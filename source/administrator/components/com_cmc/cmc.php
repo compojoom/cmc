@@ -20,6 +20,8 @@ $jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
 
+require_once( JPATH_COMPONENT . '/controller.php' );
+
 $controller = JController::getInstance('Cmc');
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();
