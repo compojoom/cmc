@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install method="upgrade" type="component" version="1.5.0">
+    <name>COM_@@COMPONENTNAMEUPPERCASE@@</name>
+    <author>Compojoom.com</author>
+    <creationDate>@@DATE@@</creationDate>
+    <copyright>(C) 2012 - compojoom.com</copyright>
+    <authorEmail>contact-us@compojoom.com</authorEmail>
+    <authorUrl>www.compojoom.com</authorUrl>
+    <version>@@VERSION@@</version>
+    <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+    <description><![CDATA[Mailchimp list management for Joomla!]]>
+    </description>
+    <scriptfile>script.php</scriptfile>
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
+        </sql>
+    </install>
+    <files folder="components/com_@@COMPONENTNAME@@">
+        ##FRONTENDCOMPONENTPACKAGEFILES##
+    </files>
+    <languages folder="language">
+        ##FRONTENDLANGUAGEFILES##
+    </languages>
+    <administration>
+        <menu img="../media/com_cmc/images/backend/cmc-16px.png">COM_@@COMPONENTNAMEUPPERCASE@@</menu>
+        <files folder="administrator/components/com_@@COMPONENTNAME@@">
+            ##ADMINCOMPONENTPACKAGEFILES##
+        </files>
+        <languages folder="administrator/language">
+            ##ADMINLANGUAGEFILES##
+        </languages>
+    </administration>
+    <media destination="com_@@COMPONENTNAME@@" folder="media/com_@@COMPONENTNAME@@">
+        ##MEDIAPACKAGEFILES##
+    </media>
+</install>
