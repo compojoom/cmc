@@ -25,7 +25,7 @@ jimport('joomla.filter.output');
             var view = new Element('input', {
                 type:'hidden',
                 name:'view',
-                'value':'galleries'
+                'value':'lists'
             });
 
             view.inject(document.adminForm);
@@ -33,6 +33,11 @@ jimport('joomla.filter.output');
         Joomla.submitform(button);
     }
 </script>
+<?php
+// testing
+//$ret = CmcHelperSynchronize::synchronizeList(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
+$ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("api_key", ''),"2c4bb4fad2",JFactory::getUser());
+?>
 <form action="index.php" method="post" name="adminForm">
     <table>
         <tr>
@@ -64,10 +69,11 @@ jimport('joomla.filter.output');
                 <th class="title"><?php echo JHTML::_('grid.sort', 'JGLOBAL_TITLE', 'cc.$list_name', $this->filter['order_Dir'],
                                             $this->filter['order']); ?></th>
                 <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
-                <th width="10%"><?php echo JText::_('JGLOBAL_DESCRIPTION'); ?></th>
-                <th width="10%"><?php echo JText::_('COM_CMC_GALLERY_ELEMENTS'); ?></th>
-                <th width="40%"><?php echo JText::_('COM_CMC_GALLERY_LAYOUT'); ?></th>
-                <th width="5%" nowrap="nowrap"><?php echo JText::_('JPUBLISHED'); ?></th>
+                <th width="10%"><?php echo JText::_('COM_CMC_MC_ID'); ?></th>
+                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_NAME'); ?></th>
+                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_MAIL'); ?></th>
+                <th width="10%"><?php echo JText::_('COM_CMC_DEFAULT_LANGUAGE'); ?></th>
+                <th width="5%" nowrap="nowrap"><?php echo JText::_('COM_CMC_VISIBILITY'); ?></th>
             </tr>
             </thead>
             <tfoot>
@@ -80,8 +86,6 @@ jimport('joomla.filter.output');
             $i = 0;
             foreach ($this->list as $l) {
                 $checked = JHTML::_('grid.id', $i, $l->id);
-                $published = JHTML::_('grid.published', $l, $i);
-
                 $link = JRoute::_('index.php?option=com_cmc&task=editList&id=' . $l->id);
                 ?>
             <tr class="<?php echo "row" . $i % 2; ?>">
@@ -90,22 +94,25 @@ jimport('joomla.filter.output');
                     <?php echo $checked; ?>
                 </td>
                 <td>
-                    <a href="<?php echo $link; ?>"><?php echo $l->gallery_name; ?></a>
+                    <a href="<?php echo $link; ?>"><?php echo $l->list_name; ?></a>
                 </td>
                 <td align="center">
                     <?php echo $l->id; ?>
                 </td>
                 <td align="center">
-                    <?php echo $l->description; ?>
+                    <?php echo $l->mc_id; ?>
                 </td>
                 <td align="center">
-                    <?php  ?>
+                    <?php echo $l->default_from_name; ?>
+                </td>
+                <td align="center">
+                    <?php echo $l->default_from_email; ?>
                 </td>
                 <td>
-                    <?php ?>
+                    <?php echo $l->default_language; ?>
                 </td>
                 <td align="center">
-                    <?php echo $published; ?>
+                    <?php echo $l->visibility; ?>
                 </td>
             </tr>
                 <?php

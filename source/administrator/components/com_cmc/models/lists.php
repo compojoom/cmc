@@ -133,7 +133,7 @@ class CmcModelLists extends JModelAdmin {
      * @return	JTable	A database object
      * @since	1.6
      */
-    public function getTable($type = 'Lists', $prefix = 'Table', $config = array())
+    public function getTable($type = 'Lists', $prefix = 'CmcTable', $config = array())
     {
         return JTable::getInstance($type, $prefix, $config);
     }

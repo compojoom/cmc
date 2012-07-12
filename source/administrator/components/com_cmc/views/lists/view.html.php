@@ -21,7 +21,7 @@ class CmcViewLists extends JView {
         //var_dump($model);
 
         //Filter
-        $context = 'com_tiles.galleries.list.';
+        $context = 'com_cmc.lists.list.';
         $filter_state2 = $appl->getUserStateFromRequest($context . 'filter_state', 'filter_state', '', 'word');
         $filter_order2 = $appl->getUserStateFromRequest($context . 'filter_order', 'filter_order', 'cc.list_name', 'cmd');
         $filter_order_Dir2 = $appl->getUserStateFromRequest($context . 'filter_order_Dir', 'filter_order_Dir', '', 'word');
@@ -31,7 +31,6 @@ class CmcViewLists extends JView {
         $list = $model->getList();
         $pagination2 = $this->get('Pagination');
         $total2 = $this->get('Total');
-
 
         $javascript = 'onchange="document.adminForm.submit();"';
 

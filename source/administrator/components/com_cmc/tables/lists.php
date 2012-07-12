@@ -14,11 +14,10 @@ defined( '_JEXEC' ) or die ( 'Restricted access' );
 // Include library dependencies
 jimport('joomla.filter.input');
 
-class TableSettings extends JTable
+class CmcTableLists extends JTable
 {
-
     function __construct(&$db)
     {
-        parent::__construct( '#__cmc_settings', 'id', $db );
+        parent::__construct( '#__cmc_lists', 'id', $db );
     }
 }

@@ -13,6 +13,12 @@ defined('_JEXEC') or die('Restricted access');
 if (!JFactory::getUser()->authorise('core.manage', 'com_cmc')) {
     return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
+
+require_once( JPATH_COMPONENT . '/controller.php' );
+JLoader::register('CmcSettingsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helper/settingshelper.php');
+JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/helper/MCAPI.class.php');
+JLoader::register('CmcHelperSynchronize', JPATH_COMPONENT_ADMINISTRATOR . '/helper/synchronizehelper.php');
+
 // thank you for this black magic Nickolas :)
 // Magic: merge the default translation with the current translation
 $jlang =& JFactory::getLanguage();
@@ -21,15 +27,13 @@ $jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
 
 // Live updater
-require_once( JPATH_COMPONENT_ADMINISTRATOR .  'liveupdate/liveupdate.php');
+require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
 
 // Conrol Center
-require_once( JPATH_COMPONENT_ADMINISTRATOR .  'controlcenter/controlcenter.php');
-require_once( JPATH_COMPONENT . '/controller.php' );
+require_once( JPATH_COMPONENT_ADMINISTRATOR . '/controlcenter/controlcenter.php');
 
 // Mailchimp PHP Class
-require_once( JPATH_COMPONENT_ADMINISTRATOR .  'helper/MCAPI.class.php');
-
+require_once( JPATH_COMPONENT_ADMINISTRATOR . '/helper/MCAPI.class.php');
 
 if(JRequest::getCmd('view','') == 'liveupdate') {
     JToolBarHelper::preferences( 'com_cmc' );
@@ -56,7 +60,7 @@ JRequest::setVar('controller', JRequest::getCmd('view','events')); // Black magi
 
 // Require specific controller if requested
 if ($controller = JRequest::getCmd('controller')) {
-    $path = JPATH_COMPONENT_ADMINISTRATOR .  'controllers' .  $controller . '.php';
+    $path = JPATH_COMPONENT_ADMINISTRATOR .  '/controllers' .  $controller . '.php';
     if (file_exists($path)) {
         require_once $path;
     } else {
@@ -65,7 +69,7 @@ if ($controller = JRequest::getCmd('controller')) {
 }
 
 if ($controller == '') {
-    require_once(JPATH_COMPONENT_ADMINISTRATOR .  'controllers/lists.php');
+    require_once(JPATH_COMPONENT_ADMINISTRATOR .  '/controllers/lists.php');
     $controller = 'lists';
 }
 

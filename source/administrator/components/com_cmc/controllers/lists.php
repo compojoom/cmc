@@ -23,6 +23,10 @@ class CmcControllerLists extends CmcController {
         $this->registerTask('apply', 'save');
     }
 
+    /**
+     * @param bool $cachable
+     * @param bool $urlparams
+     */
     public function display($cachable = false, $urlparams = false) {
         $document = JFactory::getDocument();
         $viewName = JRequest::getVar('view', 'lists');
@@ -34,6 +38,9 @@ class CmcControllerLists extends CmcController {
         $view->display();
     }
 
+    /**
+     *
+     */
     public function remove() {
         $cid = JRequest::getVar('cid', array(), '', 'array');
         $db = JFactory::getDBO();
@@ -52,7 +59,9 @@ class CmcControllerLists extends CmcController {
         $this->setRedirect('index.php?option=com_cmc&controller=lists');
     }
 
-
+    /**
+     *
+     */
     public function publish() {
         $cid = JRequest::getVar('cid', array(), '', 'array');
 
@@ -75,11 +84,11 @@ class CmcControllerLists extends CmcController {
 
     function editList() {
         $document = JFactory::getDocument();
-        $viewName = 'editlist'; // hardcoede
+        $viewName = 'editList'; // hardcoede
         $viewType = $document->getType();
         $view = $this->getView($viewName, $viewType);
 
-        $model = $this->getModel('editlist');
+        $model = $this->getModel('editList');
         $view->setModel($model, true);
         $view->setLayout('default');
         $view->display();
@@ -116,7 +125,7 @@ class CmcControllerLists extends CmcController {
             case 'save':
             default:
                 $msg = JText::_('COM_CMC_LIST_SAVE');
-                $link = 'index.php?option=com_cmc&controller=lists';
+                $link = 'index.php?option=com_cmc&view=lists';
                 break;
         }
 

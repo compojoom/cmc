@@ -11,13 +11,14 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-public class CmcHelperSynchronize {
+class CmcHelperSynchronize {
 
     /**
+     * Recreate / append the list and stores it in the database
      * @static
      * @param $apikey
      */
-    public static function synchronizeList($apikey, $append = false){
+    public static function synchronizeList($apikey, $user, $append = false){
         $api = new MCAPI($apikey);
         $lists = $api->lists();
 
@@ -30,13 +31,76 @@ public class CmcHelperSynchronize {
             $db->query();
         }
 
-
         if ($api->errorCode){
             JError::raiseError(500, JText::_("COM_CMC_API_ERROR") . " " . $api->errorMessage);
             return;
         }
 
         foreach ($lists['data'] as $list){
+            //var_dump($list);
+
+            //$list->list_name =
+            $list['list_name'] = $list['id'];
+
+            $item = array();
+            $item['id'] = null;
+            $item['mc_id'] = $list['id'];
+            $item['web_id'] = $list['web_id'];
+            $item['list_name'] = $list['name'];
+            $item['date_created'] = $list['date_created'];
+            $item['email_type_option'] = $list['email_type_option'];
+            $item['use_awesomebar'] = $list['use_awesomebar'];
+            $item['default_from_name'] = $list['default_from_name'];
+            $item['default_from_email'] = $list['default_from_email'];
+            $item['default_subject'] = $list['default_subject'];
+            $item['default_language'] = $list['default_language'];
+            $item['list_rating'] = $list['list_rating'];
+            $item['subscribe_url_short'] = $list['subscribe_url_short'];
+            $item['subscribe_url_long'] = $list['subscribe_url_long'];
+            $item['beamer_address'] = $list['beamer_address'];
+            $item['visibility'] = $list['visibility'];
+            $item['created_user_id'] = $user->id;
+            $item['created_time'] = JFactory::getDate()->toMySQL();
+            $item['modified_user_id'] = $user->id;
+            $item['modified_time'] = JFactory::getDate()->toMySQL();
+            $item['access'] = 1;
+            $item['query_data'] = json_encode($list);
+
+            $row = JTable::getInstance('lists', 'CmcTable');
+
+            if (!$row->bind($item)) {
+                return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+            }
+
+            if (!$row->check()) {
+                return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+            }
+
+            if (!$row->store()) {
+                return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+            }
+
+            //die("asdf");
+        }
+
+        return true;
+    }
+
+
+    public static function synchronizeUsers($apikey, $listId, $user, $append = false){
+        $api = new MCAPI($apikey);
+
+        $members = $api->listMembers($listId, 'subscribed', null, 0, 5000 );
+
+        if ($api->errorCode){
+            JError::raiseError(500, JText::_("COM_CMC_API_ERROR") . " " . $api->errorMessage);
+            return;
+        }
+
+        var_dump($members);
+        die("asdf");
+
+        foreach($members['data'] as $member){
 
         }
 
