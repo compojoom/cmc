@@ -181,7 +181,7 @@ class CmcModelUsers extends JModelAdmin {
     protected function loadFormData()
     {
         // Check the session for previously entered form data.
-        $data = JFactory::getApplication()->getUserState('com_cmc.edit.list.data', array());
+        $data = JFactory::getApplication()->getUserState('com_cmc.edit.user.data', array());
 
         if (empty($data)) {
             $data = $this->getItem();
