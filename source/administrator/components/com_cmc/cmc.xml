@@ -24,6 +24,14 @@
     </languages>
     <administration>
         <menu img="../media/com_cmc/images/backend/cmc-16px.png">COM_@@COMPONENTNAMEUPPERCASE@@</menu>
+        <submenu>
+            <menu img="../media/com_cmc/backend/images/controlpanel-16px.png" view="controlcenter">COM_CMC_CONTROL_CENTER</menu>
+            <menu img="../media/com_cmc/backend/images/cmc-16px.png" view="lists">COM_CMC_LISTS</menu>
+            <menu img="../media/com_cmc/backend/images/categories-16px.png" view="users">COM_CMC_USERS</menu>
+            <menu img="../media/com_cmc/backend/images/icon-16-config.png" view="settings">COM_CMC_CONFIGURATION</menu>
+            <menu img="../media/com_cmc/backend/images/information-16px.png" view="information">COM_CMC_INFORMATION</menu>
+            <menu img="../media/com_cmc/backend/images/live-update.png" view="liveupdate">COM_CMC_LIVEUPDATE</menu>
+        </submenu>
         <files folder="administrator/components/com_@@COMPONENTNAME@@">
             ##ADMINCOMPONENTPACKAGEFILES##
         </files>

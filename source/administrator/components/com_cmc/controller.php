@@ -13,11 +13,7 @@ jimport('joomla.application.component.controller');
 
 defined( '_JEXEC' ) or die ( 'Restricted access' );
 
-class cmcController extends JController
+class CmcController extends JController
 {
-    public function __construct($config = array())
-    {
-        $config['default_view'] = 'dashboard';
-        parent::__construct($config);
-    }
+
 }
