@@ -87,18 +87,31 @@ class CmcHelperSynchronize {
     }
 
 
-    public static function synchronizeUsers($apikey, $listId, $user, $append = false){
+    public static function synchronizeUsers($apikey, $listId, $user,
+                                            $status = "subscribed", $start = 0, $limit = 15000, $append = false){
         $api = new MCAPI($apikey);
 
-        $members = $api->listMembers($listId, 'subscribed', null, 0, 5000 );
+        $members = $api->listMembers($listId, $status, null, $start, $limit );
 
         if ($api->errorCode){
             JError::raiseError(500, JText::_("COM_CMC_API_ERROR") . " " . $api->errorMessage);
             return;
         }
 
+        $db =& JFactory::getDBO();
+
+        if(!$append) {
+            // We have to drop the items, because we could have more then one list
+//            $query = "DELETE FROM #__cmc_users WHERE list_id = '" . $listId . "'";
+//            $db->setQuery($query);
+//            $db->query();
+        }
+
         var_dump($members);
         die("asdf");
+
+        //  listMemberInfo(string apikey, string id, array email_address)
+
 
         foreach($members['data'] as $member){
 

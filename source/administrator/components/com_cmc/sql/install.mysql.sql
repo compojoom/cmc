@@ -34,3 +34,32 @@ CREATE TABLE IF NOT EXISTS `#__cmc_lists` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `#__cmc_users` (
+  `id` INT( 11 ) NOT NULL ,
+  `list_id` VARCHAR( 255 ) NOT NULL ,
+  `firstname` VARCHAR( 255 ) NULL ,
+  `lastname` VARCHAR( 500 ) NULL ,
+  `email` VARCHAR( 500 ) NOT NULL ,
+  `email_type` VARCHAR( 500 ) NULL ,
+  `merges` TEXT NULL ,
+  `status` VARCHAR( 255 ) NOT NULL DEFAULT  'subscribed',
+  `ip_signup` VARCHAR( 255 ) NULL ,
+  `timestamp_signup` DATETIME NOT NULL ,
+  `ip_opt` VARCHAR( 255 ) NULL ,
+  `timestamp_opt` DATETIME NOT NULL ,
+  `member_rating` TINYINT( 2 ) NOT NULL DEFAULT  '2',
+  `campaign_id` INT( 11 ) NOT NULL ,
+  `lists` VARCHAR( 255 ) NULL ,
+  `timestamp` DATETIME NOT NULL ,
+  `info_changed` DATETIME NOT NULL ,
+  `web_id` VARCHAR( 255 ) NULL ,
+  `is_gmonkey` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+  `geo` TEXT NULL COMMENT  'json',
+  `clients` TEXT NULL COMMENT  'json',
+  `static_segments` TEXT NULL COMMENT  'json',
+  `created_user_id` INT( 11 ) NOT NULL ,
+  `created_time` DATETIME NOT NULL ,
+  `modified_user_id` INT( 11 ) NOT NULL ,
+  `modified_time` DATETIME NOT NULL ,
+  `query_data` TEXT NULL COMMENT  'json'
+);
