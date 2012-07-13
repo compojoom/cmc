@@ -36,7 +36,10 @@ jimport('joomla.filter.output');
 <?php
 // testing
 //$ret = CmcHelperSynchronize::synchronizeList(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
-$ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("api_key", ''),"2c4bb4fad2",JFactory::getUser());
+//$ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("api_key", ''),"2c4bb4fad2",JFactory::getUser());
+
+CmcHelperSynchronize::synchronize(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
+
 ?>
 <form action="index.php" method="post" name="adminForm">
     <table>
@@ -123,6 +126,7 @@ $ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("ap
         </table>
     </div>
     <input type="hidden" name="option" value="com_cmc"/>
+    <input type="hidden" name="controller" value="lists"/>
     <input type="hidden" name="task" value=""/>
     <input type="hidden" name="view" value="lists"/>
     <input type="hidden" name="boxchecked" value="0"/>

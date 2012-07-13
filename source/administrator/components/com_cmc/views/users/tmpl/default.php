@@ -33,11 +33,6 @@ jimport('joomla.filter.output');
         Joomla.submitform(button);
     }
 </script>
-<?php
-// testing
-//$ret = CmcHelperSynchronize::synchronizeList(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
-$ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("api_key", ''),"2c4bb4fad2",JFactory::getUser());
-?>
 <form action="index.php" method="post" name="adminForm">
     <table>
         <tr>
@@ -66,14 +61,12 @@ $ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("ap
                     <input type="checkbox" name="toggle" value=""
                            onclick="checkAll(<?php echo count($this->list); ?>);"/>
                 </th>
-                <th class="title"><?php echo JHTML::_('grid.sort', 'JGLOBAL_TITLE', 'cc.$list_name', $this->filter['order_Dir'],
+                <th class="title"><?php echo JHTML::_('grid.sort', 'COM_CMC_EMAIL', 'cc.$email', $this->filter['order_Dir'],
                                             $this->filter['order']); ?></th>
                 <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
-                <th width="10%"><?php echo JText::_('COM_CMC_MC_ID'); ?></th>
-                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_NAME'); ?></th>
-                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_MAIL'); ?></th>
-                <th width="10%"><?php echo JText::_('COM_CMC_DEFAULT_LANGUAGE'); ?></th>
-                <th width="5%" nowrap="nowrap"><?php echo JText::_('COM_CMC_VISIBILITY'); ?></th>
+                <th width="10%"><?php echo JText::_('COM_CMC_LIST_ID'); ?></th>
+                <th width="20%"><?php echo JText::_('COM_CMC_TIMESTAMP'); ?></th>
+                <th width="15%"><?php echo JText::_('COM_CMC_STATUS'); ?></th>
             </tr>
             </thead>
             <tfoot>
@@ -86,7 +79,7 @@ $ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("ap
             $i = 0;
             foreach ($this->list as $l) {
                 $checked = JHTML::_('grid.id', $i, $l->id);
-                $link = JRoute::_('index.php?option=com_cmc&task=editList&id=' . $l->id);
+                $link = JRoute::_('index.php?option=com_cmc&task=editUser&id=' . $l->id);
                 ?>
             <tr class="<?php echo "row" . $i % 2; ?>">
                 <td><?php echo $this->pagination->getRowOffset($i); ?></td>
@@ -94,25 +87,19 @@ $ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("ap
                     <?php echo $checked; ?>
                 </td>
                 <td>
-                    <a href="<?php echo $link; ?>"><?php echo $l->list_name; ?></a>
+                    <a href="<?php echo $link; ?>"><?php echo $l->email; ?></a>
                 </td>
                 <td align="center">
                     <?php echo $l->id; ?>
                 </td>
                 <td align="center">
-                    <?php echo $l->mc_id; ?>
+                    <?php echo $l->list_id; ?>
                 </td>
                 <td align="center">
-                    <?php echo $l->default_from_name; ?>
+                    <?php echo $l->timestamp; ?>
                 </td>
                 <td align="center">
-                    <?php echo $l->default_from_email; ?>
-                </td>
-                <td>
-                    <?php echo $l->default_language; ?>
-                </td>
-                <td align="center">
-                    <?php echo $l->visibility; ?>
+                    <?php echo $l->status; ?>
                 </td>
             </tr>
                 <?php
@@ -124,7 +111,8 @@ $ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("ap
     </div>
     <input type="hidden" name="option" value="com_cmc"/>
     <input type="hidden" name="task" value=""/>
-    <input type="hidden" name="view" value="lists"/>
+    <input type="hidden" name="view" value="users"/>
+    <input type="hidden" name="controller" value="users"/>
     <input type="hidden" name="boxchecked" value="0"/>
     <input type="hidden" name="filter_order" value="<?php echo $this->filter['order']; ?>"/>
     <input type="hidden" name="filter_order_Dir" value="<?php echo $this->filter['order_Dir']; ?>"/>

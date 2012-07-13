@@ -18,8 +18,6 @@ class CmcViewUsers extends JView {
         $appl = JFactory::getApplication();
         $uri = JFactory::getURI();
         $model = $this->getModel();
-        //var_dump($model);
-
         //Filter
         $context = 'com_cmc.users.list.';
         $filter_state2 = $appl->getUserStateFromRequest($context . 'filter_state', 'filter_state', '', 'word');

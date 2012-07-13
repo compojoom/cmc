@@ -11,35 +11,42 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-class CmcHelperSynchronize {
+class CmcHelperSynchronize
+{
 
     /**
      * Recreate / append the list and stores it in the database
      * @static
      * @param $apikey
      */
-    public static function synchronizeList($apikey, $user, $append = false){
+    public static function synchronizeList($apikey, $user, $append = false, $status="subscribed", $users = true)
+    {
         $api = new MCAPI($apikey);
         $lists = $api->lists();
 
         $db =& JFactory::getDBO();
 
-        if(!$append) {
+        if (!$append) {
             // Delete complete table and reset count to zero
             $query = "TRUNCATE #__cmc_lists";
             $db->setQuery($query);
             $db->query();
         }
 
-        if ($api->errorCode){
+        if ($api->errorCode) {
             JError::raiseError(500, JText::_("COM_CMC_API_ERROR") . " " . $api->errorMessage);
             return;
         }
 
-        foreach ($lists['data'] as $list){
-            //var_dump($list);
+        for ($i = 0; $i < count($lists['data']); $i++) {
+            $list = $lists['data'][$i];
+            $stats = $lists['data'][$i]['stats'];
 
-            //$list->list_name =
+//            var_dump($list);
+//           var_dump($stats);
+////
+//            die("asdf");
+
             $list['list_name'] = $list['id'];
 
             $item = array();
@@ -80,6 +87,26 @@ class CmcHelperSynchronize {
                 return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
             }
 
+            // Insert users into the new list
+
+            if ($users) {
+
+                // We can only get 15k users every query, so if we have more we need to do more queries
+                if($stats['member_count'] < 15000) {
+                    CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user);
+                } else {
+                    $cnt = $stats['member_count'] / 15000;
+
+                    for($j = 0; $j < $cnt; $j++) {
+                        $start = 15000 * $j;
+                        $end = 15000 * ($j + 1);
+
+                        CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user,
+                            $status, $start, $end, $append);
+                    }
+                }
+            }
+
             //die("asdf");
         }
 
@@ -87,36 +114,91 @@ class CmcHelperSynchronize {
     }
 
 
+    /**
+     * Synchronize all lists and users to cmc
+     * @static
+     * @param $apikey
+     * @param $user
+     * @param null $listId
+     * @param bool $append
+     */
+    public static function synchronize($apikey, $user, $append = false, $status = "subscribed")
+    {
+         CmcHelperSynchronize::synchronizeList($apikey, $user, $append, $status, true);
+    }
+
+
+    /**
+     * @static
+     * @param $apikey
+     * @param $listId
+     * @param $user
+     * @param string $status
+     * @param int $start
+     * @param int $limit
+     * @param bool $append
+     * @return bool
+     */
     public static function synchronizeUsers($apikey, $listId, $user,
-                                            $status = "subscribed", $start = 0, $limit = 15000, $append = false){
+                                            $status = "subscribed", $start = 0, $limit = 15000, $append = false)
+    {
         $api = new MCAPI($apikey);
 
-        $members = $api->listMembers($listId, $status, null, $start, $limit );
+        $members = $api->listMembers($listId, $status, null, $start, $limit);
 
-        if ($api->errorCode){
+        if ($api->errorCode) {
             JError::raiseError(500, JText::_("COM_CMC_API_ERROR") . " " . $api->errorMessage);
             return;
         }
 
         $db =& JFactory::getDBO();
 
-        if(!$append) {
+        if (!$append) {
             // We have to drop the items, because we could have more then one list
-//            $query = "DELETE FROM #__cmc_users WHERE list_id = '" . $listId . "'";
-//            $db->setQuery($query);
-//            $db->query();
+            $query = "DELETE FROM #__cmc_users WHERE list_id = '" . $listId . "'";
+            $db->setQuery($query);
+            $db->query();
         }
 
-        var_dump($members);
-        die("asdf");
+//        var_dump($members);
+//        die("asdf");
 
         //  listMemberInfo(string apikey, string id, array email_address)
 
 
-        foreach($members['data'] as $member){
+        foreach ($members['data'] as $member) {
+            $item = array();
+            $item['id'] = null;
+            $item['list_id'] = $listId;
 
+            $item['email'] = $member['email'];
+            $item['timestamp'] = $member['timestamp'];
+
+            $item['status'] = $status;
+
+            $item['created_user_id'] = $user->id;
+            $item['created_time'] = JFactory::getDate()->toMySQL();
+            $item['modified_user_id'] = $user->id;
+            $item['modified_time'] = JFactory::getDate()->toMySQL();
+            $item['access'] = 1;
+            $item['query_data'] = json_encode($member);
+
+            $row = JTable::getInstance('users', 'CmcTable');
+
+            if (!$row->bind($item)) {
+                return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+            }
+
+            if (!$row->check()) {
+                return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+            }
+
+            if (!$row->store()) {
+                return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+            }
         }
 
+        return true;
     }
-    
+
 }

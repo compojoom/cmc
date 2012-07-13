@@ -11,7 +11,7 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 
-class CmcControllersettings extends TilesController
+class CmcControllersettings extends CmcController
 {
     function __construct() {
         parent::__construct();
@@ -61,7 +61,7 @@ class CmcControllersettings extends TilesController
         $viewType = $document->getType();
         $view = $this->getView($viewName, $viewType);
         require_once(JPATH_COMPONENT.DS.'models'.DS.'settings.php');
-        $model=new TilesModelSettings;
+        $model=new CmcModelSettings;
 
         //$model =& $this->getModel( 'settings', 'HotspotsSettings' );
         //$model->checkin();

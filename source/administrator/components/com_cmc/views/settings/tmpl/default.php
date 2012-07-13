@@ -21,15 +21,15 @@ jimport( 'joomla.html.pane' );
 
 $pane = JPane::getInstance( 'tabs',  array('startOffset'=>0));
 echo $pane->startPane( 'pane' );
-echo $pane->startPanel( JText::_( 'COM_CMC_LAYOUT' ), 'layout' );
+echo $pane->startPanel( JText::_( 'COM_CMC_BASIC' ), 'basic' );
 ?>
 <div class="col60">
 <fieldset class="adminform">
-<legend><?php echo JText::_( 'COM_CMC_LAYOUT' ); ?></legend>
+<legend><?php echo JText::_( 'COM_CMC_BASIC' ); ?></legend>
 
 <table class="admintable">
 <?php 
-foreach ($this->items_layout as $value) {
+foreach ($this->items_basic as $value) {
 
         echo '<tr>';
         echo '<td class="key">';

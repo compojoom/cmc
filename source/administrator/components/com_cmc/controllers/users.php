@@ -28,6 +28,7 @@ class CmcControllerUsers extends CmcController {
      * @param bool $urlparams
      */
     public function display($cachable = false, $urlparams = false) {
+        //die("adsf");
         $document = JFactory::getDocument();
         $viewName = JRequest::getVar('view', 'users');
         $viewType = $document->getType();
@@ -45,10 +46,11 @@ class CmcControllerUsers extends CmcController {
         $cid = JRequest::getVar('cid', array(), '', 'array');
         $db = JFactory::getDBO();
         if (count($cid)) {
+            $cids = implode(',', $cid);
             // Removing it from mailchimp
 
 
-            $cids = implode(',', $cid);
+            // REmoving it from DB
             $query = "DELETE FROM #__cmc_users where id IN ( $cids )";
             $db->setQuery($query);
             if (!$db->query()) {
