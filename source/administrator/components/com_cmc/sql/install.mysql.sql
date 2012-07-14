@@ -35,13 +35,15 @@ CREATE TABLE IF NOT EXISTS `#__cmc_lists` (
 );
 
 CREATE TABLE IF NOT EXISTS `#__cmc_users` (
-  `id` INT( 11 ) NOT NULL ,
+  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+  `mc_id` VARCHAR( 255 ) NULL ,
   `list_id` VARCHAR( 255 ) NOT NULL ,
   `firstname` VARCHAR( 255 ) NULL ,
   `lastname` VARCHAR( 500 ) NULL ,
   `email` VARCHAR( 500 ) NOT NULL ,
   `email_type` VARCHAR( 500 ) NULL ,
-  `merges` TEXT NULL ,
+  `interests` TEXT NULL,
+  `merges` TEXT NULL COMMENT 'json',
   `status` VARCHAR( 255 ) NOT NULL DEFAULT  'subscribed',
   `ip_signup` VARCHAR( 255 ) NULL ,
   `timestamp_signup` DATETIME NOT NULL ,
@@ -61,5 +63,6 @@ CREATE TABLE IF NOT EXISTS `#__cmc_users` (
   `created_time` DATETIME NOT NULL ,
   `modified_user_id` INT( 11 ) NOT NULL ,
   `modified_time` DATETIME NOT NULL ,
-  `query_data` TEXT NULL COMMENT  'json'
+  `query_data` TEXT NULL COMMENT  'json',
+  PRIMARY KEY (`id`)
 );
