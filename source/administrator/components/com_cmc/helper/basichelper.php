@@ -39,6 +39,18 @@ class CmcHelper {
        return($list_id);
     }
 
+    /**
+     * @return mixed
+     */
+
+    public static  function getLists() {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query->select('*')
+            ->from('#__cmc_lists');
+        $db->setQuery($query);
+        return $db->loadObjectList();
+    }
 
     /**
      * @static

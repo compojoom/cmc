@@ -19,7 +19,7 @@ JHTML::_('behavior.tooltip');
 <div id="cmc" class="cmc">
     <form action="index.php" method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_CMC'); ?></legend>
+            <legend><?php echo JText::_('COM_CMC_EDIT_USER'); ?></legend>
             <table>
                 <!--
                 <tr>
@@ -57,13 +57,53 @@ JHTML::_('behavior.tooltip');
                 </tr>
                 <tr>
                     <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_LIST'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->list_select; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
                         <?php echo JText::_('COM_CMC_STATUS'); ?>:
                     </td>
                     <td>
-                        select
+                        <?php echo $this->status_select; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_EMAIL_TYPE'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->email_type_select; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('Mailchimp Id'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->user->mc_id; ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('Mailchimp Id'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->user->mc_id; ?>
                     </td>
                 </tr>
             </table>
+
 
         </fieldset>
         <input type="hidden" name="id" value="<?php echo $this->user->id; ?>" />
