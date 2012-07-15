@@ -87,7 +87,7 @@ JHTML::_('behavior.tooltip');
 
                 <tr>
                     <td width="200" align="left" class="key">
-                        <?php echo JText::_('Mailchimp Id'); ?>:
+                        <?php echo JText::_('COM_CMC_MAILCHIMP_ID'); ?>:
                     </td>
                     <td>
                         <?php echo $this->user->mc_id; ?>
@@ -96,12 +96,61 @@ JHTML::_('behavior.tooltip');
 
                 <tr>
                     <td width="200" align="left" class="key">
-                        <?php echo JText::_('Mailchimp Id'); ?>:
+                        <?php echo JText::_('COM_CMC_WEB_ID'); ?>:
                     </td>
                     <td>
-                        <?php echo $this->user->mc_id; ?>
+                        <?php echo $this->user->web_id; ?>
                     </td>
                 </tr>
+
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_CUSTOM_FIELDS'); ?>:
+                    </td>
+                    <td>
+                        <?php echo CmcHelper::array_implode(" = ", ", ", json_decode($this->user->merges, true)); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_CLIENTS'); ?>:
+                    </td>
+                    <td>
+                        <?php echo CmcHelper::array_implode(" = ", ", ", json_decode($this->user->clients, true)); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_LANGUAGE'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->user->language; ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_MEMBER_SINCE'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->user->timestamp; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_LAST_CHANGE'); ?>:
+                    </td>
+                    <td>
+                        <?php echo $this->user->info_changed; ?>
+                    </td>
+                </tr>
+
             </table>
 
 

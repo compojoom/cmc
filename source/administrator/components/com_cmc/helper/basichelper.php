@@ -119,6 +119,8 @@ class CmcHelper {
 
             foreach($retval['data'] as $user) {
                 $item['id'] = $id;
+                $item['mc_id'] = $user['id'];
+
                 $item['list_id'] = $list_id;
                 $item['email_type'] = $user['email_type'];
                 $item['email'] = $user['email'];
@@ -133,6 +135,7 @@ class CmcHelper {
                 $item['status'] = $user['status'];;
                 $item['ip_opt'] = $user['ip_opt'];
                 $item['ip_signup'] = $user['ip_signup'];
+                $item['language'] = $user['language'];
 
                 $item['member_rating'] = $user['member_rating'];
 
@@ -246,6 +249,25 @@ class CmcHelper {
 
     /**
      * @static
+     * @param $glue
+     * @param $separator
+     * @param $array
+     * @return string
+     */
+    public static function array_implode( $glue, $separator, $array ) {
+        if ( ! is_array( $array ) )  {
+            return $array;
+        }
+        $string = array();
+        foreach ( $array as $key => $val ) {
+            if ( is_array( $val ) )
+                $val = implode( ',', $val );
+            $string[] = "{$key}{$glue}{$val}";
+        }
+        return implode( $separator, $string );
+    }
+    /**
+     * @static
      * @param $api_key
      * @param $list_id
      * @param bool $optin
@@ -265,7 +287,7 @@ class CmcHelper {
         $up_exist = true; // yes, update currently subscribed users
         $replace_int = false; // no, add interest, don't replace
 
-        $vals = $api->listBatchSubscribe($list_id, $batch, $optin, $up_exist, $replace_int);
+        $vals = $api->listBatchSubscribe($list_id, $batchlist, $optin, $up_exist, $replace_int);
 
         if ($api->errorCode){
             return(JError::raiseError(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED")) . " " .$api->errorCode . " / " . $api->errorMessage);
