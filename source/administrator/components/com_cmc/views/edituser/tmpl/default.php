@@ -18,10 +18,10 @@ JHTML::_('behavior.tooltip');
 
 ?>
 
-<div id="tiles" class="tiles">
+<div id="cmc" class="cmc">
     <form action="index.php" method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_TILES_EDIT_GALLERY'); ?></legend>
+            <legend><?php echo JText::_('COM_CMC'); ?></legend>
             <table>
                 <tr>
                     <td width="200" align="left" class="key">

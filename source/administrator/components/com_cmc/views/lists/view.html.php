@@ -58,10 +58,10 @@ class CmcViewLists extends JView {
     public function addToolbar() {
         // Set toolbar items for the page
         JToolBarHelper::title(JText::_('COM_CMC_LISTS'), 'lists');
-        JToolBarHelper::publishList();
-        JToolBarHelper::unpublishList();
-        JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_LIST'));
-        JToolBarHelper::editList();
-        JToolBarHelper::addNewX('editList');
+//        JToolBarHelper::publishList();
+//        JToolBarHelper::unpublishList();
+//        JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_LIST'));
+//        JToolBarHelper::editList();
+//        JToolBarHelper::addNewX('editList');
     }
 }
