@@ -37,9 +37,11 @@ jimport('joomla.filter.output');
 // testing
 //$ret = CmcHelperSynchronize::synchronizeList(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
 //$ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("api_key", ''),"2c4bb4fad2",JFactory::getUser());
+// CmcHelperSynchronize::synchronize(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
 
-CmcHelperSynchronize::synchronize(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
+//$ret = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), "2c4bb4fad2", "hoppe.yves@gmail.com", 13, true);
 
+//var_dump($ret);
 ?>
 <form action="index.php" method="post" name="adminForm">
     <table>

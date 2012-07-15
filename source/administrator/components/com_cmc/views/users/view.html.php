@@ -56,8 +56,8 @@ class CmcViewUsers extends JView {
     public function addToolbar() {
         // Set toolbar items for the page
         JToolBarHelper::title(JText::_('COM_CMC_USERS'), 'users');
-        JToolBarHelper::publishList();
-        JToolBarHelper::unpublishList();
+//        JToolBarHelper::publishList();
+//        JToolBarHelper::unpublishList();
         JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_USERS'));
         JToolBarHelper::editList();
         JToolBarHelper::addNewX('editUser');

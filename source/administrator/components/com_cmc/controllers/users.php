@@ -61,27 +61,6 @@ class CmcControllerUsers extends CmcController {
         $this->setRedirect('index.php?option=com_cmc&view=users');
     }
 
-    /**
-     *
-     */
-    public function publish() {
-        $cid = JRequest::getVar('cid', array(), '', 'array');
-
-        if ($this->task == 'publish') {
-            $publish = 1;
-        } else {
-            $publish = 0;
-        }
-
-        $msg = "";
-        $tilesTable = JTable::getInstance('users', 'Table');
-        $tilesTable->publish($cid, $publish);
-
-        $link = 'index.php?option=com_cmc&view=users';
-
-        $this->setRedirect($link, $msg);
-    }
-
     // Edit Gallery
 
     function editUser() {
@@ -121,7 +100,7 @@ class CmcControllerUsers extends CmcController {
         switch ($this->task) {
             case 'apply':
                 $msg = JText::_('COM_CMC_LIST_APPLY');
-                $link = 'index.php?option=com_cmc&task=editUser&id=' . $row->id;
+                $link = 'index.php?option=com_cmc&controller=users&task=editUser&id=' . $row->id;
                 break;
 
             case 'save':

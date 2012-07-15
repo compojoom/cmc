@@ -15,6 +15,7 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmc')) {
 }
 
 require_once( JPATH_COMPONENT . '/controller.php' );
+JLoader::register('CmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helper/basichelper.php');
 JLoader::register('CmcSettingsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helper/settingshelper.php');
 JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/helper/MCAPI.class.php');
 JLoader::register('CmcHelperSynchronize', JPATH_COMPONENT_ADMINISTRATOR . '/helper/synchronizehelper.php');

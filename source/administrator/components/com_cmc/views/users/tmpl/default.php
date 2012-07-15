@@ -64,7 +64,7 @@ jimport('joomla.filter.output');
                 <th class="title"><?php echo JHTML::_('grid.sort', 'COM_CMC_EMAIL', 'cc.$email', $this->filter['order_Dir'],
                                             $this->filter['order']); ?></th>
                 <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
-                <th width="10%"><?php echo JText::_('COM_CMC_LIST_ID'); ?></th>
+                <th width="10%"><?php echo JText::_('COM_CMC_LIST'); ?></th>
                 <th width="20%"><?php echo JText::_('COM_CMC_TIMESTAMP'); ?></th>
                 <th width="15%"><?php echo JText::_('COM_CMC_STATUS'); ?></th>
             </tr>
@@ -79,7 +79,7 @@ jimport('joomla.filter.output');
             $i = 0;
             foreach ($this->list as $l) {
                 $checked = JHTML::_('grid.id', $i, $l->id);
-                $link = JRoute::_('index.php?option=com_cmc&task=editUser&id=' . $l->id);
+                $link = JRoute::_('index.php?option=com_cmc&view=users&task=editUser&id=' . $l->id);
                 ?>
             <tr class="<?php echo "row" . $i % 2; ?>">
                 <td><?php echo $this->pagination->getRowOffset($i); ?></td>
@@ -93,7 +93,7 @@ jimport('joomla.filter.output');
                     <?php echo $l->id; ?>
                 </td>
                 <td align="center">
-                    <?php echo $l->list_id; ?>
+                    <?php echo CmcHelper::getListName($l->list_id); ?>
                 </td>
                 <td align="center">
                     <?php echo $l->timestamp; ?>

@@ -16,13 +16,23 @@ class CmcViewEditUser extends JView {
     function display($tpl = null) {
 
         $model = $this->getModel();
+        $user = $model->getUser();
 
-        $user = $model->getList();
+
 
         if (!$user) {
             // Create new empty list item
             $user = JTable::getInstance('users', 'CmcTable');
+        } else {
+            // Update User from Mailchimp
+            //     public static function getUserDetailsMC($api_key, $list_id, $email, $id = null, $store = true){
+            // //$ret = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), "2c4bb4fad2", "hoppe.yves@gmail.com", 13, true);
+
+            $user = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), $user->list_id, $user->email, $user->id, true);
         }
+//
+//        var_dump($user);
+//        die("adsf");
 
         $this->assignRef('user', $user);
 

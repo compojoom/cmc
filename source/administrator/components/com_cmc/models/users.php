@@ -95,13 +95,13 @@ class CmcModelUsers extends JModelAdmin {
         if ($search) {
             $where[] = 'LOWER(cc.email) LIKE ' . $this->_db->Quote('%' . $search . '%');
         }
-        if ($filter_state) {
-            if ($filter_state == 'P') {
-                $where[] = 'cc.published = 1';
-            } else if ($filter_state == 'U') {
-                $where[] = 'cc.published = 0';
-            }
-        }
+//        if ($filter_state) {
+//            if ($filter_state == 'P') {
+//                $where[] = 'cc.published = 1';
+//            } else if ($filter_state == 'U') {
+//                $where[] = 'cc.published = 0';
+//            }
+//        }
 
         $where = ( count($where) ? ' WHERE ' . implode(' AND ', $where) : '' );
 

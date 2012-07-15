@@ -71,6 +71,11 @@ class CmcModelLists extends JModelAdmin {
         return $query;
     }
 
+    /**
+     * @param $context
+     * @param $cc_or_a
+     * @return string
+     */
     private function _buildContentOrderBy($context, $cc_or_a) {
 
         $appl = JFactory::getApplication();
@@ -85,6 +90,10 @@ class CmcModelLists extends JModelAdmin {
         return $orderby;
     }
 
+    /**
+     * @param $context
+     * @return array|string
+     */
     private function _buildContentWhere($context) {
         $appl = JFactory::getApplication();
         $filter_state = $appl->getUserStateFromRequest($context . 'filter_state', 'filter_state', '', 'word');
@@ -95,13 +104,13 @@ class CmcModelLists extends JModelAdmin {
         if ($search) {
             $where[] = 'LOWER(cc.list_name) LIKE ' . $this->_db->Quote('%' . $search . '%');
         }
-        if ($filter_state) {
-            if ($filter_state == 'P') {
-                $where[] = 'cc.published = 1';
-            } else if ($filter_state == 'U') {
-                $where[] = 'cc.published = 0';
-            }
-        }
+//        if ($filter_state) {
+//            if ($filter_state == 'P') {
+//                $where[] = 'cc.published = 1';
+//            } else if ($filter_state == 'U') {
+//                $where[] = 'cc.published = 0';
+//            }
+//        }
 
         $where = ( count($where) ? ' WHERE ' . implode(' AND ', $where) : '' );
 

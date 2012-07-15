@@ -12,7 +12,7 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-class CmcModelEditList extends JModel {
+class CmcModelEditUser extends JModel {
 
     public function __construct() {
         parent::__construct();
@@ -20,7 +20,7 @@ class CmcModelEditList extends JModel {
         $this->setId = (int) $array[0];
     }
 
-    public function getList() {
+    public function getUser() {
         $array2 = JRequest::getVar('id', 0, '', 'array');
         $this->setId2 = (int) $array2[0];
         $id = $this->setId2;
@@ -34,7 +34,7 @@ class CmcModelEditList extends JModel {
     }
 
     private function _buildQuery($id) {
-        $query = "SELECT * FROM #__cmc_lists WHERE id = '" . $id . "'";
+        $query = "SELECT * FROM #__cmc_users WHERE id = '" . $id . "'";
         return $query;
     }
 

@@ -15,101 +15,63 @@ $editor = JFactory::getEditor();
 
 JHTML::_('behavior.mootools');
 JHTML::_('behavior.tooltip');
-
 ?>
-
 <div id="cmc" class="cmc">
     <form action="index.php" method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_CMC'); ?></legend>
             <table>
-                <tr>
-                    <td width="200" align="left" class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_NAME'); ?>:
-                    </td>
-                    <td>
-                        <input class="required" type="text" name="gallery_name" id="gallery_name" size="50" maxlength="250" value="<?php echo $this->gallery->gallery_name; ?>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100"  class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_DESCRIPTION'); ?>:
-                    </td>
-                    <td>
-                        <textarea class="text_area" type="text" cols="20" rows="4" name="description" id="description" style="width:500px" /><?php echo $this->gallery->description; ?></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100" class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_WIDTH'); ?>:
-                    </td>
-                    <td>
-                        <input class="required" type="text" name="tiles_width" id="tiles_width" size="5" maxlength="10" value="<?php echo $this->gallery->tiles_width; ?>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100" class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_HEIGHT'); ?>:
-                    </td>
-                    <td>
-                        <input class="required" type="text" name="tiles_height" id="tiles_height" size="5" maxlength="10" value="<?php echo $this->gallery->tiles_height; ?>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100" class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_FIELDS_HORIZONTAL'); ?>:
-                    </td>
-                    <td>
-                        <input class="required" type="text" name="tiles_fields_horizontal" id="tiles_fields_horizontal" size="5" maxlength="10" value="<?php echo $this->gallery->tiles_fields_horizontal; ?>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100" class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_FIELDS_VERTICAL'); ?>:
-                    </td>
-                    <td>
-                        <input class="required" type="text" name="tiles_fields_vertical" id="tiles_fields_vertical" size="5" maxlength="10" value="<?php echo $this->gallery->tiles_fields_vertical; ?>" />
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100" class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_FIELDS_HORIZONTAL_VISIBLE'); ?>:
-                    </td>
-                    <td>
-                        <input class="required" type="text" name="tiles_fields_horizontal_visible" id="tiles_fields_horizontal_visible" size="5" maxlength="10" value="<?php echo $this->gallery->tiles_fields_horizontal_visible; ?>" />
-                    </td>
-                </tr>
                 <!--
                 <tr>
-                    <td width="100"  class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_COLOR_PROFILE'); ?>:
+                    <td width="200" align="left" class="key">
+                        <?php // echo JText::_('COM_CMC_ID'); ?>:
                     </td>
                     <td>
-                        <?php // TODO:: echo $this->gallery->color_profile; ?>
-                        <select id="color_profile" name="color_profile">
-                            <option value="default"><?php echo JText::_('COM_TILES_COLOR_DEFAULT'); ?></option>
-                            <option value="blue"><?php echo JText::_('COM_TILES_COLOR_BLUE'); ?></option>
-                            <option value="grey"><?php echo JText::_('COM_TILES_COLOR_GREY'); ?></option>
-                            <option value="chstk "><?php echo JText::_('COM_TILES_COLOR_CUSTOM'); ?></option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100"  class="key">
-                        <?php echo JText::_('COM_TILES_GALLERY_COLOR_PROFILE_CUSTOM'); ?>:
-                    </td>
-                    <td>
-                        <textarea class="text_area" type="text" cols="20" rows="4" name="description" id="color_profile_custom" style="width:500px" /><?php echo $this->gallery->color_profile_custom; ?></textarea>
+                        <?php //echo $this->user->id; ?> / Mailchimp Id: <?php //echo $this->user->mc_id; ?>
                     </td>
                 </tr>
                 -->
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_FIRSTNAME'); ?>:
+                    </td>
+                    <td>
+                        <input class="required" type="text" name="firstname" id="firstname" size="50" maxlength="250" value="<?php echo $this->user->firstname; ?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_LASTNAME'); ?>:
+                    </td>
+                    <td>
+                        <input class="required" type="text" name="lastname" id="lastname" size="50" maxlength="250" value="<?php echo $this->user->lastname; ?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_EMAIL'); ?>:
+                    </td>
+                    <td>
+                        <input class="required" type="text" name="email" id="email" size="50" maxlength="250" value="<?php echo $this->user->email; ?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="left" class="key">
+                        <?php echo JText::_('COM_CMC_STATUS'); ?>:
+                    </td>
+                    <td>
+                        select
+                    </td>
+                </tr>
             </table>
 
         </fieldset>
-        <input type="hidden" name="id" value="<?php echo $this->gallery->id; ?>" />
-        <input type="hidden" name="option" value="com_tiles" />
-        <input type="hidden" name="view" value="editgallery" />
-        <input type="hidden" name="model" value="editgallery" />
-        <input type="hidden" name="task" value="editgallery" />
+        <input type="hidden" name="id" value="<?php echo $this->user->id; ?>" />
+        <input type="hidden" name="mail_old" value="<?php echo $this->user->email; ?>" />
+        <input type="hidden" name="option" value="COM_CMC" />
+        <input type="hidden" name="controller" value="users" />
+        <input type="hidden" name="view" value="edituser" />
+        <input type="hidden" name="model" value="edituser" />
+        <input type="hidden" name="task" value="edituser" />
     </form>
 </div>
