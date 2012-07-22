@@ -16,7 +16,7 @@ jimport('joomla.filter.input');
 
 class CmcTableUsers extends JTable
 {
-    function __construct(&$db)
+    public function __construct(&$db)
     {
         parent::__construct( '#__cmc_users', 'id', $db );
     }

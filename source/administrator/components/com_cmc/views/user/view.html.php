@@ -11,14 +11,12 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class CmcViewEditUser extends JView {
+class CmcViewUser extends JView {
 
     function display($tpl = null) {
+        $user = $this->get('Item');
 
-        $model = $this->getModel();
-        $user = $model->getUser();
-
-        if (!$user) {
+        if (!$user->get('id')) {
             // Create new empty list item
             $user = JTable::getInstance('users', 'CmcTable');
         } else {
@@ -28,9 +26,6 @@ class CmcViewEditUser extends JView {
 
             $user = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), $user->list_id, $user->email, $user->id, true);
         }
-//
-//        var_dump($user);
-//        die("adsf");
 
         $lists = CmcHelper::getLists();
 
@@ -73,9 +68,9 @@ class CmcViewEditUser extends JView {
     public function addToolbar() {
         // Set toolbar items for the page
         JToolBarHelper::title(JText::_('COM_CMC_EDIT_USER'), 'users');
-        JToolBarHelper::save();
-        JToolBarHelper::apply();
-        JToolBarHelper::cancel();
+        JToolBarHelper::save('user.save');
+        JToolBarHelper::apply('user.apply');
+        JToolBarHelper::cancel('user.cancel');
         JToolBarHelper::help('screen.users', true);
     }
 

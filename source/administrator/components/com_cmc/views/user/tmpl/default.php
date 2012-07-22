@@ -17,7 +17,7 @@ JHTML::_('behavior.mootools');
 JHTML::_('behavior.tooltip');
 ?>
 <div id="cmc" class="cmc">
-    <form action="index.php" method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
+    <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=user&layout=edit&id='.(int)$this->user->id); ?>" method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
         <fieldset class="adminform">
             <legend><?php echo JText::_('COM_CMC_EDIT_USER'); ?></legend>
             <table>
@@ -155,12 +155,9 @@ JHTML::_('behavior.tooltip');
 
 
         </fieldset>
-        <input type="hidden" name="id" value="<?php echo $this->user->id; ?>" />
-        <input type="hidden" name="mail_old" value="<?php echo $this->user->email; ?>" />
-        <input type="hidden" name="option" value="COM_CMC" />
-        <input type="hidden" name="controller" value="users" />
-        <input type="hidden" name="view" value="edituser" />
-        <input type="hidden" name="model" value="edituser" />
-        <input type="hidden" name="task" value="edituser" />
+
+
+        <input type="hidden" name="task" value="" />
+        <?php echo JHTML::_('form.token'); ?>
     </form>
 </div>

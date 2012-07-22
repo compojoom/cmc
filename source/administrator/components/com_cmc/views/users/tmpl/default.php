@@ -13,108 +13,76 @@ defined('_JEXEC') or die('Restricted access');
 
 JHTML::_('behavior.tooltip');
 jimport('joomla.filter.output');
-?>
-<script type="text/javascript">
-    <?php
-    /**
-     * this is so lame... I hate myself for doing it. -> QUOTE Daniel :)
-     */
-    ?>
-    Joomla.submitbutton = function (button) {
-        if (button == 'edit' || button == 'add') {
-            var view = new Element('input', {
-                type:'hidden',
-                name:'view',
-                'value':'lists'
-            });
 
-            view.inject(document.adminForm);
-        }
-        Joomla.submitform(button);
-    }
-</script>
-<form action="index.php" method="post" name="adminForm">
-    <table>
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn = $this->escape($this->state->get('list.direction'));
+?>
+
+<form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm">
+    <div class="filter-search fltlft">
+        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+        <input type="text" name="filter_search" id="filter_search"
+               value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+               title="<?php echo JText::_('COM_CMC_SEARCH_IN_EMAIL'); ?>"/>
+        <button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+        <button type="button"
+                onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+    </div>
+    <div class="clr"></div>
+
+    <table class="adminlist">
+        <thead>
         <tr>
-            <td align="left" width="100%"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>:
-                <input type="text" name="search" id="search" value="<?php echo $this->filter['search']; ?>"
-                       class="text_area" onchange="document.adminForm.submit();"/>
-                <button onclick="this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-                <button
-                    onclick="document.getElementById('search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR');
-                    ?></button>
+            <th width="5"><?php echo JText::_('JGRID_HEADING_ROW_NUMBER'); ?></th>
+            <th width="5">
+                <input type="checkbox" name="checkall-toggle" value=""
+                       title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+            </th>
+            <th class="title">
+                <?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 'u.email', $listDirn, $listOrder); ?>
+            </th>
+            <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
+            <th width="10%"><?php echo JText::_('COM_CMC_LIST'); ?></th>
+            <th width="20%"><?php echo JText::_('COM_CMC_TIMESTAMP'); ?></th>
+            <th width="15%"><?php echo JText::_('COM_CMC_STATUS'); ?></th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="10"><?php echo $this->pagination->getListFooter(); ?></td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <?php foreach ($this->items as $i => $item) : ?>
+        <tr class="<?php echo "row" . $i % 2; ?>">
+            <td><?php echo $this->pagination->getRowOffset($i); ?></td>
+            <td>
+                <?php echo JHTML::_('grid.id', $i, $item->id);; ?>
             </td>
-            <td nowrap="nowrap">
-                <?php
-                echo $this->filter['state'];
-                ?>
+            <td>
+                <a href="<?php echo JRoute::_('index.php?option=com_cmc&task=user.edit&id=' . $item->id);; ?>">
+                    <?php echo $item->email; ?>
+                </a>
+            </td>
+            <td align="center">
+                <?php echo $item->id; ?>
+            </td>
+            <td align="center">
+                <?php echo CmcHelper::getListName($item->list_id); ?>
+            </td>
+            <td align="center">
+                <?php echo $item->timestamp; ?>
+            </td>
+            <td align="center">
+                <?php echo $item->status; ?>
             </td>
         </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
-
-    <div id="editcell">
-        <table class="adminlist">
-            <thead>
-            <tr>
-                <th width="5"><?php echo JText::_('JGRID_HEADING_ROW_NUMBER'); ?></th>
-                <th width="5">
-                    <input type="checkbox" name="toggle" value=""
-                           onclick="checkAll(<?php echo count($this->list); ?>);"/>
-                </th>
-                <th class="title"><?php echo JHTML::_('grid.sort', 'COM_CMC_EMAIL', 'cc.$email', $this->filter['order_Dir'],
-                                            $this->filter['order']); ?></th>
-                <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
-                <th width="10%"><?php echo JText::_('COM_CMC_LIST'); ?></th>
-                <th width="20%"><?php echo JText::_('COM_CMC_TIMESTAMP'); ?></th>
-                <th width="15%"><?php echo JText::_('COM_CMC_STATUS'); ?></th>
-            </tr>
-            </thead>
-            <tfoot>
-            <tr>
-                <td colspan="10"><?php echo $this->pagination->getListFooter(); ?></td>
-            </tr>
-            </tfoot>
-            <tbody>
-            <?php
-            $i = 0;
-            foreach ($this->list as $l) {
-                $checked = JHTML::_('grid.id', $i, $l->id);
-                $link = JRoute::_('index.php?option=com_cmc&view=users&task=editUser&id=' . $l->id);
-                ?>
-            <tr class="<?php echo "row" . $i % 2; ?>">
-                <td><?php echo $this->pagination->getRowOffset($i); ?></td>
-                <td>
-                    <?php echo $checked; ?>
-                </td>
-                <td>
-                    <a href="<?php echo $link; ?>"><?php echo $l->email; ?></a>
-                </td>
-                <td align="center">
-                    <?php echo $l->id; ?>
-                </td>
-                <td align="center">
-                    <?php echo CmcHelper::getListName($l->list_id); ?>
-                </td>
-                <td align="center">
-                    <?php echo $l->timestamp; ?>
-                </td>
-                <td align="center">
-                    <?php echo $l->status; ?>
-                </td>
-            </tr>
-                <?php
-                $i++;
-            }
-            ?>
-            </tbody>
-        </table>
-    </div>
-    <input type="hidden" name="option" value="com_cmc"/>
     <input type="hidden" name="task" value=""/>
-    <input type="hidden" name="view" value="users"/>
-    <input type="hidden" name="controller" value="users"/>
     <input type="hidden" name="boxchecked" value="0"/>
-    <input type="hidden" name="filter_order" value="<?php echo $this->filter['order']; ?>"/>
-    <input type="hidden" name="filter_order_Dir" value="<?php echo $this->filter['order_Dir']; ?>"/>
+    <input type="hidden" name="filter_order" value="<?php echo $listOrder ?>"/>
+    <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn ?>"/>
     <?php echo JHTML::_('form.token'); ?>
 </form>

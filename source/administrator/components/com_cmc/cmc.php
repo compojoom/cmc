@@ -56,27 +56,8 @@ if(JRequest::getCmd('view','') == 'information') {
 
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
 
-// Get the view and controller from the request, or set to eventlist if they weren't set
-JRequest::setVar('controller', JRequest::getCmd('view', 'lists')); // Black magic: Get controller based on the selected view
 
-// Require specific controller if requested
-if ($controller = JRequest::getCmd('controller')) {
-    $path = JPATH_COMPONENT_ADMINISTRATOR .  '/controllers/' .  $controller . '.php';
+$controller = JController::getInstance('Cmc');
 
-    if (file_exists($path)) {
-        require_once $path;
-    } else {
-        $controller = '';
-    }
-}
-
-if ($controller == '') {
-    require_once(JPATH_COMPONENT_ADMINISTRATOR .  '/controllers/lists.php');
-    $controller = 'lists';
-}
-
-// Create the controller
-$classname = 'CmcController' . $controller;
-$controller = new $classname( );
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();
