@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.5" method="upgrade">
+    <name>mod_cmc</name>
+    <author>compojoom.com</author>
+    <creationDate>@@DATE@@</creationDate>
+    <copyright>Copyright (C) 2012 Daniel Dimitrov - compojoom.com. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>daniel@compojoom.com</authorEmail>
+    <authorUrl>compojoom.com</authorUrl>
+    <version>@@VERSION@@</version>
+    <description>MOD_CMC_XML_DESCRIPTION</description>
+    <files>
+        ##PACKAGEFILESMODULE##
+    </files>
+    <languages folder="administrator/language">
+        ##FRONTENDLANGUAGEFILES##
+    </languages>
+    <media destination="@@MODULENAME@@" folder="media/@@MODULENAME@@">
+        ##MEDIAPACKAGEFILES##
+    </media>
+    <config>
+        <fields name="params" addfieldpath="/modules/mod_cmc/library/fields">
+            <fieldset name="basic">
+                <field name="intro-text" type="textarea" default="" cols="25" rows="2" label="COM_CMC_INTRO_TEXT"
+                       description="COM_CMC_INTRO_TEXT_DESC"/>
+                <field name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="COM_CMC_OUTRO_TEXT_1"
+                       description="COM_CMC_OUTRO_TEXT_1_DESC"/>
+                <field name="outro-text-2" type="textarea" default="" cols="25" rows="2" label="COM_CMC_OUTRO_TEXT_2"
+                       description="COM_CMC_OUTRO_TEXT_2_DESC"/>
+                <field name="thankyou" type="textarea"
+                       default="Thank you! Please check your email and confirm the newsletter subscription." cols="25"
+                       rows="2" label="COM_CMC_THANKYOU_MESSAGE" description="COM_CMC_THANK_YOU_DESC"/>
+                <field name="updateMsg" type="textarea"
+                       default="You were already subscribed to this list. Your settings have been updated. Thank you!"
+                       cols="25" rows="2" label="COM_CMC_UPDATE_MESSAGE" description="COM_CMC_UPDATE_DESC"/>
+                <field name="listid" type="cmclists" default="" cols="25" rows="2" label="COM_CMC_LIST"
+                       description="COM_CMC_LIST_DESC"/>
+                <field name="fields" type="fields" default="" label="COM_CMC_FIELDS" description="COM_CMC_FIELDS_DESC"/>
+                <field name="interests" type="interests" default="" label="COM_CMC_INTERESTS"
+                       description="COM_CMC_INTERESTS_DESC"/>
+                <field name="dateFormat" type="text" default="%Y-%m-%d" label="COM_CMC_DATE_FORMAT"
+                       description="COM_CMC_DATE_FORMAT_DESC"/>
+                <field name="phoneFormat" type="radio" default="inter" label="COM_CMC_PHONE_FORMAT"
+                       description="COM_CMC_PHONE_FORMAT_DESC">
+                    <option value="us">COM_CMC_US_FORMAT</option>
+                    <option value="inter">COM_CMC_INTERNATIONAL_FORMAT</option>
+                </field>
+                <field name="address2" type="radio" default="0" label="COM_CMC_SHOW_ADDRESS2"
+                       description="COM_CMC_SHOW_ADDRESS2_DESC">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                        name="layout"
+                        type="modulelayout"
+                        label="JFIELD_ALT_LAYOUT_LABEL"
+                        description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                       description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
