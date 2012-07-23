@@ -8,3 +8,93 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
+
+require_once(JPATH_ROOT . '/modules/mod_cmc/library/form/form.php');
+$rand = rand(1000, 9999);
+$interests = $params->get('interests');
+$fields = $params->get('fields');
+
+JHtml::_('behavior.mootools', true);
+JHtml::script(JURI::root() . '/media/mod_cmc/js/cmc.js');
+
+$document = JFactory::getDocument();
+$script = 'window.addEvent("domready", function() {
+    new cmc("cmc-signup-form-' . $rand . '");
+});';
+
+$document->addScriptDeclaration($script);
+
+$form = new cmcForm($params);
+?>
+<div id="cmc-signup-<?php echo $rand;?>" class="cmc-signup <?php echo $params->get('moduleclass_sfx', ''); ?>">
+    <div id="intro<?php echo $rand;?>">
+        <?php if ($params->get('intro-text')) : ?>
+        <p class="intro"><?php echo JText::_($params->get('intro-text')); ?></p>
+        <?php endif; ?>
+    </div>
+
+    <form action="<?php echo JRoute::_('index.php?option=com_cmc&format=raw&task=subscription.save'); ?>" method="post" id="cmc-signup-form-<?php echo $rand;?>" name="cmc<?php echo $rand;?>">
+        <?php
+        if (is_array($fields)) {
+            foreach ($fields as $f) {
+                $field = explode(';', $f);
+                echo '<div>';
+                echo $form->$field[1]($field);
+                echo '</div>';
+            }
+        }
+
+        if (is_array($interests)) {
+            foreach ($interests as $i) {
+
+                $interest = explode(';', $i);
+                $groups = explode('####', $interest[3]);
+
+                echo '<div class="signup-title">' . JText::_($interest[2]) . '</div>';
+                switch ($interest[1]) {
+                    case 'checkboxes':
+                        foreach ($groups as $g) {
+                            $o = explode('##', $g);
+                            echo '<input type="checkbox" name="' . $interest[0] . '" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" /><label for="' . $interest[0] . '_' . $o[0] . '">' . JText::_($o[1]) . '</label><br />';
+                        }
+                        break;
+                    case 'radio':
+                        foreach ($groups as $g) {
+                            $o = explode('##', $g);
+                            echo '<input type="radio" name="' . $interest[0] . '" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" /><label for="' . $interest[0] . '_' . $o[0] . '">' . JText::_($o[1]) . '</label><br />';
+                        }
+                        break;
+                    case 'dropdown':
+                        echo '<select name="' . $interest[0] . '" id="' . $interest[0] . '" class="submitMerge inputbox">';
+                        echo '<option value=""></option>';
+                        foreach ($groups as $g) {
+                            $o = explode('##', $g);
+                            echo '<option value="' . $o[0] . '">' . JText::_($o[1]) . '</option>';
+                        }
+                        echo '</select><br />';
+                        break;
+                }
+            }
+        }
+
+        ?>
+
+        <input type="hidden" name="listid" value="<?php echo $params->get( 'listid' );?>" />
+        <?php echo JHTML::_('form.token'); ?>
+        <?php if ($params->get('outro-text-1')) : ?>
+        <div id="outro1_<?php echo $rand;?>" class="outro1">
+            <p class="outro"><?php echo JText::_($params->get('outro-text-1')); ?></p>
+        </div>
+        <?php endif; ?>
+        <div>
+            <input type="submit" class="button" value="<?php echo JText::_('COM_CMC_SUBSCRIBE'); ?>"
+                   id="mcsignupSubmit<?php echo $rand;?>"/>
+        </div>
+        <?php if ($params->get('outro-text-2')) : ?>
+        <div id="outro2_<?php echo $rand;?>" class="outro2">
+            <p class="outro"><?php echo JText::_($params->get('outro-text-2')); ?></p>
+        </div>
+        <?php endif; ?>
+    </form>
+
+</div>
