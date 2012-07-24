@@ -286,7 +286,7 @@ class cmcForm
             $title = $title . ' *';
         }
 
-        return $this->input($params[0], $params[0], 'class="' . implode(' ', $class) . '"', $title);
+        return $this->input('jform[groups]['.$params[0].']', $params[0], 'class="' . implode(' ', $class) . '"', $title);
     }
 
     private function input($name, $id, $class, $title, $attrib = '')
@@ -304,7 +304,7 @@ class cmcForm
             $title = JText::_($params[2]) . ' *';
         }
         echo '<div class="mcsignupTitle">' . $title . '</div>';
-        $select = '<select name="' . $params[0] . '" id="' . $params[0] . '" ' . $req . '>';
+        $select = '<select name="jform[groups][' . $params[0] . ']" id="' . $params[0] . '" ' . $req . '>';
         if (!$params[3]) {
             $select .= '<option value=""></option>';
         }
@@ -326,7 +326,7 @@ class cmcForm
         }
         $radio = '<div class="mcsignupTitle">' . $title . '</div>';
         foreach ($choices as $ch) {
-            $radio .= '<input type="radio" name="' . $params[0] . '" id="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="' . $ch . '" title="' . JText::_($title) . '" /><label for="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '">' . JText::_($ch) . '</label><br />';
+            $radio .= '<input type="radio" name="jform[groups][' . $params[0] . ']" id="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="' . $ch . '" title="' . JText::_($title) . '" /><label for="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '">' . JText::_($ch) . '</label><br />';
         }
 
         return $radio;
@@ -346,7 +346,7 @@ class cmcForm
         } else {
             $attributes['class'] = 'inputbox';
         }
-        return JHTML::calendar($title, $params[0], $params[0], $this->params->get('dateFormat', '%Y-%m-%d'), $attributes);
+        return JHTML::calendar($title, 'jform[groups]['.$params[0].']', $params[0], $this->params->get('dateFormat', '%Y-%m-%d'), $attributes);
 
     }
 
@@ -358,13 +358,13 @@ class cmcForm
             $title = $params[2] . ' *';
         }
         $select = '<label for="' . $params[0] . '_month">' . $title . ': </label>';
-        $select .= '<select name="' . $params[0] . '#*#month" id="' . $params[0] . '_month" title="' . JText::_($params[2]) . '" ' . $req . '>';
+        $select .= '<select name="jform[groups][' . $params[0] . '][month]" id="' . $params[0] . '_month" title="' . JText::_($params[2]) . '" ' . $req . '>';
         $select .= '<option value="">MM</option>';
         for ($i = 1; $i <= 12; $i++) {
             $select .= '<option value="' . str_pad($i, 2, '0', STR_PAD_LEFT) . '">' . str_pad($i, 2, '0', STR_PAD_LEFT) . '</option>';
         }
         $select .= '</select>';
-        $select .= '<select name="' . $params[0] . '#*#day" id="' . $params[0] . '_day" title="' . JText::_($params[2]) . '" ' . $req . '>';
+        $select .= '<select name="jform[groups][' . $params[0] . '][day]" id="' . $params[0] . '_day" title="' . JText::_($params[2]) . '" ' . $req . '>';
         $select .= '<option value="">DD</option>';
         for ($i = 1; $i <= 31; $i++) {
             $select .= '<option value="' . str_pad($i, 2, '0', STR_PAD_LEFT) . '">' . str_pad($i, 2, '0', STR_PAD_LEFT) . '</option>';
@@ -388,9 +388,9 @@ class cmcForm
             }
 
             $phone = '<label for="' . $params[0] . '">' . $title . ': </label>';
-            $phone .= $this->input($params[0] . '*#*1', $params[0], 'class="' . implode(' ', $class) . '"', $title, 'size="2" maxlength="3"');
-            $phone .= $this->input($params[0] . '*#*2', $params[0], 'class="' . implode(' ', $class) . '"', $title, 'size="2" maxlength="3"');
-            $phone .= $this->input($params[0] . '*#*3', $params[0], 'class="' . implode(' ', $class) . '"', $title, 'size="2" maxlength="4"');
+            $phone .= $this->input('jform[groups]['.$params[0] . '][area]', $params[0], 'class="' . implode(' ', $class) . '"', $title, 'size="2" maxlength="3"');
+            $phone .= $this->input('jform[groups]['.$params[0] . '][detail1]', $params[0], 'class="' . implode(' ', $class) . '"', $title, 'size="2" maxlength="3"');
+            $phone .= $this->input('jform[groups]['.$params[0] . '][detail2]', $params[0], 'class="' . implode(' ', $class) . '"', $title, 'size="2" maxlength="4"');
         }
 
         return $phone;
@@ -405,15 +405,15 @@ class cmcForm
         }
         $address = '<label for="' . $params[0] . '">' . $title . ': </label><br />';
 
-        $address .= $this->input($params[0] . '***addr1', $params[0], $req, JText::_('MOD_CMC_STREET_ADDRESS'));
+        $address .= $this->input('jform[groups]['.$params[0] . '][addr1]', $params[0], $req, JText::_('MOD_CMC_STREET_ADDRESS'));
         if ($this->params->get('address2', 0)) {
-            $address .= $this->input($params[0] . '***addr2', $params[0], $req, JText::_('MOD_CMC_ADDRESS_2'));
+            $address .= $this->input('jform[groups]['.$params[0] . '][addr2]', $params[0], $req, JText::_('MOD_CMC_ADDRESS_2'));
         }
-        $address .= $this->input($params[0] . '***city', $params[0], $req, JText::_('MOD_CMC_CITY'));
-        $address .= $this->input($params[0] . '***state', $params[0], $req, JText::_('MOD_CMC_STATE'));
-        $address .= $this->input($params[0] . '***zip', $params[0], $req, JText::_('MOD_CMC_ZIP'));
+        $address .= $this->input('jform[groups]['.$params[0] . '][city]', $params[0], $req, JText::_('MOD_CMC_CITY'));
+        $address .= $this->input('jform[groups]['.$params[0] . '][state]', $params[0], $req, JText::_('MOD_CMC_STATE'));
+        $address .= $this->input('jform[groups]['.$params[0] . '][zip]', $params[0], $req, JText::_('MOD_CMC_ZIP'));
 
-        $address .= $this->getCountryDropdown($params[0] . '***country', $params[0], JText::_('MOD_CMC_COUNTRY'), $req) . '<br />';
+        $address .= $this->getCountryDropdown('jform[groups]['.$params[0] . '][country]', $params[0], JText::_('MOD_CMC_COUNTRY'), $req) . '<br />';
 
         return $address;
     }

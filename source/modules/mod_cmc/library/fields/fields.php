@@ -56,7 +56,7 @@ class JFormFieldFields extends CmcField
 				});
 				</script>';
         } else {
-            $content = '<div style="float:left;">' . JText::_('JM_NO_FIELDS') . '</div>';
+            $content = '<div style="float:left;">' . JText::_('MOD_CMC_NO_FIELDS') . '</div>';
         }
 
         return $content;

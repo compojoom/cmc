@@ -20,7 +20,7 @@ class JFormFieldCmclists extends CmcField {
 
         $key = 'id';
         $val = 'name';
-        $options[] = array( $key => '', $val => '-- '.JText::_('COM_CMC_PLEASE_SELECT_A_LIST').' --');
+        $options[] = array( $key => '', $val => '-- '.JText::_('MOD_CMC_PLEASE_SELECT_A_LIST').' --');
 
         foreach ($lists['data'] as $list){
             $options[]=array($key=>$list[$key],$val=>$list[$val]);
