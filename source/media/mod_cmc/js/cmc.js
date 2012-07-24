@@ -75,16 +75,5 @@ var cmc = new Class({
             }
 
         });
-    },
-
-    /**
-     * proxy for jtext
-     * @param key
-     * @return {*}
-     */
-    translate: function(key) {
-        return Joomla.JText._(key);
     }
-
-
 });
