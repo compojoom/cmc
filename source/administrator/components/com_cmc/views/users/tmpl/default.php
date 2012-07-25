@@ -68,7 +68,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                 <?php echo $item->id; ?>
             </td>
             <td align="center">
-                <?php echo CmcHelper::getListName($item->list_id); ?>
+                <?php echo CmcHelperBasic::getListName($item->list_id); ?>
             </td>
             <td align="center">
                 <?php echo $item->timestamp; ?>

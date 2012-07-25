@@ -14,11 +14,12 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmc')) {
     return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
+JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
+
 require_once( JPATH_COMPONENT . '/controller.php' );
-JLoader::register('CmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helper/basichelper.php');
-JLoader::register('CmcSettingsHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helper/settingshelper.php');
-JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/helper/MCAPI.class.php');
-JLoader::register('CmcHelperSynchronize', JPATH_COMPONENT_ADMINISTRATOR . '/helper/synchronizehelper.php');
+JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/libraries/mailchimp/MCAPI.class.php');
+
+JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
 
 // thank you for this black magic Nickolas :)
 // Magic: merge the default translation with the current translation
@@ -28,36 +29,22 @@ $jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
 
 // Live updater
-require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
-
-// Conrol Center
-require_once( JPATH_COMPONENT_ADMINISTRATOR . '/controlcenter/controlcenter.php');
-
-// Mailchimp PHP Class
-require_once( JPATH_COMPONENT_ADMINISTRATOR . '/helper/MCAPI.class.php');
-
 if(JRequest::getCmd('view','') == 'liveupdate') {
     JToolBarHelper::preferences( 'com_cmc' );
+    require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
     LiveUpdate::handleRequest();
     return;
 }
 
-if(JRequest::getCmd('view','') == 'controlcenter') {
+// Conrol Center
+$view = JRequest::getCmd('view','');
+if(( $view == '' && JRequest::getCmd('task') == '') || $view == 'controlcenter') {
     JToolBarHelper::preferences( 'com_cmc' );
+    require_once( JPATH_COMPONENT_ADMINISTRATOR . '/controlcenter/controlcenter.php');
     CompojoomControlCenter::handleRequest();
     return;
 }
 
-if(JRequest::getCmd('view','') == 'information') {
-    JToolBarHelper::preferences( 'com_cmc' );
-    CompojoomControlCenter::handleRequest('information');
-    return;
-}
-
-JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
-
-
 $controller = JController::getInstance('Cmc');
-
 $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();

@@ -11,10 +11,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::register('CmcHelperSettings', JPATH_COMPONENT_ADMINISTRATOR . '/helper/settings.php');
-JLoader::register('CmcHelperSynchronize', JPATH_COMPONENT_ADMINISTRATOR . '/helper/synchronizehelper.php');
-JLoader::register('CmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helper/basichelper.php');
-JLoader::register('CmcHelperChimp', JPATH_COMPONENT_ADMINISTRATOR . '/helper/chimp.php');
+JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
 
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
 
