@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
+JLoader::register('MCAPI', JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/mailchimp/MCAPI.class.php');
 
 /**
  * This class will work as a small abstraction over the MCAPI class.
@@ -17,7 +18,7 @@ class cmcHelperChimp extends MCAPI {
 
     public function __construct($key = '', $secure = '' ) {
         if(!$key) {
-            $key = CmcSettingsHelper::getSettings('api_key', '');
+            $key = JComponentHelper::getParams('com_cmc')->get('api_key', '');
         }
 
         if(!$secure) {
