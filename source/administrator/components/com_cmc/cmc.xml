@@ -8,8 +8,7 @@
     <authorUrl>www.compojoom.com</authorUrl>
     <version>@@VERSION@@</version>
     <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
-    <description><![CDATA[Mailchimp list management for Joomla!]]>
-    </description>
+    <description><![CDATA[Mailchimp list management for Joomla!]]></description>
     <scriptfile>script.php</scriptfile>
     <install>
         <sql>

@@ -142,6 +142,13 @@
                 <foreach list="${modules_admin}" param="module_admin" target="buildModule"/>
             </then>
         </if>
+
+        <if>
+            <isset property="modules"/>
+            <then>
+                <foreach list="${modules}" param="module" target="buildModule"/>
+            </then>
+        </if>
     </target>
 
     <target name="dev-release" description="Makes everything except the documentation"
