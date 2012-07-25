@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-    <!-- joomla 1.6 -->
-    <fieldset name="backend" label="COM_CMC_CONFIG_BACKEND_HEADER_LABEL"
-              description="COM_CMC_CONFIG_LIVE_UPDATE_HEADER_DESC">
-        <field name="username" type="text" default="" size="30" label="Username"
-               description ="Enter the username to our site in order to enable Live Updates" />
-        <field name="password" type="text" default="" size="30" label="Password"
-               description ="Enter the password to our site in order to enable Live Updates" />
+    <fieldset name="main" label="COM_CMC_MAIN_SETTINGS"
+              description="COM_CMC_MAIN_SETTINGS_DESC">
+        <field
+                name="api_key"
+                type="text" default=""
+                label="COM_CMC_API_KEY"
+                description="COM_CMC_API_KEY_DESC"
+                size="60"
+                />
+        <field
+                name="secure_key"
+                type="text" default=""
+                label="COM_CMC_WEBHOOKS_KEY"
+                description="COM_CMC_WEBHOOKS_SECURE_DESC"
+                size="60"
+                />
+
     </fieldset>
+
     <fieldset
             name="permissions"
-            label="COM_CMC_PERMISSIONS_FRONTEND_LABEL"
-            description="COM_CMC_PERMISSIONS_FRONTEND_DESC"
+            label="JCONFIG_PERMISSIONS_LABEL"
+            description="COM_CMC_PERMISSIONS_DESC"
             >
 
         <field
                 name="rules"
                 type="rules"
-                label="COM_CMC_PERMISSIONS_FRONTEND"
+                label="JCONFIG_PERMISSIONS_LABEL"
                 class="inputbox"
                 validate="rules"
                 filter="rules"
-                component="com_cmc" />
+                component="com_cmc" section="component"/>
     </fieldset>
 </config>
