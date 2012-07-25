@@ -21,13 +21,10 @@ class CmcViewUser extends JView {
             $user = JTable::getInstance('users', 'CmcTable');
         } else {
             // Update User from Mailchimp
-            //     public static function getUserDetailsMC($api_key, $list_id, $email, $id = null, $store = true){
-            // //$ret = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), "2c4bb4fad2", "hoppe.yves@gmail.com", 13, true);
-
-            $user = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), $user->list_id, $user->email, $user->id, true);
+            $user = CmcHelperBasic::getUserDetailsMC(JComponentHelper::getParams('com_cmc')->get("api_key", ''), $user->list_id, $user->email, $user->id, true);
         }
 
-        $lists = CmcHelper::getLists();
+        $lists = CmcHelperBasic::getLists();
 
         $list_options = array();
 

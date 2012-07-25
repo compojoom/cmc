@@ -108,7 +108,7 @@ JHTML::_('behavior.tooltip');
                         <?php echo JText::_('COM_CMC_CUSTOM_FIELDS'); ?>:
                     </td>
                     <td>
-                        <?php echo CmcHelper::array_implode(" = ", ", ", json_decode($this->user->merges, true)); ?>
+                        <?php echo CmcHelperBasic::array_implode(" = ", ", ", json_decode($this->user->merges, true)); ?>
                     </td>
                 </tr>
                 <tr>
@@ -116,7 +116,7 @@ JHTML::_('behavior.tooltip');
                         <?php echo JText::_('COM_CMC_CLIENTS'); ?>:
                     </td>
                     <td>
-                        <?php echo CmcHelper::array_implode(" = ", ", ", json_decode($this->user->clients, true)); ?>
+                        <?php echo CmcHelperBasic::array_implode(" = ", ", ", json_decode($this->user->clients, true)); ?>
                     </td>
                 </tr>
                 <tr>

@@ -17,25 +17,6 @@ jimport('joomla.filter.output');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 ?>
-<script type="text/javascript">
-    <?php
-    /**
-     * this is so lame... I hate myself for doing it. -> QUOTE Daniel :)
-     */
-    ?>
-    //    Joomla.submitbutton = function (button) {
-    //        if (button == 'edit' || button == 'add') {
-    //            var view = new Element('input', {
-    //                type:'hidden',
-    //                name:'view',
-    //                'value':'lists'
-    //            });
-    //
-    //            view.inject(document.adminForm);
-    //        }
-    //        Joomla.submitform(button);
-    //    }
-</script>
 <?php
 // testing
 //$ret = CmcHelperSynchronize::synchronizeList(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
