@@ -9,8 +9,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::register('CmcSettingsHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper/settingshelper.php');
-
 abstract class CmcField extends JFormField {
 
     public function __construct($form = null) {
@@ -21,13 +19,13 @@ abstract class CmcField extends JFormField {
     }
 
     public function checkCmcInstall() {
-        if(!CmcSettingsHelper::getSettings('api_key', '')) {
+        if(!JComponentHelper::getParams('com_cmc')->get('api_key', '')) {
             $appl = JFactory::getApplication();
             $appl->redirect('index.php?option=com_cmc','MOD_CMC_YOU_NEED_TO_PROVIDE_API_KEY');
         }
     }
 
     public function getSettings($key, $default = '') {
-        return CmcSettingsHelper::getSettings($key, $default);
+        return JComponentHelper::getParams('com_cmc')->get($key, $default);
     }
 }

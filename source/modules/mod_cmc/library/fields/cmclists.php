@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 JLoader::register('CmcField', JPATH_ROOT . '/modules/mod_cmc/library/fields/field.php');
-JLoader::register('cmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helper/chimp.php');
+JLoader::register('cmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
 
 
 class JFormFieldCmclists extends CmcField {

@@ -49,7 +49,7 @@ class JFormFieldInterests extends CmcField
             }
         }
 
-        $attribs = 'multiple="multiple"';
+        $attribs = 'multiple="multiple" size="8"';
         if ($options) {
             $content = JHtml::_('select.genericlist', $options, 'jform[params][interests][]', $attribs, $key, $val, $this->value, $this->id);
         } else {

@@ -44,7 +44,7 @@ class JFormFieldFields extends CmcField
             }
         }
 
-        $attribs = 'multiple="multiple"';
+        $attribs = 'multiple="multiple" size="8"';
         if ($options) {
             $content = JHtml::_('select.genericlist', $options, 'jform[params][fields][]', $attribs, $key, $val, $this->value, $this->id);
             $content .= '<script type="text/javascript">
