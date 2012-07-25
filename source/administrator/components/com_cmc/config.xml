@@ -8,13 +8,15 @@
                 label="COM_CMC_API_KEY"
                 description="COM_CMC_API_KEY_DESC"
                 size="60"
+                required="true"
                 />
         <field
-                name="secure_key"
+                name="webhooks_key"
                 type="text" default=""
                 label="COM_CMC_WEBHOOKS_KEY"
                 description="COM_CMC_WEBHOOKS_SECURE_DESC"
                 size="60"
+                required="true"
                 />
 
     </fieldset>

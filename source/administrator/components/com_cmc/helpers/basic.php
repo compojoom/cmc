@@ -20,9 +20,11 @@ class CmcHelperBasic {
      */
     public static function checkRequiredSettings()
     {
-        $api_key = CmcSettingsHelper::getSettings("api_key", '');
-        $webhook = CmcSettingsHelper::getSettings("webhook_secret", '');
+        $params = JComponentHelper::getParams('com_cmc');
+        $api_key = $params->get("api_key", '');
+        $webhook = $params->get("webhooks_key", '');
 
+//        var_dump()
         if(!empty($api_key) && !empty($webhook)){
             return true;
         }

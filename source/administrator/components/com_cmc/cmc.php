@@ -36,6 +36,21 @@ if(JRequest::getCmd('view','') == 'liveupdate') {
     return;
 }
 
+/*
+ * this part is a little crazy because of the redirects...
+ * Show a warning only if we are in the controlcenter view
+ * Redirect only if we are not in the controlcenter view
+ */
+if(!cmcHelperBasic::checkRequiredSettings()) {
+    if(JRequest::getCmd('view','') == 'controlcenter') {
+        JError::raiseWarning('NO_KEY', JText::_('COM_CMC_YOU_NEED_TO_PROVIDE_API_KEYS'));
+    }
+    if(JRequest::getCmd('view','') != 'controlcenter') {
+        $appl = JFactory::getApplication();
+        $appl->redirect('index.php?option=com_cmc&view=controlcenter');
+    }
+}
+
 // Conrol Center
 $view = JRequest::getCmd('view','');
 if(( $view == '' && JRequest::getCmd('task') == '') || $view == 'controlcenter') {
