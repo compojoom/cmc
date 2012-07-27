@@ -15,9 +15,13 @@ jimport('joomla.application.component.view');
 class CmcViewUsers extends JView {
 
     public function display($tpl = null) {
+
         $this->items = $this->get('Items');
         $this->state = $this->get('state');
+        $this->status = $this->get('status');
         $this->pagination = $this->get('Pagination');
+
+        $this->assignRef('filter', $filter);
 
         $this->addToolbar();
         parent::display($tpl);

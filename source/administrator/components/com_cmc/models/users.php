@@ -19,7 +19,14 @@ class CmcModelUsers extends JModelList {
         $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
 
+        $status = $this->getUserStateFromRequest($this->context.'.filter.status', 'filter_status');
+        $this->setState('filter.status', $status);
+
         parent::populateState('u.email', 'asc');
+    }
+
+    public function getContext(){
+         return $this->context;
     }
 
     public function getListQuery(){
@@ -38,6 +45,12 @@ class CmcModelUsers extends JModelList {
                 $search = $db->Quote('%'.$db->escape($search, true).'%');
                 $query->where('(u.email LIKE '.$search .')');
             }
+        }
+
+        $status = $this->getState('filter.status');
+
+        if(!empty($status)){
+            $query->where('u.status = ' . $db->Quote($status));
         }
 
         // Add the list ordering clause.

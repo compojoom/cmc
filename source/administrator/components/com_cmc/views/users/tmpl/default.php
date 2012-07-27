@@ -16,6 +16,7 @@ jimport('joomla.filter.output');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
+$filterStatus = $this->escape($this->state->get('filter_status'));
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm">
@@ -27,6 +28,10 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
         <button type="button"
                 onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
+        <?php
+            echo JHTML::_('grid.state', $this->status, 'subscribed', 'unsubscribed');
+        ?>
+
     </div>
     <div class="clr"></div>
 
@@ -88,5 +93,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <input type="hidden" name="boxchecked" value="0"/>
     <input type="hidden" name="filter_order" value="<?php echo $listOrder ?>"/>
     <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn ?>"/>
+    <input type="hidden" name="filter_status" value="<?php echo $filterStatus; ?>"/>
+
+
     <?php echo JHTML::_('form.token'); ?>
 </form>
