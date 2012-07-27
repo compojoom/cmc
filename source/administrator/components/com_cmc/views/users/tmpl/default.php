@@ -28,9 +28,11 @@ $filterStatus = $this->escape($this->state->get('filter_status'));
         <button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
         <button type="button"
                 onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-        <?php
-            echo JHTML::_('grid.state', $this->status, 'subscribed', 'unsubscribed');
-        ?>
+        <select name="filter_status" class="inputbox" onchange="this.form.submit()">
+            <option value=""><?php echo JText::_('COM_CMC_STATUS');?></option>
+            <option value="subscribed"><?php echo JText::_('COM_CMC_SUBSCRIBED');?></option>
+            <option value="unsubscribed"><?php echo JText::_('COM_CMC_UNSUBSCRIBED');?></option>
+        </select>
 
     </div>
     <div class="clr"></div>
@@ -93,8 +95,6 @@ $filterStatus = $this->escape($this->state->get('filter_status'));
     <input type="hidden" name="boxchecked" value="0"/>
     <input type="hidden" name="filter_order" value="<?php echo $listOrder ?>"/>
     <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn ?>"/>
-    <input type="hidden" name="filter_status" value="<?php echo $filterStatus; ?>"/>
-
 
     <?php echo JHTML::_('form.token'); ?>
 </form>
