@@ -16,7 +16,8 @@ jimport('joomla.filter.output');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
-$filterStatus = $this->escape($this->state->get('filter_status'));
+$filterStatus = $this->escape($this->state->get('filter.status'));
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm">
@@ -30,8 +31,23 @@ $filterStatus = $this->escape($this->state->get('filter_status'));
                 onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
         <select name="filter_status" class="inputbox" onchange="this.form.submit()">
             <option value=""><?php echo JText::_('COM_CMC_STATUS');?></option>
-            <option value="subscribed"><?php echo JText::_('COM_CMC_SUBSCRIBED');?></option>
-            <option value="unsubscribed"><?php echo JText::_('COM_CMC_UNSUBSCRIBED');?></option>
+            <?php
+               $subs = $subu = $subup = $subc = "";
+
+               if($filterStatus == "subscribed") {
+                   $subs = ' selected="selected" ';
+               } else if ($filterStatus == "unsubscribed") {
+                   $subu = ' selected="selected "';
+               } else if ($filterStatus == "updated") {
+                   $subup = ' selected="selected "';
+               } else if ($filterStatus == "cleaned") {
+                   $subc = ' selected="selected" ';
+               }
+            ?>
+            <option value="subscribed" <?php echo $subs; ?>><?php echo JText::_('COM_CMC_SUBSCRIBED');?></option>
+            <option value="unsubscribed" <?php echo $subu; ?>><?php echo JText::_('COM_CMC_UNSUBSCRIBED');?></option>
+            <option value="updated" <?php echo $subup; ?>><?php echo JText::_('COM_CMC_CLEANED');?></option>
+            <option value="cleaned" <?php echo $subc; ?>><?php echo JText::_('COM_CMC_UPDATED');?></option>
         </select>
 
     </div>
