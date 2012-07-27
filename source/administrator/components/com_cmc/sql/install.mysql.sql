@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `#__cmc_users` (
   `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
   `mc_id` VARCHAR( 255 ) NULL ,
   `list_id` VARCHAR( 255 ) NOT NULL ,
+  `user_id` INT( 11 ) NOT NULL DEFAULT '0',
   `firstname` VARCHAR( 255 ) NULL ,
   `lastname` VARCHAR( 500 ) NULL ,
   `email` VARCHAR( 500 ) NOT NULL ,

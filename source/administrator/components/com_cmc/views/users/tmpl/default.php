@@ -38,6 +38,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                 <input type="checkbox" name="checkall-toggle" value=""
                        title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
             </th>
+            <th width="7%"><?php echo JText::_('COM_CMC_GRAVATAR'); ?></th>
             <th class="title">
                 <?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 'u.email', $listDirn, $listOrder); ?>
             </th>
@@ -58,6 +59,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
             <td><?php echo $this->pagination->getRowOffset($i); ?></td>
             <td>
                 <?php echo JHTML::_('grid.id', $i, $item->id);; ?>
+            </td>
+            <td align="center">
+                <img src="http://www.gravatar.com/avatar/<?php echo md5($item->email); ?>?s=20" alt="<?php echo $item->firstname . " " . $item->lastname; ?>" />
             </td>
             <td>
                 <a href="<?php echo JRoute::_('index.php?option=com_cmc&task=user.edit&id=' . $item->id);; ?>">

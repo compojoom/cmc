@@ -15,12 +15,18 @@ $editor = JFactory::getEditor();
 
 JHTML::_('behavior.mootools');
 JHTML::_('behavior.tooltip');
+JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
+
 ?>
+
 <div id="cmc" class="cmc">
     <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=user&layout=edit&id='.(int)$this->user->id); ?>" method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
         <fieldset class="adminform">
+            <div id="cmc_gravatar">
+                <img src="http://www.gravatar.com/avatar/<?php echo md5($this->user->email); ?>?s=140" alt="<?php echo $this->user->firstname . " " . $this->user->lastname; ?>" />
+            </div>
             <legend><?php echo JText::_('COM_CMC_EDIT_USER'); ?></legend>
-            <table>
+            <table width="80%">
                 <!--
                 <tr>
                     <td width="200" align="left" class="key">

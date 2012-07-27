@@ -17,16 +17,6 @@ jimport('joomla.filter.output');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 ?>
-<?php
-// testing
-//$ret = CmcHelperSynchronize::synchronizeList(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
-//$ret = CmcHelperSynchronize::synchronizeUsers(CmcSettingsHelper::getSettings("api_key", ''),"2c4bb4fad2",JFactory::getUser());
-// CmcHelperSynchronize::synchronize(CmcSettingsHelper::getSettings("api_key", ''), JFactory::getUser());
-
-//$ret = CmcHelper::getUserDetailsMC(CmcSettingsHelper::getSettings("api_key", ''), "2c4bb4fad2", "hoppe.yves@gmail.com", 13, true);
-
-//var_dump($ret);
-?>
 <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>" method="post" name="adminForm">
     <div class="filter-search fltlft">
         <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
