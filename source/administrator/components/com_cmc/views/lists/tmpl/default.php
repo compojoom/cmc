@@ -25,7 +25,8 @@ $overwrite ='Joomla.submitbutton = function(pressbutton){
 
         if(Check == false){
             return;
-        }ddd
+        }
+
         document.adminForm.task.value=pressbutton;
         submitform(pressbutton);
     }';
