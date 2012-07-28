@@ -19,8 +19,11 @@ $modules_slider = JModuleHelper::getModules('ccc_'. $this->config->extensionPosi
 $modules_promotion = JModuleHelper::getModules('ccc_'. $this->config->extensionPosition . '_promotion');
 
 JHTML::_('behavior.tooltip');
-JHTML::_('stylesheet', 'ccc.css', 'media/com_matukio/ccc/css/');
-JHTML::_('script', 'ccc.js', 'media/com_matukio/ccc/js/');
+JHTML::_('stylesheet', 'ccc.css', 'media/com_cmc/ccc/css/');
+JHTML::_('script', 'ccc.js', 'media/com_cmc/ccc/js/');
+
+JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
+
 ?>
 
 <div id="ccc_left">

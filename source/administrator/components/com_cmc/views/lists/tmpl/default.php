@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 JHTML::_('behavior.tooltip');
 jimport('joomla.filter.output');
+JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
@@ -61,7 +62,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
                 <?php echo JHTML::_('grid.id', $i, $item->id);; ?>
             </td>
             <td>
-                <a href="<?php echo JRoute::_('index.php?option=com_cmc&task=list.edit&id=' . $item->id);; ?>"><?php echo $item->list_name; ?></a>
+<!--                <a href="--><?php //echo JRoute::_('index.php?option=com_cmc&task=list.edit&id=' . $item->id);; ?><!--">--><?php //echo $item->list_name; ?><!--</a>-->
+                <?php echo $item->list_name; ?>
             </td>
             <td align="center">
                 <?php echo $item->id; ?>

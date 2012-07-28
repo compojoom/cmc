@@ -14,4 +14,11 @@ jimport('joomla.application.component.controller');
 
 class CmcControllerLists extends CmcController {
 
+    public function synchronize(){
+        $params = JComponentHelper::getParams('com_cmc');
+        $api_key = $params->get("api_key", '');
+        $user = JFactory::getUser();
+
+        CmcHelperSynchronize::synchronize($api_key, $user);
+    }
 }

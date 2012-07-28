@@ -1,0 +1,7 @@
+#ccc_left {float: left; width: 50%; clear: both;}
+#ccc_left_inner {padding:20px; clear: both;}
+
+#ccc_right {float: left; width: 50%;}
+#ccc_right_inner {padding: 0 20px 20px 20px; }
+
+#ccc_promotion{padding: 20px; margin-top: 20px; clear: both;}

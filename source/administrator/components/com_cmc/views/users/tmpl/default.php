@@ -13,6 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 
 JHTML::_('behavior.tooltip');
 jimport('joomla.filter.output');
+JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));

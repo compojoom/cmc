@@ -20,7 +20,7 @@ $subMenus = array(
     'controlcenter' => 'COM_CMC_CONTROLCENTER',
     'lists' => 'COM_CMC_LISTS',
     'users' => 'COM_CMC_USERS',
-    'statistics' => 'COM_CMC_STATISTICS',
+    //'statistics' => 'COM_CMC_STATISTICS',
     'liveupdate' => 'COM_CMC_LIVEUPDATE'
 );
 

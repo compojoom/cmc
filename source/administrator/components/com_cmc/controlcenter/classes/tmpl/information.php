@@ -13,10 +13,10 @@ defined('_JEXEC') or die();
 
 // Loading css and js
 JHTML::_('behavior.tooltip');
-JHTML::_('stylesheet', 'ccc.css', 'media/compojoomcc/css/');
-JHTML::_('script', 'ccc.js', 'media/compojoomcc/js/');
+JHTML::_('stylesheet', 'ccc.css', 'media/com_cmc/ccc/css/');
+JHTML::_('script', 'ccc.js', 'media/com_cmc/ccc/js/');
 
-
+JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
 $modules = JModuleHelper::getModules('ccc_'. $this->config->extensionPosition . '_information');
 
 ?>

@@ -26,5 +26,6 @@ class CmcViewLists extends JView {
     public function addToolbar() {
         // Set toolbar items for the page
         JToolBarHelper::title(JText::_('COM_CMC_LISTS'), 'lists');
+        JToolBarHelper::custom( 'lists.synchronize', 'synchronize.png', 'synchronize.png', 'First Sync', false, false );
     }
 }
