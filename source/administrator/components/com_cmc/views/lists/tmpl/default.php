@@ -17,6 +17,20 @@ JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
+// Joomla.submitbutton('lists.synchronize')
+
+$document = &JFactory::getDocument();
+$overwrite ='Joomla.submitbutton = function(pressbutton){
+        Check = confirm("' . JText::_("COM_CMC_SYNCRONIZE_CONFIRM") . '");
+
+        if(Check == false){
+            return;
+        }ddd
+        document.adminForm.task.value=pressbutton;
+        submitform(pressbutton);
+    }';
+$document->addScriptDeclaration($overwrite);
+
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>" method="post" name="adminForm">
     <div class="filter-search fltlft">

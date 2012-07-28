@@ -20,5 +20,7 @@ class CmcControllerLists extends CmcController {
         $user = JFactory::getUser();
 
         CmcHelperSynchronize::synchronize($api_key, $user);
+
+        $this->setRedirect('index.php?option=com_cmc&view=lists', JText::_("COM_CMC_SYNCRONIZE_SUCCESSFUL"));
     }
 }
