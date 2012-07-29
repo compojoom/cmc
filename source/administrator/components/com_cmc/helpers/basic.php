@@ -260,9 +260,9 @@ class CmcHelperBasic {
         if ( ! is_array( $array ) )  {
             return $array;
         }
-        $newval = "";
         $string = array();
         foreach ( $array as $key => $val ) {
+            $newval = "";
             if ( is_array( $val ) ) {
                 foreach($val as $v){
                     $newval .= implode( ',',  array_values($v));
