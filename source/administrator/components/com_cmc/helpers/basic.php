@@ -185,7 +185,7 @@ class CmcHelperBasic {
      * @param null $user
      * @param array $groupings
      */
-    public static function subscribeList($api_key, $list_id, $email, $firstname, $lastname, $user = null, $groupings = array(null)){
+    public static function subscribeList($api_key, $list_id, $email, $firstname, $lastname, $user = null, $groupings = array(null), $email_type = "html", $update = false){
 
         $api = new MCAPI($api_key);
 
@@ -195,7 +195,7 @@ class CmcHelperBasic {
 
         // By default this sends a confirmation email - you will not see new members
         // until the link contained in it is clicked!
-        $retval = $api->listSubscribe( $list_id, $email, $merge_vars );
+        $retval = $api->listSubscribe( $list_id, $email, $merge_vars, $email_type, false, $update );
 
         if ($api->errorCode){
             return(JError::raiseError(JTEXT::_("COM_CMC_SUBSCRIBE_FAILED")) . " " .$api->errorCode . " / " . $api->errorMessage);
