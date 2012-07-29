@@ -263,9 +263,13 @@ class CmcHelperBasic {
         $string = array();
         foreach ( $array as $key => $val ) {
             if ( is_array( $val ) ) {
-                $val = implode( ',',  array_values($val));
+                foreach($val as $v){
+                    $newval = implode( ',',  array_values($v));
+                }
+            } else {
+                $newval = $val;
             }
-            $string[] = "{$key}{$glue}{$val}";
+            $string[] = "{$key}{$glue}{$newval}";
         }
         return implode( $separator, $string );
     }
