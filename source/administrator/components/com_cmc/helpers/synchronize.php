@@ -98,11 +98,16 @@ class CmcHelperSynchronize
                     $cnt = $stats['member_count'] / 10000;
 
                     for($j = 0; $j < $cnt; $j++) {
-                        $start = 10000 * $j;
+                        if($j == 0) {
+                            $start = 10000 * $j;
+                        } else {
+                            $start = 10000 * $j + 1;
+                        }
+
                         $end = 10000 * ($j + 1);
 
                         CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user,
-                            $status, $start, $end, true);
+                            $status, $start, $end, false);
                     }
                 }
             }
@@ -153,7 +158,7 @@ class CmcHelperSynchronize
 
         $db =& JFactory::getDBO();
 
-        if (!$append) {
+        if (!$append && $start == 0) {
             // We have to drop the items, because we could have more then one list
             $query = "DELETE FROM #__cmc_users WHERE list_id = '" . $listId . "'";
             $db->setQuery($query);
