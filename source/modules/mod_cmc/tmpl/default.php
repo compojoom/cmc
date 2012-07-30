@@ -105,6 +105,6 @@ $form = new cmcForm($params);
         </div>
         <?php endif; ?>
     </form>
-    <div id="spinner-<?php echo $moduleId;?>" style="text-align:center;display:none;"><img src="<?php echo JURI::root();?>modules/mod_mailchimpsignup/assets/images/ajax-loader.gif" alt="Please wait"/></div>
+    <div id="spinner-<?php echo $moduleId;?>" style="text-align:center;display:none;"><img src="<?php echo JURI::root();?>media/mod_cmc/images/ajax-loader.gif" alt="Please wait"/></div>
 
 </div>
