@@ -29,9 +29,10 @@ $jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
 
 // Live updater
+require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
 if(JRequest::getCmd('view','') == 'liveupdate') {
     JToolBarHelper::preferences( 'com_cmc' );
-    require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
+
     LiveUpdate::handleRequest();
     return;
 }

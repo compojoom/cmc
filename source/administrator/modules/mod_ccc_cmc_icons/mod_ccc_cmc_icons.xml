@@ -4,20 +4,23 @@
         client="administrator"
         method="upgrade"
         >
-    <name>@@MODULENAME@@</name>
+    <name>mod_ccc_cmc_icons</name>
     <author>compojoom.com</author>
-    <creationDate>@@DATE@@</creationDate>
+    <creationDate>2012-07-30</creationDate>
     <copyright>Copyright (C) 2012 Yves Hoppe - compojoom.com. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>yves@compojoom.com</authorEmail>
     <authorUrl>compojoom.com</authorUrl>
-    <version>@@VERSION@@</version>
+    <version>git_5fcce54</version>
     <description>MOD_CCC_CMC_ICONS_XML_DESCRIPTION</description>
     <files>
-        ##PACKAGEFILESMODULE##
+        <file>helper.php</file>
+<file>index.html</file>
+<file module="mod_ccc_cmc_icons">mod_ccc_cmc_icons.php</file>
+<folder>tmpl</folder>
     </files>
     <languages folder="administrator/language">
-        ##FRONTENDLANGUAGEFILES##
+        <language tag="en-GB">en-GB/en-GB.mod_ccc_cmc_icons.ini</language>
     </languages>
     <help key="CCC_MODULE_PROMOTION" />
     <config>

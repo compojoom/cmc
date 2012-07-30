@@ -4,20 +4,23 @@
         client="administrator"
         method="upgrade"
         >
-    <name>@@MODULENAME@@</name>
+    <name>mod_ccc_cmc_overview</name>
     <author>compojoom.com</author>
-    <creationDate>@@DATE@@</creationDate>
+    <creationDate>2012-07-30</creationDate>
     <copyright>Copyright (C) 2012 Yves Hoppe - compojoom.com. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>yves@compojoom.com</authorEmail>
     <authorUrl>compojoom.com</authorUrl>
-    <version>@@VERSION@@</version>
+    <version>git_5fcce54</version>
     <description>MOD_CCC_CMC_OVERVIEW_XML_DESCRIPTION</description>
     <files>
-        ##PACKAGEFILESMODULE##
+        <file>helper.php</file>
+<file>index.html</file>
+<file module="mod_ccc_cmc_overview">mod_ccc_cmc_overview.php</file>
+<folder>tmpl</folder>
     </files>
     <languages folder="administrator/language">
-        ##FRONTENDLANGUAGEFILES##
+        <language tag="en-GB">en-GB/en-GB.mod_ccc_cmc_overview.ini</language>
     </languages>
     <help key="CCC_MODULE_OVERVIEW" />
     <config>
@@ -26,7 +29,7 @@
                 <field
                         name="version"
                         type="text"
-                        default="@@VERSION@@"
+                        default="git_5fcce54"
                         label="MOD_CCC_CMC_OVERVIEW_VERSION"
                         description="MOD_CCC_CMC_OVERVIEW_VERSION_DESC" />
                 <field
@@ -34,8 +37,7 @@
                         type="textarea"
                         rows="3"
                         cols="30"
-                        default="Copyright (C) 2012 Yves Hoppe -
-                                 compojoom.com"
+                        default="Copyright (C) 2012 - compojoom.com"
                         label="MOD_CCC_CMC_OVERVIEW_COPYRIGHT"
                         description="MOD_CCC_CMC_OVERVIEW_COPYRIGHT_DESC" />
                 <field
@@ -49,8 +51,7 @@
                         type="textarea"
                         rows="6"
                         cols="30"
-                        default="English: compojoom.com
-                                 German: compojoom.com"
+                        default="Translations are handled at transifex.com"
                         label="MOD_CCC_CMC_OVERVIEW_TRANSLATION"
                         description="MOD_CCC_CMC_OVERVIEW_TRANSLATION_DESC" />
                 <field
@@ -58,8 +59,7 @@
                         type="textarea"
                         rows="10"
                         cols="30"
-                        default="Google™, Google Maps™, Google Picasa™ and YouTube Broadcast Yourself™
-                                are registered trademarks of Google Inc."
+                        default="MailChimp® is a registered trademark of The Rocket Science Group"
                         label="MOD_CCC_CMC_OVERVIEW_DESCRIPTION"
                         description="MOD_CCC_CMC_OVERVIEW_DESCRIPTION_DESC" />
 

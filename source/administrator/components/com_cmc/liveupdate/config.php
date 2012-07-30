@@ -16,7 +16,7 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 	var $_extensionTitle		= 'CMC - Compojoom Mailchimp Extension';
 	var $_versionStrategy		= 'vcompare';
 	var $_updateURL				= 'https://compojoom.com/index.php?option=com_ars&view=update&format=ini&id=9';
-	var $_requiresAuthorization = true;
+	var $_requiresAuthorization = false;
 	/**
 	var $_storageAdapter		= 'component';
 	var $_storageConfig			= array(
