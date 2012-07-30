@@ -35,6 +35,12 @@
                         default="5"
                         label="MOD_CCC_CMC_NEWSFEED_FEEDITEMS"
                         description="MOD_CCC_CMC_NEWSFEED_FEEDITEMS_DESC" />
+                <field
+                        name="word_count"
+                        type="text"
+                        default="30"
+                        label="MOD_CCC_HOTSPOTS_NEWSFEED_WORD_COUNT"
+                        description="MOD_CCC_HOTSPOTS_NEWSFEED_WORD_COUNT_DESC" />
             </fieldset>
             <fieldset name="advanced">
                 <field

@@ -26,7 +26,7 @@
                 <field
                         name="extension"
                         type="text"
-                        default="com_matukio"
+                        default="com_cmc"
                         label="MOD_CCC_CMC_UPDATE_EXTENSION"
                         description="MOD_CCC_CMC_UPDATE_EXTENSION_DESC" />
             </fieldset>
