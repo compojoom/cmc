@@ -102,7 +102,7 @@ class CmcHelperSynchronize
                         $end = 10000 * ($j + 1);
 
                         CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user,
-                            $status, $start, $end, $append);
+                            $status, $start, $end, true);
                     }
                 }
             }
