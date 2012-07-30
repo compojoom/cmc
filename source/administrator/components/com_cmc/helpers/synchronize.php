@@ -95,11 +95,11 @@ class CmcHelperSynchronize
                 if($stats['member_count'] < 15000) {
                     CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user);
                 } else {
-                    $cnt = $stats['member_count'] / 15000;
+                    $cnt = $stats['member_count'] / 10000;
 
                     for($j = 0; $j < $cnt; $j++) {
-                        $start = 15000 * $j;
-                        $end = 15000 * ($j + 1);
+                        $start = 10000 * $j;
+                        $end = 10000 * ($j + 1);
 
                         CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user,
                             $status, $start, $end, $append);
