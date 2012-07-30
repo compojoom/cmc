@@ -34,7 +34,11 @@ class JFormFieldWebhook extends JFormFieldText {
             document.id('jform_webhooks_key').addEvent('keyup', function(){
                 var key = {key : this.get('value')};
                 document.id('webhook-url').set('value', url.substitute(key));
-            });;
+            });
+
+            if(document.id('jform_webhooks_key').get('value') != '') {
+                document.id('webhook-url').set('value', url.substitute({key: document.id('jform_webhooks_key').get('value')}));
+            }
 
             document.id('webhook-url').addEvent('click', function() {
                 this.select();
