@@ -4,23 +4,20 @@
         client="administrator"
         method="upgrade"
         >
-    <name>mod_ccc_cmc_update</name>
+    <name>@@MODULENAME@@</name>
     <author>compojoom.com</author>
-    <creationDate>2012-07-30</creationDate>
+    <creationDate>@@DATE@@</creationDate>
     <copyright>Copyright (C) 2012 Yves Hoppe - compojoom.com. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>yves@compojoom.com</authorEmail>
     <authorUrl>compojoom.com</authorUrl>
-    <version>git_5fcce54</version>
+    <version>@@VERSION@@</version>
     <description>MOD_CCC_CMC_UPDATE_XML_DESCRIPTION</description>
     <files>
-        <file>helper.php</file>
-<file>index.html</file>
-<file module="mod_ccc_cmc_update">mod_ccc_cmc_update.php</file>
-<folder>tmpl</folder>
+        ##PACKAGEFILESMODULE##
     </files>
     <languages folder="administrator/language">
-        <language tag="en-GB">en-GB/en-GB.mod_ccc_cmc_update.ini</language>
+        ##FRONTENDLANGUAGEFILES##
     </languages>
     <help key="CCC_MODULE_UPDATE" />
     <config>
@@ -29,7 +26,7 @@
                 <field
                         name="extension"
                         type="text"
-                        default="com_cmc"
+                        default="com_matukio"
                         label="MOD_CCC_CMC_UPDATE_EXTENSION"
                         description="MOD_CCC_CMC_UPDATE_EXTENSION_DESC" />
             </fieldset>

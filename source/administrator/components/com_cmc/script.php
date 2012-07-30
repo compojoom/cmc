@@ -52,6 +52,15 @@ class com_cmcInstallerScript extends CompojoomInstaller
         $this->type = 'uninstall';
         $this->parent = $parent;
 
+        $jlang = JFactory::getLanguage();
+        $path = JPATH_ADMINISTRATOR;
+        $jlang->load($this->extension, $path, 'en-GB', true);
+        $jlang->load($this->extension, $path, $jlang->getDefault(), true);
+        $jlang->load($this->extension, $path, null, true);
+        $jlang->load($this->extension . '.sys', $path, 'en-GB', true);
+        $jlang->load($this->extension . '.sys', $path, $jlang->getDefault(), true);
+        $jlang->load($this->extension . '.sys', $path, null, true);
+
         $this->status->plugins = $this->uninstallPlugins($this->installationQueue['plugins']);
         $this->status->modules = $this->uninstallModules($this->installationQueue['modules']);
 

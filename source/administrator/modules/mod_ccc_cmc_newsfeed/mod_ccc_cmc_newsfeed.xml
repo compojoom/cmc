@@ -4,23 +4,20 @@
         client="administrator"
         method="upgrade"
         >
-    <name>mod_ccc_cmc_newsfeed</name>
+    <name>@@MODULENAME@@</name>
     <author>compojoom.com</author>
-    <creationDate>2012-07-30</creationDate>
+    <creationDate>@@DATE@@</creationDate>
     <copyright>Copyright (C) 2012 Yves Hoppe - compojoom.com. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>yves@compojoom.com</authorEmail>
     <authorUrl>compojoom.com</authorUrl>
-    <version>git_5fcce54</version>
+    <version>@@VERSION@@</version>
     <description>MOD_CCC_CMC_NEWSFEED_XML_DESCRIPTION</description>
     <files>
-        <file>helper.php</file>
-<file>index.html</file>
-<file module="mod_ccc_cmc_newsfeed">mod_ccc_cmc_newsfeed.php</file>
-<folder>tmpl</folder>
+        ##PACKAGEFILESMODULE##
     </files>
     <languages folder="administrator/language">
-        <language tag="en-GB">en-GB/en-GB.mod_ccc_cmc_newsfeed.ini</language>
+        ##FRONTENDLANGUAGEFILES##
     </languages>
     <help key="MOD_CCC_CMC_MATUKIO_NEWSFEED" />
     <config>
@@ -38,12 +35,6 @@
                         default="5"
                         label="MOD_CCC_CMC_NEWSFEED_FEEDITEMS"
                         description="MOD_CCC_CMC_NEWSFEED_FEEDITEMS_DESC" />
-                <field
-                        name="word_count"
-                        type="text"
-                        default="30"
-                        label="MOD_CCC_HOTSPOTS_NEWSFEED_WORD_COUNT"
-                        description="MOD_CCC_HOTSPOTS_NEWSFEED_WORD_COUNT_DESC" />
             </fieldset>
             <fieldset name="advanced">
                 <field

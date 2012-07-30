@@ -49,10 +49,10 @@ $document->addScriptDeclaration($overwrite);
         <thead>
         <tr>
             <th width="5"><?php echo JText::_('JGRID_HEADING_ROW_NUMBER'); ?></th>
-            <th width="5">
-                <input type="checkbox" name="checkall-toggle" value=""
-                       title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
-            </th>
+<!--            <th width="5">-->
+<!--                <input type="checkbox" name="checkall-toggle" value=""-->
+<!--                       title="--><?php //echo JText::_('JGLOBAL_CHECK_ALL'); ?><!--" onclick="Joomla.checkAll(this)"/>-->
+<!--            </th>-->
             <th class="title">
                 <?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'cc.list_name', $listDirn, $listOrder); ?>
             </th>
@@ -73,9 +73,9 @@ $document->addScriptDeclaration($overwrite);
         <?php foreach ($this->items as $i => $item) : ?>
         <tr class="<?php echo "row" . $i % 2; ?>">
             <td><?php echo $this->pagination->getRowOffset($i); ?></td>
-            <td>
-                <?php echo JHTML::_('grid.id', $i, $item->id);; ?>
-            </td>
+<!--            <td>-->
+<!--                --><?php //echo JHTML::_('grid.id', $i, $item->id);; ?>
+<!--            </td>-->
             <td>
 <!--                <a href="--><?php //echo JRoute::_('index.php?option=com_cmc&task=list.edit&id=' . $item->id);; ?><!--">--><?php //echo $item->list_name; ?><!--</a>-->
                 <?php echo $item->list_name; ?>

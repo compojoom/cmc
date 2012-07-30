@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 $lang = JFactory::getLanguage();
 $lang->load('com_hotspots.sys',JPATH_ADMINISTRATOR);
 $path = JURI::root() . '/media/com_cmc/backend/images/';
+require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
 ?>
 <div id="cpanel">
 

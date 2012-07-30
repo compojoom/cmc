@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="2.5" method="upgrade">
+<extension type="module" version="2.5" method="upgrade" client="site">
     <name>mod_cmc</name>
     <author>compojoom.com</author>
-    <creationDate>2012-07-30</creationDate>
+    <creationDate>@@DATE@@</creationDate>
     <copyright>Copyright (C) 2012 Daniel Dimitrov - compojoom.com. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>daniel@compojoom.com</authorEmail>
     <authorUrl>compojoom.com</authorUrl>
-    <version>git_5fcce54</version>
+    <version>@@VERSION@@</version>
     <description>MOD_CMC_XML_DESCRIPTION</description>
     <files>
-        <folder>library</folder>
-<file module="mod_cmc">mod_cmc.php</file>
-<folder>tmpl</folder>
+        ##PACKAGEFILESMODULE##
     </files>
     <languages folder="language">
-        <language tag="en-GB">en-GB/en-GB.mod_cmc.ini</language>
-<language tag="en-GB">en-GB/en-GB.mod_cmc.sys.ini</language>
+        ##FRONTENDLANGUAGEFILES##
     </languages>
-    <media destination="mod_cmc" folder="media/mod_cmc">
-        <folder>css</folder>
-<file>index.html</file>
-<folder>js</folder>
+    <media destination="@@MODULENAME@@" folder="media/@@MODULENAME@@">
+        ##MEDIAPACKAGEFILES##
     </media>
     <config>
         <fields name="params" addfieldpath="/modules/mod_cmc/library/fields">

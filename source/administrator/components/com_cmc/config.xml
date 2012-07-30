@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <fieldset name="main" label="COM_CMC_MAIN_SETTINGS"
-              description="COM_CMC_MAIN_SETTINGS_DESC">
+              description="COM_CMC_MAIN_SETTINGS_DESC" addfieldpath="/administrator/components/com_cmc/models/fields/">
         <field
                 name="api_key"
                 type="text" default=""
@@ -12,9 +12,9 @@
                 />
         <field
                 name="webhooks_key"
-                type="text" default=""
+                type="webhook" default=""
                 label="COM_CMC_WEBHOOKS_KEY"
-                description="COM_CMC_WEBHOOKS_SECURE_DESC"
+                description="COM_CMC_WEBHOOKS_KEY_DESC"
                 size="60"
                 required="true"
                 />
