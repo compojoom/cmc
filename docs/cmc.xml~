@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title>CMC - Mailchimp® for Joomla™ - User's Guide</title>
+
+    <author>
+      <firstname>Daniel</firstname>
+
+      <surname>Dimitrov</surname>
+
+      <affiliation>
+        <orgname>compojoom.com</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>31.07.2012</pubdate>
+
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this
+      document under the terms of the GNU Free Documentation License, Version
+      1.3 or any later version published by the Free Software Foundation; with
+      no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A
+      copy of the license is included in the appendix entitled "The GNU Free
+      Documentation License".</para>
+    </legalnotice>
+
+    <abstract>
+      <para>This book covers the use of the CMC - Mailchimp® for Joomla™
+      extension. It does not cover any other extension available on
+      compojoom.com .</para>
+    </abstract>
+  </bookinfo>
+
+  <chapter>
+    <title>Introduction</title>
+
+    <section>
+      <title>Introducing CMC</title>
+
+      <para>CMC is a Joomla extension that integrates with the Mailchimp API.
+      It#s functionality includes, but is not limited to displaying your
+      mailchimp lists and users directly in your Joomla backend. You have a
+      Joomla module that lets you easily allow users on your site to register
+      for your Mailchimp Newsletter. </para>
+    </section>
+
+    <section>
+      <title>Indicative uses</title>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Newsletter subscription. CMC makes it really easy to publish
+            your list on a Joomla based website and doesn't require you to
+            create any HTML code what so ever.</para>
+          </listitem>
+
+          <listitem>
+            <para>You love your Joomla backend and you like to have access to
+            your Mailchimp lists &amp; users </para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Installation and updates</title>
+
+    <para>Installing CMC is no different than installing any other Joomla!™
+    extension on your site. You can read the complete instructions for
+    installing Joomla!™ extensions on the <ulink
+    url="http://help.joomla.org/content/view/1476/235/">official help
+    page</ulink> .Throughout this chapter we assume that you are familiar with
+    these instructions and we will not duplicate them.</para>
+
+    <section>
+      <title>Getting the installation packages</title>
+
+      <para>You can download the latest installation packages by visiting our
+      site at <ulink
+      url="https://compojoom.com">https://compojoom.com</ulink>. Go to
+      Download -&gt; CMC menu item. The releases are listed in descending
+      order with the newest release always on top. Click on the release number
+      and then download the ZIP package.</para>
+
+      <para>The installation package can be installed on Joomla 2.5 . You can
+      use the installation package to update from previous version as well;
+      just install it, without uninstalling the old package.</para>
+    </section>
+
+    <section>
+      <title>Updating to the latest version</title>
+
+      <section>
+        <title>Checking for the latest version and upgrading</title>
+
+        <para>You can easily check for the latest published version of CMCMC
+        by visiting https://compojoom.com and going to
+        Downloads-&gt;CMC.</para>
+
+        <para>Updating CMC to the latest version is by no means different than
+        installing the component! You do not have to uninstall the previous
+        version; in fact, you are discouraged from doing so. Simply follow the
+        installation instructions so as to install the latest CMC version over
+        the existing installation. That's all! All your settings are
+        preserved.</para>
+      </section>
+
+      <section>
+        <title>Live update</title>
+
+        <para>There is also an alternate update path, if your server supports
+        it. It is called the "Live Update" feature (thanks to Nicholas K.
+        Dionysopoulos from http://akeebabackup.com) . Whenever you click on
+        the Live update button in the Navigation toolbar, it will
+        automatically check for the existence of an updated version and it
+        will notify you. Clicking on the update button allows you to perform a
+        live update without further interaction (you will need to provide your
+        compojoom username and password in order for us to check your
+        subscription validity). Do note that if your server is protected by a
+        firewall you'll have to enable port 80 and 443 TCP traffic to
+        https://compojoom.com for this feature to work properly.</para>
+
+        <para/>
+      </section>
+    </section>
+  </chapter>
+</book>

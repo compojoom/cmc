@@ -21,7 +21,6 @@ class ControlCenterView extends JView
         $config = ControlCenterConfig::getInstance();
 
         JToolBarHelper::title(JText::_($config->_extensionTitle).' &ndash; '.JText::_('COMPOJOOM_CONTROLCENTER_TASK_OVERVIEW'),'controlcenter');
-        JToolBarHelper::help('screen.' . $config->_extensionTitle);
 
         $this->assign('config', $config);
 

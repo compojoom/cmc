@@ -13,9 +13,9 @@ defined('_JEXEC') or die();
 class LiveUpdateConfig extends LiveUpdateAbstractConfig
 {
 	var $_extensionName			= 'com_cmc';
-	var $_extensionTitle		= 'CMC - Compojoom Mailchimp Extension';
+	var $_extensionTitle		= 'CMC - Mailchimp for Joomla!';
 	var $_versionStrategy		= 'vcompare';
-	var $_updateURL				= 'https://compojoom.com/index.php?option=com_ars&view=update&format=ini&id=9';
+	var $_updateURL				= 'https://compojoom.com/index.php?option=com_ars&view=update&format=ini&id=13';
 	var $_requiresAuthorization = false;
 	/**
 	var $_storageAdapter		= 'component';

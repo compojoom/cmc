@@ -33,7 +33,6 @@ $jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
 // Live updater
 if(JRequest::getCmd('view','') == 'liveupdate') {
-    JToolBarHelper::preferences( 'com_cmc' );
     require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
     LiveUpdate::handleRequest();
     return;

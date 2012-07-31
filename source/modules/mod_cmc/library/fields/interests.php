@@ -53,7 +53,7 @@ class JFormFieldInterests extends CmcField
         if ($options) {
             $content = JHtml::_('select.genericlist', $options, 'jform[params][interests][]', $attribs, $key, $val, $this->value, $this->id);
         } else {
-            $content = '<div style="float:left;">' . JText::_('JM_NO_INTEREST_GROUPS') . '</div>';
+            $content = '<div style="float:left;">' . JText::_('MOD_CMC_NO_INTEREST_GROUPS') . '</div>';
         }
 
         return $content;
