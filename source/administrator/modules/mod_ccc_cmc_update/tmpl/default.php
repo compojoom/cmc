@@ -9,6 +9,8 @@
  * @version $Revision: 0.9.0 beta $
  **/
 
+defined('_JEXEC') or die('');
+
 $extension = $params->get('extension', '');
 
 require_once (JPATH_ADMINISTRATOR . "/components/" . $extension . "/liveupdate/liveupdate.php");

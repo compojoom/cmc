@@ -13,6 +13,7 @@
     <taskdef name="extfile" classname="phingext.listJPackageFilesTask"/>
     <taskdef name="gitversion" classname="phingext.GitVersionTask"/>
     <taskdef name="explode" classname="phingext.explodeTask"/>
+    <taskdef name="indexhtml" classname="phingext.indexHtmlTask" />
 
     <import file="plugin.xml" optional="true"/>
     <import file="module.xml" optional="true"/>
@@ -149,6 +150,9 @@
                 <foreach list="${modules}" param="module" target="buildModule"/>
             </then>
         </if>
+
+        <echo message="Now add the index.html files!" />
+        <indexhtml dir="${destination.dir}" />
     </target>
 
     <target name="dev-release" description="Makes everything except the documentation"
