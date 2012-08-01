@@ -24,4 +24,28 @@ class CmcControllerUsers extends JControllerAdmin {
         return $model;
     }
 
+
+    public function delete(){
+        $cid = JRequest::getVar('cid', array(), '', 'array');
+        $params = JComponentHelper::getParams('com_cmc');
+        $api_key = $params->get("api_key", '');
+        $db = JFactory::getDBO();
+
+        if (count($cid)) {
+            for($i = 0; $i < $cid; $i++){
+                $query = "SELECT * FROM #__cmc_users WHERE id = '" . $cid[$i] . "'";
+                $db->setQuery($query);
+                $member = $db->loadObject();
+                CmcHelperBasic::unsubscribeList($api_key, $member->list_id, $member->email);
+            }
+
+            $cids = implode(',', $cid);
+            $query = "DELETE FROM #__cmc_users where id IN ( $cids )";
+            $db->setQuery($query);
+            if (!$db->query()) {
+                echo "<script> alert('" . $db->getErrorMsg() . "'); window.history.go (-1); </script>\n";
+            }
+        }
+        $this->setRedirect('index.php?option=com_cmc&view=users');
+    }
 }
