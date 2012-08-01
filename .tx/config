@@ -14,3 +14,51 @@ file_filter = source\administrator\language\<lang>\<lang>.com_cmc.sys.ini
 source_file = source\administrator\language\en-GB\en-GB.com_cmc.sys.ini
 source_lang = en_GB
 minimum_perc = 80
+
+[compojoom-cmc.mod_ccc_cmc_icons]
+file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_icons.ini
+source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_icons.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.mod_ccc_cmc_newsfeed]
+file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_newsfeed.ini
+source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_newsfeed.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.mod_ccc_cmc_overview]
+file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_overview.ini
+source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_overview.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.mod_ccc_cmc_update]
+file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_update.ini
+source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_update.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.mod_ccc_cmc_icons]
+file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_icons.ini
+source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_icons.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.frontend_com_cmc]
+file_filter = source\language\<lang>\<lang>.com_cmc.ini
+source_file = source\language\en-GB\en-GB.com_cmc.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.mod_cmc]
+file_filter = source\language\<lang>\<lang>.mod_cmc.ini
+source_file = source\language\en-GB\en-GB.mod_cmc.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.mod_cmc_sys]
+file_filter = source\language\<lang>\<lang>.mod_cmc.ini
+source_file = source\language\en-GB\en-GB.mod_cmc.ini
+source_lang = en_GB
+minimum_perc = 80

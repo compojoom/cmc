@@ -48,7 +48,7 @@
                         type="textarea"
                         rows="6"
                         cols="30"
-                        default="Translations are handled at <a href='https://www.transifex.com/projects/p/compojoom-cmc/'>transifex</a>"
+                        default="Translations are handled at transifex https://www.transifex.com/projects/p/compojoom-cmc"
                         label="MOD_CCC_CMC_OVERVIEW_TRANSLATION"
                         description="MOD_CCC_CMC_OVERVIEW_TRANSLATION_DESC" />
                 <field
