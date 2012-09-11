@@ -167,3 +167,6 @@ JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
         <?php echo JHTML::_('form.token'); ?>
     </form>
 </div>
+
+<div class="clear"></div>
+<?php echo CmcHelperBasic::footer(); ?>

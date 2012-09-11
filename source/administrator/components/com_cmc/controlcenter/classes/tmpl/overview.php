@@ -73,3 +73,30 @@ JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
         </div>
     </div>
 </div>
+<div class="clr"></div>
+<p style="font-size: small">
+    <strong>
+        CMC <?php echo CmcHelperBasic::getComponent('com_cmc')->manifest_cache->get('version'); ?></strong>
+    <br />
+	<span style="font-size: x-small">
+		Copyright 2008&ndash;2012 &copy;compojoom.com
+	</span>
+    <br />
+
+    <strong>
+        If you use CMC, please post a rating and a review at the
+        <a href="http://extensions.joomla.org/extensions/content-sharing/mailing-a-newsletter-bridges/21710" target="_blank">Joomla! Extensions Directory</a>.
+    </strong>
+    <br />
+
+	<span style="font-size: x-small">
+		CMC is Free software released under the
+		<a href="www.gnu.org/licenses/gpl.html">GNU General Public License,</a>
+		version 2 of the license or &ndash;at your option&ndash; any later version
+		published by the Free Software Foundation.
+	</span>
+    <br />
+    <span>
+        <a href="https://mailchimp.com/?pid=compojoom&source=website" target="_blank">MailChimp</a>® is a registered trademark of The Rocket Science Group
+    </span>
+</p>

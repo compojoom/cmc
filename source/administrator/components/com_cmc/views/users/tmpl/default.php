@@ -121,3 +121,6 @@ $filterStatus = $this->escape($this->state->get('filter.status'));
 
     <?php echo JHTML::_('form.token'); ?>
 </form>
+
+<div class="clear"></div>
+<?php echo CmcHelperBasic::footer(); ?>

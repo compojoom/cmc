@@ -15,6 +15,14 @@ defined('_JEXEC') or die('Restricted access');
 class CmcHelperBasic {
 
     /**
+     * The component list cache
+     *
+     * @var    array
+     * @since  1.1
+     */
+    protected static $components = array();
+
+    /**
      * @static
      * @return bool
      */
@@ -315,6 +323,70 @@ class CmcHelperBasic {
 
     }
 
+    /**
+     * @param string $option
+     * @return bool || object
+     */
+    public function getComponent($option = 'com_cmc') {
+        if (!isset(self::$components[$option]))
+        {
+            if (self::_load($option))
+            {
+                $result = self::$components[$option];
+            }
+            else
+            {
+                $result = false;
+            }
+        }
+        else
+        {
+            $result = self::$components[$option];
+        }
+
+        return $result;
+
+
+    }
+
+    /**
+     *
+     */
+    public static function footer() {
+        $footer = '<p style="text-align: center; margin-top: 15px;" class="copyright"> ';
+        $footer .= 'CMC - <a href="https://mailchimp.com/?pid=compojoom&source=website" target="_blank">Mailchimp</a>® integration for <a href="http://joomla.org" target="_blank">Joomla!™</a>';
+        $footer .= ' by <a href="https://compojoom.com">compojoom.com</a>';
+        $footer .= '</p>';
+        return $footer;
+    }
+
+    private function _load($option) {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery('true');
+        $query->select('*')->from('#__extensions');
+        $query->where($query->qn('type') . ' = ' . $db->quote('component'));
+        $query->where($query->qn('element') . ' = ' . $db->quote($option));
+        $db->setQuery($query, 0, 1);
+
+        self::$components[$option] = $db->loadObject();
+
+        // Convert the params to an object.
+        if (is_string(self::$components[$option]->params))
+        {
+            $temp = new JRegistry;
+            $temp->loadString(self::$components[$option]->params);
+            self::$components[$option]->params = $temp;
+        }
+
+        if (is_string(self::$components[$option]->manifest_cache))
+        {
+            $temp = new JRegistry;
+            $temp->loadString(self::$components[$option]->manifest_cache);
+            self::$components[$option]->manifest_cache = $temp;
+        }
+
+        return $db->loadObject();
+    }
 
 
 }
