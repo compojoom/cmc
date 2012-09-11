@@ -92,6 +92,23 @@ class CmcModelUsers extends JModelList {
     }
 
     /**
+     * Gets users for export
+     * @return mixed
+     */
+    public function export() {
+        $db = JFactory::getDbo();
+        $this->populateState();
+        $query = $this->getListQuery();
+
+        $query->clear('select');
+
+        $query->select(array('firstname','lastname','email','user_id','timestamp','list_id','status'));
+
+        $db->setQuery($query);
+        return $db->loadAssocList();
+    }
+
+    /**
      * Returns a reference to the a Table object, always creating it.
      *
      * @param	type	The table type to instantiate

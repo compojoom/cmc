@@ -43,5 +43,6 @@ class CmcViewUsers extends JView {
         JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_USERS'), 'users.delete');
         JToolBarHelper::editList('user.edit');
         JToolBarHelper::addNewX('user.add');
+        JToolBarHelper::custom('users.export',  'csv.png', '', 'CSV', false);
     }
 }

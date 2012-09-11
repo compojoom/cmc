@@ -5,6 +5,10 @@
     background-image: url(../images/icon-32-sync.png);
 }
 
+.icon-32-csv {
+    background: url('../images/csv_text.png') no-repeat;
+}
+
 .icon-48-lists {
     background-image: url(../images/icon-48-lists.png);
 }

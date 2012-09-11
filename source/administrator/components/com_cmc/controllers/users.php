@@ -48,4 +48,28 @@ class CmcControllerUsers extends JControllerAdmin {
         }
         $this->setRedirect('index.php?option=com_cmc&view=users');
     }
+
+    /**
+     * Exports users to CSV file for download
+     *
+     */
+    public function export() {
+        $model = $this->getModel('Users');
+        $users = $model->export();
+
+        $output = fopen('php://output','w') or die("Can't open php://output");
+
+        header('Content-Type:application/csv');
+        header('Content-Disposition: attachment; filename="users.csv"');
+
+        fputcsv($output, array('firstname','lastname','email','user_id','timestamp','list_id','status'), ',','"');
+
+        foreach ($users as $user) {
+            fputcsv($output, $user, ',', '"');
+        }
+
+        fclose($output) or die("can't close php://output");
+
+        jexit();
+    }
 }
