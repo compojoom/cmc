@@ -93,21 +93,13 @@ class CmcHelperSynchronize
 
                 // We can only get 15k users every query, so if we have more we need to do more queries
                 if($stats['member_count'] < 15000) {
-                    CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user);
+                    self::synchronizeUsers($apikey, $list['id'], $user);
                 } else {
-                    $cnt = $stats['member_count'] / 10000;
+                    $cnt = $stats['member_count'] / 15000;
 
                     for($j = 0; $j < $cnt; $j++) {
-                        if($j == 0) {
-                            $start = 10000 * $j;
-                        } else {
-                            $start = 10000 * $j + 1;
-                        }
-
-                        $end = 10000 * ($j + 1);
-
-                        CmcHelperSynchronize::synchronizeUsers($apikey, $list['id'], $user,
-                            $status, $start, $end, false);
+                        self::synchronizeUsers($apikey, $list['id'], $user,
+                            $status, $j, 15000, false);
                     }
                 }
             }
