@@ -22,6 +22,9 @@ class CmcModelUsers extends JModelList {
         $status = $this->getUserStateFromRequest($this->context.'.filter.status', 'filter_status');
         $this->setState('filter.status', $status);
 
+        $list = $this->getUserStateFromRequest($this->context.'.filter.list', 'filter_list');
+        $this->setState('filter.list', $list);
+
         parent::populateState('u.email', 'asc');
     }
 
@@ -51,6 +54,12 @@ class CmcModelUsers extends JModelList {
 
         if(!empty($status)){
             $query->where('u.status = ' . $db->Quote($status));
+        }
+
+        $list = $this->getState('filter.list');
+
+        if(!empty($list)) {
+            $query->where($db->qn('u.list_id') . ' = ' . $db->q($list));
         }
 
         // Add the list ordering clause.

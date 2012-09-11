@@ -22,36 +22,42 @@ $filterStatus = $this->escape($this->state->get('filter.status'));
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm">
-    <div class="filter-search fltlft">
-        <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-        <input type="text" name="filter_search" id="filter_search"
-               value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-               title="<?php echo JText::_('COM_CMC_SEARCH_IN_EMAIL'); ?>"/>
-        <button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
-        <button type="button"
-                onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
-        <select name="filter_status" class="inputbox" onchange="this.form.submit()">
-            <option value=""><?php echo JText::_('COM_CMC_STATUS');?></option>
-            <?php
-               $subs = $subu = $subup = $subc = "";
+    <fieldset id="filter-bar">
+        <div class="filter-search fltlft">
+            <label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+            <input type="text" name="filter_search" id="filter_search"
+                   value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                   title="<?php echo JText::_('COM_CMC_SEARCH_IN_EMAIL'); ?>"/>
+            <button type="submit"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
+            <button type="button"
+                    onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 
-               if($filterStatus == "subscribed") {
-                   $subs = ' selected="selected" ';
-               } else if ($filterStatus == "unsubscribed") {
-                   $subu = ' selected="selected "';
-               } else if ($filterStatus == "updated") {
-                   $subup = ' selected="selected "';
-               } else if ($filterStatus == "cleaned") {
-                   $subc = ' selected="selected" ';
-               }
-            ?>
-            <option value="subscribed" <?php echo $subs; ?>><?php echo JText::_('COM_CMC_SUBSCRIBED');?></option>
-            <option value="unsubscribed" <?php echo $subu; ?>><?php echo JText::_('COM_CMC_UNSUBSCRIBED');?></option>
-            <option value="updated" <?php echo $subup; ?>><?php echo JText::_('COM_CMC_CLEANED');?></option>
-            <option value="cleaned" <?php echo $subc; ?>><?php echo JText::_('COM_CMC_UPDATED');?></option>
-        </select>
+        </div>
+        <div class="filter-select fltrt">
+            <select name="filter_status" class="inputbox" onchange="this.form.submit()">
+                <option value=""><?php echo JText::_('COM_CMC_STATUS');?></option>
+                <?php
+                $subs = $subu = $subup = $subc = "";
 
-    </div>
+                if($filterStatus == "subscribed") {
+                    $subs = ' selected="selected" ';
+                } else if ($filterStatus == "unsubscribed") {
+                    $subu = ' selected="selected "';
+                } else if ($filterStatus == "updated") {
+                    $subup = ' selected="selected "';
+                } else if ($filterStatus == "cleaned") {
+                    $subc = ' selected="selected" ';
+                }
+                ?>
+                <option value="subscribed" <?php echo $subs; ?>><?php echo JText::_('COM_CMC_SUBSCRIBED');?></option>
+                <option value="unsubscribed" <?php echo $subu; ?>><?php echo JText::_('COM_CMC_UNSUBSCRIBED');?></option>
+                <option value="updated" <?php echo $subup; ?>><?php echo JText::_('COM_CMC_CLEANED');?></option>
+                <option value="cleaned" <?php echo $subc; ?>><?php echo JText::_('COM_CMC_UPDATED');?></option>
+            </select>
+
+            <?php echo $this->lists; ?>
+        </div>
+    </fieldset>
     <div class="clr"></div>
 
     <table class="adminlist">

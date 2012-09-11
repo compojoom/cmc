@@ -21,6 +21,16 @@ class CmcViewUsers extends JView {
         $this->status = $this->get('status');
         $this->pagination = $this->get('Pagination');
 
+        $lists = CmcHelperBasic::getLists();
+        $options[] = array( 'value' => '', 'text' => JText::_('JALL'));
+        foreach($lists as $list) {
+            $options[] = array(
+                'value' => $list->mc_id,
+                'text' => $list->list_name
+            );
+        }
+        $this->lists = JHtml::_('select.genericlist', $options, 'filter_list', 'onchange="this.form.submit()"', 'value', 'text', $this->state->get('filter.list'));
+
         $this->assignRef('filter', $filter);
 
         $this->addToolbar();
