@@ -14,6 +14,26 @@ jimport('joomla.application.component.modellist');
 
 class CmcModelUsers extends JModelList {
 
+    /**
+     * Constructor.
+     *
+     * @param	array	An optional associative array of configuration settings.
+     * @see		JController
+     * @since	1.6
+     */
+    public function __construct($config = array())
+    {
+        if (empty($config['filter_fields'])) {
+            $config['filter_fields'] = array(
+                'id', 'u.id',
+                'email', 'u.email',
+                'timestamp', 'u.timestamp'
+            );
+        }
+
+        parent::__construct($config);
+    }
+
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');

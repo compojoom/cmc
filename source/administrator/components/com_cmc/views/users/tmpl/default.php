@@ -72,9 +72,13 @@ $filterStatus = $this->escape($this->state->get('filter.status'));
             <th class="title">
                 <?php echo JHtml::_('grid.sort', 'JGLOBAL_EMAIL', 'u.email', $listDirn, $listOrder); ?>
             </th>
-            <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
+            <th width="10%">
+                <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'u.id', $listDirn, $listOrder); ?>
+            </th>
             <th width="10%"><?php echo JText::_('COM_CMC_LIST'); ?></th>
-            <th width="20%"><?php echo JText::_('COM_CMC_TIMESTAMP'); ?></th>
+            <th width="20%">
+                <?php echo JHtml::_('grid.sort', 'COM_CMC_TIMESTAMP', 'u.timestamp', $listDirn, $listOrder); ?>
+            </th>
             <th width="15%"><?php echo JText::_('COM_CMC_STATUS'); ?></th>
         </tr>
         </thead>
