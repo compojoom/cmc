@@ -8,6 +8,10 @@
 .icon-32-csv {
     background: url('../images/csv_text.png') no-repeat;
 }
+.icon-32-group {
+    background: url('../images/add-group-32px.png') no-repeat;
+}
+
 
 .icon-48-lists {
     background-image: url(../images/icon-48-lists.png);
@@ -19,4 +23,30 @@
 
 .icon-48-controlcenter{
     background-image: url(../images/icon-48-controlcenter.png);
+}
+
+#groups {
+    position: absolute;
+    left: 40%;
+    top: 20%;
+    display: none;
+    z-index: 9999;
+    background: #FFF;
+    padding: 20px;
+    width: 300px;
+}
+
+ul.usergroups {
+    padding-left: 0;
+}
+ul.usergroups li {
+    list-style: none;
+}
+
+.important {
+    color: red;
+}
+
+.close {
+    cursor: pointer;
 }

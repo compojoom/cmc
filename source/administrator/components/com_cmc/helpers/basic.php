@@ -220,12 +220,11 @@ class CmcHelperBasic {
      * @param null $user
      * @return bool|string
      */
-    public static function unsubscribeList($api_key, $list_id, $email, $user = null){
-        $api = new MCAPI($api_key);
+    public static function unsubscribeList($user){
+        $api = new cmcHelperChimp();
+        $appl = JFactory::getApplication();
 
-        //echo $list_id . " " . $email;
-        //die("asdf");
-        $retval = $api->listUnsubscribe($list_id, $email, true);
+        $retval = $api->listUnsubscribe($user->list_id, $user->email, true);
         if ($api->errorCode){
             JError::raiseError(500, JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . " " .$api->errorCode . " / " . $api->errorMessage);
         } else {

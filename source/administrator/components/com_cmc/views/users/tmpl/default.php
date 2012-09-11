@@ -14,13 +14,22 @@ defined('_JEXEC') or die('Restricted access');
 JHTML::_('behavior.tooltip');
 jimport('joomla.filter.output');
 JHTML::_('stylesheet', 'cmc.css', 'media/com_cmc/backend/css/');
+JHTML::_('script', 'media/com_cmc/backend/js/users.js', true);
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 $filterStatus = $this->escape($this->state->get('filter.status'));
 
 ?>
-
+<script type="text/javascript">
+    Joomla.submitbutton = function(pressbutton) {
+        if(pressbutton == 'users.addGroup') {
+            new cmcUsers();
+        } else {
+            Joomla.submitform(pressbutton);
+        }
+    }
+</script>
 <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm">
     <fieldset id="filter-bar">
         <div class="filter-search fltlft">
@@ -128,3 +137,27 @@ $filterStatus = $this->escape($this->state->get('filter.status'));
 
 <div class="clear"></div>
 <?php echo CmcHelperBasic::footer(); ?>
+
+<div id="groups">
+    <span id="close" class="close fltrt">close</span>
+    <div class="clr"></div>
+    <form id="addGroup" name="addGroup" action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post">
+        <?php echo JText::_('COM_CMC_SELECT_LIST'); ?> <br />
+        <?php echo $this->lists; ?>
+        <br />
+        <br />
+        <?php echo JText::_('COM_CMC_SELECT_JOOMLA_USERGROUPS'); ?> <br />
+        <?php echo JHtml::_('access.usergroups', 'usergroups', ''); ?>
+        <input type="hidden" name="task" value="users.addGroup" />
+
+        <br /><br />
+        <span class="important">
+            <?php echo JText::_('COM_CMC_ADD_USERS_FROM_GROUP_INFO'); ?>
+        </span>
+        <br />
+        <button><?php echo JText::_('COM_CMC_ADD_USERS_NOW'); ?></button>
+
+        <?php echo JHTML::_('form.token'); ?>
+    </form>
+
+</div>
