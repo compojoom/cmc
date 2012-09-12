@@ -84,7 +84,7 @@ class CmcControllerUsers extends JControllerAdmin
         $input = $appl->input;
         $chunks = 0;
 
-        $list = $input->get('filter_list');
+        $list = $input->get('addtolist');
         $groups = $input->get('usergroups', array(), 'ARRAY');
 
         // get the joomla users in the specific groups

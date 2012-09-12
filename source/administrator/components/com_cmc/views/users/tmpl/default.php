@@ -143,7 +143,7 @@ $filterStatus = $this->escape($this->state->get('filter.status'));
     <div class="clr"></div>
     <form id="addGroup" name="addGroup" action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post">
         <?php echo JText::_('COM_CMC_SELECT_LIST'); ?> <br />
-        <?php echo $this->lists; ?>
+        <?php echo $this->addToList; ?>
         <br />
         <br />
         <?php echo JText::_('COM_CMC_SELECT_JOOMLA_USERGROUPS'); ?> <br />

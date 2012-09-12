@@ -30,6 +30,8 @@ class CmcViewUsers extends JView {
             );
         }
         $this->lists = JHtml::_('select.genericlist', $options, 'filter_list', 'onchange="this.form.submit()"', 'value', 'text', $this->state->get('filter.list'));
+        array_shift($options);
+        $this->addToList = JHtml::_('select.genericlist', $options, 'addtolist', '', 'value', 'text', $this->state->get('filter.list'));
 
         $this->assignRef('filter', $filter);
 
