@@ -28,6 +28,7 @@ class com_cmcInstallerScript extends CompojoomInstaller
         'modules' => array(
             'admin' => array(
                 'mod_ccc_cmc_icons' => array('ccc_cmc_left',1),
+                'mod_ccc_cmc_mailchimp' => array('ccc_cmc_slider',1),
                 'mod_ccc_cmc_newsfeed' => array('ccc_cmc_slider',1),
                 'mod_ccc_cmc_overview' => array('ccc_cmc_slider',1),
                 'mod_ccc_cmc_update' => array('ccc_cmc_slider',1)

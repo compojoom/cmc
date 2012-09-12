@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module"
+        version="2.5"
+        client="administrator"
+        method="upgrade"
+        >
+    <name>@@MODULENAME@@</name>
+    <author>compojoom.com</author>
+    <creationDate>@@DATE@@</creationDate>
+    <copyright>Copyright (C) 2012 - compojoom.com. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>daniel@compojoom.com</authorEmail>
+    <authorUrl>compojoom.com</authorUrl>
+    <version>@@VERSION@@</version>
+    <description>MOD_CCC_CMC_MAILCHIMP_XML_DESCRIPTION</description>
+    <files>
+        ##PACKAGEFILESMODULE##
+    </files>
+    <languages folder="administrator/language">
+        ##FRONTENDLANGUAGEFILES##
+    </languages>
+    <help key="CCC_MODULE_PROMOTION" />
+    <config>
+        <fields name="params">
+
+        </fields>
+    </config>
+</extension>

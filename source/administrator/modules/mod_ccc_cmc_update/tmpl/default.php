@@ -15,7 +15,7 @@ $extension = $params->get('extension', '');
 
 require_once (JPATH_ADMINISTRATOR . "/components/" . $extension . "/liveupdate/liveupdate.php");
 
-$updateinfos = LiveUpdate::getUpdateInformation(true);
+$updateinfos = LiveUpdate::getUpdateInformation();
 
 ?>
 <div style="padding: 12px;">
