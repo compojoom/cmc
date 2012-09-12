@@ -13,8 +13,8 @@
         <field
                 name="webhooks_key"
                 type="webhook" default=""
-                label="COM_CMC_WEBHOOKS_KEY"
-                description="COM_CMC_WEBHOOKS_KEY_DESC"
+                label="COM_CMC_WEBHOOKS_URL"
+                description="COM_CMC_WEBHOOKS_URL_DESC"
                 size="60"
                 required="true"
                 />

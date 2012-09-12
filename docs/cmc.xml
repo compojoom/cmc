@@ -61,7 +61,7 @@
       Its functionality includes, but is not limited to displaying your
       Mailchimp lists and users directly in your Joomla backend. It comes with
       a Joomla module that will let you easily create newsletter subscription
-      forms on your site. </para>
+      forms on your site.</para>
     </section>
 
     <section>
@@ -76,7 +76,7 @@
 
           <listitem>
             <para>Access information about your Mailchimp lists and users
-            right in your Joomla backend </para>
+            right in your Joomla backend</para>
           </listitem>
         </itemizedlist></para>
     </section>
@@ -154,7 +154,7 @@
     component is all setup and you can run your first synchronisation (go to
     the list view). Once you've run the synchronisation and if everything went
     fine you can go ahead and publish the subscription module and let users
-    subscribe. </para>
+    subscribe.</para>
 
     <para>This was the absolute minimum of what you need to do. If you are an
     advanced user the steps most probably didn't scare you. If on the other
@@ -176,7 +176,7 @@
       <title>Options</title>
 
       <para>From the top right of your dashboard you can access the component
-      Options. </para>
+      Options.</para>
 
       <para><graphic fileref="images/options.PNG"/>The options are divided
       into 2 tabs - "Main Settings" &amp; "Permissions" . The main settings is
@@ -186,7 +186,7 @@
       for that so it is best that you read the documentation available at
       <ulink
       url="http://docs.joomla.org/Access_Control_List/1.6-2.5/Tutorial">http://docs.joomla.org</ulink>
-      . </para>
+      .</para>
 
       <section>
         <title>Mailchimp API key</title>
@@ -194,7 +194,7 @@
         <para>In order for the component to work you will need to provide your
         Mailchimp API key. To get the key log into your profile on
         mailchimp.com . Then on the top go your account -&gt; API keys &amp;
-        Authorized Apps. </para>
+        Authorized Apps.</para>
 
         <graphic fileref="images/mailchimp_api_key.png"/>
 
@@ -209,7 +209,7 @@
       </section>
 
       <section>
-        <title>Webhooks key</title>
+        <title>Webhooks URL</title>
 
         <para>Webhooks are a way for Mailchimp to send information related to
         your lists and users to your site. Webhooks allows CMC to offer a 2
@@ -217,32 +217,32 @@
         whenever a user unsubscribes on Mailchimp - this will be reflected in
         the backend of your website. Whenever you modify an user on
         mailchimp.com -&gt; the modified information will be also show in your
-        backend. </para>
+        backend.</para>
 
         <para>In order for the webhooks support to work you need to provide
         the URL to your site in the Mailchimp list settings. Since this URL is
         publicly available it means that everyone would be able to send data
-        to your site. To prevent this you need to provide a Webhooks key in
-        the settings of the component. The webhooks key is like a password
+        to your site. To prevent this we automatically generate a secret key
+        for your site and append it to the url. The key is like a password
         -&gt; if someone tries to call your webhooks URL without the key -&gt;
         the system will just do nothing. On the other side - if the request to
         that URL has the correct webhooks key, then the system will proceed
-        with the processing of the request. </para>
+        with the processing of the request.</para>
 
-        <para>So, long story short - think of a random string for a key! Enter
-        it in the field and then copy the URL from the adjacent field. It will
-        look something like this:
-        http://yoursite.com/index.php?option=com_cmc&amp;format=raw&amp;task=webhooks.request&amp;key=xxxx
-        - where xxxx will be replaced with your webhooks key. Now that you
-        have provided the webhooks key and that you have copied the
-        appropriate URL you have to go to mailchimp.com, log into your account
-        and go to your list:</para>
+        <para>So, long story short - copy the URL from the webhooks URL field
+        and give it to mailchimp:</para>
+
+        <important>
+          <para>Don't forget to save the settings! If you don't do so the key
+          generated for the webhook URL won't be saved and mailchimp won't be
+          able to properly authenticate on your site! </para>
+        </important>
 
         <graphic fileref="images/lists.PNG"/>
 
         <para>Once you've reached the list view at the top you'll see a bar
         with settings related to your list. Click on "List tools" -&gt;
-        "Webhooks" as shown in the screen shot below </para>
+        "Webhooks" as shown in the screen shot below</para>
 
         <graphic fileref="images/webhooks-select.png"/>
 
@@ -265,19 +265,19 @@
       the lists you have and some additional information about each list. On
       the top right of the screen you'll see a First Sync button. You need to
       click this one the first time after your installation. This will
-      download all your lists and users from Mailchimp. </para>
+      download all your lists and users from Mailchimp.</para>
     </section>
 
     <section>
       <title>Users</title>
 
       <para>The user screen allows you to see all the users subscribed to all
-      of your lists. </para>
+      of your lists.</para>
 
       <graphic fileref="images/users.PNG"/>
 
       <para>By clicking on the email of an user you will be presented with a
-      view that has more information about him. Similar to this one: </para>
+      view that has more information about him. Similar to this one:</para>
 
       <graphic fileref="images/user.PNG"/>
 
@@ -310,7 +310,7 @@
     <graphic fileref="images/mod_cmc_group_options.PNG"/>
 
     <para>Select the fields you want to show in the frontend and click on save
-    once ready. </para>
+    once ready.</para>
 
     <para><important>
         <para>Please make sure to select all the fields that you've marked as
@@ -336,7 +336,7 @@
       <para>The module frontend presentation doesn't include any CSS file.
       We've left the presentation to your template. However if you are not
       happy with the way the module is styled you can always add the CSS rule
-      to your template CSS file. </para>
+      to your template CSS file.</para>
     </section>
   </chapter>
 

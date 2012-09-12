@@ -30,16 +30,6 @@ class JFormFieldWebhook extends JFormFieldText {
     protected function getInput()
     {
         $script = "window.addEvent('domready', function() {
-            var url = document.id('webhook-url').get('value');
-            document.id('jform_webhooks_key').addEvent('keyup', function(){
-                var key = {key : this.get('value')};
-                document.id('webhook-url').set('value', url.substitute(key));
-            });
-
-            if(document.id('jform_webhooks_key').get('value') != '') {
-                document.id('webhook-url').set('value', url.substitute({key: document.id('jform_webhooks_key').get('value')}));
-            }
-
             document.id('webhook-url').addEvent('click', function() {
                 this.select();
             });
@@ -57,8 +47,13 @@ class JFormFieldWebhook extends JFormFieldText {
         // Initialize JavaScript field attributes.
         $onchange = $this->element['onchange'] ? ' onchange="' . (string) $this->element['onchange'] . '"' : '';
 
-        return '<input type="text" name="' . $this->name . '" id="' . $this->id . '"' . ' value="'
+
+        if(!$this->value) {
+            $this->value = md5(JFactory::getUser()->id . JFactory::getUser()->name . microtime());
+        }
+
+        return '<input type="hidden" name="' . $this->name . '" id="' . $this->id . '"' . ' value="'
             . htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') . '"' . $class . $size . $disabled . $readonly . $onchange . $maxLength . '/>
-            <input type="text" size="60" readonly="readonly" id="webhook-url" value="'.JURI::root().'index.php?option=com_cmc&format=raw&task=webhooks.request&key={key}" />';
+            <input type="text" size="60" readonly="readonly" id="webhook-url" value="'.JURI::root().'index.php?option=com_cmc&format=raw&task=webhooks.request&key='.$this->value .'" />';
     }
 }
