@@ -21,6 +21,12 @@ source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_icons.ini
 source_lang = en_GB
 minimum_perc = 80
 
+[compojoom-cmc.mod_ccc_cmc_mailchimp]
+file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_mailchimp.ini
+source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_mailchimp.ini
+source_lang = en_GB
+minimum_perc = 80
+
 [compojoom-cmc.mod_ccc_cmc_newsfeed]
 file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_newsfeed.ini
 source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_newsfeed.ini
