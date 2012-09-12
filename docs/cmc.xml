@@ -27,9 +27,10 @@
     </legalnotice>
 
     <abstract>
-      <para>This book covers the use of the CMC - Mailchimp® for Joomla™
-      extension. It does not cover any other extension available on
-      compojoom.com .</para>
+      <para>This book covers the use of the CMC - <ulink
+      url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>®
+      for Joomla™ extension. It does not cover any other extension available
+      on compojoom.com .</para>
     </abstract>
   </bookinfo>
 
@@ -57,8 +58,9 @@
     <section>
       <title>Introducing CMC</title>
 
-      <para>CMC is a Joomla extension that integrates with the Mailchimp API.
-      Its functionality includes, but is not limited to displaying your
+      <para>CMC is a Joomla extension that integrates with the <ulink
+      url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>
+      API. Its functionality includes, but is not limited to displaying your
       Mailchimp lists and users directly in your Joomla backend. It comes with
       a Joomla module that will let you easily create newsletter subscription
       forms on your site.</para>
@@ -149,12 +151,13 @@
     <para>Congrats! It seems that you have the first step - the installation
     behind you! Now let us quickly sum up what you need to do after the
     installation. Go to the extensions dashboard -&gt; click on Options in the
-    top right -&gt; provide your Mailchimp API key and enter a webhooks key.
-    Copy the webhooks URL to your lists settings on Mailchimp! Now the
-    component is all setup and you can run your first synchronisation (go to
-    the list view). Once you've run the synchronisation and if everything went
-    fine you can go ahead and publish the subscription module and let users
-    subscribe.</para>
+    top right -&gt; provide your <ulink
+    url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>
+    API key and enter a webhooks key. Copy the webhooks URL to your lists
+    settings on Mailchimp! Now the component is all setup and you can run your
+    first synchronisation (go to the list view). Once you've run the
+    synchronisation and if everything went fine you can go ahead and publish
+    the subscription module and let users subscribe.</para>
 
     <para>This was the absolute minimum of what you need to do. If you are an
     advanced user the steps most probably didn't scare you. If on the other
@@ -211,13 +214,14 @@
       <section>
         <title>Webhooks URL</title>
 
-        <para>Webhooks are a way for Mailchimp to send information related to
-        your lists and users to your site. Webhooks allows CMC to offer a 2
-        way synchronisation of lists. In simple English this means that -
-        whenever a user unsubscribes on Mailchimp - this will be reflected in
-        the backend of your website. Whenever you modify an user on
-        mailchimp.com -&gt; the modified information will be also show in your
-        backend.</para>
+        <para>Webhooks are a way for <ulink
+        url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>
+        to send information related to your lists and users to your site.
+        Webhooks allows CMC to offer a 2 way synchronisation of lists. In
+        simple English this means that - whenever a user unsubscribes on
+        Mailchimp - this will be reflected in the backend of your website.
+        Whenever you modify an user on mailchimp.com -&gt; the modified
+        information will be also show in your backend.</para>
 
         <para>In order for the webhooks support to work you need to provide
         the URL to your site in the Mailchimp list settings. Since this URL is
@@ -235,7 +239,7 @@
         <important>
           <para>Don't forget to save the settings! If you don't do so the key
           generated for the webhook URL won't be saved and mailchimp won't be
-          able to properly authenticate on your site! </para>
+          able to properly authenticate on your site!</para>
         </important>
 
         <graphic fileref="images/lists.PNG"/>
@@ -265,7 +269,8 @@
       the lists you have and some additional information about each list. On
       the top right of the screen you'll see a First Sync button. You need to
       click this one the first time after your installation. This will
-      download all your lists and users from Mailchimp.</para>
+      download all your lists and users from <ulink
+      url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>.</para>
     </section>
 
     <section>
@@ -315,8 +320,10 @@
     <para><important>
         <para>Please make sure to select all the fields that you've marked as
         required in Mailchimp. Failure to do so will result in not working
-        subscriptions as Mailchimp will refuse to subscribe the users to the
-        list, because some fields are missing.</para>
+        subscriptions as <ulink
+        url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>
+        will refuse to subscribe the users to the list, because some fields
+        are missing.</para>
       </important>Depending on the fields and interest groups that you've
     selected the module will display different options in the frontend. Here
     is a screen shot of a module that has only the Email, First and Last name
