@@ -17,7 +17,7 @@ $language->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 $view	= JRequest::getCmd('view');
 
 $subMenus = array(
-    'controlcenter' => 'COM_CMC_CONTROLCENTER',
+    'cpanel' => 'COM_CMC_CPANEL',
     'lists' => 'COM_CMC_LISTS',
     'users' => 'COM_CMC_USERS',
     //'statistics' => 'COM_CMC_STATISTICS',

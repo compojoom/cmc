@@ -12,7 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class CmcViewUsers extends JView {
+class CmcViewUsers extends JViewLegacy {
 
     public function display($tpl = null) {
 
@@ -44,7 +44,7 @@ class CmcViewUsers extends JView {
         JToolBarHelper::title(JText::_('COM_CMC_USERS'), 'users');
         JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_USERS'), 'users.delete');
         JToolBarHelper::editList('user.edit');
-        JToolBarHelper::addNewX('user.add');
+        JToolBarHelper::addNew('user.add');
         JToolBarHelper::custom('users.addGroup', 'group.png', '', JText::_('COM_CMC_ADD_GROUP'), false);
         JToolBarHelper::custom('users.export',  'csv.png', '', 'CSV', false);
     }

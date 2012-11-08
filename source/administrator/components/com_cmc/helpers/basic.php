@@ -224,12 +224,13 @@ class CmcHelperBasic {
         $api = new cmcHelperChimp();
         $appl = JFactory::getApplication();
 
-        $retval = $api->listUnsubscribe($user->list_id, $user->email, true);
+
+        $api->listUnsubscribe($user->list_id, $user->email, true);
         if ($api->errorCode){
-            JError::raiseError(500, JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . " " .$api->errorCode . " / " . $api->errorMessage);
-        } else {
-            return true;
+            throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->errorMessage, $api->errorCode);
         }
+
+        return true;
     }
 
 
@@ -357,6 +358,17 @@ class CmcHelperBasic {
         $footer .= ' by <a href="https://compojoom.com">compojoom.com</a>';
         $footer .= '</p>';
         return $footer;
+    }
+
+    /**
+     * include the bootstrap css and js if necessary
+     */
+    public static function bootstrap() {
+        if(JVERSION < 3.0) {
+            JHTML::_('stylesheet', 'media/com_cmc/css/bootstrap.css');
+            JHTML::_('script', 'media/com_cmc/backend/js/jquery.min.js');
+            JHTML::_('script', 'media/com_cmc/backend/js/bootstrap.min.js');
+        }
     }
 
     private function _load($option) {

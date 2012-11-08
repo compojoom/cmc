@@ -35,19 +35,9 @@ abstract class modCCCNewsfeedHelper
         $filter = JFilterInput::getInstance();
 
         //  get RSS parsed object
+        $rssDoc = JFactory::getFeedParser($rssurl);
 
-
-        $options = array();
-        $options['rssUrl']		= $rssurl;
-        if ($params->get('cache')) {
-            $options['cache_time']  = $params->get('cache_time', 15) ;
-            $options['cache_time']	*= 60;
-        } else {
-            $options['cache_time'] = null;
-        }
-
-        $rssDoc = JFactory::getXMLParser('RSS', $options);
-
+//	    var_dump($rssDoc);
         // echo "feed " + $rssurl;
 
         if ($rssDoc != false)

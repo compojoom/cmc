@@ -11,10 +11,10 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.controller');
+jimport('joomla.application.component.controllerlegacy');
 
 
-class CmcControllerWebhooks extends JController
+class CmcControllerWebhooks extends JControllerLegacy
 {
     public function __construct($config = array()) {
         JLog::addLogger(

@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die();
 
+JHtml::_('behavior.framework');
+JHtml::_('behavior.modal');
 ?>
 
 <div class="liveupdate">
@@ -19,12 +21,12 @@ defined('_JEXEC') or die();
 			</div>
 		</div>
 	</div>
-	<?php endif; ?>	
-	
+	<?php endif; ?>
+
 	<?php if(!$this->updateInfo->supported): ?>
 	<div class="liveupdate-notsupported">
 		<h3><?php echo JText::_('LIVEUPDATE_NOTSUPPORTED_HEAD') ?></h3>
-		
+
 		<p><?php echo JText::_('LIVEUPDATE_NOTSUPPORTED_INFO'); ?></p>
 		<p class="liveupdate-url">
 			<?php echo $this->escape($this->updateInfo->extInfo->updateurl) ?>
@@ -34,19 +36,19 @@ defined('_JEXEC') or die();
 			<button onclick="window.location='<?php echo $this->requeryURL ?>'" ><?php echo JText::_('LIVEUPDATE_REFRESH_INFO') ?></button>
 		</p>
 	</div>
-	
+
 	<?php elseif($this->updateInfo->stuck):?>
 	<div class="liveupdate-stuck">
 		<h3><?php echo JText::_('LIVEUPDATE_STUCK_HEAD') ?></h3>
-		
+
 		<p><?php echo JText::_('LIVEUPDATE_STUCK_INFO'); ?></p>
 		<p><?php echo JText::sprintf('LIVEUPDATE_NOTSUPPORTED_ALTMETHOD', $this->escape($this->updateInfo->extInfo->title)); ?></p>
-		
+
 		<p class="liveupdate-buttons">
 			<button onclick="window.location='<?php echo $this->requeryURL ?>'" ><?php echo JText::_('LIVEUPDATE_REFRESH_INFO') ?></button>
 		</p>
 	</div>
-	
+
 	<?php else: ?>
 	<?php
 		$class = $this->updateInfo->hasUpdates ? 'hasupdates' : 'noupdates';
@@ -84,7 +86,7 @@ defined('_JEXEC') or die();
 					<?php if($this->updateInfo->releasenotes): ?>
 					<a href="#" id="btnLiveUpdateReleaseNotes"><?php echo JText::_('LIVEUPDATE_RELEASENOTES') ?></a>
 					<?php
-					JHTML::_('behavior.mootools');
+					JHTML::_('behavior.framework');
 					JHTML::_('behavior.modal');
 
 					$script = <<<ENDSCRIPT
@@ -94,8 +96,10 @@ defined('_JEXEC') or die();
 
 					function showLiveUpdateReleaseNotes()
 					{
+						var liveupdateReleasenotes = $('liveupdate-releasenotes').clone();
+						
 						SqueezeBox.fromElement(
-							$('liveupdate-releasenotes'), {
+							liveupdateReleasenotes, {
 								handler: 'adopt',
 								size: {
 									x: 450,
@@ -119,7 +123,7 @@ ENDSCRIPT;
 			</div>
 			<?php endif; ?>
 		</div>
-		
+
 		<p class="liveupdate-buttons">
 			<?php if($this->updateInfo->hasUpdates):?>
 			<?php $disabled = $this->needsAuth ? 'disabled="disabled"' : ''?>
@@ -128,7 +132,7 @@ ENDSCRIPT;
 			<button onclick="window.location='<?php echo $this->requeryURL ?>'" ><?php echo JText::_('LIVEUPDATE_REFRESH_INFO') ?></button>
 		</p>
 	</div>
-	
+
 	<?php endif; ?>
 
 	<p class="liveupdate-poweredby">

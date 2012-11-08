@@ -15,22 +15,24 @@ $lang->load('com_hotspots.sys',JPATH_ADMINISTRATOR);
 $path = JURI::root() . '/media/com_cmc/backend/images/';
 require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
 ?>
-<div id="cpanel">
+
 
     <div class="icon-wrapper">
-        <div class="icon">
-            <a href="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>">
-                <img src="<?php echo $path; ?>icon-48-lists.png" alt="" />
+        <div class="icon" >
+            <a href="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>" >
+                <div>
+                    <img src="<?php echo $path; ?>icon-48-lists.png" alt="" />
+                </div>
                 <span><?php echo JText::_('COM_CMC_LISTS'); ?></span>
             </a>
         </div>
         <div class="icon">
             <a href="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>">
-                <img src="<?php echo $path; ?>icon-48-users.png" alt="" />
+                <div>
+                    <img src="<?php echo $path; ?>icon-48-users.png" alt="" />
+                </div>
                 <span><?php echo JText::_('COM_CMC_USERS'); ?></span>
             </a>
         </div>
         <?php echo LiveUpdate::getIcon(); ?>
     </div>
-
-</div>

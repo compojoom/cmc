@@ -13,7 +13,7 @@ jimport('joomla.application.component.controller');
 
 defined( '_JEXEC' ) or die ( 'Restricted access' );
 
-class CmcController extends JController
+class CmcController extends JControllerLegacy
 {
-
+    protected $default_view = 'cpanel';
 }

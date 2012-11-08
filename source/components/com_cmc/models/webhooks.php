@@ -10,8 +10,8 @@
  **/
 
 defined('_JEXEC') or die('Restricted access');
-jimport('joomla.application.component.model');
+jimport('joomla.application.component.modellegacy');
 
-class CmcModelWebhooks extends JModel {
+class CmcModelWebhooks extends JModelLegacy {
 
 }

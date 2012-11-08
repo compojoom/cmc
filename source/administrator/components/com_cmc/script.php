@@ -19,7 +19,7 @@ class com_cmcInstallerScript extends CompojoomInstaller
       * The release value to be displayed and checked against throughout this file.
       */
     public $release = '3.0';
-    public $minimum_joomla_release = '2.5';
+    public $minimum_joomla_release = '2.5.6';
     public $extension = 'com_cmc';
     private $type = '';
 

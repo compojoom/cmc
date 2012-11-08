@@ -12,20 +12,16 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class CmcViewLists extends JViewLegacy {
+class CmcViewCpanel extends JViewLegacy {
 
-    function display($tpl = null) {
-        $this->state = $this->get('State');
-        $this->items = $this->get('Items');
-        $this->pagination = $this->get('Pagination');
+    public function display($tpl = null) {
 
         $this->addToolbar();
         parent::display($tpl);
     }
 
     public function addToolbar() {
-        // Set toolbar items for the page
-        JToolBarHelper::title(JText::_('COM_CMC_LISTS'), 'lists');
-        JToolBarHelper::custom( 'lists.synchronize', 'synchronize.png', 'synchronize.png', 'First Sync', false, false );
+        JToolBarHelper::title(JText::_('COM_CMC_CPANEL'), 'cpanel');
+        JToolBarHelper::preferences( 'com_cmc' );
     }
 }

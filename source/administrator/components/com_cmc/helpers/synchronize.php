@@ -67,9 +67,9 @@ class CmcHelperSynchronize
             $item['beamer_address'] = $list['beamer_address'];
             $item['visibility'] = $list['visibility'];
             $item['created_user_id'] = $user->id;
-            $item['created_time'] = JFactory::getDate()->toMySQL();
+            $item['created_time'] = JFactory::getDate()->toSql();
             $item['modified_user_id'] = $user->id;
-            $item['modified_time'] = JFactory::getDate()->toMySQL();
+            $item['modified_time'] = JFactory::getDate()->toSql();
             $item['access'] = 1;
             $item['query_data'] = json_encode($list);
 
@@ -174,9 +174,9 @@ class CmcHelperSynchronize
             $item['status'] = $status;
 
             $item['created_user_id'] = $user->id;
-            $item['created_time'] = JFactory::getDate()->toMySQL();
+            $item['created_time'] = JFactory::getDate()->toSql();
             $item['modified_user_id'] = $user->id;
-            $item['modified_time'] = JFactory::getDate()->toMySQL();
+            $item['modified_time'] = JFactory::getDate()->toSql();
             $item['access'] = 1;
             $item['query_data'] = json_encode($member);
 

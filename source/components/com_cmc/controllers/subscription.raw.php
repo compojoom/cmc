@@ -9,9 +9,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.controller');
+jimport('joomla.application.component.controllerlegacy');
 
-class CmcControllerSubscription extends JController {
+class CmcControllerSubscription extends JControllerLegacy {
 
     public function save() {
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));

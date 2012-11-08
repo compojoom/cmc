@@ -269,7 +269,7 @@ class cmcForm
 
     public function text($params)
     {
-        $class = $params[3] ? array('required', 'inputbox') : array('inputbox');
+        $class = $params[3] ? array('required', 'inputbox', 'input-medium') : array('inputbox', 'input-medium');
         $validate = array(
             'email' => 'validate-email',
             'number' => 'validate-digits',
@@ -326,7 +326,7 @@ class cmcForm
         }
         $radio = '<div class="mcsignupTitle">' . $title . '</div>';
         foreach ($choices as $ch) {
-            $radio .= '<input type="radio" name="jform[groups][' . $params[0] . ']" id="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="' . $ch . '" title="' . JText::_($title) . '" /><label for="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '">' . JText::_($ch) . '</label><br />';
+            $radio .= '<label class="radio" for="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '"><input type="radio" name="jform[groups][' . $params[0] . ']" id="' . $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="' . $ch . '" title="' . JText::_($title) . '" />' . JText::_($ch) . '</label>';
         }
 
         return $radio;
@@ -340,11 +340,11 @@ class cmcForm
         if ($params[3]) {
             $title = $params[2] . ' *';
         }
-        $attributes = array('maxlength' => '10', 'style' => 'width:85%;', 'title' => $title);
+        $attributes = array('maxlength' => '10', 'title' => $title);
         if ($params[3]) {
-            $attributes['class'] = 'required inputbox';
+            $attributes['class'] = 'required inputbox input-small';
         } else {
-            $attributes['class'] = 'inputbox';
+            $attributes['class'] = 'inputbox input-small';
         }
         return JHTML::calendar($title, 'jform[groups]['.$params[0].']', $params[0], $this->params->get('dateFormat', '%Y-%m-%d'), $attributes);
 
@@ -352,7 +352,7 @@ class cmcForm
 
     public function birthday($params)
     {
-        $req = ($params[3]) ? 'class="required inputbox"' : 'class="inputbox"';
+        $req = ($params[3]) ? 'class="required inputbox input-medium"' : 'class="inputbox input-medium"';
         $title = JText::_($params[2]);
         if ($params[3]) {
             $title = $params[2] . ' *';
@@ -398,7 +398,7 @@ class cmcForm
 
     public function address($params)
     {
-        $req = ($params[3]) ? 'class="required inputbox"' : 'class="inputbox"';
+        $req = ($params[3]) ? 'class="required inputbox input-medium"' : 'class="inputbox input-medium"';
         $title = JText::_($params[2]);
         if ($params[3]) {
             $title = $params[2] . ' *';

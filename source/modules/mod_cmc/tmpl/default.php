@@ -14,15 +14,16 @@ $moduleId = $module->id;
 $interests = $params->get('interests');
 $fields = $params->get('fields');
 
-JHtml::_('behavior.mootools', true);
+JHtml::_('behavior.framework', true);
 JHtml::script(JURI::root() . '/media/mod_cmc/js/cmc.js');
+JHtml::_('stylesheet',JURI::root() .'media/mod_cmc/css/cmc.css');
 
 $document = JFactory::getDocument();
 $script = 'window.addEvent("domready", function() {
     var options = {
         language : {
-            "updated" : '.json_encode(JText::_( $params->get( 'thankyou' ))) .',
-             "saved" : '.json_encode(JText::_( $params->get( 'updateMsg' ))) .'
+            "updated" : '.json_encode(JText::_( $params->get( 'updateMsg' ))) .',
+             "saved" : '.json_encode(JText::_( $params->get( 'thankyou' ) )) .'
         },
         spinner : "spinner-'.$moduleId.'"
     }
@@ -65,13 +66,13 @@ $form = new cmcForm($params);
                     case 'checkboxes':
                         foreach ($groups as $g) {
                             $o = explode('##', $g);
-                            echo '<input type="checkbox" name="jform[interests][' . $interest[0] . ']" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" /><label for="' . $interest[0] . '_' . $o[0] . '">' . JText::_($o[1]) . '</label><br />';
+                            echo '<label for="' . $interest[0] . '_' . $o[0] . '" class="checkbox"><input type="checkbox" name="jform[interests][' . $interest[0] . ']" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" />' . JText::_($o[1]) . '</label>';
                         }
                         break;
                     case 'radio':
                         foreach ($groups as $g) {
                             $o = explode('##', $g);
-                            echo '<input type="radio" name="jform[interests][' . $interest[0] . ']" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" /><label for="' . $interest[0] . '_' . $o[0] . '">' . JText::_($o[1]) . '</label><br />';
+                            echo '<label for="' . $interest[0] . '_' . $o[0] . '" class="radio"><input type="radio" name="jform[interests][' . $interest[0] . ']" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" />' . JText::_($o[1]) . '</label>';
                         }
                         break;
                     case 'dropdown':
@@ -96,7 +97,7 @@ $form = new cmcForm($params);
         </div>
         <?php endif; ?>
         <div>
-            <input type="submit" class="button" value="<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>"
+            <input type="submit" class="button btn btn-primary" value="<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>"
                    id="cmc-signup-submit-<?php echo $moduleId;?>"/>
         </div>
         <?php if ($params->get('outro-text-2')) : ?>

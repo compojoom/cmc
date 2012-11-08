@@ -9,6 +9,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-class cmcController extends JController {
+class cmcController extends JControllerLegacy {
 
 }

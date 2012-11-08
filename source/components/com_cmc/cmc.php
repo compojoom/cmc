@@ -15,9 +15,9 @@ JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
 
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
 
-jimport('joomla.application.component.controller');
-$controller = JController::getInstance('Cmc');
-$controller->execute(JRequest::getCmd('task'));
+jimport('joomla.application.component.controllerlegacy');
+$controller = JControllerLegacy::getInstance('Cmc');
+$controller->execute(JFactory::getApplication()->input->getCmd('task'));
 $controller->redirect();
 
 

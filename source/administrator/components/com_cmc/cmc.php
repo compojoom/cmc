@@ -13,7 +13,10 @@ defined('_JEXEC') or die('Restricted access');
 if (!JFactory::getUser()->authorise('core.manage', 'com_cmc')) {
     return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
+// in J3.0 the toolbar is not loaded automatically, so let us load it ourselves.
+require_once('toolbar.cmc.php');
 
+$input = JFactory::getApplication()->input;
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
 
 require_once( JPATH_COMPONENT . '/controller.php' );
@@ -32,7 +35,7 @@ $jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
 // Live updater
-if(JRequest::getCmd('view','') == 'liveupdate') {
+if($input->getCmd('view','') == 'liveupdate') {
     require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
     LiveUpdate::handleRequest();
     return;
@@ -40,28 +43,19 @@ if(JRequest::getCmd('view','') == 'liveupdate') {
 
 /*
  * this part is a little crazy because of the redirects...
- * Show a warning only if we are in the controlcenter view
- * Redirect only if we are not in the controlcenter view
+ * Show a warning only if we are in the cpanel view
+ * Redirect only if we are not in the cpanel view
  */
 if(!cmcHelperBasic::checkRequiredSettings()) {
-    if(JRequest::getCmd('view','') == 'controlcenter') {
+    if($input->getCmd('view','') == 'cpanel') {
         JError::raiseWarning('NO_KEY', JText::_('COM_CMC_YOU_NEED_TO_PROVIDE_API_KEYS'));
     }
-    if(JRequest::getCmd('view','') != 'controlcenter') {
+    if($input->getCmd('view','') != 'cpanel') {
         $appl = JFactory::getApplication();
         $appl->redirect('index.php?option=com_cmc&view=controlcenter');
     }
 }
 
-// Conrol Center
-$view = JRequest::getCmd('view','');
-if(( $view == '' && JRequest::getCmd('task') == '') || $view == 'controlcenter') {
-    JToolBarHelper::preferences( 'com_cmc' );
-    require_once( JPATH_COMPONENT_ADMINISTRATOR . '/controlcenter/controlcenter.php');
-    CompojoomControlCenter::handleRequest();
-    return;
-}
-
-$controller = JController::getInstance('Cmc');
-$controller->execute(JRequest::getCmd('task'));
+$controller = JControllerLegacy::getInstance('Cmc');
+$controller->execute($input->getCmd('task'));
 $controller->redirect();

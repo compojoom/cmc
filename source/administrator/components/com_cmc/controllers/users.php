@@ -34,11 +34,19 @@ class CmcControllerUsers extends JControllerAdmin
         $db = JFactory::getDBO();
 
         if (count($cid)) {
-            for ($i = 0; $i < $cid; $i++) {
+            for ($i = 0; $i < count($cid); $i++) {
                 $query = "SELECT * FROM #__cmc_users WHERE id = '" . $cid[$i] . "'";
                 $db->setQuery($query);
                 $member = $db->loadObject();
-                CmcHelperBasic::unsubscribeList($member);
+                try {
+                    CmcHelperBasic::unsubscribeList($member);
+                } catch(Exception $e) {
+                    // catching the case where the user is already unsubscribed from mailchimp
+                    if($e->getCode() != 232) {
+                        throw $e;
+                    }
+                }
+
             }
 
             $cids = implode(',', $cid);

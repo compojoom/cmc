@@ -1,0 +1,6 @@
+.validation-advice,
+.validation-failed {
+    color: #B94A48!important;
+    border-color: #B94A48!important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}

@@ -11,7 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class CmcViewUser extends JView {
+class CmcViewUser extends JViewLegacy {
 
     function display($tpl = null) {
         $user = $this->get('Item');

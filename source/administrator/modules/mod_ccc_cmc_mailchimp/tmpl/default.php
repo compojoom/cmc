@@ -12,36 +12,33 @@
 defined('_JEXEC') or die();
 $apiKey = CmcHelperBasic::getComponent('com_cmc')->params->get('api_key');
 ?>
-<div style="padding: 12px;">
-    <?php
-    if (!$apiKey) :
-        ?>
-        <h1>Easy Email Newsletters</h1>
-        <p>
-            MailChimp helps you design email newsletters, share them on social networks, integrate with services you
-            already
-            use,
-            and track your results. It's like your own personal publishing platform.
-            <br /><br />
-            <a href="https://mailchimp.com/signup/?pid=compojoom&source=website" target="_blank" class="button-link">
-                <?php echo JText::_('MOD_CCC_CMC_MAILCHIMP_CREATE_ACCOUNT'); ?>
-            </a>
-        </p>
-
-
-        <?php else : ?>
-        <h2><?php echo JText::_('MOD_CCC_CMC_MAILCHIMP_ACCOUNT_DETAILS'); ?></h2>
-        <?php
-        $details = modCCCMailchimpHelper::getAccountDetails();
-
-        echo JText::_('MOD_CCC_CMC_MAILCHIMP_PLAN') . ': ' . $details['plan_type'];
-        ?>
-        <br /><br /><br />
-        <a href="https://us1.admin.mailchimp.com/account/plans" target="_blank" class="button-link">
-            <?php echo JText::_('MOD_CCC_CMC_MAILCHIMP_BUY_CREDITS'); ?>
-        </a>
-        <br /><br />
-        <?php
-    endif;
+<?php
+if (!$apiKey) :
     ?>
-</div>
+<h1>Easy Email Newsletters</h1>
+<p>
+    MailChimp helps you design email newsletters, share them on social networks, integrate with services you
+    already
+    use,
+    and track your results. It's like your own personal publishing platform.
+</p>
+<a href="https://mailchimp.com/signup/?pid=compojoom&source=website" target="_blank"
+   class="btn btn-primary button-link">
+    <?php echo JText::_('MOD_CCC_CMC_MAILCHIMP_CREATE_ACCOUNT'); ?>
+</a>
+
+<?php else : ?>
+<h2><?php echo JText::_('MOD_CCC_CMC_MAILCHIMP_ACCOUNT_DETAILS'); ?></h2>
+<p>
+    <?php
+    $details = modCCCMailchimpHelper::getAccountDetails();
+
+    echo JText::_('MOD_CCC_CMC_MAILCHIMP_PLAN') . ': ' . $details['plan_type'];
+    ?>
+</p>
+<a href="https://us1.admin.mailchimp.com/account/plans" target="_blank" class="btn btn-primary button-link">
+    <?php echo JText::_('MOD_CCC_CMC_MAILCHIMP_BUY_CREDITS'); ?>
+</a>
+<?php
+endif;
+?>

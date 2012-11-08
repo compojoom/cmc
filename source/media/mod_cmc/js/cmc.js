@@ -55,10 +55,8 @@ var cmc = new Class({
                     onComplete: function(data) {
                         document.id(self.options.spinner).setStyle('display', 'none');
                         if(data.error == true) {
-                            console.log(data.html);
                             form.getParent('div').set('html', data.html);
                         } else {
-                            console.log( self.options.language.updated);
                             if(data.html == 'updated') {
                                 form.getParent('div').set('html', self.options.language.updated);
                             } else {
