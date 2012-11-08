@@ -33,12 +33,6 @@ source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_newsfeed.ini
 source_lang = en_GB
 minimum_perc = 80
 
-[compojoom-cmc.mod_ccc_cmc_overview]
-file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_overview.ini
-source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_overview.ini
-source_lang = en_GB
-minimum_perc = 80
-
 [compojoom-cmc.mod_ccc_cmc_update]
 file_filter = source\administrator\language\<lang>\<lang>.mod_ccc_cmc_update.ini
 source_file = source\administrator\language\en-GB\en-GB.mod_ccc_cmc_update.ini
