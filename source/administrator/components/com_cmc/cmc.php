@@ -52,7 +52,7 @@ if(!cmcHelperBasic::checkRequiredSettings()) {
     }
     if($input->getCmd('view','') != 'cpanel') {
         $appl = JFactory::getApplication();
-        $appl->redirect('index.php?option=com_cmc&view=controlcenter');
+        $appl->redirect('index.php?option=com_cmc&view=cpanel');
     }
 }
 
