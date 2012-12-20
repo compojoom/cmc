@@ -217,10 +217,11 @@ class plgSystemECom360_akeeba extends JPlugin {
 
         $akeeba_subscription_name = "TODO Query";
 
-        $products = array(
+        $products = array( 0 => array(
             "product_id" => $info['current']->akeebasubs_level_id, "sku" => "", "product_name" => $akeeba_subscription_name,
             "category_id" => 0, "category_name" => "", "qty" => 1.00,         // No category id, qty always 1
             "cost" =>  $info['current']->gross_amount
+            )
         );
 
         /**
