@@ -26,7 +26,7 @@ JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
 
 // thank you for this black magic Nickolas :)
 // Magic: merge the default translation with the current translation
-$jlang =& JFactory::getLanguage();
+$jlang = JFactory::getLanguage();
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
@@ -57,5 +57,5 @@ if(!cmcHelperBasic::checkRequiredSettings()) {
 }
 
 $controller = JControllerLegacy::getInstance('Cmc');
-$controller->execute($input->getCmd('task'));
+$controller->execute($input->getCmd('task', ''));
 $controller->redirect();

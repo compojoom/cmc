@@ -23,7 +23,7 @@ if (!defined('CDEBUG')) {
 // import libaries
 jimport('joomla.event.plugin');
 
-JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . 'components/com_cmc/helpers/');
+JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 class plgSystemECom360 extends JPlugin {
 
@@ -52,7 +52,7 @@ class plgSystemECom360 extends JPlugin {
             return true;
         }
 
-        $cid = JFactory::getApplication()->input->get('mc_cid', '');
+        $cid = JFactory::getApplication()->input->get('mc_cid', ''); // a string, no int!
         $eid = JFactory::getApplication()->input->get('mc_eid', '');
 
         // User comes from MC, cid is optional so just test for eid
@@ -61,6 +61,8 @@ class plgSystemECom360 extends JPlugin {
             $session->set( 'mc', '1' );
             $session->set( 'mc_cid', $cid);
             $session->set( 'mc_eid', $eid);
+
+            echo "SESSION started";
         }
     }
 

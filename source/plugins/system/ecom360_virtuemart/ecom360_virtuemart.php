@@ -15,7 +15,9 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 // import libaries
 jimport('joomla.event.plugin');
 
-JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . 'components/com_cmc/helpers/');
+JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');   // Hmm not working?
+
+
 
 class plgSystemECom360_virtuemart extends JPlugin {
     /**
@@ -103,13 +105,18 @@ class plgSystemECom360_virtuemart extends JPlugin {
             return;
         }
 
+        echo JPATH_ADMINISTRATOR . 'components/com_cmc/helpers/';
+
         $mc_cid = $session->get('mc_cid', '');
         $mc_eid = $session->get('mc_eid', '');
 
         $params = JComponentHelper::getParams('com_cmc');
         $api_key = $params->get("api_key", '');
 
-        var_dump($order);
+        //var_dump($order);
+
+        echo "MC_EID: " . $mc_eid . "<br />";
+        echo "MC_CID: " . $mc_eid;
 
         /**
          * ($api_key, $mc_cid, $mc_eid, $store_id, $store_name = "Store name", $order_id = 0, $total_amount = 0,
@@ -139,12 +146,8 @@ class plgSystemECom360_virtuemart extends JPlugin {
             );
         }
 
-
-
         CmcHelperEcom360::sendOrderInformations($api_key, $mc_cid, $mc_eid, 42, 'storename', $order["details"]["BT"]->virtuemart_order_id, $order["details"]["BT"]->order_total,
             $order["details"]["BT"]->order_tax, $order["details"]["BT"]->order_shipment, $products
         );
-
-        die("asdf");
     }
 }

@@ -17,7 +17,6 @@ JHTML::_('behavior.framework');
 JHTML::_('behavior.tooltip');
 CmcHelperBasic::bootstrap();
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
-
 JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 
 ?>

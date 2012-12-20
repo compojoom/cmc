@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die('');
 
-$extension = $params->get('extension', '');
+$extension = $params->get('extension', 'com_cmc');
 
 require_once (JPATH_ADMINISTRATOR . "/components/" . $extension . "/liveupdate/liveupdate.php");
 

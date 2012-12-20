@@ -19,7 +19,7 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 // Joomla.submitbutton('lists.synchronize')
 
-$document = & JFactory::getDocument();
+$document = JFactory::getDocument();
 $overwrite = 'Joomla.submitbutton = function(pressbutton){
         Check = confirm("' . JText::_("COM_CMC_SYNCRONIZE_CONFIRM") . '");
 
