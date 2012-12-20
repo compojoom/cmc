@@ -23,7 +23,9 @@ if (!defined('CDEBUG')) {
 // import libaries
 jimport('joomla.event.plugin');
 
-class plgSystemECommerce360 extends JPlugin {
+JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
+
+class plgSystemECom360 extends JPlugin {
 
     /**
      * mc_cid - this is the campaign's unique_id
@@ -53,13 +55,13 @@ class plgSystemECommerce360 extends JPlugin {
         $cid = JFactory::getApplication()->input->get('mc_cid', '');
         $eid = JFactory::getApplication()->input->get('mc_eid', '');
 
-        // User comes from MC
-        if(!empty($cid) && !empty($eid)) {
+        // User comes from MC, cid is optional so just test for eid
+        if(!empty($eid)) {
             $session = JFactory::getSession();
             $session->set( 'mc', '1' );
             $session->set( 'mc_cid', $cid);
             $session->set( 'mc_eid', $eid);
         }
     }
-    
+
 }
