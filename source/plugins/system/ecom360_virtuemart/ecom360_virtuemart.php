@@ -15,11 +15,9 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 // import libaries
 jimport('joomla.event.plugin');
 
-JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
-
+JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . 'components/com_cmc/helpers/');
 
 class plgSystemECom360_virtuemart extends JPlugin {
-
     /**
      * array(4) {
          * ["details"]=> array(1) {
