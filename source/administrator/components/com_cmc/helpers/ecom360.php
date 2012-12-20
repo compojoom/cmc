@@ -20,8 +20,7 @@ class CmcHelperEcom360
 
     public static function sendOrderInformations($api_key, $mc_cid, $mc_eid, $store_id, $store_name = "Store name", $order_id = 0, $total_amount = 0,
                                                  $tax_amount = 0, $shipping_amount = 0,
-                                                 $products = array(0 => array("product_id" => 0, "sku" => "", "product_name" => "", "category_id" => 0, "category_name" => "", "qty" => 1.00, "cost" => 0.00))
-    )
+                                                 $products = array(0 => array("product_id" => 0, "sku" => "", "product_name" => "", "category_id" => 0, "category_name" => "", "qty" => 1.00, "cost" => 0.00)))
     {
 
         $order = array();
@@ -38,25 +37,22 @@ class CmcHelperEcom360
         $order["campaign_id"] = $mc_cid; // Optional
         $order["items"] = $products;
 
-
-        echo "<br><br>";
-        var_dump($order);
-        echo "<br><br>";
-
+//        echo "<br><br>";
+//        var_dump($order);
+//        echo "<br><br>";
 
         $api = new MCAPI($api_key);
 
         $success = $api->ecommOrderAdd($order);
 
         if ($api->errorCode) {
+            var_dump($api);
+            die();
             JError::raiseError(500, JTEXT::_("COM_CMC_TRACKING_FAILED")) . " " . $api->errorCode . " / " . $api->errorMessage;
         } else {
             return true;
         }
 
-        //var_dump($api);
-
-        die();
     }
 
 }

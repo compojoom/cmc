@@ -112,11 +112,8 @@ class plgSystemECom360_virtuemart extends JPlugin {
 
         $params = JComponentHelper::getParams('com_cmc');
         $api_key = $params->get("api_key", '');
-
-        //var_dump($order);
-
-        echo "MC_EID: " . $mc_eid . "<br />";
-        echo "MC_CID: " . $mc_eid;
+        $shop_name = $params->get("shop_name", "Your shop");
+        $shop_id = $params->get("shop_id", 42);
 
         /**
          * ($api_key, $mc_cid, $mc_eid, $store_id, $store_name = "Store name", $order_id = 0, $total_amount = 0,
@@ -146,7 +143,7 @@ class plgSystemECom360_virtuemart extends JPlugin {
             );
         }
 
-        CmcHelperEcom360::sendOrderInformations($api_key, $mc_cid, $mc_eid, 42, 'storename', $order["details"]["BT"]->virtuemart_order_id, $order["details"]["BT"]->order_total,
+        CmcHelperEcom360::sendOrderInformations($api_key, $mc_cid, $mc_eid, $shop_id, $shop_name, $order["details"]["BT"]->virtuemart_order_id, $order["details"]["BT"]->order_total,
             $order["details"]["BT"]->order_tax, $order["details"]["BT"]->order_shipment, $products
         );
     }
