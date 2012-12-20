@@ -22,7 +22,6 @@ $filterStatus = $this->escape($this->state->get('filter.status'));
 
 CmcHelperBasic::bootstrap();
 JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
-
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function (pressbutton) {
@@ -180,7 +179,5 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 
             <?php echo JHTML::_('form.token'); ?>
         </form>
-
     </div>
-
 </div>

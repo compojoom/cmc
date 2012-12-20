@@ -17,7 +17,7 @@ JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR .  '/tables');
 
 jimport('joomla.application.component.controllerlegacy');
 $controller = JControllerLegacy::getInstance('Cmc');
-$controller->execute(JFactory::getApplication()->input->getCmd('task'));
+$controller->execute(JFactory::getApplication()->input->getCmd('task', ''));
 $controller->redirect();
 
 
