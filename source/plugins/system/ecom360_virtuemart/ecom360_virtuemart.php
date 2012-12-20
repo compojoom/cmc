@@ -17,8 +17,6 @@ jimport('joomla.event.plugin');
 
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');   // Hmm not working?
 
-
-
 class plgSystemECom360_virtuemart extends JPlugin {
     /**
      * array(4) {
@@ -104,8 +102,6 @@ class plgSystemECom360_virtuemart extends JPlugin {
         if(!$mc) {
             return;
         }
-
-        echo JPATH_ADMINISTRATOR . 'components/com_cmc/helpers/';
 
         $mc_cid = $session->get('mc_cid', '');
         $mc_eid = $session->get('mc_eid', '');
