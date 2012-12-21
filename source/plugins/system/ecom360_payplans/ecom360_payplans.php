@@ -18,19 +18,22 @@ jimport('joomla.event.plugin');
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');   // Hmm not working?
 
 
-class plgSystemECom360_matukio extends JPlugin {
+class plgSystemECom360_payplans extends JPlugin {
 
 
     /**
-     *
-     * ('onAfterBooking', $neu, $event)
+     * $appCompleteHtml = PayplansHelperEvent::trigger('onPayplansPaymentAfter',$args,'payment',$payment);
      */
 
-    public function onAfterBooking($neu, $event){
-        $this->notifyMC($neu,$event);
+    public function onPayplansPaymentAfter($data){
+        $this->notifyMC($data);
     }
 
-    function notifyMC($row, $event) {
+    /**
+     *
+     * @param $data
+     */
+    function notifyMC($data) {
         $session = JFactory::getSession();
         $mc = $session->get( 'mc', '0' );
 
@@ -38,6 +41,20 @@ class plgSystemECom360_matukio extends JPlugin {
         if(!$mc) {
             return;
         }
+
+        //  $order      = PayplansOrder::getInstance( $payment->getOrder())
+        /*
+          // Table fields
+            protected $payment_id;
+            protected $user_id;
+            protected $invoice_id;
+            protected $app_id;
+            protected $created_date;
+            protected $modified_date;
+            protected $params;
+            protected $gateway_params;
+            protected $_transactions	=	array();
+         */
 
         echo JPATH_ADMINISTRATOR . 'components/com_cmc/helpers/';
 
