@@ -215,7 +215,9 @@ class plgSystemECom360_akeeba extends JPlugin {
          * $products = array(0 => array("product_id" => 0, "sku" => "", "product_name" => "", "category_id" => 0, "category_name" => "", "qty" => 1.00, "cost" => 0.00))
          */
 
-        $akeeba_subscription_name = "TODO Query";
+        $akeebasubsLevel = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
+
+        $akeeba_subscription_name = $akeebasubsLevel->title;
 
         $products = array( 0 => array(
             "product_id" => $info['current']->akeebasubs_level_id, "sku" => "", "product_name" => $akeeba_subscription_name,
