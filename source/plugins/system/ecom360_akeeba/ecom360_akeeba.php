@@ -163,26 +163,26 @@ class plgSystemECom360_akeeba extends JPlugin {
             if($row->enabled) {
                 if(is_object($info['previous']) && $info['previous']->state == 'P') {
                     // A pending subscription just got paid
-                    //echo "ASDF";
-                    echo "PENDINGPAID";
-                    notifyMC($row, $info);
+                    //echo "PENDINGPAID";
+                    $this->notifyMC($row, $info);
                 } else {
                     // A new subscription just got paid; send new subscription notification
-                    notifyMC($row, $info);
-                    echo "NEWPAID";
+                    $this->notifyMC($row, $info);
+                   //echo "NEWPAID";
                 }
             } elseif($row->state == 'C') {
                 if($row->contact_flag <= 2) {
                     // A new subscription which is for a renewal (will be active in a future date)
-                    echo "RENEW";
+                    //echo "RENEW";
+                    $this->notifyMC($row, $info);
                 }
             } else {
                 // A new subscription which is pending payment by the processor
-                echo "PENDING";
+                //echo "PENDING";
+                $this->notifyMC($row, $info);
             }
         }
 
-        die("");
     }
 
     function notifyMC($row, $info, $type = "new") {
