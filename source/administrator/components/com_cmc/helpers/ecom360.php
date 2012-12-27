@@ -11,14 +11,14 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::register('MCAPI', JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/mailchimp/MCAPI.class.php');
+JLoader::register('cmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
 
 
 class CmcHelperEcom360
 {
     private static $instance;
 
-    public static function sendOrderInformations($api_key, $mc_cid, $mc_eid, $store_id, $store_name = "Store name", $order_id = 0, $total_amount = 0,
+    public static function sendOrderInformations($mc_cid, $mc_eid, $store_id, $store_name = "Store name", $order_id = 0, $total_amount = 0,
                                                  $tax_amount = 0, $shipping_amount = 0,
                                                  $products = array(0 => array("product_id" => 0, "sku" => "", "product_name" => "", "category_id" => 0, "category_name" => "", "qty" => 1.00, "cost" => 0.00)))
     {
@@ -37,13 +37,9 @@ class CmcHelperEcom360
         $order["campaign_id"] = $mc_cid; // Optional
         $order["items"] = $products;
 
-//        echo "<br><br>";
-//        var_dump($order);
-//        echo "<br><br>";
 
-        $api = new MCAPI($api_key);
-
-        $success = $api->ecommOrderAdd($order);
+        $api = new cmcHelperChimp();
+        $api->ecommOrderAdd($order);
 
         if ($api->errorCode) {
             var_dump($api);

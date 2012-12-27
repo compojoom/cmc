@@ -12,29 +12,14 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-if (!defined('COMPOJOOM_PLUGIN')) {
-    define('COMPOJOOM_PLUGIN', '1.0.0');
-}
-
-if (!defined('CDEBUG')) {
-    define('CDEBUG', false);
-}
-
-// import libaries
-jimport('joomla.event.plugin');
-
 JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 class plgSystemECom360 extends JPlugin {
 
     /**
-     * mc_cid - this is the campaign's unique_id
-     *  mc_eid - this is the member email's unique_id
-     * @var array
-     */
-
-    protected $_getvars = array("mc_cid", "mc_eid");
-
+     * Sets the mc_cid & mc_eid session variables if the user is comming from mailchimp to the page
+	 * @return bool
+	 */
     public function onAfterDispatch() {
 
         $app = JFactory::getApplication();
@@ -61,9 +46,9 @@ class plgSystemECom360 extends JPlugin {
             $session->set( 'mc', '1' );
             $session->set( 'mc_cid', $cid);
             $session->set( 'mc_eid', $eid);
-
-            echo "SESSION started";
         }
+
+		return true;
     }
 
 }
