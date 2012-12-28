@@ -32,7 +32,7 @@ class CmcControllerSubscription extends JControllerLegacy {
 
         if(isset($form['interests'])) {
             foreach($form['interests'] as $key => $interest) {
-                $mergeVars['GROUPINGS'][] = array( 'id' => $key, 'groups' => $interest);
+                $mergeVars['GROUPINGS'][] = array( 'id' => $key, 'groups' => implode(',',$interest));
             }
         }
 

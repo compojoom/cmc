@@ -66,7 +66,7 @@ $form = new cmcForm($params);
                     case 'checkboxes':
                         foreach ($groups as $g) {
                             $o = explode('##', $g);
-                            echo '<label for="' . $interest[0] . '_' . $o[0] . '" class="checkbox"><input type="checkbox" name="jform[interests][' . $interest[0] . ']" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" />' . JText::_($o[1]) . '</label>';
+                            echo '<label for="' . $interest[0] . '_' . $o[0] . '" class="checkbox"><input type="checkbox" name="jform[interests][' . $interest[0] . '][]" id="' . $interest[0] . '_' . str_replace(' ', '_', $o[0]) . '" class="submitMerge inputbox" value="' . $o[0] . '" />' . JText::_($o[1]) . '</label>';
                         }
                         break;
                     case 'radio':
