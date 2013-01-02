@@ -32,7 +32,9 @@ class CmcControllerSubscription extends JControllerLegacy {
 
         if(isset($form['interests'])) {
             foreach($form['interests'] as $key => $interest) {
-                $mergeVars['GROUPINGS'][] = array( 'id' => $key, 'groups' => implode(',',$interest));
+				// take care of interests that contain a comma (,)
+				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
+                $mergeVars['GROUPINGS'][] = array( 'id' => $key, 'groups' => implode(',', $interest));
             }
         }
 
