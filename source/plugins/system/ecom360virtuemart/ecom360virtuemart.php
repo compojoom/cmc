@@ -19,19 +19,23 @@ class plgSystemECom360Virtuemart extends JPlugin {
     /**
      * @param $cart
      * @param $order
-     */
+	 * @return bool
+	 */
     public function plgVmConfirmedOrder($cart, $order){
 
+		$app = JFactory::getApplication();
+
+		// This plugin is only intended for the frontend
+		if ($app->isAdmin()) {
+			return true;
+		}
+
         $session = JFactory::getSession();
-        $mc = $session->get( 'mc', '0' );
 
         // Trigger plugin only if user comes from Mailchimp
-        if(!$mc) {
+        if(!$session->get( 'mc', '0' )) {
             return;
         }
-
-        $mc_cid = $session->get('mc_cid', '');
-        $mc_eid = $session->get('mc_eid', '');
 
 		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
@@ -47,7 +51,7 @@ class plgSystemECom360Virtuemart extends JPlugin {
             );
         }
 
-        CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id, $shop_name, $order["details"]["BT"]->virtuemart_order_id, $order["details"]["BT"]->order_total,
+        return CmcHelperEcom360::sendOrderInformations($shop_id, $shop_name, $order["details"]["BT"]->virtuemart_order_id, $order["details"]["BT"]->order_total,
             $order["details"]["BT"]->order_tax, $order["details"]["BT"]->order_shipment, $products
         );
     }

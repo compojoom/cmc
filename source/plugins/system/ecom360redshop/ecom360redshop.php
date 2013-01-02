@@ -26,20 +26,23 @@ class plgSystemECom360Redshop extends JPlugin {
 	 */
     public function afterOrderPlace($cart,$orderresult){
 
+		$app = JFactory::getApplication();
+
+		// This plugin is only intended for the frontend
+		if ($app->isAdmin()) {
+			return true;
+		}
+
         $this->notifyMC($cart, $orderresult);
     }
 
     public function notifyMC($cart, $orderresult, $type = "new") {
         $session = JFactory::getSession();
-        $mc = $session->get( 'mc', '0' );
 
         // Trigger plugin only if user comes from Mailchimp
-        if(!$mc) {
-            return;
+        if(!$session->get( 'mc', '0' )) {
+            return false;
         }
-
-        $mc_cid = $session->get('mc_cid', '');
-        $mc_eid = $session->get('mc_eid', '');
 
 		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
@@ -58,7 +61,7 @@ class plgSystemECom360Redshop extends JPlugin {
             );
         }
 
-        CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id, $shop_name, $orderresult['order_id'],
+        return CmcHelperEcom360::sendOrderInformations($shop_id, $shop_name, $orderresult['order_id'],
             $cart["total"], $cart["tax"], $cart["shipping"], $products // No shipping
         );
     }

@@ -23,6 +23,14 @@ class plgSystemECom360Payplans extends JPlugin {
 	 * @return bool
 	 */
 	public function onPayplansSubscriptionAfterSave($prev, $new){
+
+		$app = JFactory::getApplication();
+
+		// This plugin is only intended for the frontend
+		if ($app->isAdmin()) {
+			return true;
+		}
+
 		// no need to trigger if previous and current state is same
 		if($prev != null && $prev->getStatus() == $new->getStatus()){
 			$this->notifyMC($new);
@@ -37,16 +45,11 @@ class plgSystemECom360Payplans extends JPlugin {
      */
     public function notifyMC($data) {
         $session = JFactory::getSession();
-        $mc = $session->get( 'mc', '0' );
 
         // Trigger plugin only if user comes from Mailchimp
-        if(!$mc) {
+        if(!$session->get( 'mc', '0' )) {
             return;
         }
-
-
-        $mc_cid = $session->get('mc_cid', '');
-        $mc_eid = $session->get('mc_eid', '');
 
         $shop_name = $this->params->get("store_name", "Your shop");
         $shop_id = $this->params->get("store_id", 42);
@@ -71,7 +74,7 @@ class plgSystemECom360Payplans extends JPlugin {
             )
         );
 
-        CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id,
+        CmcHelperEcom360::sendOrderInformations($shop_id,
 			$shop_name, $data->getId(), $total, $tax , 0.00, $products // No shipping
         );
     }

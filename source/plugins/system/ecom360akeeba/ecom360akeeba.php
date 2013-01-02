@@ -21,8 +21,16 @@ class plgSystemECom360Akeeba extends JPlugin {
     /**
      * @param $row
      * @param $info
-     */
+	 * @return bool
+	 */
     public function onAKSubscriptionChange($row, $info){
+
+		$app = JFactory::getApplication();
+
+		// This plugin is only intended for the frontend
+		if ($app->isAdmin()) {
+			return true;
+		}
 
         if($row->state == 'N' || $row->state == 'X')
             return;
@@ -51,15 +59,11 @@ class plgSystemECom360Akeeba extends JPlugin {
 
     private function notifyMC($row, $info) {
         $session = JFactory::getSession();
-        $mc = $session->get( 'mc', '0' );
 
         // Trigger plugin only if user comes from Mailchimp
-        if(!$mc) {
+        if(!$session->get( 'mc', '0' )) {
             return;
         }
-
-        $mc_cid = $session->get('mc_cid', '');
-        $mc_eid = $session->get('mc_eid', '');
 
 		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
@@ -75,8 +79,14 @@ class plgSystemECom360Akeeba extends JPlugin {
             )
         );
 
-        CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id, $shop_name, $info['current']->akeebasubs_subscription_id, $info['current']->gross_amount,
-            $info['current']->tax_percent, 0.00, $products // No shipping
+        CmcHelperEcom360::sendOrderInformations(
+			$shop_id,
+			$shop_name,
+			$info['current']->akeebasubs_subscription_id,
+			$info['current']->gross_amount,
+            $info['current']->tax_percent,
+			0.00, // No shipping
+			$products
         );
     }
 }

@@ -21,8 +21,16 @@ class plgSystemECom360Hika extends JPlugin {
 	/**
 	 * @param $order
 	 * @param $send_email
+	 * @return bool
 	 */
 	public function onAfterOrderCreate($order,$send_email){
+		$app = JFactory::getApplication();
+
+		// This plugin is only intended for the frontend
+		if ($app->isAdmin()) {
+			return true;
+		}
+
         $this->notifyMC($order);
     }
 
@@ -34,15 +42,10 @@ class plgSystemECom360Hika extends JPlugin {
 	 */
     function notifyMC($order) {
         $session = JFactory::getSession();
-        $mc = $session->get( 'mc', '0' );
-
         // Trigger plugin only if user comes from Mailchimp
-        if(!$mc) {
+        if(!$session->get( 'mc', '0' )) {
             return;
         }
-
-        $mc_cid = $session->get('mc_cid', '');
-        $mc_eid = $session->get('mc_eid', '');
 
 		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
@@ -63,8 +66,14 @@ class plgSystemECom360Hika extends JPlugin {
         if($order->order_shipping_price != null)
             $shipping = $order->order_shipping_price;
 
-        CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id, $shop_name, $order->order_id, $order->cart->full_total->prices[0]->price_value_with_tax,
-            ($order->cart->full_total->prices[0]->price_value_with_tax - $order->cart->full_total->prices[0]->price_value), $shipping, $products
+        CmcHelperEcom360::sendOrderInformations(
+			$shop_id,
+			$shop_name,
+			$order->order_id,
+			$order->cart->full_total->prices[0]->price_value_with_tax,
+            ($order->cart->full_total->prices[0]->price_value_with_tax - $order->cart->full_total->prices[0]->price_value),
+			$shipping,
+			$products
         );
     }
 }

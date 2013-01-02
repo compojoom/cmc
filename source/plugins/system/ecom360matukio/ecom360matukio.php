@@ -23,20 +23,22 @@ class plgSystemECom360Matukio extends JPlugin {
      */
 
     public function onAfterBooking($neu, $event){
+		$app = JFactory::getApplication();
+
+		// This plugin is only intended for the frontend
+		if ($app->isAdmin()) {
+			return true;
+		}
+
         $this->notifyMC($neu,$event);
     }
 
     private function notifyMC($row, $event) {
         $session = JFactory::getSession();
-        $mc = $session->get( 'mc', '0' );
-
         // Trigger plugin only if user comes from Mailchimp
-        if(!$mc) {
+        if(!$session->get( 'mc', '0' )) {
             return;
         }
-
-        $mc_cid = $session->get('mc_cid', '');
-        $mc_eid = $session->get('mc_eid', '');
 
 		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
@@ -55,8 +57,14 @@ class plgSystemECom360Matukio extends JPlugin {
             )
         );
 
-        CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id, $shop_name, $row->id, $row->payment_brutto,
-            $row->payment_tax, 0.00, $products // No shipping
+        CmcHelperEcom360::sendOrderInformations(
+												$shop_id,
+												$shop_name,
+												$row->id,
+												$row->payment_brutto,
+												$row->payment_tax,
+												0.00,  // No shipping
+												$products
         );
     }
 }

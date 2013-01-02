@@ -290,6 +290,115 @@
       presented with the Mailchimp group and interest fields in raw form. (in
       a future version we plan to add support for editing them as well)</para>
     </section>
+
+    <section>
+      <title>Ecommerce360 tracking</title>
+
+      <para>Mailchimp's Ecommerce360 tracking is designed to help you measure
+      the ROI of your email campaigns. Now to make use of this feature in
+      Joomla all you need to do is to activate one of the plugins for the
+      supported shopping carts/subscription extensions. We currently
+      support</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><ulink
+          url="https://www.akeebabackup.com/products/akeeba-subscriptions.html">Akeebasubs</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="???">Hika</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="https://compojoom.com/joomla-extensions/matukio-events-management-made-easy">Matukio</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://www.jpayplans.com/">Payplans</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://redcomponent.com/redcomponent/redshop">Redshop</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://virtuemart.net/">Virtuemart</ulink></para>
+        </listitem>
+      </itemizedlist>
+
+      <section>
+        <title>Enabling Ecommerce360 tracking</title>
+
+        <para>First when you are sending a new campaign in Mailchimp enable
+        the ecommerce tracking feature there. This will ensure that the links
+        in your email contain the necessary tracking information. </para>
+
+        <para>Then login into the backend of your Joomla website and go to
+        Extensions -&gt; Plugin Manager. Enable the "CMC - Ecom360" plugin and
+        one of the available plugins for your shopping cart/subscription
+        system ( see the previous section on information about currently
+        supported systems).</para>
+      </section>
+
+      <section>
+        <title>Developing your own ecommerce360 tracking plugin</title>
+
+        <para>Developing a plugin for your own shopping cart is very easy.
+        Prerequisites are that you know PHP.</para>
+
+        <para>The easiest way to understand the ecommerce360 plugins would be
+        to look at the already existing plugins in plugins/system/ (all
+        ecommerce360 plugins start with ecom360 in their name). You'll notice
+        that in each plugin we have the following line:</para>
+
+        <programlisting>JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');</programlisting>
+
+        <para>With it we are including all available CMC Helpers. This ensures
+        that you can call the CmcHelperEcom360::sendOrderInformations function
+        and pass to it all the necessary parameters with your order
+        information.</para>
+
+        <programlisting>public static function sendOrderInformations(
+		$store_id,
+		$store_name = "Store name",
+		$order_id = 0,
+		$total_amount = 0,
+    	$tax_amount = 0,
+		$shipping_amount = 0,
+        $products = array(
+						0 =&gt; array(
+							"product_id" =&gt; 0,
+							"sku" =&gt; "",
+							"product_name" =&gt; "",
+							"category_id" =&gt; 0,
+							"category_name" =&gt; "",
+							"qty" =&gt; 1.00,
+							"cost" =&gt; 0.00
+						)
+					)
+	)</programlisting>
+
+        <para>$store_id = unique id for the store sending the order (20 bytes
+        max)</para>
+
+        <para>$store_name = a "nice" name for the store - typically the base
+        web address (ie, "store.mailchimp.com")</para>
+
+        <para>$order_id = the Order id</para>
+
+        <para>$total_amount = The Order Total</para>
+
+        <para>$tax_amount = the total tax paid</para>
+
+        <para>$shipping_amount = the total paid for Shipping Fees</para>
+
+        <para>$products = an array containing the individual products(items)
+        for each order.</para>
+      </section>
+    </section>
   </chapter>
 
   <chapter>
