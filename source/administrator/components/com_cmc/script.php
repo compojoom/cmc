@@ -38,6 +38,13 @@ class com_cmcInstallerScript extends CompojoomInstaller
             )
         ),
         'plugins' => array(
+			'plg_system_ecom360' => 0,
+			'plg_system_ecom360akeeba' => 0,
+			'plg_system_ecom360hika' => 0,
+			'plg_system_ecom360matukio' => 0,
+			'plg_system_ecom360payplans' => 0,
+			'plg_system_ecom360redshop' => 0,
+			'plg_system_ecom360virtuemart' => 0,
         )
     );
 
@@ -91,7 +98,7 @@ class com_cmcInstallerScript extends CompojoomInstaller
 
     private function displayInfoInstallation()
     {
-        $html[] = '<div class="header">' . JText::_(strtoupper($this->extension).'_INSTALLATION_SUCCESS') . '</div>';
+        $html[] = '<div class="alert alert-info">' . JText::_(strtoupper($this->extension).'_INSTALLATION_SUCCESS') . '</div>';
 
 
         if ($this->status->plugins) {
@@ -283,7 +290,7 @@ class CompojoomInstaller
 
         $html = array();
         if (count($modules)) {
-            $html[] = '<table>';
+            $html[] = '<table class="table">';
             $html[] = '<tr>';
             $html[] = '<th>' . JText::_(strtoupper($this->extension) .'_MODULE') . '</th>';
             $html[] = '<th>' . JText::_(strtoupper($this->extension) .'_CLIENT') . '</th>';
@@ -312,7 +319,7 @@ class CompojoomInstaller
         $rows = 0;
         $html = array();
         if (count($modules)) {
-            $html[] = '<table>';
+            $html[] = '<table class="table">';
             $html[] = '<tr>';
             $html[] = '<th>' . JText::_(strtoupper($this->extension) . '_MODULE') . '</th>';
             $html[] = '<th>' . JText::_(strtoupper($this->extension) . '_CLIENT') . '</th>';
@@ -338,7 +345,7 @@ class CompojoomInstaller
     public function renderPluginInfoInstall($plugins)
     {
         $rows = 0;
-        $html[] = '<table>';
+        $html[] = '<table class="table">';
         if (count($plugins)) {
             $html[] = '<tr>';
             $html[] = '<th>' . JText::_(strtoupper($this->extension) . '_PLUGIN') . '</th>';
@@ -367,7 +374,7 @@ class CompojoomInstaller
         $rows = 0;
         $html = array();
         if (count($plugins)) {
-            $html[] = '<table>';
+            $html[] = '<table class="table">';
             $html[] = '<tbody>';
             $html[] = '<tr>';
             $html[] = '<th>Plugin</th>';

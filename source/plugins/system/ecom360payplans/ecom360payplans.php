@@ -14,7 +14,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
-class plgSystemECom360_payplans extends JPlugin {
+class plgSystemECom360Payplans extends JPlugin {
 
 	/**
 	 * Notify Mailchimp only when the subscription has changed

@@ -15,7 +15,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 
-class plgSystemECom360_hika extends JPlugin {
+class plgSystemECom360Hika extends JPlugin {
 
 
 	/**
