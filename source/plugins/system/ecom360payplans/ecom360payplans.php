@@ -53,8 +53,16 @@ class plgSystemECom360Payplans extends JPlugin {
 
 		// with each order you can subscribe to only 1 subscription. But there is no getPlan function
 		$plans = $data->getPlans();
+
+		$total = $data->getPrice();
+		$tax = 0;
+
 		// get the invoice information - otherwise we have no tax information for the purchase
 		$invoice = $data->getOrder(true)->getInvoice();
+		if($invoice) {
+			$total = $invoice->getTotal();
+			$tax = $invoice->getTaxAmount();
+		}
 
         $products = array( 0 => array(
             "product_id" => $plans[0], "sku" => $plans[0], "product_name" => $data->getTitle(),
@@ -64,8 +72,7 @@ class plgSystemECom360Payplans extends JPlugin {
         );
 
         CmcHelperEcom360::sendOrderInformations($mc_cid, $mc_eid, $shop_id,
-			$shop_name, $data->getId(), $invoice->getTotal(),
-            $invoice->getTaxAmount(), 0.00, $products // No shipping
+			$shop_name, $data->getId(), $total, $tax , 0.00, $products // No shipping
         );
     }
 }

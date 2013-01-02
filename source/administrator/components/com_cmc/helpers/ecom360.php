@@ -27,9 +27,7 @@ class CmcHelperEcom360
 
         $order["id"] = $order_id;
         $order["email_id"] = $mc_eid;
-        //$order["email"] =  not needed - mc_eid
         $order["total"] = (double)$total_amount;
-        //$order["order_date"] =  $order_date;   // Should be always today; so not necessary
         $order["shipping"] = (double)$shipping_amount;
         $order["tax"] = (double)$tax_amount;
         $order["store_id"] = $store_id;
@@ -41,13 +39,15 @@ class CmcHelperEcom360
         $api->ecommOrderAdd($order);
 
         if ($api->errorCode) {
-            var_dump($api);
-            die();
-            JError::raiseError(500, JTEXT::_("COM_CMC_TRACKING_FAILED")) . " " . $api->errorCode . " / " . $api->errorMessage;
-        } else {
-            return true;
+			// log the errors to a file
+			JLog::addLogger(array(
+				'text_file' => 'com_cmc_ecom360.php'
+			));
+			JLog::add($api->errorMessage, JLOG::ERROR, $api->errorCode);
+			return false;
         }
 
+		return true;
     }
 
 }
