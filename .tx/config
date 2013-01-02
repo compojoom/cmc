@@ -62,3 +62,45 @@ file_filter = source\language\<lang>\<lang>.mod_cmc.ini
 source_file = source\language\en-GB\en-GB.mod_cmc.ini
 source_lang = en_GB
 minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360.sys.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360akeeba]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360akeeba.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360akeeba.sys.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360hika]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360hika.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360hika.sys.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360matukio]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360matukio.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360matukio.sys.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360payplans]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360payplans.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360payplans.sys.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360redshop]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360redshop.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360redshop.sys.ini
+source_lang = en_GB
+minimum_perc = 80
+
+[compojoom-cmc.plg_system_ecom360virtuemart]
+file_filter = source\administrator\language\<lang>\<lang>.plg_system_ecom360virtuemart.sys.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_system_ecom360virtuemart.sys.ini
+source_lang = en_GB
+minimum_perc = 80
