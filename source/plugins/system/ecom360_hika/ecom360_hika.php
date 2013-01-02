@@ -12,27 +12,26 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-// import libaries
-jimport('joomla.event.plugin');
-
-JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');   // Hmm not working?
+JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 
 class plgSystemECom360_hika extends JPlugin {
 
 
-    /**
-     * $appCompleteHtml = PayplansHelperEvent::trigger('onPayplansPaymentAfter',$args,'payment',$payment);
-     */
-
-    public function onAfterOrderCreate($order,$send_email){
+	/**
+	 * @param $order
+	 * @param $send_email
+	 */
+	public function onAfterOrderCreate($order,$send_email){
         $this->notifyMC($order);
     }
 
-    /**
-     *
-     * @param $data
-     */
+	/**
+	 *
+	 * @param $order
+	 * @return void
+	 * @internal param $data
+	 */
     function notifyMC($order) {
         $session = JFactory::getSession();
         $mc = $session->get( 'mc', '0' );
@@ -45,9 +44,8 @@ class plgSystemECom360_hika extends JPlugin {
         $mc_cid = $session->get('mc_cid', '');
         $mc_eid = $session->get('mc_eid', '');
 
-        $params = JComponentHelper::getParams('com_cmc');
-        $shop_name = $params->get("shop_name", "Your shop");
-        $shop_id = $params->get("shop_id", 42);
+		$shop_name = $this->params->get("store_name", "Your shop");
+		$shop_id = $this->params->get("store_id", 42);
 
 
         foreach ($order->cart->products as $product) {

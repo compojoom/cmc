@@ -12,7 +12,6 @@
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-
 // get the cmcHelpers
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
@@ -62,9 +61,8 @@ class plgSystemECom360_akeeba extends JPlugin {
         $mc_cid = $session->get('mc_cid', '');
         $mc_eid = $session->get('mc_eid', '');
 
-        $params = JComponentHelper::getParams('com_cmc');
-        $shop_name = $params->get("shop_name", "Your shop");
-        $shop_id = $params->get("shop_id", 42);
+		$shop_name = $this->params->get("store_name", "Your shop");
+		$shop_id = $this->params->get("store_id", 42);
 
         $akeebasubsLevel = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
 
