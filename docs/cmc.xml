@@ -307,7 +307,7 @@
         </listitem>
 
         <listitem>
-          <para><ulink url="???">Hika</ulink></para>
+          <para><ulink url="http://www.hikashop.com/">Hika</ulink></para>
         </listitem>
 
         <listitem>
@@ -334,7 +334,7 @@
 
         <para>First when you are sending a new campaign in Mailchimp enable
         the ecommerce tracking feature there. This will ensure that the links
-        in your email contain the necessary tracking information. </para>
+        in your email contain the necessary tracking information.</para>
 
         <para>Then login into the backend of your Joomla website and go to
         Extensions -&gt; Plugin Manager. Enable the "CMC - Ecom360" plugin and
