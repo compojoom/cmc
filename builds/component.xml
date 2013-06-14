@@ -179,4 +179,22 @@
             </fileset>
         </ftpdeploy>
     </target>
+
+	<target name="ftpdeploy-docs" depends="setup-properties">
+		<gitversion workingCopy="${dirs.root}" propertyName="git.lastrevision"/>
+		<!-- Core release -->
+		<echo>Uploading ${component.name} docs</echo>
+		<ftpdeploy
+				host="${ftp.host}"
+				port="${ftp.port}"
+				username="${ftp.username}"
+				password="${ftp.password}"
+				dir="${ftp.dir.docs}/${component.name}/"
+				mode="${ftp.mode}"
+				level="debug">
+			<fileset dir="${dirs.root}/docs/">
+				<include name="**/*.*"/>
+			</fileset>
+		</ftpdeploy>
+	</target>
 </project>
