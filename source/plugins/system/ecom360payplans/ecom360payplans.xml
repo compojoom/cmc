@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="system" method="upgrade">
-    <name>@@PLUGINNAME@@</name>
+    <name>System - CMC Ecom360 Payplans</name>
     <author>compojoom.com</author>
     <creationDate>@@DATE@@</creationDate>
     <copyright>Copyright (C) 2012 Yves Hoppe - compojoom.com. All rights reserved.</copyright>

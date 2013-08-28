@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension method="upgrade" type="component" version="2.5.0">
-    <name>COM_@@COMPONENTNAMEUPPERCASE@@</name>
+    <name>COM_CMC</name>
     <author>Compojoom.com</author>
     <creationDate>@@DATE@@</creationDate>
     <copyright>(C) 2012 - compojoom.com</copyright>

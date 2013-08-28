@@ -4,7 +4,7 @@
         client="administrator"
         method="upgrade"
         >
-    <name>@@MODULENAME@@</name>
+    <name>CMC - Mailchimp</name>
     <author>compojoom.com</author>
     <creationDate>@@DATE@@</creationDate>
     <copyright>Copyright (C) 2012 - compojoom.com. All rights reserved.</copyright>
