@@ -68,7 +68,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
         <table class="adminlist table">
             <thead>
             <tr>
-                <th width="5"><?php echo JText::_('JGRID_HEADING_ROW_NUMBER'); ?></th>
+                <th width="5">#</th>
                 <!--            <th width="5">-->
                 <!--                <input type="checkbox" name="checkall-toggle" value=""-->
                 <!--                       title="-->
