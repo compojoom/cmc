@@ -19,7 +19,6 @@ if (!@include_once(JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/registrati
 }
 
 global $_PLUGINS;
-
 $_PLUGINS->registerFunction('onUserActive', 'userActivated', 'getCmcTab');
 $_PLUGINS->registerFunction( 'onAfterDeleteUser', 'userDelete','getCmcTab' );
 $_PLUGINS->registerFunction( 'onBeforeUserBlocking', 'onBeforeUserBlocking','getCmcTab' );
@@ -29,8 +28,11 @@ $_PLUGINS->registerFunction( 'onBeforeUserBlocking', 'onBeforeUserBlocking','get
  * @author Yves Hoppe
 */
 
-class CBCmc extends cbTabHandler
+class getCmcTab extends cbTabHandler
 {
+
+    var $installed = true;
+    var $errormsg = "This plugin can't work without the CMC Component";
 
     /**
      * Gets the handler
@@ -39,7 +41,6 @@ class CBCmc extends cbTabHandler
     function getCmcTab()
     {
         // TODO insert a installation check
-
         $this->cbTabHandler();
     }
 
@@ -49,17 +50,43 @@ class CBCmc extends cbTabHandler
      * @param $ui
      */
 
-    function getDisplayRegistration($tab, $user, $ui)
-    {
-        $ret = array();
+    function getDisplayRegistration($tab, $user, $ui) {
 
-
-        $htmlValue = JHTML::_('select.booleanlist', "acymailing[user][html]" ,'',1,JText::_('HTML'),JText::_('JOOMEXT_TEXT').'&nbsp;&nbsp;');
-        $ret[] = cbTabs::_createPseudoField( $tab, JText::_('RECEIVE'), $htmlValue, '', 'acymailingReceiveField', false );
-        die("asdf");
+        $ret = "\t<tr>\n";
+        $ret .= "\t\t<td class='titleCell'>"."Example plugin warnings:"."</td>\n";
+        $ret .= "\t\t<td class='fieldCell'>";
+        $ret .= "ParameterText: ";
+        $ret .= "<p>Be carefull: don't set password same as username !</p>";
+        $ret .= "</td>";
+        $ret .= "\t</tr>\n";
 
         return $ret;
     }
+
+    /**
+     * @param $tab
+     * @param $user
+     * @param $ui
+     */
+
+    function getDisplayTab( $tab, $user, $ui)
+    {
+
+    }
+
+    /**
+     * @param $tab
+     * @param $user
+     * @param $ui
+     * @param $postdata
+     */
+
+    function saveRegistrationTab($tab, &$user, $ui, $postdata)
+    {
+
+    }
+
+
 
     /**
      * Deletes the CMC Subscription, triggered on user deletion
@@ -69,6 +96,10 @@ class CBCmc extends cbTabHandler
 
     function userDelete($user, $success)
     {
+        if (!$success) {
+            return;
+        }
+
 
     }
 
@@ -95,6 +126,35 @@ class CBCmc extends cbTabHandler
      */
 
     function onBeforeUserBlocking($user,$block)
+    {
+
+    }
+
+    /**
+     * @param $tab
+     * @param $user
+     * @param $ui
+     * @return string
+     */
+
+    function getEditTab( $tab, $user, $ui)
+    {
+        $return = '';
+
+        $return .= "<table><tr><td>I love cmc</td></tr>";
+
+        return $return;
+    }
+
+
+    /**
+     * @param $tab
+     * @param $user
+     * @param $ui
+     * @param $postdata
+     */
+
+    function saveEditTab($tab, &$user, $ui, $postdata)
     {
 
     }

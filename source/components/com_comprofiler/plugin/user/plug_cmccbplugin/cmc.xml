@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cbinstall version="1.0.0" type="plugin" group="user">
+    <name>CMC CB Plugin</name>
+    <author>Compojoom - Yves Hoppe</author>
+    <creationDate>@@DATE@@</creationDate>
+    <copyright>(C) 2013 compojoom.com</copyright>
+    <license>GNU/GPL version 2</license>
+    <authorEmail>contact-us@compjoom.com</authorEmail>
+    <authorUrl>www.compojoom.com</authorUrl>
+    <version>1.2</version>
+    <description>
+        A Community Builder plugin for CMC.
+    </description>
+    <files>
+        <filename plugin="cmc">cmc.php</filename>
+        <filename>index.html</filename>
+    </files>
+    <params description="PLG_CMC_DESCRIPTION">
+    </params>
+    <tabs>
+        <tab name="Mailing Lists" description="Enables the user to manage his subscription to the Cmc Lists"
+             class="getCmcTab" fields="0" position="cb_tabmain" displaytype="tab">
+            <params>
+            </params>
+            <fields>
+            </fields>
+        </tab>
+    </tabs>
+    <install>
+    </install>
+    <uninstall>
+    </uninstall>
+    <database>
+    </database>
+</cbinstall>
