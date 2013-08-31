@@ -50,13 +50,14 @@ class getCmcTab extends cbTabHandler
      * @param $ui
      */
 
-    function getDisplayRegistration($tab, $user, $ui) {
+    function getDisplayRegistration($tab, $user, $ui)
+    {
 
         $ret = "\t<tr>\n";
-        $ret .= "\t\t<td class='titleCell'>"."Example plugin warnings:"."</td>\n";
+        $ret .= "\t\t<td class='titleCell'>"."Newsletter Signup:"."</td>\n";
         $ret .= "\t\t<td class='fieldCell'>";
         $ret .= "ParameterText: ";
-        $ret .= "<p>Be carefull: don't set password same as username !</p>";
+        $ret .= "<p>List of CMC Newsletters? Or like the module?!</p>";
         $ret .= "</td>";
         $ret .= "\t</tr>\n";
 
