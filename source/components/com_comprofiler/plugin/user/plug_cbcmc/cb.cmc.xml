@@ -7,7 +7,7 @@
     <license>GNU/GPL version 2</license>
     <authorEmail>contact-us@compjoom.com</authorEmail>
     <authorUrl>www.compojoom.com</authorUrl>
-    <version>@@VERSION@@</version>
+    <version>1.0</version>
     <description>
         A Community Builder plugin for CMC.
     </description>

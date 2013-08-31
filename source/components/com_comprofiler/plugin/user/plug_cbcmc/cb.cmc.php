@@ -21,7 +21,8 @@ if (!@include_once(JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/registrati
 global $_PLUGINS;
 
 $_PLUGINS->registerFunction('onUserActive', 'userActivated', 'getCmcTab');
-
+$_PLUGINS->registerFunction( 'onAfterDeleteUser', 'userDelete','getCmcTab' );
+$_PLUGINS->registerFunction( 'onBeforeUserBlocking', 'onBeforeUserBlocking','getCmcTab' );
 
 /**
  * Class CBCmc
@@ -53,7 +54,11 @@ class CBCmc extends cbTabHandler
         $ret = array();
 
 
+        $htmlValue = JHTML::_('select.booleanlist', "acymailing[user][html]" ,'',1,JText::_('HTML'),JText::_('JOOMEXT_TEXT').'&nbsp;&nbsp;');
+        $ret[] = cbTabs::_createPseudoField( $tab, JText::_('RECEIVE'), $htmlValue, '', 'acymailingReceiveField', false );
+        die("asdf");
 
+        return $ret;
     }
 
     /**
@@ -82,6 +87,16 @@ class CBCmc extends cbTabHandler
         // Activate CMC Registration
 
         return;
+    }
+
+    /**
+     * @param $user
+     * @param $block
+     */
+
+    function onBeforeUserBlocking($user,$block)
+    {
+
     }
 
 }
