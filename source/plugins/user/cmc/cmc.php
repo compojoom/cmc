@@ -62,6 +62,22 @@ class plgUserCmc extends JPlugin
     }
 
     /**
+     * @param $user
+     * @param $isNew
+     * @param $data
+     */
+
+    function onUserBeforeSave($user, $isNew, $data)
+    {
+      //  var_dump($data);
+
+
+
+    //    die("onsave");
+    }
+
+
+    /**
      * @param $data
      * @param $isNew
      * @param $result
@@ -74,6 +90,10 @@ class plgUserCmc extends JPlugin
         if ($userId && $result && isset($data['profile']) && (count($data['profile']))) {
             // Save data
         }
+
+//        var_dump($data);
+
+ //       die("asdf");
 
         return true;
     }

@@ -84,6 +84,36 @@ class getCmcTab extends cbTabHandler
 
     function saveRegistrationTab($tab, &$user, $ui, $postdata)
     {
+        // Save User
+        // NOt active
+
+
+        var_dump($user);
+
+        $juser = JFactory::getUser($user->_cmsUser->id);
+
+        $juser->setParam("newsletter", 1);
+        $juser->save();
+
+        if (!empty($postdata['cmc']['newsletter'])) {
+
+            // Check if user email already registered
+            // Query cmc_users table mit email
+
+            // Update subscription
+
+
+            // Save user in CMC database
+
+
+
+
+        }
+
+        echo $juser->id;
+        die();
+
+
 
     }
 
@@ -116,7 +146,14 @@ class getCmcTab extends cbTabHandler
             return;
         }
 
+        // Query cmc database
+
+
         // Activate CMC Registration
+
+        // Mailchimp
+
+
 
         return;
     }
