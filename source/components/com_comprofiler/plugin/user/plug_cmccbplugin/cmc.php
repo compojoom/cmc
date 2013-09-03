@@ -52,14 +52,40 @@ class getCmcTab extends cbTabHandler
 
     function getDisplayRegistration($tab, $user, $ui)
     {
+        JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
+
+        $listid = $this->params->get('listid', "");
+
 
         $ret = "\t<tr>\n";
-        $ret .= "\t\t<td class='titleCell'>"."Newsletter Signup:"."</td>\n";
+        $ret .= "\t\t<td class='titleCell'>". JText::_('SUBSCRIPTION') .":</td>\n";
         $ret .= "\t\t<td class='fieldCell'>";
-        $ret .= "ParameterText: ";
-        $ret .= "<p>List of CMC Newsletters? Or like the module?!</p>";
-        $ret .= "</td>";
+
+        // Display
+        $ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc[newsletter]" value="1" />';
+        $ret .= '<label for="cmc[newsletter]" id="cmc[newsletter]-lbl">' . JText::_('NEWSLETTER') . '</label>';
+        $ret .= "</td>\n";
+        $ret .= "</tr>\n";
+        $ret .= "\t<tr>\n";
+        $ret .= "<td colspan='2' id='cmc_td_newsletter' style=''>\n";
+        $ret .= "<div id=\"cmc_newsletter\" style=\"display: none;\">\n";
+
+        // Render Content
+        $ret .= "test: <input type=\"text\" name=\"cmc[merge_var1]\" id=\"cmc[merge_var1]\" />";
+
+        $ret .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
+        $ret .= "</div>\n";
+        $ret .= "</td>\n";
+        $ret .= "</tr>\n";
         $ret .= "\t</tr>\n";
+
+        // TODO move to document.ready in separate file
+        $ret .= "<script type=\"text/javascript\">";
+        $ret .= 'document.id("cmc[newsletter]").addEvent("click", function() {';
+        $ret .= 'document.id("cmc_newsletter").setStyle("display", "block");';
+        $ret .= "});";
+        $ret .= "</script>";
+
 
         return $ret;
     }
@@ -84,33 +110,38 @@ class getCmcTab extends cbTabHandler
 
     function saveRegistrationTab($tab, &$user, $ui, $postdata)
     {
-        // Save User
-        // NOt active
+        // Save User to temporary table- not active here
 
-
-        var_dump($user);
-
-        $juser = JFactory::getUser($user->_cmsUser->id);
-
-        $juser->setParam("newsletter", 1);
-        $juser->save();
 
         if (!empty($postdata['cmc']['newsletter'])) {
 
+            var_dump($postdata['cmc']);
+
             // Check if user email already registered
-            // Query cmc_users table mit email
+            $chimp = new cmcHelperChimp();
 
-            // Update subscription
+            $userlists = $chimp->listsForEmail($user->email);
+            $listId = $postdata['cmc']['listid']; // hidden field
+
+            if ($userlists && in_array($listId, $userlists)) {
+                $updated = true;
+            } else {
+                $updated = false;
+            }
+
+            if($updated) {
+                // Update user data
 
 
-            // Save user in CMC database
+            } else {
+                // Temporary save user in cmc databse
 
 
-
+            }
 
         }
 
-        echo $juser->id;
+        echo $user->id;
         die();
 
 
