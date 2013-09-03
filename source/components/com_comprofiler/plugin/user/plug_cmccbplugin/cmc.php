@@ -18,6 +18,8 @@ if (!@include_once(JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/registrati
     return;
 }
 
+JLoader::register('CmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
+
 global $_PLUGINS;
 $_PLUGINS->registerFunction('onUserActive', 'userActivated', 'getCmcTab');
 $_PLUGINS->registerFunction( 'onAfterDeleteUser', 'userDelete','getCmcTab' );
@@ -53,6 +55,7 @@ class getCmcTab extends cbTabHandler
     function getDisplayRegistration($tab, $user, $ui)
     {
         JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
+        JHtml::_('behavior.framework', true);
 
         $listid = $this->params->get('listid', "");
 
@@ -135,8 +138,7 @@ class getCmcTab extends cbTabHandler
 
             } else {
                 // Temporary save user in cmc databse
-
-
+                CmcHelperRegistration::saveTempUser($user, $postdata['cmc'], _CPLG_CB);
             }
 
         }
