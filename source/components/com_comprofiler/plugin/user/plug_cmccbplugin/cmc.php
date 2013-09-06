@@ -9,7 +9,7 @@
  * @version $Revision: 1.0.0 $
  **/
 
-if (!(defined( '_VALID_CB')||defined('_JEXEC')||defined('_VALID_MOS'))) {
+if (!(defined('_VALID_CB') || defined('_JEXEC') || defined('_VALID_MOS'))) {
     die('Direct Access to this location is not allowed.');
 }
 
@@ -19,16 +19,22 @@ if (!@include_once(JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/registrati
 }
 
 JLoader::register('CmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
+JLoader::register('CmcHelperRegistrationrender', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registrationrender.php');
 
 global $_PLUGINS;
 $_PLUGINS->registerFunction('onUserActive', 'userActivated', 'getCmcTab');
-$_PLUGINS->registerFunction( 'onAfterDeleteUser', 'userDelete','getCmcTab' );
-$_PLUGINS->registerFunction( 'onBeforeUserBlocking', 'onBeforeUserBlocking','getCmcTab' );
+$_PLUGINS->registerFunction('onAfterDeleteUser', 'userDelete', 'getCmcTab');
+$_PLUGINS->registerFunction('onBeforeUserBlocking', 'onBeforeUserBlocking', 'getCmcTab');
+
+$language = JFactory::getLanguage();
+$language->load('plg_cmccb', JPATH_ADMINISTRATOR, 'en-GB', true);
+$language->load('plg_cmccb', JPATH_ADMINISTRATOR, $language->getDefault(), true);
+$language->load('plg_cmccb', JPATH_ADMINISTRATOR, null, true);
 
 /**
  * Class CBCmc
  * @author Yves Hoppe
-*/
+ */
 
 class getCmcTab extends cbTabHandler
 {
@@ -58,15 +64,17 @@ class getCmcTab extends cbTabHandler
         JHtml::_('behavior.framework', true);
 
         $listid = $this->params->get('listid', "");
+        $interests = explode("|*|", $this->params->get('interests', ''));
+        $fields = explode("|*|", $this->params->get('fields', ''));
 
 
         $ret = "\t<tr>\n";
-        $ret .= "\t\t<td class='titleCell'>". JText::_('SUBSCRIPTION') .":</td>\n";
+        $ret .= "\t\t<td class='titleCell'>" . JText::_('PLG_CMCCB_SUBSCRIPTION') . ":</td>\n";
         $ret .= "\t\t<td class='fieldCell'>";
 
         // Display
         $ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc[newsletter]" value="1" />';
-        $ret .= '<label for="cmc[newsletter]" id="cmc[newsletter]-lbl">' . JText::_('NEWSLETTER') . '</label>';
+        $ret .= '<label for="cmc[newsletter]" id="cmc[newsletter]-lbl">' . JText::_('PLG_CMCCB_NEWSLETTER') . '</label>';
         $ret .= "</td>\n";
         $ret .= "</tr>\n";
         $ret .= "\t<tr>\n";
@@ -74,9 +82,12 @@ class getCmcTab extends cbTabHandler
         $ret .= "<div id=\"cmc_newsletter\" style=\"display: none;\">\n";
 
         // Render Content
-        $ret .= "test: <input type=\"text\" name=\"cmc[merge_var1]\" id=\"cmc[merge_var1]\" />";
+        $ret .= CmcHelperRegistrationrender::renderForm($this->params->get('intro-text', ""),
+            $this->params->get('outro-text-1', ""), $this->params->get('outro-text-2', ""),
+            $fields, $interests, $listid, _CPLG_CB
+        );
 
-        $ret .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
+        //$ret .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
         $ret .= "</div>\n";
         $ret .= "</td>\n";
         $ret .= "</tr>\n";
@@ -99,7 +110,7 @@ class getCmcTab extends cbTabHandler
      * @param $ui
      */
 
-    function getDisplayTab( $tab, $user, $ui)
+    function getDisplayTab($tab, $user, $ui)
     {
 
     }
@@ -118,7 +129,7 @@ class getCmcTab extends cbTabHandler
 
         if (!empty($postdata['cmc']['newsletter'])) {
 
-            var_dump($postdata['cmc']);
+            //var_dump($postdata['cmc']);
 
             // Check if user email already registered
             $chimp = new cmcHelperChimp();
@@ -132,7 +143,7 @@ class getCmcTab extends cbTabHandler
                 $updated = false;
             }
 
-            if($updated) {
+            if ($updated) {
                 // Update user data
 
 
@@ -147,9 +158,7 @@ class getCmcTab extends cbTabHandler
         die();
 
 
-
     }
-
 
 
     /**
@@ -187,7 +196,6 @@ class getCmcTab extends cbTabHandler
         // Mailchimp
 
 
-
         return;
     }
 
@@ -196,7 +204,7 @@ class getCmcTab extends cbTabHandler
      * @param $block
      */
 
-    function onBeforeUserBlocking($user,$block)
+    function onBeforeUserBlocking($user, $block)
     {
 
     }
@@ -208,7 +216,7 @@ class getCmcTab extends cbTabHandler
      * @return string
      */
 
-    function getEditTab( $tab, $user, $ui)
+    function getEditTab($tab, $user, $ui)
     {
         $return = '';
 
@@ -229,5 +237,140 @@ class getCmcTab extends cbTabHandler
     {
 
     }
+
+
+    /**
+     * @return mixed
+     */
+    function loadLists()
+    {
+        $api = new cmcHelperChimp();
+        $lists = $api->lists();
+
+        $key = 'id';
+        $val = 'name';
+        $options[] = array( $key => '', $val => '-- '.JText::_('Please select').' --');
+
+        foreach ($lists['data'] as $list){
+            $options[]=array($key=>$list[$key],$val=>$list[$val]);
+        }
+
+        $attribs = "onchange='submitbutton(\"applyPlugin\")'";
+
+        //$attribs = null;
+        if($options){
+            //$content = "listid: " . $this->params->get('listid', "");
+            $content =  JHtml::_('select.genericlist', $options, 'params[listid]', $attribs, $key,
+                $val, $this->params->get('listid', ""));
+        }
+
+        return $content;
+    }
+
+
+    /**
+     * @return string
+     */
+    function loadFields()
+    {
+        $listid = $this->params->get('listid', "");
+
+        if (empty($listid)) {
+           $content = '<div style="float:left;">' . JText::_('PLG_CMCCB_NO_FIELDS') . '</div>';
+           return $content;
+        }
+
+        $api = new cmcHelperChimp();
+        $fields = $api->listMergeVars($listid);
+        $key = 'tag';
+        $val = 'name';
+        $options = false;
+        if ($fields) {
+            foreach ($fields as $field) {
+                $choices = '';
+                if (isset($field['choices'])) {
+                    foreach ($field['choices'] as $c) {
+                        $choices .= $c . '##';
+                    }
+                    $choices = substr($choices, 0, -2);
+                }
+                $req = ($field['req']) ? 1 : 0;
+                if ($field[$key] == 'EMAIL') {
+                    if (!is_array($this->value)) {
+                        $oldValue = $this->value;
+                        $this->value = array();
+                        $this->value[] = $oldValue;
+                    }
+                    $this->value[] = $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices;
+                }
+                $options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+            }
+        }
+
+        $attribs = 'multiple="multiple" size="8"';
+
+        if ($options) {
+
+            $content = "";
+            $content = "Fields: " . $this->params->get('fields', "");
+
+            $content .= JHtml::_('select.genericlist', $options, 'params[fields][]', $attribs, $key, $val, explode("|*|", $this->params->get('fields', "")));
+
+
+            $content .= '<script type="text/javascript">
+				window.addEvent(\'domready\',function() {
+				    $("jform_params_fields").addEvent( \'change\', function(){
+					$("jform_params_fields").options[0].setProperty(\'selected\', \'selected\');
+
+				    });
+				});
+				</script>';
+        } else {
+            $content = '<div style="float:left;">' . JText::_('PLG_CMCCB_NO_FIELDS') . '</div>';
+        }
+
+        return $content;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    function loadInterests()
+    {
+        $listid = $this->params->get('listid', "");
+
+        if (empty($listid)) {
+            $content = '<div style="float:left;">' . JText::_('PLG_CMCCB_NO_INTEREST_GROUPS') . '</div>';
+            return $content;
+        }
+
+        $api = new cmcHelperChimp();
+        $interests = $api->listInterestGroupings($listid);
+        $key = 'id';
+        $val = 'name';
+        $options = false;
+        if ($interests) {
+            foreach ($interests as $interest) {
+                if ($interest['form_field'] != 'hidden') {
+                    $groups = '';
+                    foreach ($interest['groups'] as $ig) {
+                        $groups .= $ig['name'] . '##' . $ig['name'] . '####';
+                    }
+                    $groups = substr($groups, 0, -4);
+                    $options[] = array($key => $interest[$key] . ';' . $interest['form_field'] . ';' . $interest['name'] . ';' . $groups, $val => $interest[$val]);
+                }
+            }
+        }
+
+        $attribs = 'multiple="multiple" size="8"';
+        if ($options) {
+            $content = JHtml::_('select.genericlist', $options, 'params[interests][]', $attribs, $key, $val, explode("|*|", $this->params->get('interests', "")));
+        } else {
+            $content = '<div style="float:left;">' . JText::_('PLG_CMCCB_NO_INTEREST_GROUPS') . '</div>';
+        }
+
+        return $content;
+    }
+
 
 }

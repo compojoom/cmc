@@ -15,8 +15,41 @@
         <filename plugin="cmc">cmc.php</filename>
         <filename>index.html</filename>
     </files>
-    <params description="PLG_CMC_DESCRIPTION">
+    <params description="Plugin which integrates CMC - Mailchimp for Joomla! into Community Builder">
+        <param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text:"
+               description="This text will be displayed above your signup form."/>
+        <param name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="Text above submit"
+               description="This text will be displayed above the submit button."/>
+        <param name="outro-text-2" type="textarea" default="" cols="25" rows="2" label="Text below submit"
+               description="This text will be displayed below the submit button."/>
+        <param name="thankyou" type="textarea"
+               default="Thank you! Please check your email and confirm the newsletter subscription." cols="25"
+               rows="2" label="ThankYou Message" description="This message will be displayed after a successfull signup. (You can also use a placeholder and add it to the language files.)"/>
+        <param name="updateMsg" type="textarea"
+               default="You were already subscribed to this list. Your settings have been updated. Thank you!"
+               cols="25" rows="2" label="Update Message" description="This message will be displayed if the user has already been signed up to the list. In that case the selected fields/groups will be updated. (You can also use a placeholder and add it to the language files.)"/>
+
+        <param name="listid" required="true" type="custom" class="getCmcTab" method="loadLists" default="" cols="25" rows="2" label="List"
+               description="Select the subscriber list to which people will sign up to."/>
+
+        <param name="fields" type="custom" class="getCmcTab" method="loadFields" default="" label="Fields" description="These list fields (merge tags) will be displayed on the signup form. FNAME, LNAME and EMAIL are already supplied by CB!"/>
+
+        <param name="interests" type="custom" class="getCmcTab" method="loadInterests" default="" label="Interests"
+               description="These interest groups will be displayed on the signup form."/>
+        <param name="dateFormat" type="text" default="%Y-%m-%d" label="Date format"
+               description="If you are using a date field you can define the format here."/>
+        <param name="phoneFormat" type="radio" default="inter" label="Phone Format"
+               description="If you are using a phone field select whether to display it in US or international format. US =  (###) ### - #### ; International = ##########">
+            <option value="us">US Format</option>
+            <option value="inter">International</option>
+        </param>
+        <param name="address2" type="radio" default="0" label="Show address 2"
+               description="If you are using address fields, do you want to display the address line 2 field?">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </param>
     </params>
+
     <tabs>
         <tab name="Mailing Lists" description="Enables the user to manage his subscription to the Cmc Lists"
              class="getCmcTab" fields="0" position="cb_tabmain" displaytype="tab">
