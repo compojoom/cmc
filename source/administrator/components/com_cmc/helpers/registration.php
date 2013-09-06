@@ -53,7 +53,57 @@ class CmcHelperRegistration
      */
     public static function activateTempUser($user)
     {
+        // Check if user wants newsletter and is in our temp table
 
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
+
+        $query->select("*")->from("#__cmc_register")->where("user_id = " . $db->quote($user->id));
+        $db->setQuery($query);
+
+        $res = $db->loadObject();
+
+        if($res == null)
+            return; // not in database
+
+        // Check if user is already activated
+
+        $params = json_decode($res->paramas, true); // We want a assoc array here
+
+        $chimp = new cmcHelperChimp();
+
+        $userlists = $chimp->listsForEmail($user->email);
+        $listId = $params['listid']; // hidden field
+
+        if ($userlists && in_array($listId, $userlists)) {
+            return; // Already in list, we don't update here, we update on form send
+        }
+
+        // Activate E-Mail in mailchimp
+        if(isset($params['groups'])) {
+            foreach($params['groups'] as $key => $group) {
+                $mergeVars[$key] = $group;
+            }
+        }
+
+        if(isset($params['interests'])) {
+            foreach($params['interests'] as $key => $interest) {
+                // take care of interests that contain a comma (,)
+                array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
+                $mergeVars['GROUPINGS'][] = array( 'id' => $key, 'groups' => implode(',', $interest));
+            }
+        }
+
+        $mergeVars['OPTINIP'] = $params['OPTINIP'];
+
+        $chimp->listSubscribe( $listId, $user->email, $mergeVars, 'html', true, false, true, false ); // Double OPTIN false
+
+        if (! $chimp->errorCode ) {
+            $query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
+                ->where('email = ' .$db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
+            $db->setQuery($query);
+            $db->query();
+        }
     }
 
 

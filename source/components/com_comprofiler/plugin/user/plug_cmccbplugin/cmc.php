@@ -191,12 +191,8 @@ class getCmcTab extends cbTabHandler
             return;
         }
 
-        // Query cmc database
-
-
-        // Activate CMC Registration
-
-        // Mailchimp
+        // Activates the user (after checking if he exists)
+        CmcHelperRegistration::activateTempUser($user);
 
 
         return;
