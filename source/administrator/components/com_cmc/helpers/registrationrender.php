@@ -1,21 +1,20 @@
 <?php
 /**
- * Compojoom Community-Builder Plugin
- * @package Joomla!
- * @Copyright (C) 2013 - Yves Hoppe - compojoom.com
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 $
- **/
+ * @package    Cmc
+ * @author     Yves Hoppe <yves@compojoom.com>
+ * @date       06.09.13
+ *
+ * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * Helper class for Rendering registration plugins
  * Class CmcHelperRegistrationrender
+ *
+ * @since  1.4
  */
-
 class CmcHelperRegistrationrender
 {
 
@@ -268,17 +267,23 @@ class CmcHelperRegistrationrender
 		'ZM' => 'ZAMBIA',
 		'ZW' => 'ZIMBABWE'
 	);
-	public $dateFormat, $phoneFormat, $address2;
 
+	public $dateFormat, $phoneFormat, $address2;
 
 	private static $instance = null;
 
-
+	/**
+	 * Gets a instance (SINGLETON) of this class
+	 *
+	 * @return object
+	 */
 	public static function getInstance()
 	{
-		if (null === self::$instance) {
+		if (null === self::$instance)
+		{
 			self::$instance = new self;
 		}
+
 		return self::$instance;
 	}
 
@@ -291,41 +296,54 @@ class CmcHelperRegistrationrender
 
 		$html .= '<div id="intro_text">';
 
-		if ($introtext) {
+		if ($introtext)
+		{
 			$html .= "<p class=\"intro\">";
 			$html .= $introtext;
 			$html .= "</p>";
 		}
 
-		if ($plugin == _CPLG_CB) {
+		if ($plugin == _CPLG_CB)
+		{
 			$html .= "<table class=\"content_pane\" style=\"width: 100%; border: 0 !important;\">";
 		}
 
-		if (is_array($fields)) {
-			foreach ($fields as $f) {
+		if (is_array($fields))
+		{
+			foreach ($fields as $f)
+			{
 				$field = explode(';', $f);
+
 				// Render field
-				if ($plugin == _CPLG_JOOMLA) {
+				if ($plugin == _CPLG_JOOMLA)
+				{
 					$html .= $this->renderField($field);
-				} else if ($plugin == _CPLG_CB) {
+				}
+				else if ($plugin == _CPLG_CB)
+				{
 					$html .= $this->renderCBField($field);
-				} else if ($plugin == _CPLG_JOMSOCIAL) {
+				}
+				else if ($plugin == _CPLG_JOMSOCIAL)
+				{
 					$html .= $this->renderField($field);
 				}
 			}
 		}
 
-		if (is_array($interests)) {
-			foreach ($interests as $i) {
-
+		if (is_array($interests))
+		{
+			foreach ($interests as $i)
+			{
 				$interest = explode(';', $i);
 				$groups = explode('####', $interest[3]);
 
 				$html .= '<div class="signup-title">' . JText::_($interest[2]) . '</div>';
 
-				switch ($interest[1]) {
+				switch ($interest[1])
+				{
 					case 'checkboxes':
-						foreach ($groups as $g) {
+						foreach ($groups as $g)
+						{
 							$o = explode('##', $g);
 							$html .= '<label for="' . $interest[0] . '_' . $o[0]
 								. '" class="checkbox"><input type="checkbox" name="cmc[interests]['
@@ -334,7 +352,8 @@ class CmcHelperRegistrationrender
 						}
 						break;
 					case 'radio':
-						foreach ($groups as $g) {
+						foreach ($groups as $g)
+						{
 							$o = explode('##', $g);
 							$html .= '<label for="' . $interest[0] . '_' . $o[0]
 								. '" class="radio"><input type="radio" name="cmc[interests]['
@@ -346,23 +365,28 @@ class CmcHelperRegistrationrender
 						$html .= '<select name="cmc[interests][' . $interest[0] . ']" id="'
 							. $interest[0] . '" class="submitMerge inputbox">';
 						$html .= '<option value=""></option>';
-						foreach ($groups as $g) {
+
+						foreach ($groups as $g)
+						{
 							$o = explode('##', $g);
 							$html .= '<option value="' . $o[0] . '">' . JText::_($o[1]) . '</option>';
 						}
+
 						$html .= '</select><br />';
 						break;
 				}
 			}
 		}
 
-		if ($plugin == _CPLG_CB) {
+		if ($plugin == _CPLG_CB)
+		{
 			$html .= "</table>";
 		}
 
 		$html .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
 
-		if ($outrotext) {
+		if ($outrotext)
+		{
 			$html .= '<div class="outro1">';
 			$html .= '<p class="outro">' . $outrotext . '</p>';
 			$html .= '</div>';

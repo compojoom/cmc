@@ -1,126 +1,164 @@
 <?php
 /**
- * Compojoom User Plugin
- * @package Joomla!
- * @Copyright (C) 2013 - Yves Hoppe - compojoom.com
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 $
- **/
+ * @package    Cmc
+ * @author     Yves Hoppe <yves@compojoom.com>
+ * @date       06.09.13
+ *
+ * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
-// no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
+// No direct access
+defined('_JEXEC') or die('Restricted access');
+
+require_once(JPATH_ROOT . '/modules/mod_cmc/library/form/form.php');
 
 JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 /**
- * Class plgUserCmc
+ * Class PlgUserCmc
+ *
+ * @since  1.4
  */
-class plgUserCmc extends JPlugin
+class PlgUserCmc extends JPlugin
 {
+	/**
+	 * Prepares the data
+	 *
+	 * @param   string  $context  - the context
+	 * @param   object  $data     - the data object
+	 *
+	 * @return bool
+	 */
 
-    /**
-     * @param $context
-     * @param $data
-     * @return bool
-     */
-    function onContentPrepareData($context, $data)
-    {
-        // Check we are manipulating a valid form.
-        if (!in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile'))) {
-            return true;
-        }
+	function onContentPrepareData($context, $data)
+	{
+		// Check we are manipulating a valid form.
+		if (!in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')))
+		{
+			return true;
+		}
 
-        if (is_object($data)) {
+		if (is_object($data))
+		{
+			// Extend form
+		}
 
-        }
+		return true;
+	}
 
-        return true;
-    }
+	/**
+	 * Prepares the form
+	 *
+	 * @param   string  $form  - the form
+	 * @param   object  $data  - the data object
+	 *
+	 * @return bool
+	 */
 
-    /**
-     * @param $form
-     * @param $data
-     */
-    function onContentPrepareForm($form, $data)
-    {
-        if (!($form instanceof JForm)) {
-            $this->_subject->setError('JERROR_NOT_A_FORM');
-            return false;
-        }
+	function onContentPrepareForm($form, $data)
+	{
+		if (!($form instanceof JForm))
+		{
+			$this->_subject->setError('JERROR_NOT_A_FORM');
 
-        // Check we are manipulating a valid form.
-        $name = $form->getName();
-        if (!in_array($name, array('com_admin.profile', 'com_users.user', 'com_users.profile', 'com_users.registration'))) {
-            return true;
-        }
+			return false;
+		}
 
+		// Check we are manipulating a valid form.
+		$name = $form->getName();
 
+		if (!in_array(
+			$name, array('com_admin.profile', 'com_users.user',
+			'com_users.profile', 'com_users.registration'
+		)
+		))
+		{
+			return true;
+		}
 
-        return true;
-    }
-
-    /**
-     * @param $user
-     * @param $isNew
-     * @param $data
-     */
-
-    function onUserBeforeSave($user, $isNew, $data)
-    {
-      //  var_dump($data);
+		// Example = $form->text(array("FNAME", "text", "First Name", 0, ""));
+		$field = array("FNAME", "text", "First Name", 0, "");
 
 
-
-    //    die("onsave");
-    }
-
-
-    /**
-     * @param $data
-     * @param $isNew
-     * @param $result
-     * @param $error
-     */
-    function onUserAfterSave($data, $isNew, $result, $error)
-    {
-        $userId	= JArrayHelper::getValue($data, 'id', 0, 'int');
-
-        if ($userId && $result && isset($data['profile']) && (count($data['profile']))) {
-            // Save data
-        }
-
-//        var_dump($data);
-
- //       die("asdf");
-
-        return true;
-    }
+		//  ["@attributes"]=> array(8) { ["name"]=> string(4) "name" ["type"]=> string(4) "text"
+		// ["description"]=> string(28) "COM_USERS_REGISTER_NAME_DESC" ["filter"]=> string(6) "string"
+		// ["label"]=> string(29) "COM_USERS_REGISTER_NAME_LABEL" ["message"]=> string(31)
+		// "COM_USERS_REGISTER_NAME_MESSAGE" ["required"]=> string(4) "true" ["size"]=> string(2) "30" }
+		$form->setField(new JFormFieldText(array("name" => "testcmc", "type" => "text",
+			"description" => "blabla", "filter" => "string", "label" => "testcmc", "message" => "messagecmc", "required" => true, "size" => 30 )));
 
 
 
-    /**
-     * Remove all Cmc information for the given user ID
-     *
-     * Method is called after user data is deleted from the database
-     *
-     * @param	array		$user		Holds the user data
-     * @param	boolean		$success	True if user was succesfully stored in the database
-     * @param	string		$msg		Message
-     */
-    function onUserAfterDelete($user, $success, $msg)
-    {
-        if (!$success) {
-            return false;
-        }
+		return true;
+	}
 
-        $userId	= JArrayHelper::getValue($user, 'id', 0, 'int');
+	/**
+	 * Prepares the form
+	 *
+	 * @param   string   $user   - the not saved user obj
+	 * @param   boolean  $isNew  - is the user new
+	 * @param   object   $data   - the data object
+	 *
+	 * @return   void
+	 */
 
-        if ($userId) {
-            // Delete User from mailing list?
-        }
+	function onUserBeforeSave($user, $isNew, $data)
+	{
+		// Tab
+	}
 
-        return true;
-    }
+
+	/**
+	 * Prepares the form
+	 *
+	 * @param   object   $data    - the users data
+	 * @param   boolean  $isNew   - is the user new
+	 * @param   object   $result  - the db result
+	 * @param   string   $error   - the error message
+	 *
+	 * @return   boolean
+	 */
+
+	function onUserAfterSave($data, $isNew, $result, $error)
+	{
+		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
+
+		if ($userId && $result && isset($data['profile']) && (count($data['profile'])))
+		{
+			// Save data
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * Remove all Cmc information for the given user ID
+	 *
+	 * Method is called after user data is deleted from the database
+	 *
+	 * @param   array    $user     - Holds the user data
+	 * @param   boolean  $success  - True if user was succesfully stored in the database
+	 * @param   string   $msg      - Message
+	 *
+	 * @return boolean
+	 */
+
+	function onUserAfterDelete($user, $success, $msg)
+	{
+		if (!$success)
+		{
+			return false;
+		}
+
+		$userId = JArrayHelper::getValue($user, 'id', 0, 'int');
+
+		if ($userId)
+		{
+			// Delete User from mailing list?
+		}
+
+		return true;
+	}
 }
