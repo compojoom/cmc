@@ -13,12 +13,10 @@ var cmcSync = new Class({
 
 		$$('input[type=checkbox]').addEvent('click',function(){
 			if(this.get('checked')) {
-				document.id('sync').set('disabled', false);
-				document.id('sync').removeClass('disabled');
+				document.id('sync').set('disabled', '');
 			} else {
 				if(!$$('input[type=checkbox]:checked').length) {
-					document.id('sync').set('disabled', true);
-					document.id('sync').addClass('disabled');
+					document.id('sync').set('disabled', 'disabled');
 				}
 			}
 		});

@@ -9,7 +9,7 @@
  */
 
 defined('_JEXEC') or die();
-jimport('joomla.application.component.modellist');
+jimport('joomla.application.component.modeladmin');
 
 /**
  * Class CmcModelLists
