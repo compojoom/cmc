@@ -22,90 +22,131 @@ define('_CPLG_JOMSOCIAL', 2);
 
 class CmcHelperRegistration
 {
-    private static $instance;
+	private static $instance;
 
-    /**
-     * Temporary saves the user merge_vars after the registration, no processing
-     * Does not check if user E-Mail already exists (this has to be done before!)
-     * @param $user joomla user obj
-     * @param $postdata only cmc data
-     * @param int $plg which plugin triggerd the save method
-     */
-    public static function saveTempUser($user, $postdata, $plg = _CPLG_JOOMLA)
-    {
-        $db = JFactory::getDBO();
-        $query = $db->getQuery(true);
+	/**
+	 * Temporary saves the user merge_vars after the registration, no processing
+	 * Does not check if user E-Mail already exists (this has to be done before!)
+	 * @param $user joomla user obj
+	 * @param $postdata only cmc data
+	 * @param int $plg which plugin triggerd the save method
+	 */
+	public static function saveTempUser($user, $postdata, $plg = _CPLG_JOOMLA)
+	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
 
-        $postdata['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
+		$postdata['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
-        $query->insert("#__cmc_register")->columns("user_id, params, plg")
-            ->values(
-                $db->quote($user->id) . ',' . $db->quote(json_encode($postdata))
-                . ',' . $db->quote($plg)
-            );
+		$query->insert("#__cmc_register")->columns("user_id, params, plg")
+			->values(
+				$db->quote($user->id) . ',' . $db->quote(json_encode($postdata))
+				. ',' . $db->quote($plg)
+			);
 
-        $db->setQuery($query);
-        $db->query();
-    }
+		$db->setQuery($query);
+		$db->query();
+	}
 
-    /**
-     * @param $user
-     */
-    public static function activateTempUser($user)
-    {
-        // Check if user wants newsletter and is in our temp table
+	/**
+	 * Activates a temporary user after his user account is activated
+	 * Checks if user is in the temporary table and if the user is already activated before
+	 * sending the user to mailchimp
+	 * @param $user
+	 */
+	public static function activateTempUser($user)
+	{
+		// Check if user wants newsletter and is in our temp table
 
-        $db = JFactory::getDBO();
-        $query = $db->getQuery(true);
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
 
-        $query->select("*")->from("#__cmc_register")->where("user_id = " . $db->quote($user->id));
-        $db->setQuery($query);
+		$query->select("*")->from("#__cmc_register")->where(
+			"user_id = " . $db->quote($user->id)
+		);
 
-        $res = $db->loadObject();
+		$db->setQuery($query);
 
-        if($res == null)
-            return; // not in database
+		$res = $db->loadObject();
 
-        // Check if user is already activated
+		if ($res == null) {
+			return; // not in database
+		}
 
-        $params = json_decode($res->paramas, true); // We want a assoc array here
+		// Check if user is already activated
 
-        $chimp = new cmcHelperChimp();
+		$params = json_decode($res->params, true); // We want a assoc array here
 
-        $userlists = $chimp->listsForEmail($user->email);
-        $listId = $params['listid']; // hidden field
+		$chimp = new cmcHelperChimp();
 
-        if ($userlists && in_array($listId, $userlists)) {
-            return; // Already in list, we don't update here, we update on form send
-        }
+		$userlists = $chimp->listsForEmail($user->email);
+		$listId = $params['listid']; // hidden field
 
-        // Activate E-Mail in mailchimp
-        if(isset($params['groups'])) {
-            foreach($params['groups'] as $key => $group) {
-                $mergeVars[$key] = $group;
-            }
-        }
+		if ($userlists && in_array($listId, $userlists)) {
+			return; // Already in list, we don't update here, we update on form send
+		}
 
-        if(isset($params['interests'])) {
-            foreach($params['interests'] as $key => $interest) {
-                // take care of interests that contain a comma (,)
-                array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-                $mergeVars['GROUPINGS'][] = array( 'id' => $key, 'groups' => implode(',', $interest));
-            }
-        }
+		// Activate E-Mail in mailchimp
+		if (isset($params['groups'])) {
+			foreach ($params['groups'] as $key => $group) {
+				$mergeVars[$key] = $group;
+			}
+		}
 
-        $mergeVars['OPTINIP'] = $params['OPTINIP'];
+		if (isset($params['interests'])) {
+			foreach ($params['interests'] as $key => $interest) {
+				// take care of interests that contain a comma (,)
+				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
+				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
+			}
+		}
 
-        $chimp->listSubscribe( $listId, $user->email, $mergeVars, 'html', true, false, true, false ); // Double OPTIN false
+		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
-        if (! $chimp->errorCode ) {
-            $query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
-                ->where('email = ' .$db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
-            $db->setQuery($query);
-            $db->query();
-        }
-    }
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false); // Double OPTIN false
 
+		if (!$chimp->errorCode) {
+			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
+				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
+			$db->setQuery($query);
+			$db->query();
+		} else {
+			echo "Error: " . $chimp->errorMessage;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Deletes users subscription, does check if the table exists before
+	 * @param $user
+	 */
+
+	public static function deleteUser($user)
+	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+		// check for email, more valid then id
+		$query->select("*")->from("#__cmc_users")->where(
+			"email = " . $db->quote($user->email)
+		);
+		$db->setQuery($query);
+
+		$res = $db->loadObject();
+
+		if ($res == null)
+			return; // nothing to delete
+
+		$chimp = new cmcHelperChimp();
+		$userlists = $chimp->listsForEmail($user->email);
+
+		if ($userlists && in_array($res->list_id, $userlists)) {
+			$chimp->listUnsubscribe($res->list_id, $user->email, false, false, true);
+		}
+
+		return true;
+	}
 
 
 }
