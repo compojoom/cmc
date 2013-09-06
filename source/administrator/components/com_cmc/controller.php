@@ -1,19 +1,24 @@
 <?php
 /**
-* Hotspots - Adminstrator
-* @package Joomla!
-* @Copyright (C) 2009 Yves Hoppe - lunajoom.de
-* @All rights reserved
-* @Joomla! is Free Software
-* @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
-* @version $Revision: 0.9.3 beta $
-**/
+ * @package    Cmc
+ * @author     DanielDimitrov <daniel@compojoom.com>
+ * @date       06.09.13
+ *
+ * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
+
 
 jimport('joomla.application.component.controller');
 
-defined( '_JEXEC' ) or die ( 'Restricted access' );
+defined('_JEXEC') or die ('Restricted access');
 
+/**
+ * Class CmcController
+ *
+ * @since  1.0
+ */
 class CmcController extends JControllerLegacy
 {
-    protected $default_view = 'cpanel';
+	protected $default_view = 'cpanel';
 }
