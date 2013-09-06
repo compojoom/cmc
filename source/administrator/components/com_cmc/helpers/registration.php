@@ -66,12 +66,13 @@ class CmcHelperRegistration
 
 		$res = $db->loadObject();
 
-		if ($res == null)
+		if ($res == null) {
 			return; // not in database
+		}
 
 		// Check if user is already activated
 
-		$params = json_decode($res->paramas, true); // We want a assoc array here
+		$params = json_decode($res->params, true); // We want a assoc array here
 
 		$chimp = new cmcHelperChimp();
 
@@ -99,13 +100,15 @@ class CmcHelperRegistration
 
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', true, false, true, false); // Double OPTIN false
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false); // Double OPTIN false
 
 		if (!$chimp->errorCode) {
 			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
 				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
 			$db->setQuery($query);
 			$db->query();
+		} else {
+			echo "Error: " . $chimp->errorMessage;
 		}
 
 		return true;
