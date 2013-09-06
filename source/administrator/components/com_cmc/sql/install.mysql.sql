@@ -58,3 +58,13 @@ CREATE TABLE IF NOT EXISTS `#__cmc_users` (
   `query_data` text COMMENT 'json',
   PRIMARY KEY (`id`)
 );
+
+
+CREATE TABLE `#__cmc_register` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `params` text NOT NULL,
+  `plg` tinyint(2) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+);
