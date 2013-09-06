@@ -50,3 +50,7 @@ ul.usergroups li {
 .close {
     cursor: pointer;
 }
+
+#cmc-progress-container {
+	width: 100%;
+}

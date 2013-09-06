@@ -17,7 +17,6 @@ JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
-// Joomla.submitbutton('lists.synchronize')
 
 $document = JFactory::getDocument();
 $overwrite = 'Joomla.submitbutton = function(pressbutton){

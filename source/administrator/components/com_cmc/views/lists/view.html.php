@@ -1,31 +1,51 @@
 <?php
 /**
- * Tiles
- * @package Joomla!
- * @Copyright (C) 2012 - Yves Hoppe - compojoom.com
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 0.9.0 beta $
- **/
+ * @author     Yves Hoppe <yves@compojoom.com>
+ * @author     Daniel Dimitrov <daniel@compojoom.com>
+ * @date       28.08.13
+ *
+ * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
-class CmcViewLists extends JViewLegacy {
+/**
+ * Class CmcViewLists
+ *
+ * @since  1.0
+ */
+class CmcViewLists extends JViewLegacy
+{
+	/**
+	 * Displays the view
+	 *
+	 * @param   string  $tpl  - the layout
+	 *
+	 * @return mixed|void
+	 */
+	public function display($tpl = null)
+	{
+		$this->state = $this->get('State');
+		$this->items = $this->get('Items');
+		$this->pagination = $this->get('Pagination');
 
-    function display($tpl = null) {
-        $this->state = $this->get('State');
-        $this->items = $this->get('Items');
-        $this->pagination = $this->get('Pagination');
+		$this->addToolbar();
+		parent::display($tpl);
+	}
 
-        $this->addToolbar();
-        parent::display($tpl);
-    }
-
-    public function addToolbar() {
-        // Set toolbar items for the page
-        JToolBarHelper::title(JText::_('COM_CMC_LISTS'), 'lists');
-        JToolBarHelper::custom( 'lists.synchronize', 'synchronize.png', 'synchronize.png', 'First Sync', false, false );
-    }
+	/**
+	 * Ads a toolbar to the page
+	 *
+	 * @return void
+	 */
+	public function addToolbar()
+	{
+		$toolbar = JToolbar::getInstance('toolbar');
+		$toolbar->appendButton(
+			'Popup', 'archive', 'COM_CMC_SYNC', 'index.php?option=com_cmc&view=sync&tmpl=component', 500, 300, 0, 0,
+			'window.parent.location.reload()', 'COM_CMC_SYNC_HEADING'
+		);
+	}
 }
