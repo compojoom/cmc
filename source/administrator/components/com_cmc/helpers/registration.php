@@ -104,6 +104,18 @@ class CmcHelperRegistration
             $db->setQuery($query);
             $db->query();
         }
+
+        return true;
+    }
+
+    /**
+     * Deletes users subscription if user account is deleted
+     * @param $user
+     */
+
+    public static function deleteUser($user) {
+        $chimp = new cmcHelperChimp();
+        $userlists = $chimp->listsForEmail($user->email);
     }
 
 

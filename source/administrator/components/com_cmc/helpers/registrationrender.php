@@ -268,8 +268,12 @@ class CmcHelperRegistrationrender
         'ZM' => 'ZAMBIA',
         'ZW' => 'ZIMBABWE'
     );
+    public $dateFormat, $phoneFormat, $address2;
+
+
 
     private static $instance = null;
+
 
     public static function getInstance()
     {
@@ -396,13 +400,13 @@ class CmcHelperRegistrationrender
         } else if ($fieldtype == "radio") {
             return $this->radio($field, $prefix);
         } else if ($fieldtype == "date") {
-            return $this->date($field, "%d-%m-%Y", $prefix); // TODO
+            return $this->date($field, $this->dateFormat, $prefix);
         } else if ($fieldtype == "birthday") {
             return $this->birthday($field, $prefix);
         } else if ($fieldtype == "phone") {
-            return $this->phone($field, "inter", $prefix); // TODO
+            return $this->phone($field, $this->phoneFormat, $prefix);
         } else if ($fieldtype == "address") {
-            return $this->address($field, 0, $prefix); // TODO
+            return $this->address($field, $this->address2, $prefix);
         } else {
             // Fallback, maybe should be a 404 not supported
             return $this->text($field);

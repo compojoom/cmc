@@ -83,6 +83,9 @@ class getCmcTab extends cbTabHandler
         $ret .= "<div id=\"cmc_newsletter\" style=\"display: none;\">\n";
 
         $renderer = CmcHelperRegistrationrender::getInstance();
+        $renderer->phoneFormat = $this->params->get("phoneFormat", "inter");
+        $renderer->dateFormat = $this->params->get("dateFormat", "%Y-%m-%d");
+        $renderer->address2 = $this->params->get("address2", 0);
 
         // Render Content
         $ret .= $renderer->renderForm($this->params->get('intro-text', ""),
@@ -176,7 +179,6 @@ class getCmcTab extends cbTabHandler
             return;
         }
 
-
     }
 
     /**
@@ -191,9 +193,8 @@ class getCmcTab extends cbTabHandler
             return;
         }
 
-        // Activates the user (after checking if he exists)
+        // Activates the user (after checking if he exists etc)
         CmcHelperRegistration::activateTempUser($user);
-
 
         return;
     }
