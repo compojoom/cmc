@@ -49,6 +49,9 @@ class CmcHelperRegistration
 	}
 
 	/**
+	 * Activates a temporary user after his user account is activated
+	 * Checks if user is in the temporary table and if the user is already activated before
+	 * sending the user to mailchimp
 	 * @param $user
 	 */
 	public static function activateTempUser($user)
@@ -115,7 +118,7 @@ class CmcHelperRegistration
 	}
 
 	/**
-	 * Deletes users subscription if user account is deleted
+	 * Deletes users subscription, does check if the table exists before
 	 * @param $user
 	 */
 
