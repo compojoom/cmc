@@ -1,23 +1,32 @@
 <?php
 /**
- * CMC
- * @package Joomla!
- * @Copyright (C) 2012 - Yves Hoppe - compojoom.com
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 stable $
- **/
+ * @package    Cmc
+ * @author     DanielDimitrov <daniel@compojoom.com>
+ * @date       06.09.13
+ *
+ * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
-defined( '_JEXEC' ) or die ( 'Restricted access' );
+defined('_JEXEC') or die ('Restricted access');
 
 // Include library dependencies
 jimport('joomla.filter.input');
 
+/**
+ * Class CmcTableUsers
+ *
+ * @since  1.0
+ */
 class CmcTableUsers extends JTable
 {
-    public function __construct(&$db)
-    {
-        parent::__construct( '#__cmc_users', 'id', $db );
-    }
+	/**
+	 * The constructor
+	 *
+	 * @param   string  &$db  - the db object
+	 */
+	public function __construct(&$db)
+	{
+		parent::__construct('#__cmc_users', 'id', $db);
+	}
 }

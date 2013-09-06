@@ -1,17 +1,22 @@
 <?php
 /**
- * CmC
- * @package Joomla!
- * @Copyright (C) 2012 - Yves Hoppe - compojoom.com
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 stable $
- **/
+ * @package    Cmc
+ * @author     DanielDimitrov <daniel@compojoom.com>
+ * @date       06.09.13
+ *
+ * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.modellegacy');
 
-class CmcModelWebhooks extends JModelLegacy {
-
+/**
+ * Class CmcModelWebhooks
+ *
+ * @since  1.0
+ */
+class CmcModelWebhooks extends JModelLegacy
+{
+	// Nothing yet
 }

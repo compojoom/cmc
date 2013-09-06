@@ -1,15 +1,14 @@
 <?php
 /**
- * Compojoom System Plugin
- * @package Joomla!
- * @Copyright (C) 2012 - Yves Hoppe - compojoom.com
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 $
- **/
+ * @package    Cmc
+ * @author     DanielDimitrov <daniel@compojoom.com>
+ * @date       06.09.13
+ *
+ * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
-// no direct access
+// No direct access
 defined('_JEXEC') or die('Restricted access');
 
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
@@ -17,21 +16,21 @@ JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
 
 class plgSystemECom360Redshop extends JPlugin
 {
-
 	/**
 	 * @param $cart
 	 * @param $orderresult
+	 *
 	 * @return void
 	 * @internal param $row
 	 * @internal param $info
 	 */
 	public function afterOrderPlace($cart, $orderresult)
 	{
-
 		$app = JFactory::getApplication();
 
 		// This plugin is only intended for the frontend
-		if ($app->isAdmin()) {
+		if ($app->isAdmin())
+		{
 			return true;
 		}
 
@@ -40,9 +39,10 @@ class plgSystemECom360Redshop extends JPlugin
 
 
 	/**
-	 * @param $cart
-	 * @param $orderresult
+	 * @param        $cart
+	 * @param        $orderresult
 	 * @param string $type
+	 *
 	 * @return mixed
 	 */
 	public function notifyMC($cart, $orderresult, $type = "new")
@@ -50,7 +50,8 @@ class plgSystemECom360Redshop extends JPlugin
 		$session = JFactory::getSession();
 
 		// Trigger plugin only if user comes from Mailchimp
-		if (!$session->get('mc', '0')) {
+		if (!$session->get('mc', '0'))
+		{
 			return false;
 		}
 
@@ -60,7 +61,8 @@ class plgSystemECom360Redshop extends JPlugin
 		$products = array();
 
 
-		for ($i = 0; $i < $cart["idx"]; $i++) {
+		for ($i = 0; $i < $cart["idx"]; $i++)
+		{
 			$prod = $cart[$i];
 
 			$prodInfo = $this->getProductInfo($prod['product_id']);
@@ -75,7 +77,8 @@ class plgSystemECom360Redshop extends JPlugin
 		}
 
 
-		return CmcHelperEcom360::sendOrderInformations($shop_id, $shop_name, $orderresult->order_id,
+		return CmcHelperEcom360::sendOrderInformations(
+			$shop_id, $shop_name, $orderresult->order_id,
 			$cart['total'], $cart['tax'], $cart['shipping'], $products // No shipping
 		);
 	}
@@ -85,6 +88,7 @@ class plgSystemECom360Redshop extends JPlugin
 	 * why we need to grab it ourselves
 	 *
 	 * @param $id
+	 *
 	 * @return mixed
 	 */
 	private function getProductInfo($id)
