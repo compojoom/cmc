@@ -33,13 +33,16 @@ class CmcHelperRegistration
      */
     public static function saveTempUser($user, $postdata, $plg = _CPLG_JOOMLA)
     {
-        $db = & JFactory::getDBO();
+        $db = JFactory::getDBO();
         $query = $db->getQuery(true);
 
         $postdata['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
         $query->insert("#__cmc_register")->columns("user_id, params, plg")
-            ->values($db->quote($user->id), $db->quote(json_encode($postdata)), $db->quote($plg));
+            ->values(
+                $db->quote($user->id) . ',' . $db->quote(json_encode($postdata))
+                . ',' . $db->quote($plg)
+            );
 
         $db->setQuery($query);
         $db->query();

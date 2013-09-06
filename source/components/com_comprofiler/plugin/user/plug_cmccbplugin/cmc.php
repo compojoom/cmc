@@ -56,9 +56,11 @@ class getCmcTab extends cbTabHandler
      * @param $tab
      * @param $user
      * @param $ui
+     * @param $postdata
+     * @return string
      */
 
-    function getDisplayRegistration($tab, $user, $ui)
+    function getDisplayRegistration($tab, $user, $ui, $postdata)
     {
         JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
         JHtml::_('behavior.framework', true);
@@ -66,7 +68,6 @@ class getCmcTab extends cbTabHandler
         $listid = $this->params->get('listid', "");
         $interests = explode("|*|", $this->params->get('interests', ''));
         $fields = explode("|*|", $this->params->get('fields', ''));
-
 
         $ret = "\t<tr>\n";
         $ret .= "\t\t<td class='titleCell'>" . JText::_('PLG_CMCCB_SUBSCRIPTION') . ":</td>\n";
@@ -81,8 +82,10 @@ class getCmcTab extends cbTabHandler
         $ret .= "<td colspan='2' id='cmc_td_newsletter' style=''>\n";
         $ret .= "<div id=\"cmc_newsletter\" style=\"display: none;\">\n";
 
+        $renderer = CmcHelperRegistrationrender::getInstance();
+
         // Render Content
-        $ret .= CmcHelperRegistrationrender::renderForm($this->params->get('intro-text', ""),
+        $ret .= $renderer->renderForm($this->params->get('intro-text', ""),
             $this->params->get('outro-text-1', ""), $this->params->get('outro-text-2', ""),
             $fields, $interests, $listid, _CPLG_CB
         );

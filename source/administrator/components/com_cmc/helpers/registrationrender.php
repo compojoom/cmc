@@ -12,15 +12,14 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * Helper class for Registration plugins
- * Class CmcHelperRegistration
+ * Helper class for Rendering registration plugins
+ * Class CmcHelperRegistrationrender
  */
 
 class CmcHelperRegistrationrender
 {
-    private static $instance;
 
-    public static $countries = array(
+    public $countries = array(
         'AF' => 'AFGHANISTAN',
         'AX' => 'ÅLAND ISLANDS',
         'AL' => 'ALBANIA',
@@ -270,11 +269,20 @@ class CmcHelperRegistrationrender
         'ZW' => 'ZIMBABWE'
     );
 
+    private static $instance = null;
+
+    public static function getInstance()
+    {
+        if (null === self::$instance) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
 
     /**
      * @param int $plugin
      */
-    public static function renderForm($introtext, $outrotext, $outrotext2, $fields, $interests, $listid, $plugin = _CPLG_JOOMLA)
+    public function renderForm($introtext, $outrotext, $outrotext2, $fields, $interests, $listid, $plugin = _CPLG_JOOMLA)
     {
         $html = "";
 
@@ -295,11 +303,11 @@ class CmcHelperRegistrationrender
                 $field = explode(';', $f);
                 // Render field
                 if ($plugin == _CPLG_JOOMLA) {
-                    $html .= CmcHelperRegistrationrender::renderField($field);
+                    $html .= $this->renderField($field);
                 } else if ($plugin == _CPLG_CB) {
-                    $html .= CmcHelperRegistrationrender::renderCBField($field);
+                    $html .= $this->renderCBField($field);
                 } else if ($plugin == _CPLG_JOMSOCIAL) {
-                    $html .= CmcHelperRegistrationrender::renderField($field);
+                    $html .= $this->renderField($field);
                 }
             }
         }
@@ -373,20 +381,31 @@ class CmcHelperRegistrationrender
      *
      * @param $field FNAME;text;First Name;0;""
      */
-    public static function renderField($field)
+    public function renderField($field, $prefix = "cmc")
     {
         $fieldname = $field[0];
         $fieldtype = $field[1];
         $label = $field[2];
         $val = $field[3];
-
+        // 'text', 'email', 'imageurl', 'number', 'zip', 'url'
+        // Not using exec here
         if ($fieldtype == "text") {
-            return CmcHelperRegistrationrender::text($field);
+            return $this->text($field, $prefix);
+        } else if ($fieldtype == "dropdown") {
+            return $this->dropdown($field, $prefix);
         } else if ($fieldtype == "radio") {
-
+            return $this->radio($field, $prefix);
+        } else if ($fieldtype == "date") {
+            return $this->date($field, "%d-%m-%Y", $prefix); // TODO
+        } else if ($fieldtype == "birthday") {
+            return $this->birthday($field, $prefix);
+        } else if ($fieldtype == "phone") {
+            return $this->phone($field, "inter", $prefix); // TODO
+        } else if ($fieldtype == "address") {
+            return $this->address($field, 0, $prefix); // TODO
         } else {
-            // Fallback
-            return CmcHelperRegistrationrender::text($field);
+            // Fallback, maybe should be a 404 not supported
+            return $this->text($field);
         }
     }
 
@@ -394,9 +413,9 @@ class CmcHelperRegistrationrender
      * @param $field
      * @return string
      */
-    private static function renderCBField($field)
+    private function renderCBField($field)
     {
-        $inputfield = CmcHelperRegistrationrender::renderField($field);
+        $inputfield = $this->renderField($field);
 
         $h = "<tr class=\"sectiontableentry1 cbft_predefined\">\n";
         $h .= "<td class=\"titleCell\">";
@@ -415,7 +434,7 @@ class CmcHelperRegistrationrender
      * @param string $prefix
      * @return string
      */
-    public static function text($params, $prefix = "cmc")
+    public function text($params, $prefix = "cmc")
     {
         $class = $params[3] ? array('required', 'inputbox', 'input-medium') : array('inputbox', 'input-medium');
         $validate = array(
@@ -435,11 +454,203 @@ class CmcHelperRegistrationrender
             $title = $title . ' *';
         }
 
-        return CmcHelperRegistrationrender::_input(
-            $prefix . '[groups]['. $params[0] . ']', $params[0],
+        return $this->input(
+            $prefix . '[groups][' . $params[0] . ']', $params[0],
             'class="' . implode(' ', $class) . '"', $title
         );
     }
+
+    /**
+     * @param $params
+     * @param string $prefix
+     * @return string
+     */
+    public function dropdown($params, $prefix = "cmc")
+    {
+        $choices = explode('##', $params[4]);
+        $req = ($params[3]) ? 'class="required inputbox"' : 'class="inputbox"';
+        $title = JText::_($params[2]);
+        if ($params[3]) {
+            $title = JText::_($params[2]) . ' *';
+        }
+        echo '<div class="mcsignupTitle">' . $title . '</div>';
+        $select = '<select name="' . $prefix . '[groups][' . $params[0] . ']" id="' . $params[0] . '" ' . $req . '>';
+        if (!$params[3]) {
+            $select .= '<option value=""></option>';
+        }
+        foreach ($choices as $ch) {
+            $select .= '<option value="' . $ch . '">' . $ch . '</option>';
+        }
+        $select .= '</select><br />';
+
+        return $select;
+    }
+
+    /**
+     * @param $params
+     * @param string $prefix
+     * @return string
+     */
+    public function radio($params, $prefix = "cmc")
+    {
+        $choices = explode('##', $params[4]);
+        $req = ($params[3]) ? 'class="required inputbox"' : 'class="inputbox"';
+        $title = JText::_($params[2]);
+        if ($params[3]) {
+            $title = JText::_($params[2]) . ' *';
+        }
+        $radio = '<div class="mcsignupTitle">' . $title . '</div>';
+        foreach ($choices as $ch) {
+            $radio .= '<label class="radio" for="' . $params[0] . '_' . str_replace(' ', '_', $ch)
+                . '"><input type="radio" name="' . $prefix . '[groups][' . $params[0] . ']" id="'
+                . $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="'
+                . $ch . '" title="' . JText::_($title) . '" />' . JText::_($ch) . '</label>';
+        }
+
+        return $radio;
+    }
+
+    /**
+     * @param $params
+     * @param string $prefix
+     * @return string
+     */
+    public function date($params, $dateformat, $prefix = "cmc")
+    {
+        JHTML::_('behavior.calendar');
+        $title = JText::_($params[2]);
+        if ($params[3]) {
+            $title = $params[2] . ' *';
+        }
+        $attributes = array('maxlength' => '10', 'title' => $title);
+        if ($params[3]) {
+            $attributes['class'] = 'required inputbox input-small';
+        } else {
+            $attributes['class'] = 'inputbox input-small';
+        }
+        return JHTML::calendar(
+            $title, $prefix . '[groups][' . $params[0] . ']',
+            $params[0], $dateformat, $attributes
+        );
+    }
+
+    /**
+     * @param $params
+     * @param string $prefix
+     * @return string
+     */
+    public function birthday($params, $prefix = "cmc")
+    {
+        $req = ($params[3]) ? 'class="required inputbox input-medium"' : 'class="inputbox input-medium"';
+        $title = JText::_($params[2]);
+        if ($params[3]) {
+            $title = $params[2] . ' *';
+        }
+        $select = '<label for="' . $params[0] . '_month">' . $title . ': </label>';
+        $select .= '<select name="' . $prefix . '[groups][' . $params[0] . '][month]" id="'
+            . $params[0] . '_month" title="' . JText::_($params[2]) . '" ' . $req . '>';
+        $select .= '<option value="">MM</option>';
+        for ($i = 1; $i <= 12; $i++) {
+            $select .= '<option value="' . str_pad($i, 2, '0', STR_PAD_LEFT) . '">'
+                . str_pad($i, 2, '0', STR_PAD_LEFT) . '</option>';
+        }
+        $select .= '</select>';
+        $select .= '<select name="' . $prefix . '[groups][' . $params[0] . '][day]" id="'
+            . $params[0] . '_day" title="' . JText::_($params[2]) . '" ' . $req . '>';
+        $select .= '<option value="">DD</option>';
+        for ($i = 1; $i <= 31; $i++) {
+            $select .= '<option value="' . str_pad($i, 2, '0', STR_PAD_LEFT)
+                . '">' . str_pad($i, 2, '0', STR_PAD_LEFT) . '</option>';
+        }
+        $select .= '</select>';
+
+        return $select;
+
+    }
+
+    /**
+     * @param $params
+     * @param string $prefix
+     * @return string
+     */
+    public function phone($params, $phoneformat, $prefix = "cmc")
+    {
+        if ($phoneformat == 'inter') {
+            $phone = $this->text($params);
+        } else {
+            $class = ($params[3]) ? array('required') : array();
+            $class[] = 'phone';
+            $title = JText::_($params[2]);
+            if ($params[3]) {
+                $title = $params[2] . ' *';
+            }
+
+            $phone = '<label for="' . $params[0] . '">' . $title . ': </label>';
+            $phone .= $this->input(
+                $prefix . '[groups][' . $params[0] . '][area]', $params[0], 'class="' .
+                implode(' ', $class) . '"', $title, 'size="2" maxlength="3"'
+            );
+            $phone .= $this->input(
+                $prefix . '[groups][' . $params[0] . '][detail1]', $params[0], 'class="' .
+                implode(' ', $class) . '"', $title, 'size="2" maxlength="3"'
+            );
+            $phone .= $this->input(
+                $prefix . '[groups][' . $params[0] . '][detail2]', $params[0], 'class="' .
+                implode(' ', $class) . '"', $title, 'size="2" maxlength="4"'
+            );
+        }
+
+        return $phone;
+    }
+
+    /**
+     * @param $params
+     * @param string $prefix
+     * @return string
+     */
+    public function address($params, $address2, $prefix = "cmc")
+    {
+        $req = ($params[3]) ? 'class="required inputbox input-medium"' : 'class="inputbox input-medium"';
+        $title = JText::_($params[2]);
+        if ($params[3]) {
+            $title = $params[2] . ' *';
+        }
+        $address = '<label for="' . $params[0] . '">' . $title . ': </label><br />';
+
+        $address .= $this->input($prefix . '[groups][' . $params[0] . '][addr1]', $params[0], $req, JText::_('MOD_CMC_STREET_ADDRESS'));
+        if ($address2) {
+            $address .= $this->input($prefix . '[groups][' . $params[0] . '][addr2]', $params[0], $req, JText::_('MOD_CMC_ADDRESS_2'));
+        }
+        $address .= $this->input($prefix . '[groups][' . $params[0] . '][city]', $params[0], $req, JText::_('MOD_CMC_CITY'));
+        $address .= $this->input($prefix . 'jform[groups][' . $params[0] . '][state]', $params[0], $req, JText::_('MOD_CMC_STATE'));
+        $address .= $this->input($prefix . '[groups][' . $params[0] . '][zip]', $params[0], $req, JText::_('MOD_CMC_ZIP'));
+
+        $address .= $this->getCountryDropdown('jform[groups][' . $params[0] . '][country]', $params[0], JText::_('MOD_CMC_COUNTRY'), $req) . '<br />';
+
+        return $address;
+    }
+
+    /**
+     * @param $name
+     * @param $id
+     * @param $title
+     * @param $req
+     * @return string$prefix
+     */
+    private function getCountryDropdown($name, $id, $title, $req)
+    {
+        $options = $this->countries;
+
+        $result = '<select name="' . $name . '" id="' . $id . '" title="' . $title . '" ' . $req . '>';
+        $result .= '<option value=""></option>';
+        foreach ($options as $k => $v) {
+            $result .= '<option value="' . $k . '">' . ucwords(strtolower($v)) . '</option>';
+        }
+        $result .= '</select>';
+
+        return $result;
+    }
+
 
     /**
      * @param $name
@@ -449,12 +660,10 @@ class CmcHelperRegistrationrender
      * @param string $attrib
      * @return string
      */
-    private static function _input($name, $id, $class, $title, $attrib = '')
+    private function input($name, $id, $class, $title, $attrib = '')
     {
         return '<input name="' . $name . '" id="' . $id . '" ' . $class . ' type="text" size="25" value="" title="' . $title . '" ' . $attrib . ' />';
     }
-
-
 
 
 }
