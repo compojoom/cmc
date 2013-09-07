@@ -27,9 +27,12 @@ class CmcHelperRegistration
 	/**
 	 * Temporary saves the user merge_vars after the registration, no processing
 	 * Does not check if user E-Mail already exists (this has to be done before!)
-	 * @param $user joomla user obj
-	 * @param $postdata only cmc data
-	 * @param int $plg which plugin triggerd the save method
+	 *
+	 * @param   object  $user      -joomla user obj
+	 * @param   object  $postdata  - only cmc data
+	 * @param   int     $plg       - which plugin triggerd the save method
+	 *
+	 * @return void
 	 */
 	public static function saveTempUser($user, $postdata, $plg = _CPLG_JOOMLA)
 	{
@@ -49,14 +52,30 @@ class CmcHelperRegistration
 	}
 
 	/**
-	 * Prepares the form
+	 * Directly activates the user with Mailchimp
 	 *
-	 * @param   object   $user            - the users data
-	 * @param   boolean  $directActivate  - is the user new
+	 * @param   object  $user      - The Joomla user Object
+	 * @param   object  $postdata  - The cmc post data
+	 * @param   int     $plg       - Which plugin triggerd the save method
+	 *
+	 * @return bool
+	 */
+	public static function activateDirectUser($user, $postdata, $plg = _CPLG_JOOMLA)
+	{
+
+
+		return true;
+	}
+
+	/**
+	 * Activates the temporary user, checks if user is in the temporary table
+	 * and also checks if the E-Mail address is already activated
+	 *
+	 * @param   object  $user  - the users data
 	 *
 	 * @return   boolean
 	 */
-	public static function activateTempUser($user, $directActivate = false)
+	public static function activateTempUser($user)
 	{
 		// Check if user wants newsletter and is in our temp table
 		$db = JFactory::getDBO();
@@ -90,7 +109,7 @@ class CmcHelperRegistration
 		if ($userlists && in_array($listId, $userlists))
 		{
 			// Already in list, we don't update here, we update on form send
-			return;
+			return null;
 		}
 
 		// Activate E-Mail in mailchimp
@@ -123,7 +142,9 @@ class CmcHelperRegistration
 				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
 			$db->setQuery($query);
 			$db->query();
-		} else {
+		}
+		else
+		{
 			echo "Error: " . $chimp->errorMessage;
 		}
 
@@ -132,7 +153,10 @@ class CmcHelperRegistration
 
 	/**
 	 * Deletes users subscription, does check if the table exists before
-	 * @param $user
+	 *
+	 * @param   object  $user  - The Joomla user object
+	 *
+	 * @return boolean
 	 */
 
 	public static function deleteUser($user)
@@ -164,6 +188,4 @@ class CmcHelperRegistration
 
 		return true;
 	}
-
-
 }

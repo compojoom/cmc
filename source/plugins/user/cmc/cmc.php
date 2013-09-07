@@ -167,7 +167,7 @@ class PlgUserCmc extends JPlugin
 			// Save data
 			var_dump($data);
 
-			if ($data["cmc"]["newsletter"] != "1")
+			if ($data["cmc"]["newsletter"] != "1" && $isNew != false)
 			{
 				// Abort if Newsletter is not checked
 				return true;
@@ -180,8 +180,18 @@ class PlgUserCmc extends JPlugin
 			}
 			else
 			{
-				// Activate User to Mailchimp
-				CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+				if (!$isNew)
+				{
+					// Activate User to Mailchimp
+					CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+				}
+				else
+				{
+					// Directly activate user
+					CmcHelperRegistration::activateDirectUser(
+						JFactory::getUser($data["id"]), $data["cmc"], _CPLG_JOOMLA
+					);
+				}
 			}
 
 			var_dump($isNew);
