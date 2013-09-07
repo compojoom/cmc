@@ -48,8 +48,8 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the form
 	 *
-	 * @param   string $form - the form
-	 * @param   object $data - the data object
+	 * @param   string  $form  - the form
+	 * @param   object  $data  - the data object
 	 *
 	 * @return bool
 	 */
@@ -78,10 +78,9 @@ class PlgUserCmc extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
 
-		// Example = $form->text(array("FNAME", "text", "First Name", 0, ""));
 		$listid = $this->params->get('listid', "");
-		$interests = explode("|*|", $this->params->get('interests', ''));
-		$fields = explode("|*|", $this->params->get('fields', ''));
+		$interests = $this->params->get('interests', '');
+		$fields = $this->params->get('fields', '');
 
 		$renderer = CmcHelperRegistrationrender::getInstance();
 		$renderer->phoneFormat = $this->params->get("phoneFormat", "inter");
@@ -95,14 +94,16 @@ class PlgUserCmc extends JPlugin
 		// Adding Newsletter Checkbox
 		$formcode .= '
 					<field
-						name="cmcnewsletter"
+						name="newsletter"
 						type="checkbox"
-						id="cmcnewsletter"
+						id="newsletter"
 						description="PLG_USER_CMC_NEWSLETTER_DESC"
 						value="1"
 						default="0"
 						label="PLG_USER_CMC_NEWSLETTER"
 					/>';
+
+
 
 		// Render Content
 		$formcode .= $renderer->renderForm(
@@ -111,6 +112,9 @@ class PlgUserCmc extends JPlugin
 			$fields, $interests, $listid, _CPLG_JOOMLA
 		);
 
+		var_dump($formcode);
+		die();
+
 		$formcode .= "</fieldset>";
 		$formcode .= "</fields>";
 		$formcode .= "</form>";
@@ -118,7 +122,7 @@ class PlgUserCmc extends JPlugin
 
 
 		// Inject fields into the form
-		var_dump($form->load($formcode, false));
+		$form->load($formcode, false);
 		//die();
 
 		return true;

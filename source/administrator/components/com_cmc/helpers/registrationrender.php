@@ -10,6 +10,8 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+require_once(dirname(__FILE__) . "/registration.php");
+
 /**
  * Class CmcHelperRegistrationrender
  *
@@ -290,13 +292,19 @@ class CmcHelperRegistrationrender
 	/**
 	 * @param int $plugin
 	 */
-	public function renderForm($introtext, $outrotext, $outrotext2, $fields, $interests, $listid, $plugin = _CPLG_JOOMLA)
+	public function renderForm(
+		$introtext, $outrotext, $outrotext2, $fields,
+		$interests, $listid, $plugin = _CPLG_JOOMLA
+	)
 	{
 		$html = "";
 
-		$html .= '<div id="intro_text">';
+		if($plugin != _CPLG_JOOMLA)
+		{
+			$html .= '<div id="intro_text">';
+		}
 
-		if ($introtext)
+		if ($introtext && $plugin != _CPLG_JOOMLA)
 		{
 			$html .= "<p class=\"intro\">";
 			$html .= $introtext;
@@ -317,7 +325,7 @@ class CmcHelperRegistrationrender
 				// Render field
 				if ($plugin == _CPLG_JOOMLA)
 				{
-					$html .= $this->renderField($field);
+					$html .= $this->renderJoomlaField($field);
 				}
 				else if ($plugin == _CPLG_CB)
 				{
@@ -330,7 +338,7 @@ class CmcHelperRegistrationrender
 			}
 		}
 
-		if (is_array($interests))
+		if (is_array($interests) && $plugin != _CPLG_JOOMLA)
 		{
 			foreach ($interests as $i)
 			{
@@ -381,11 +389,10 @@ class CmcHelperRegistrationrender
 		if ($plugin == _CPLG_CB)
 		{
 			$html .= "</table>";
+			$html .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
 		}
 
-		$html .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
-
-		if ($outrotext)
+		if ($outrotext && $plugin != _CPLG_JOOMLA)
 		{
 			$html .= '<div class="outro1">';
 			$html .= '<p class="outro">' . $outrotext . '</p>';
@@ -393,7 +400,7 @@ class CmcHelperRegistrationrender
 
 		}
 
-		if ($outrotext2) {
+		if ($outrotext2 && $plugin != _CPLG_JOOMLA) {
 			$html .= '<div class="outro2">';
 			$html .= '<p class="outro">' . $outrotext2 . '</p>';
 			$html .= '</div>';
@@ -416,23 +423,86 @@ class CmcHelperRegistrationrender
 		$val = $field[3];
 		// 'text', 'email', 'imageurl', 'number', 'zip', 'url'
 		// Not using exec here
-		if ($fieldtype == "text") {
+		if ($fieldtype == "text")
+		{
 			return $this->text($field, $prefix);
-		} else if ($fieldtype == "dropdown") {
+		}
+		elseif ($fieldtype == "dropdown")
+		{
 			return $this->dropdown($field, $prefix);
-		} else if ($fieldtype == "radio") {
+		}
+		elseif ($fieldtype == "radio")
+		{
 			return $this->radio($field, $prefix);
-		} else if ($fieldtype == "date") {
+		}
+		elseif ($fieldtype == "date")
+		{
 			return $this->date($field, $this->dateFormat, $prefix);
-		} else if ($fieldtype == "birthday") {
+		}
+		elseif ($fieldtype == "birthday")
+		{
 			return $this->birthday($field, $prefix);
-		} else if ($fieldtype == "phone") {
+		}
+		elseif ($fieldtype == "phone")
+		{
 			return $this->phone($field, $this->phoneFormat, $prefix);
-		} else if ($fieldtype == "address") {
+		}
+		elseif ($fieldtype == "address")
+		{
 			return $this->address($field, $this->address2, $prefix);
-		} else {
+		}
+		else
+		{
 			// Fallback, maybe should be a 404 not supported
 			return $this->text($field);
+		}
+	}
+
+	/**
+	 * Returns an xml formatted form field
+	 *
+	 * @param   object  $field  - the field array
+	 *
+	 * @return object
+	 */
+	public function renderJoomlaField($field)
+	{
+		$fieldtype = $field[1];
+
+		// We need to return a xml formatted object for the joomla form
+
+		if ($fieldtype == "text")
+		{
+			return $this->xmltext($field);
+		}
+		elseif ($fieldtype == "dropdown")
+		{
+			return $this->dropdown($field);
+		}
+		elseif ($fieldtype == "radio")
+		{
+			return $this->radio($field);
+		}
+		elseif ($fieldtype == "date")
+		{
+			//return $this->date($field);
+		}
+		elseif ($fieldtype == "birthday")
+		{
+			return $this->birthday($field);
+		}
+		elseif ($fieldtype == "phone")
+		{
+			//return $this->phone($field);
+		}
+		elseif ($fieldtype == "address")
+		{
+			//return $this->address($field);
+		}
+		else
+		{
+			// Fallback, maybe should be a 404 not supported
+			return $this->xmltext($field);
 		}
 	}
 
@@ -446,7 +516,8 @@ class CmcHelperRegistrationrender
 
 		$h = "<tr class=\"sectiontableentry1 cbft_predefined\">\n";
 		$h .= "<td class=\"titleCell\">";
-		$h .= $field[2] . ":"; // TODO Make label
+		// TODO Make label
+		$h .= $field[2] . ":";
 		$h .= "</td>\n";
 		$h .= "<td class=\"fieldCell\">";
 		$h .= $inputfield;
@@ -471,13 +542,15 @@ class CmcHelperRegistrationrender
 			'phone' => 'validate-digits'
 		);
 
-		if (isset($validate[$params[1]])) {
+		if (isset($validate[$params[1]]))
+		{
 			$class[] = $validate[$params[1]];
 		}
 
 		$title = JText::_($params[2]);
 
-		if ($params[3]) {
+		if ($params[3])
+		{
 			$title = $title . ' *';
 		}
 
@@ -485,6 +558,47 @@ class CmcHelperRegistrationrender
 			$prefix . '[groups][' . $params[0] . ']', $params[0],
 			'class="' . implode(' ', $class) . '"', $title
 		);
+	}
+
+	/**
+	 * Returns an xml formatted form field
+	 *
+	 * @param   object  $field  - the field array
+	 *
+	 * @return string
+	 */
+	public function xmltext($field)
+	{
+		// Structure: EMAIL;email;Email Address;1;
+		$class = $field[3] ? array('required', 'inputbox', 'input-medium') : array('inputbox', 'input-medium');
+		$validate = array(
+			'email' => 'validate-email',
+			'number' => 'validate-digits',
+			'url' => 'validate-url',
+			'phone' => 'validate-digits'
+		);
+
+		if (isset($validate[$field[1]]))
+		{
+			$class[] = $validate[$field[1]];
+		}
+
+		$title = JText::_($field[2]);
+
+		$x = "<field\n";
+		$x .= "name = \"" . $field[0] . "\"\n";
+		$x .= "type = \"text\"\n";
+		$x .= "id = \"" . $field[0] . "\"\n";
+
+		// Do we want a description here?
+		$x .= "description = \"\"\n";
+		$x .= "filter = \"string\"\n";
+		$x .= "class = \"" . implode(" ", $class) . "\"";
+		$x .= "label = \"" . $title . "\"\n";
+		$x .= "size = \"30\"\n";
+		$x .= "/>\n";
+
+		return $x;
 	}
 
 	/**
