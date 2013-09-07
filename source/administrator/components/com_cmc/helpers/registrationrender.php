@@ -388,6 +388,11 @@ class CmcHelperRegistrationrender
 
 		if ($plugin == _CPLG_CB)
 		{
+			$html .= "</div>";
+		}
+
+		if ($plugin == _CPLG_CB)
+		{
 			$html .= "</table>";
 			$html .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
 		}

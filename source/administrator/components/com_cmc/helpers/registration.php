@@ -54,15 +54,65 @@ class CmcHelperRegistration
 	/**
 	 * Directly activates the user with Mailchimp
 	 *
-	 * @param   object  $user      - The Joomla user Object
-	 * @param   object  $postdata  - The cmc post data
-	 * @param   int     $plg       - Which plugin triggerd the save method
+	 * @param   object  $user    - The Joomla user Object
+	 * @param   object  $params  - The cmc post data
+	 * @param   int     $plg     - Which plugin triggerd the save method
 	 *
 	 * @return bool
 	 */
-	public static function activateDirectUser($user, $postdata, $plg = _CPLG_JOOMLA)
+	public static function activateDirectUser($user, $params, $plg = _CPLG_JOOMLA)
 	{
+		$chimp = new cmcHelperChimp;
 
+		$userlists = $chimp->listsForEmail($user->email);
+
+		// Hidden field
+		$listId = $params['listid'];
+
+		if ($userlists && in_array($listId, $userlists))
+		{
+			// Already in list, we don't update here, we update on form send
+			return null;
+		}
+
+		// Activate E-Mail in mailchimp
+		if (isset($params['groups']))
+		{
+			foreach ($params['groups'] as $key => $group)
+			{
+				$mergeVars[$key] = $group;
+			}
+		}
+
+		if (isset($params['interests']))
+		{
+			foreach ($params['interests'] as $key => $interest)
+			{
+				// Take care of interests that contain a comma (,)
+				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
+				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
+			}
+		}
+
+		$mergeVars['OPTINIP'] = $params['OPTINIP'];
+
+		// Double OPTIN false
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+
+		if (!$chimp->errorCode)
+		{
+			$db = JFactory::getDBO();
+			$query = $db->getQuery(true);
+
+			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
+				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
+			$db->setQuery($query);
+			$db->query();
+		}
+		else
+		{
+			echo "Error: " . $chimp->errorMessage;
+		}
 
 		return true;
 	}
