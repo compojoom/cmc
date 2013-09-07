@@ -654,6 +654,7 @@ class CmcHelperRegistrationrender
 		{
 			$select .= '<option value="' . $ch . '">' . $ch . '</option>';
 		}
+
 		$select .= '</select><br />';
 
 		return $select;
