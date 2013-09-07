@@ -299,7 +299,7 @@ class CmcHelperRegistrationrender
 	{
 		$html = "";
 
-		if($plugin != _CPLG_JOOMLA)
+		if ($plugin != _CPLG_JOOMLA)
 		{
 			$html .= '<div id="intro_text">';
 		}
@@ -402,7 +402,6 @@ class CmcHelperRegistrationrender
 			$html .= '<div class="outro1">';
 			$html .= '<p class="outro">' . $outrotext . '</p>';
 			$html .= '</div>';
-
 		}
 
 		if ($outrotext2 && $plugin != _CPLG_JOOMLA)
@@ -410,7 +409,6 @@ class CmcHelperRegistrationrender
 			$html .= '<div class="outro2">';
 			$html .= '<p class="outro">' . $outrotext2 . '</p>';
 			$html .= '</div>';
-
 		}
 
 		return $html;
@@ -423,11 +421,8 @@ class CmcHelperRegistrationrender
 	 */
 	public function renderField($field, $prefix = "cmc")
 	{
-		$fieldname = $field[0];
 		$fieldtype = $field[1];
-		$label = $field[2];
-		$val = $field[3];
-		// 'text', 'email', 'imageurl', 'number', 'zip', 'url'
+
 		// Not using exec here
 		if ($fieldtype == "text")
 		{
@@ -522,6 +517,7 @@ class CmcHelperRegistrationrender
 
 		$h = "<tr class=\"sectiontableentry1 cbft_predefined\">\n";
 		$h .= "<td class=\"titleCell\">";
+
 		// TODO Make label
 		$h .= $field[2] . ":";
 		$h .= "</td>\n";
