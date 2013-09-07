@@ -478,7 +478,7 @@ class CmcHelperRegistrationrender
 	 *
 	 * @param   object  $field  - the field array
 	 *
-	 * @return object
+	 * @return  object
 	 */
 	public function renderJoomlaField($field)
 	{
