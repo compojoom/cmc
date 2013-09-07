@@ -386,7 +386,7 @@ class CmcHelperRegistrationrender
 			}
 		}
 
-		if ($plugin == _CPLG_CB)
+		if ($plugin != _CPLG_JOOMLA)
 		{
 			$html .= "</div>";
 		}
