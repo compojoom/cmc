@@ -293,13 +293,13 @@ class CmcHelperRegistrationrender
 	/**
 	 * Renders the Plugin form
 	 *
-	 * @param   string  $introtext   - Intro text
-	 * @param   string  $outrotext   - Outro text (Before submit button)
-	 * @param   string  $outrotext2  - Outro text 2 (After submit button)
-	 * @param   array   $fields      - The fields array
-	 * @param   array   $interests   - The interests
-	 * @param   string  $listid      - The list id
-	 * @param   int     $plugin      - The plugin id
+	 * @param   string $introtext  - Intro text
+	 * @param   string $outrotext  - Outro text (Before submit button)
+	 * @param   string $outrotext2 - Outro text 2 (After submit button)
+	 * @param   array  $fields     - The fields array
+	 * @param   array  $interests  - The interests
+	 * @param   string $listid     - The list id
+	 * @param   int    $plugin     - The plugin id
 	 *
 	 * @return string
 	 */
@@ -428,8 +428,8 @@ class CmcHelperRegistrationrender
 	/**
 	 * The default renderer returns a input field
 	 *
-	 * @param   array   $field   - Example FNAME;text;First Name;0;""
-	 * @param   string  $prefix  - The field name prefix
+	 * @param   array  $field  - Example FNAME;text;First Name;0;""
+	 * @param   string $prefix - The field name prefix
 	 *
 	 * @return string
 	 */
@@ -476,7 +476,7 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns an xml formatted form field
 	 *
-	 * @param   object  $field  - the field array
+	 * @param   object $field - the field array
 	 *
 	 * @return  object
 	 */
@@ -500,15 +500,15 @@ class CmcHelperRegistrationrender
 		}
 		elseif ($fieldtype == "date")
 		{
-			//return $this->date($field);
+			return $this->date($field, $this->dateFormat);
 		}
 		elseif ($fieldtype == "birthday")
 		{
-			return $this->birthday($field);
+			return $this->xmltext($field, array('type' => 'birthday'));
 		}
 		elseif ($fieldtype == "phone")
 		{
-			//return $this->phone($field);
+			return $this->xmltext($field, array('type' => 'phone', 'class' => $this->phoneFormat === 'inter' ? 'inter' : ''));
 		}
 		elseif ($fieldtype == "address")
 		{
@@ -524,7 +524,7 @@ class CmcHelperRegistrationrender
 	/**
 	 * The renderer for community builder - returns a input field
 	 *
-	 * @param   array  $field  - Example FNAME;text;First Name;0;""
+	 * @param   array $field - Example FNAME;text;First Name;0;""
 	 *
 	 * @return string
 	 */
@@ -549,8 +549,8 @@ class CmcHelperRegistrationrender
 	/**
 	 * The inputbox renderer for a text field
 	 *
-	 * @param   array   $params  - Example FNAME;text;First Name;0;""
-	 * @param   string  $prefix  - The field name prefix
+	 * @param   array  $params - Example FNAME;text;First Name;0;""
+	 * @param   string $prefix - The field name prefix
 	 *
 	 * @return string
 	 */
@@ -585,11 +585,12 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns an xml formatted form field
 	 *
-	 * @param   object  $field  - the field array
+	 * @param   object $field  - the field array
+	 * @param   array  $config - the field type
 	 *
 	 * @return string
 	 */
-	public function xmltext($field)
+	public function xmltext($field, $config = array())
 	{
 		// Structure: EMAIL;email;Email Address;1;
 		$class = $field[3] ? array('required', 'inputbox', 'input-medium') : array('inputbox', 'input-medium');
@@ -600,6 +601,13 @@ class CmcHelperRegistrationrender
 			'phone' => 'validate-digits'
 		);
 
+		$type = isset($config['type']) ? $config['type'] : 'text';
+
+		if (isset($config['class']))
+		{
+			$class[] = $config['class'];
+		}
+
 		if (isset($validate[$field[1]]))
 		{
 			$class[] = $validate[$field[1]];
@@ -608,8 +616,8 @@ class CmcHelperRegistrationrender
 		$title = JText::_($field[2]);
 
 		$x = "<field\n";
-		$x .= "name=\"" . $field[0] . "\"\n";
-		$x .= "type=\"text\"\n";
+		$x .= "name=\"groups][" . $field[0] . "\"\n";
+		$x .= "type=\"" . $type . "\"\n";
 		$x .= "id=\"" . $field[0] . "\"\n";
 
 		// Do we want a description here?
@@ -617,6 +625,12 @@ class CmcHelperRegistrationrender
 		$x .= "filter=\"string\"\n";
 		$x .= "class=\"" . implode(" ", $class) . "\"\n";
 		$x .= "label=\"" . $title . "\"\n";
+
+		if ($field[3])
+		{
+			$x .= "required=\"required\"\n";
+		}
+
 		$x .= "size=\"30\"\n";
 		$x .= "/>\n";
 
@@ -626,8 +640,8 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns a drop-down input box element
 	 *
-	 * @param   array   $params  - Example FNAME;text;First Name;0;""
-	 * @param   string  $prefix  - The field name prefix
+	 * @param   array  $params - Example FNAME;text;First Name;0;""
+	 * @param   string $prefix - The field name prefix
 	 *
 	 * @return string
 	 */
@@ -642,19 +656,28 @@ class CmcHelperRegistrationrender
 			$title = JText::_($params[2]) . ' *';
 		}
 
-		echo '<div class="mcsignupTitle">' . $title . '</div>';
-		$select = '<select name="' . $prefix . '[groups][' . $params[0] . ']" id="' . $params[0] . '" ' . $req . '>';
-
+		$select = '<field
+			id="purchase_type"
+			name="groups][' . $params[0] . '"
+			type="list"
+			label="' . $title . '"
+			default="0"
+			class="inputbox">';
+//		echo '<div class="mcsignupTitle">' . $title . '</div>';
+//		$select = '<select name="' . $prefix . '[groups][' . $params[0] . ']" id="' . $params[0] . '" ' . $req . '>';
+//
 		if (!$params[3])
 		{
 			$select .= '<option value=""></option>';
 		}
-
+//
 		foreach ($choices as $ch)
 		{
 			$select .= '<option value="' . $ch . '">' . $ch . '</option>';
 		}
-		$select .= '</select><br />';
+
+		$select .= '</field>';
+//		$select .= '</select><br />';
 
 		return $select;
 	}
@@ -662,15 +685,15 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns a radio input box element
 	 *
-	 * @param   array   $params  - Example FNAME;text;First Name;0;""
-	 * @param   string  $prefix  - The field name prefix
+	 * @param   array  $params - Example FNAME;text;First Name;0;""
+	 * @param   string $prefix - The field name prefix
 	 *
 	 * @return string
 	 */
 	public function radio($params, $prefix = "cmc")
 	{
 		$choices = explode('##', $params[4]);
-		$req = ($params[3]) ? 'class="required inputbox"' : 'class="inputbox"';
+		$req = ($params[3]) ? 'required inputbox' : 'inputbox';
 		$title = JText::_($params[2]);
 
 		if ($params[3])
@@ -678,15 +701,26 @@ class CmcHelperRegistrationrender
 			$title = JText::_($params[2]) . ' *';
 		}
 
-		$radio = '<div class="mcsignupTitle">' . $title . '</div>';
-
+//		$radio = '<div class="mcsignupTitle">' . $title . '</div>';
+		$radio = '<field
+			name="groups][' . $params[0] . '"
+			type="radio"
+			class="' . $req . '"
+			default="0"
+			label="COM_BANNERS_FIELD_TRACKIMPRESSION_LABEL"
+			description="COM_BANNERS_FIELD_TRACKIMPRESSION_DESC">';
 		foreach ($choices as $ch)
 		{
-			$radio .= '<label class="radio" for="' . $params[0] . '_' . str_replace(' ', '_', $ch)
-				. '"><input type="radio" name="' . $prefix . '[groups][' . $params[0] . ']" id="'
-				. $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="'
-				. $ch . '" title="' . JText::_($title) . '" />' . JText::_($ch) . '</label>';
+
+			$radio .= '<option value="' . $ch . '">' . $title . '</option>';
+
+//			$radio .= '<label class="radio" for="' . $params[0] . '_' . str_replace(' ', '_', $ch)
+//				. '"><input type="radio" name="' . $prefix . '[groups][' . $params[0] . ']" id="'
+//				. $params[0] . '_' . str_replace(' ', '_', $ch) . '" ' . $req . ' value="'
+//				. $ch . '" title="' . JText::_($title) . '" />' . JText::_($ch) . '</label>';
 		}
+
+		$radio .= '</field>';
 
 		return $radio;
 	}
@@ -694,15 +728,15 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   array   $params      - Example FNAME;text;First Name;0;""
-	 * @param   string  $dateformat  - The date format for this field
-	 * @param   string  $prefix      - The field name prefix
+	 * @param   array  $params     - Example FNAME;text;First Name;0;""
+	 * @param   string $dateformat - The date format for this field
+	 * @param   string $prefix     - The field name prefix
 	 *
 	 * @return string
 	 */
 	public function date($params, $dateformat, $prefix = "cmc")
 	{
-		JHTML::_('behavior.calendar');
+//		JHTML::_('behavior.calendar');
 		$title = JText::_($params[2]);
 
 		if ($params[3])
@@ -721,17 +755,27 @@ class CmcHelperRegistrationrender
 			$attributes['class'] = 'inputbox input-small';
 		}
 
-		return JHTML::calendar(
-			$title, $prefix . '[groups][' . $params[0] . ']',
-			$params[0], $dateformat, $attributes
-		);
+		return '<field
+			name="groups][' . $params[0] . '"
+			type="calendar"
+			class="' . $attributes['class'] . '"
+			label="' . $title . '"
+			format="' . $dateformat . '"
+			required="' . ($params[3] ? 'required' : '') . '"
+			maxlength="10"
+		/>';
+
+//		return JHTML::calendar(
+//			$title, $prefix . '[groups][' . $params[0] . ']',
+//			$params[0], $dateformat, $attributes
+//		);
 	}
 
 	/**
 	 * Returns a birthday input box element
 	 *
-	 * @param   array   $params  - Example FNAME;text;First Name;0;""
-	 * @param   string  $prefix  - The field name prefix
+	 * @param   array  $params - Example FNAME;text;First Name;0;""
+	 * @param   string $prefix - The field name prefix
 	 *
 	 * @return string
 	 */
@@ -775,9 +819,9 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns phone input box element
 	 *
-	 * @param   array   $params       - Example FNAME;text;First Name;0;""
-	 * @param   string  $phoneformat  - The phone format for this field
-	 * @param   string  $prefix       - The field name prefix
+	 * @param   array  $params      - Example FNAME;text;First Name;0;""
+	 * @param   string $phoneformat - The phone format for this field
+	 * @param   string $prefix      - The field name prefix
 	 *
 	 * @return string
 	 */
@@ -819,9 +863,9 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns address input box element
 	 *
-	 * @param   array   $params    - Example FNAME;text;First Name;0;""
-	 * @param   int     $address2  - Should the address2 field be shown?
-	 * @param   string  $prefix    - The field name prefix
+	 * @param   array  $params   - Example FNAME;text;First Name;0;""
+	 * @param   int    $address2 - Should the address2 field be shown?
+	 * @param   string $prefix   - The field name prefix
 	 *
 	 * @return string
 	 */
@@ -856,10 +900,10 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   string   $name   - Name of the select
-	 * @param   int      $id     - The date format for this field
-	 * @param   string   $title  - The field name prefix
-	 * @param   boolean  $req    - Is the field required?
+	 * @param   string  $name  - Name of the select
+	 * @param   int     $id    - The date format for this field
+	 * @param   string  $title - The field name prefix
+	 * @param   boolean $req   - Is the field required?
 	 *
 	 * @return string
 	 */
@@ -884,17 +928,17 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns the html input field code on the given parameter
 	 *
-	 * @param   string  $name    - The name of the input field
-	 * @param   int     $id      - The id of the input field
-	 * @param   string  $class   - The class of the input field
-	 * @param   string  $title   - The title of the input field
-	 * @param   string  $attrib  - The attributes
+	 * @param   string $name   - The name of the input field
+	 * @param   int    $id     - The id of the input field
+	 * @param   string $class  - The class of the input field
+	 * @param   string $title  - The title of the input field
+	 * @param   string $attrib - The attributes
 	 *
 	 * @return string
 	 */
 	private function input($name, $id, $class, $title, $attrib = '')
 	{
 		return '<input name="' . $name . '" id="' . $id . '" ' . $class
-			. ' type="text" size="25" value="" title="' . $title . '" ' . $attrib . ' />';
+		. ' type="text" size="25" value="" title="' . $title . '" ' . $attrib . ' />';
 	}
 }
