@@ -122,9 +122,6 @@ class PlgUserCmc extends JPlugin
 		$formcode .= "</fields>\n";
 		$formcode .= "</form>";
 
-		//var_dump($formcode);
-		//die();
-
 		// Inject fields into the form
 		$form->load($formcode, false);
 

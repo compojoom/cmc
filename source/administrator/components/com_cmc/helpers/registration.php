@@ -71,7 +71,7 @@ class CmcHelperRegistration
 
 		if ($userlists && in_array($listId, $userlists))
 		{
-			// Already in list, we don't update here, we update on form send
+			// Already in list, TODO update subscription here
 			return null;
 		}
 
@@ -97,7 +97,7 @@ class CmcHelperRegistration
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
 		// Double OPTIN false
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', true, true, true, false);
 
 		if (!$chimp->errorCode)
 		{
