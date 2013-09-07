@@ -87,9 +87,9 @@ class PlgUserCmc extends JPlugin
 		$renderer->dateFormat = $this->params->get("dateFormat", "%Y-%m-%d");
 		$renderer->address2 = $this->params->get("address2", 0);
 
-		$formcode = "<form>";
-		$formcode .= "<fields name=\"cmc\">";
-		$formcode .= "<fieldset name=\"cmc\" label=\"PLG_USER_CMC_CMC_LABEL\">";
+		$formcode = "<form>\n";
+		$formcode .= "<fields name=\"cmc\">\n";
+		$formcode .= "<fieldset name=\"cmc\" label=\"PLG_USER_CMC_CMC_LABEL\">\n";
 
 		// Adding Newsletter Checkbox
 		$formcode .= '
@@ -101,7 +101,8 @@ class PlgUserCmc extends JPlugin
 						value="1"
 						default="0"
 						label="PLG_USER_CMC_NEWSLETTER"
-					/>';
+					/>
+					';
 
 
 
@@ -112,18 +113,17 @@ class PlgUserCmc extends JPlugin
 			$fields, $interests, $listid, _CPLG_JOOMLA
 		);
 
-		var_dump($formcode);
-		die();
 
-		$formcode .= "</fieldset>";
-		$formcode .= "</fields>";
+
+		$formcode .= "</fieldset>\n";
+		$formcode .= "</fields>\n";
 		$formcode .= "</form>";
 
-
+		//var_dump($formcode);
+		//die();
 
 		// Inject fields into the form
 		$form->load($formcode, false);
-		//die();
 
 		return true;
 	}

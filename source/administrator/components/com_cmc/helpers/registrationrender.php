@@ -295,7 +295,7 @@ class CmcHelperRegistrationrender
 	public function renderForm(
 		$introtext, $outrotext, $outrotext2, $fields,
 		$interests, $listid, $plugin = _CPLG_JOOMLA
-	)
+		)
 	{
 		$html = "";
 
@@ -327,11 +327,11 @@ class CmcHelperRegistrationrender
 				{
 					$html .= $this->renderJoomlaField($field);
 				}
-				else if ($plugin == _CPLG_CB)
+				elseif ($plugin == _CPLG_CB)
 				{
 					$html .= $this->renderCBField($field);
 				}
-				else if ($plugin == _CPLG_JOMSOCIAL)
+				elseif ($plugin == _CPLG_JOMSOCIAL)
 				{
 					$html .= $this->renderField($field);
 				}
@@ -400,7 +400,8 @@ class CmcHelperRegistrationrender
 
 		}
 
-		if ($outrotext2 && $plugin != _CPLG_JOOMLA) {
+		if ($outrotext2 && $plugin != _CPLG_JOOMLA)
+		{
 			$html .= '<div class="outro2">';
 			$html .= '<p class="outro">' . $outrotext2 . '</p>';
 			$html .= '</div>';
@@ -586,16 +587,16 @@ class CmcHelperRegistrationrender
 		$title = JText::_($field[2]);
 
 		$x = "<field\n";
-		$x .= "name = \"" . $field[0] . "\"\n";
-		$x .= "type = \"text\"\n";
-		$x .= "id = \"" . $field[0] . "\"\n";
+		$x .= "name=\"" . $field[0] . "\"\n";
+		$x .= "type=\"text\"\n";
+		$x .= "id=\"" . $field[0] . "\"\n";
 
 		// Do we want a description here?
-		$x .= "description = \"\"\n";
-		$x .= "filter = \"string\"\n";
-		$x .= "class = \"" . implode(" ", $class) . "\"";
-		$x .= "label = \"" . $title . "\"\n";
-		$x .= "size = \"30\"\n";
+		$x .= "description=\"\"\n";
+		$x .= "filter=\"string\"\n";
+		$x .= "class=\"" . implode(" ", $class) . "\"\n";
+		$x .= "label=\"" . $title . "\"\n";
+		$x .= "size=\"30\"\n";
 		$x .= "/>\n";
 
 		return $x;
