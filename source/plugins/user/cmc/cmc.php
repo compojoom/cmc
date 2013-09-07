@@ -11,8 +11,6 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-require_once(JPATH_ROOT . '/modules/mod_cmc/library/form/form.php');
-
 JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 /**
@@ -34,11 +32,16 @@ class PlgUserCmc extends JPlugin
 	function onContentPrepareData($context, $data)
 	{
 		// Check we are manipulating a valid form.
-		if (!in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile'))) {
+		if (!in_array(
+			$context, array(
+			'com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')
+		))
+		{
 			return true;
 		}
 
-		if (is_object($data)) {
+		if (is_object($data))
+		{
 			// Extend form
 		}
 
@@ -131,9 +134,9 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the form
 	 *
-	 * @param   string $user - the not saved user obj
-	 * @param   boolean $isNew - is the user new
-	 * @param   object $data - the data object
+	 * @param   string   $user   - the not saved user obj
+	 * @param   boolean  $isNew  - is the user new
+	 * @param   object   $data   - the data object
 	 *
 	 * @return   void
 	 */
@@ -147,10 +150,10 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the form
 	 *
-	 * @param   object $data - the users data
-	 * @param   boolean $isNew - is the user new
-	 * @param   object $result - the db result
-	 * @param   string $error - the error message
+	 * @param   object   $data    - the users data
+	 * @param   boolean  $isNew   - is the user new
+	 * @param   object   $result  - the db result
+	 * @param   string   $error   - the error message
 	 *
 	 * @return   boolean
 	 */
@@ -159,8 +162,31 @@ class PlgUserCmc extends JPlugin
 	{
 		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
-		if ($userId && $result && isset($data['profile']) && (count($data['profile']))) {
+		if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))
+		{
 			// Save data
+			var_dump($data);
+
+			if ($data["cmc"]["newsletter"] != "1")
+			{
+				// Abort if Newsletter is not checked
+				return true;
+			}
+
+			if ($data["block"] == 1)
+			{
+				// Temporary save user
+				CmcHelperRegistration::saveTempUser($data["id"], $data["cmc"], _CPLG_JOOMLA);
+			}
+			else
+			{
+				// Activate User to Mailchimp
+				CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+			}
+
+			var_dump($isNew);
+			var_dump($result);
+			die("12");
 		}
 
 		return true;
@@ -172,9 +198,9 @@ class PlgUserCmc extends JPlugin
 	 *
 	 * Method is called after user data is deleted from the database
 	 *
-	 * @param   array $user - Holds the user data
-	 * @param   boolean $success - True if user was succesfully stored in the database
-	 * @param   string $msg - Message
+	 * @param   array    $user     - Holds the user data
+	 * @param   boolean  $success  - True if user was succesfully stored in the database
+	 * @param   string   $msg      - Message
 	 *
 	 * @return boolean
 	 */

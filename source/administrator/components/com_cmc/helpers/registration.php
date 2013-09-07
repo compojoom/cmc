@@ -49,15 +49,16 @@ class CmcHelperRegistration
 	}
 
 	/**
-	 * Activates a temporary user after his user account is activated
-	 * Checks if user is in the temporary table and if the user is already activated before
-	 * sending the user to mailchimp
-	 * @param $user
+	 * Prepares the form
+	 *
+	 * @param   object   $user            - the users data
+	 * @param   boolean  $directActivate  - is the user new
+	 *
+	 * @return   boolean
 	 */
-	public static function activateTempUser($user)
+	public static function activateTempUser($user, $directActivate = false)
 	{
 		// Check if user wants newsletter and is in our temp table
-
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
@@ -69,33 +70,43 @@ class CmcHelperRegistration
 
 		$res = $db->loadObject();
 
-		if ($res == null) {
-			return; // not in database
+		if ($res == null)
+		{
+			// Nothing to delete
+			return null;
 		}
 
 		// Check if user is already activated
+		// We want a assoc array here
+		$params = json_decode($res->params, true);
 
-		$params = json_decode($res->params, true); // We want a assoc array here
-
-		$chimp = new cmcHelperChimp();
+		$chimp = new cmcHelperChimp;
 
 		$userlists = $chimp->listsForEmail($user->email);
-		$listId = $params['listid']; // hidden field
 
-		if ($userlists && in_array($listId, $userlists)) {
-			return; // Already in list, we don't update here, we update on form send
+		// Hidden field
+		$listId = $params['listid'];
+
+		if ($userlists && in_array($listId, $userlists))
+		{
+			// Already in list, we don't update here, we update on form send
+			return;
 		}
 
 		// Activate E-Mail in mailchimp
-		if (isset($params['groups'])) {
-			foreach ($params['groups'] as $key => $group) {
+		if (isset($params['groups']))
+		{
+			foreach ($params['groups'] as $key => $group)
+			{
 				$mergeVars[$key] = $group;
 			}
 		}
 
-		if (isset($params['interests'])) {
-			foreach ($params['interests'] as $key => $interest) {
-				// take care of interests that contain a comma (,)
+		if (isset($params['interests']))
+		{
+			foreach ($params['interests'] as $key => $interest)
+			{
+				// Take care of interests that contain a comma (,)
 				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
 				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
 			}
@@ -103,9 +114,11 @@ class CmcHelperRegistration
 
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false); // Double OPTIN false
+		// Double OPTIN false
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
 
-		if (!$chimp->errorCode) {
+		if (!$chimp->errorCode)
+		{
 			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
 				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
 			$db->setQuery($query);
@@ -127,7 +140,7 @@ class CmcHelperRegistration
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
-		// check for email, more valid then id
+		// Check for email, more valid then id
 		$query->select("*")->from("#__cmc_users")->where(
 			"email = " . $db->quote($user->email)
 		);
@@ -136,12 +149,16 @@ class CmcHelperRegistration
 		$res = $db->loadObject();
 
 		if ($res == null)
-			return; // nothing to delete
+		{
+			// Nothing to delete
+			return null;
+		}
 
-		$chimp = new cmcHelperChimp();
+		$chimp = new cmcHelperChimp;
 		$userlists = $chimp->listsForEmail($user->email);
 
-		if ($userlists && in_array($res->list_id, $userlists)) {
+		if ($userlists && in_array($res->list_id, $userlists))
+		{
 			$chimp->listUnsubscribe($res->list_id, $user->email, false, false, true);
 		}
 
