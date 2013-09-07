@@ -75,21 +75,51 @@ class PlgUserCmc extends JPlugin
 			return true;
 		}
 
+		$lang = JFactory::getLanguage();
+		$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
+
 		// Example = $form->text(array("FNAME", "text", "First Name", 0, ""));
-		$fields = array("FNAME", "text", "First Name", 0, "");
+		$listid = $this->params->get('listid', "");
+		$interests = explode("|*|", $this->params->get('interests', ''));
+		$fields = explode("|*|", $this->params->get('fields', ''));
+
+		$renderer = CmcHelperRegistrationrender::getInstance();
+		$renderer->phoneFormat = $this->params->get("phoneFormat", "inter");
+		$renderer->dateFormat = $this->params->get("dateFormat", "%Y-%m-%d");
+		$renderer->address2 = $this->params->get("address2", 0);
 
 		$formcode = "<form>";
 		$formcode .= "<fields name=\"cmc\">";
+		$formcode .= "<fieldset name=\"cmc\" label=\"PLG_USER_CMC_CMC_LABEL\">";
 
+		// Adding Newsletter Checkbox
+		$formcode .= '
+					<field
+						name="cmcnewsletter"
+						type="checkbox"
+						id="cmcnewsletter"
+						description="PLG_USER_CMC_NEWSLETTER_DESC"
+						value="1"
+						default="0"
+						label="PLG_USER_CMC_NEWSLETTER"
+					/>';
 
+		// Render Content
+		$formcode .= $renderer->renderForm(
+			$this->params->get('intro-text', ""),
+			$this->params->get('outro-text-1', ""), $this->params->get('outro-text-2', ""),
+			$fields, $interests, $listid, _CPLG_JOOMLA
+		);
 
+		$formcode .= "</fieldset>";
 		$formcode .= "</fields>";
 		$formcode .= "</form>";
 
 
 
 		// Inject fields into the form
-		$form->load($formcode);
+		var_dump($form->load($formcode, false));
+		//die();
 
 		return true;
 	}

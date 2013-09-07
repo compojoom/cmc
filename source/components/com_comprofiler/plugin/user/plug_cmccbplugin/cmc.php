@@ -88,12 +88,12 @@ class getCmcTab extends cbTabHandler
 		$renderer->address2 = $this->params->get("address2", 0);
 
 		// Render Content
-		$ret .= $renderer->renderForm($this->params->get('intro-text', ""),
+		$ret .= $renderer->renderForm(
+			$this->params->get('intro-text', ""),
 			$this->params->get('outro-text-1', ""), $this->params->get('outro-text-2', ""),
 			$fields, $interests, $listid, _CPLG_CB
 		);
 
-		//$ret .= '<input type="hidden" name="cmc[listid]" value="' . $listid . '" />';
 		$ret .= "</div>\n";
 		$ret .= "</td>\n";
 		$ret .= "</tr>\n";

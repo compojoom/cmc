@@ -48,8 +48,10 @@ $form = new cmcForm($params);
 			<?php endif; ?>
 		</div>
 		<?php
-		if (is_array($fields)) {
-			foreach ($fields as $f) {
+		if (is_array($fields))
+		{
+			foreach ($fields as $f)
+			{
 				$field = explode(';', $f);
 				echo '<div>';
 				echo $form->$field[1]($field);
@@ -57,9 +59,10 @@ $form = new cmcForm($params);
 			}
 		}
 
-		if (is_array($interests)) {
-			foreach ($interests as $i) {
-
+		if (is_array($interests))
+		{
+			foreach ($interests as $i)
+			{
 				$interest = explode(';', $i);
 				$groups = explode('####', $interest[3]);
 
