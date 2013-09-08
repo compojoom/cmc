@@ -22,13 +22,12 @@ class PlgCommunityCmc extends JPlugin
 	/**
 	 * Manupulates the registration form
 	 *
-	 * @param   object  $data  - registration form data
+	 * @param   object $data - registration form data
 	 *
 	 * @return mixed
 	 */
 	public function onUserRegisterFormDisplay(&$data)
 	{
-//		var_dump($this->params);
 		libxml_use_internal_errors(true);
 		$dom = new DOMDocument;
 		$dom->loadHTML($data);
@@ -36,7 +35,6 @@ class PlgCommunityCmc extends JPlugin
 		// Find the before last li element
 		$xp = new DOMXpath($dom);
 		$nodes = $xp->query('//ul/li[last()-1]');
-
 
 
 		$listid = $this->params->get('listid', "");
@@ -49,55 +47,29 @@ class PlgCommunityCmc extends JPlugin
 		$renderer->address2 = $this->params->get("address2", 0);
 
 		$form = new JForm('myform');
-		$form->addFieldPath(JPATH_ADMINISTRATOR .'/components/com_cmc/models/fields');
+		$form->addFieldPath(JPATH_ADMINISTRATOR . '/components/com_cmc/models/fields');
 		$ret = '';
 
-		$ret = "<form>\n";
-		$ret .= "<fields name=\"cmc\">\n";
-		$ret .= "<fieldset name=\"cmc\" label=\"PLG_USER_CMC_CMC_LABEL\">\n";
-
-//		$ret = '<li>';
-//		$ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc[newsletter]" value="1" />';
-//		$ret .= '<label for="cmc[newsletter]" id="cmc[newsletter]-lbl">' . JText::_('PLG_CMCCB_NEWSLETTER') . '</label>';
-//		$ret .= "<div id=\"cmc_newsletter\" style=\"display: none;\">\n";
-//		var_dump($this->params->get("dateFormat"));
 		// Render Content
 		$ret .= $renderer->renderForm(
-			$this->params->get('intro-text', ""),
-			$this->params->get('outro-text-1', ""), $this->params->get('outro-text-2', ""),
-			$fields, $interests, $listid, _CPLG_JOOMLA
+			$fields, $interests
 		);
 
-		$ret .= "</fieldset>\n";
-		$ret .= "</fields>\n";
-		$ret .= "</form>";
+		$form->load($ret);
 
-//		$ret .= '</div>';
-//
-//		// TODO move to document.ready in separate file
-//		$ret .= "<script type=\"text/javascript\">";
-//
-//		$ret .= 'document.id("cmc[newsletter]").addEvent("click", function() {';
-//		$ret .= 'document.id("cmc_newsletter").setStyle("display", "block");';
-//		$ret .= "});";
-//		$ret .= "</script>";
-//		$ret .= '</li>';
-		var_dump($ret);
+		$fieldsets = $form->getFieldsets();
 
-		var_dump($form->load($ret));
+		foreach ($fieldsets as $key => $value)
+		{
+			echo JText::_($value->label);
 
-		$fields = $form->getFieldset('cmc');
+			$fields = $form->getFieldset($key);
 
-		foreach($fields as $field) {
-			echo $field->label;
-			echo $field->input;
+			foreach ($fields as $field)
+			{
+				echo $field->label;
+				echo $field->input;
+			}
 		}
-//		$fragment = $dom->createDocumentFragment();
-//		$fragment->appendXML($ret);
-//		$nodes->item(0)->appendChild($fragment);
-//
-//		$data = $dom->saveHTML();
-//		var_dump($ret);
-
 	}
 }
