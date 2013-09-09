@@ -18,44 +18,58 @@ defined('_JEXEC') or die('Restricted access');
  */
 class CmcHelperXmlbuilder
 {
-	public $dateFormat, $phoneFormat, $address2;
-
+	/**
+	 * @var CmcHelperXmlbuilder
+	 */
 	private static $instance = null;
+
+	/**
+	 * The constructor
+	 *
+	 * @param   JRegistry  $options  - config object with everything we need
+	 */
+	public function __construct($options)
+	{
+		$this->phoneFormat = $options->get("phoneFormat", "inter");
+		$this->dateFormat = $options->get("dateFormat", "%Y-%m-%d");
+		$this->address2 = $options->get("address2", 0);
+		$this->listId = $options->get('listid', "");
+		$this->interests = $options->get('interests', '');
+		$this->fields = $options->get('fields', '');
+	}
 
 	/**
 	 * Gets a instance (SINGLETON) of this class
 	 *
+	 * @param   JRegistry  $config  - configration object
+	 *
 	 * @return CmcHelperXmlbuilder
 	 */
-	public static function getInstance()
+	public static function getInstance($config)
 	{
 		if (null === self::$instance)
 		{
-			self::$instance = new self;
+			self::$instance = new CmcHelperXmlbuilder($config);
 		}
 
 		return self::$instance;
 	}
 
 	/**
-	 * Renders the Plugin form
-	 *
-	 * @param   array   $fields     - The fields array
-	 * @param   array   $interests  - The interests
-	 * @param   string  $listid     - the list id
+	 * Builds the necessary XML for JForm
 	 *
 	 * @return string
 	 */
-	public function renderForm($fields, $interests, $listid)
+	public function build()
 	{
 		$html = "<form>";
 		$html .= '<fields name="cmc">';
 
-		if (is_array($fields))
+		if (is_array($this->fields))
 		{
 			$html .= '<fieldset name="groups">';
 
-			foreach ($fields as $f)
+			foreach ($this->fields as $f)
 			{
 				$field = explode(';', $f);
 				$html .= $this->createXmlField($field);
@@ -64,11 +78,11 @@ class CmcHelperXmlbuilder
 			$html .= '</fieldset>';
 		}
 
-		if (is_array($interests))
+		if (is_array($this->interests))
 		{
 			$html .= '<fieldset name="interests">';
 
-			foreach ($interests as $i)
+			foreach ($this->interests as $i)
 			{
 				$interest = explode(';', $i);
 				$groups = explode('####', $interest[3]);
@@ -113,8 +127,8 @@ class CmcHelperXmlbuilder
 		}
 
 		// Output the hidden stuff
-		$html .= '<fieldset name="defaults">';
-		$html .= '<field type="hidden" name="listid" value="' . $listid . '" />';
+		$html .= '<fieldset name="cmc-defaults">';
+		$html .= '<field type="hidden" default="' . $this->listId . '" name="listid" />';
 		$html .= '</fieldset>';
 
 		$html .= '</fields>';
@@ -440,10 +454,10 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   string  $name  - Name of the select
-	 * @param   int     $id    - The date format for this field
-	 * @param   string  $title - The field name prefix
-	 * @param   boolean $req   - Is the field required?
+	 * @param   string   $name   - Name of the select
+	 * @param   int      $id     - The date format for this field
+	 * @param   string   $title  - The field name prefix
+	 * @param   boolean  $req    - Is the field required?
 	 *
 	 * @return string
 	 */
