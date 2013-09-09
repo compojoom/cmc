@@ -19,24 +19,39 @@ JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
  */
 class PlgCommunityCmc extends JPlugin
 {
+
+	/**
+	 * Constructor
+	 *
+	 * @param   object  &$subject  The object to observe
+	 * @param   array   $config    An optional associative array of configuration settings.
+	 */
+	public function __construct(&$subject, $config = array())
+	{
+		$jlang = JFactory::getLanguage();
+		$jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
+
+		parent::__construct($subject, $config);
+	}
+
 	/**
 	 * Manupulates the registration form
 	 *
-	 * @param   object $data - registration form data
+	 * @param   string  &$data  - registration form data
 	 *
 	 * @return mixed
 	 */
 	public function onUserRegisterFormDisplay(&$data)
 	{
-		libxml_use_internal_errors(true);
-		$dom = new DOMDocument;
-		$dom->loadHTML($data);
+		// Load the css file
+		JHtml::stylesheet('media/plg_community_cmc/css/style.css');
 
-		// Find the before last li element
-		$xp = new DOMXpath($dom);
-		$nodes = $xp->query('//ul/li[last()-1]');
-
-
+		$html = array();
 		$listid = $this->params->get('listid', "");
 		$interests = $this->params->get('interests', '');
 		$fields = $this->params->get('fields', '');
@@ -51,9 +66,7 @@ class PlgCommunityCmc extends JPlugin
 		$ret = '';
 
 		// Render Content
-		$ret .= $renderer->renderForm(
-			$fields, $interests
-		);
+		$ret .= $renderer->renderForm($fields, $interests, $listid);
 
 		$form->load($ret);
 
@@ -61,15 +74,18 @@ class PlgCommunityCmc extends JPlugin
 
 		foreach ($fieldsets as $key => $value)
 		{
-			echo JText::_($value->label);
-
 			$fields = $form->getFieldset($key);
 
 			foreach ($fields as $field)
 			{
-				echo $field->label;
-				echo $field->input;
+				$html[] = '<li>';
+				$html[] = $field->label;
+				$html[] = '<div class="form-field">' . $field->input . '</div>';
+				$html[] = '</li>';
 			}
 		}
+
+		$pos = strpos($data, '<li class="form-action has-seperator">');
+		$data = substr($data, 0, $pos) . implode('', $html) . substr($data, $pos);
 	}
 }

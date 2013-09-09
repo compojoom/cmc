@@ -40,12 +40,13 @@ class CmcHelperRegistrationrender
 	/**
 	 * Renders the Plugin form
 	 *
-	 * @param   array  $fields     - The fields array
-	 * @param   array  $interests  - The interests
+	 * @param   array   $fields     - The fields array
+	 * @param   array   $interests  - The interests
+	 * @param   string  $listid     - the list id
 	 *
 	 * @return string
 	 */
-	public function renderForm($fields, $interests)
+	public function renderForm($fields, $interests, $listid)
 	{
 		$html = "<form>";
 		$html .= '<fields name="cmc">';
@@ -76,7 +77,8 @@ class CmcHelperRegistrationrender
 				{
 					case 'checkboxes':
 						$html .= '<field type="checkboxes" name="interests][' . $interest[0] . '"
-								class="submitMerge inputbox"
+								class="submitMerge inputbox cmc-checkboxes"
+								labelclass="form-label cmc-label"
 								label="' . $interest[2] . '"
 								id="' . $interest[0] . '" >';
 
@@ -93,7 +95,8 @@ class CmcHelperRegistrationrender
 							name="interests][' . $interest[0] . '"
 							type="radio"
 							default="0"
-							label="' . $interest[2] . '">';
+							label="' . $interest[2] . '"
+							labelclass="form-label cmc-label">';
 
 						foreach ($groups as $g)
 						{
@@ -108,6 +111,11 @@ class CmcHelperRegistrationrender
 
 			$html .= '</fieldset>';
 		}
+
+		// Output the hidden stuff
+		$html .= '<fieldset name="defaults">';
+		$html .= '<field type="hidden" name="listid" value="' . $listid . '" />';
+		$html .= '</fieldset>';
 
 		$html .= '</fields>';
 		$html .= '</form>';
@@ -174,7 +182,6 @@ class CmcHelperRegistrationrender
 	public function xmltext($field, $config = array())
 	{
 		// Structure: EMAIL;email;Email Address;1;
-		$class = $field[3] ? array('required', 'inputbox', 'input-medium') : array('inputbox', 'input-medium');
 		$validate = array(
 			'email' => 'validate-email',
 			'number' => 'validate-digits',
@@ -204,7 +211,8 @@ class CmcHelperRegistrationrender
 		// Do we want a description here?
 		$x .= "description=\"\"\n";
 		$x .= "filter=\"string\"\n";
-		$x .= "class=\"" . implode(" ", $class) . "\"\n";
+		$x .= 'class="inputbox input-medium" ';
+		$x .= 'labelclass="form-label cmc-label" ';
 		$x .= "label=\"" . $title . "\"\n";
 
 		if ($field[3])
@@ -235,6 +243,7 @@ class CmcHelperRegistrationrender
 			name="groups][' . $params[0] . '"
 			type="list"
 			label="' . $title . '"
+			labelclass="form-label cmc-label"
 			default="0"
 			' . $req . '
 			class="inputbox">';
@@ -273,6 +282,7 @@ class CmcHelperRegistrationrender
 			' . $req . '
 			default="0"
 			class="inputbox"
+			labelclass="form-label cmc-label"
 			label="' . $title . '">';
 
 		foreach ($choices as $ch)
@@ -301,6 +311,7 @@ class CmcHelperRegistrationrender
 			name="groups][' . $params[0] . '"
 			type="calendar"
 			class="inputbox input-small"
+			labelclass="form-label cmc-label"
 			label="' . $title . '"
 			format="' . $this->dateFormat . '"
 			' . $req . '
@@ -320,46 +331,13 @@ class CmcHelperRegistrationrender
 		$req = ($params[3]) ? 'required="required"' : '';
 		$title = JText::_($params[2]);
 
-		$address = '<field type="spacer" name="birthday" label="' . $title . '" />';
-		$address .= '<field
-				id="' . $params[0] . '_month"
-                name="groups][' . $params[0] . '][month"
-                type="list" default=""
-                label="' . JText::_('COM_CMC_MONTH') . '"
-                multiple="false"
-                ' . $req . '
-                class="inputbox input-medium"
-                >';
-
-		$address .= '<option value="">MM</option>';
-
-		for ($i = 1; $i <= 12; $i++)
-		{
-			$address .= '<option value="' . str_pad($i, 2, '0', STR_PAD_LEFT) . '">'
-				. str_pad($i, 2, '0', STR_PAD_LEFT) . '</option>';
-		}
-
-		$address .= '</field>';
-
-		$address .= '<field
-				id="' . $params[0] . '_day"
-                name="groups][' . $params[0] . '][day"
-                type="list" default=""
-                label="' . JText::_('COM_CMC_DAY') . '"
-                multiple="false"
-                ' . $req . '
-                class="inputbox input-medium"
-                >';
-
-		$address .= '<option value="">DD</option>';
-
-		for ($i = 1; $i <= 31; $i++)
-		{
-			$address .= '<option value="' . str_pad($i, 2, '0', STR_PAD_LEFT) . '">'
-				. str_pad($i, 2, '0', STR_PAD_LEFT) . '</option>';
-		}
-
-		$address .= '</field>';
+		$address = '<field type="birthday"
+					id="' . $params[0] . '_month"
+					name="birthday"
+					class="inputbox input-small cmc-birthday"
+					labelclass="form-label cmc-label"
+					' . $req . '
+					label="' . $title . '" />';
 
 		return $address;
 	}
@@ -375,42 +353,22 @@ class CmcHelperRegistrationrender
 	{
 		$req = ($params[3]) ? 'required="required"' : '';
 		$title = JText::_($params[2]);
+		$inter = '';
 
 		if ($this->phoneFormat == 'inter')
 		{
-			$phone = '
-			<field name="groups][' . $params[0] . '"
-			type="text"
-			class="phone validate-digits"
-			size="40"
-			label="' . $title . '"
-			' . $req . ' />';
+			$inter = 'inter';
 		}
-		else
-		{
-			$phone = '<field type="spacer" name="phone" label="' . $title . '" />';
-			$phone .= '
-			<field name="groups][' . $params[0] . '[area"
-			type="text"
-			class="phone validate-digits"
-			size="40"
-			label="' . JText::_('COM_CMC_AREA_CODE') . '"
-			' . $req . ' />';
-			$phone .= '
-			<field name="groups][' . $params[0] . '[detail1"
-			type="text"
-			class="phone validate-digits"
-			size="40"
-			label="' . JText::_('COM_CMC_DETAIL1_CODE') . '"
-			' . $req . ' />';
-			$phone .= '
-			<field name="groups][' . $params[0] . '[detail2"
-			type="text"
-			class="phone validate-digits"
-			size="40"
-			label="' . JText::_('COM_CMC_DETAIL2_CODE') . '"
-			' . $req . ' />';
-		}
+
+		$phone = '
+		<field name="groups][' . $params[0] . '"
+		type="phone"
+		id="cmc-phone-' . $params[0] . '"
+		class="phone validate-digits ' . $inter . '"
+		labelclass="form-label cmc-label"
+		size="40"
+		label="' . $title . '"
+		' . $req . ' />';
 
 		return $phone;
 	}
@@ -431,33 +389,50 @@ class CmcHelperRegistrationrender
 		$address .= '<field
                 name="groups][' . $params[0] . '][addr1"
                 type="text" default=""
-                label="' . JText::_('MOD_CMC_STREET_ADDRESS') . '"
+                label="' . JText::_('CMC_STREET_ADDRESS') . '"
                 class="inputbox input-medium"
+                labelclass="form-label cmc-label"
                 ' . $req . '
                 />';
+
+		if ($this->address2)
+		{
+			$address .= '<field
+	                name="groups][' . $params[0] . '][addr2"
+	                type="text" default=""
+	                label="' . JText::_('CMC_STREET_ADDRESS2') . '"
+	                class="inputbox input-medium"
+	                labelclass="form-label cmc-label"
+	                ' . $req . '
+	                />';
+		}
+
 		$address .= '<field
                 name="groups][' . $params[0] . '][city"
                 type="text" default=""
-                label="' . JText::_('MOD_CMC_CITY') . '"
+                label="' . JText::_('CMC_CITY') . '"
                 class="inputbox input-medium"
+                labelclass="form-label cmc-label"
                 ' . $req . '
                 />';
 		$address .= '<field
                 name="groups][' . $params[0] . '][state"
                 type="text" default=""
-                label="' . JText::_('MOD_CMC_STATE') . '"
+                label="' . JText::_('CMC_STATE') . '"
                 class="inputbox input-medium"
+                labelclass="form-label cmc-label"
                 ' . $req . '
                 />';
 		$address .= '<field
                 name="groups][' . $params[0] . '][zip"
                 type="text" default=""
-                label="' . JText::_('MOD_CMC_ZIP') . '"
+                label="' . JText::_('CMC_ZIP') . '"
                 class="inputbox input-medium"
+                labelclass="form-label cmc-label"
                 ' . $req . '
                 />';
 
-		$address .= $this->getCountryDropdown($params[0], $params[0], JText::_('MOD_CMC_COUNTRY'), $req) . '<br />';
+		$address .= $this->getCountryDropdown($params[0], $params[0], JText::_('CMC_COUNTRY'), $req) . '<br />';
 
 		return $address;
 	}
@@ -465,10 +440,10 @@ class CmcHelperRegistrationrender
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   string   $name   - Name of the select
-	 * @param   int      $id     - The date format for this field
-	 * @param   string   $title  - The field name prefix
-	 * @param   boolean  $req    - Is the field required?
+	 * @param   string  $name  - Name of the select
+	 * @param   int     $id    - The date format for this field
+	 * @param   string  $title - The field name prefix
+	 * @param   boolean $req   - Is the field required?
 	 *
 	 * @return string
 	 */
@@ -478,11 +453,12 @@ class CmcHelperRegistrationrender
 
 		$select = '<field
 			id="' . $id . '"
-			name="groups][' . $name . '"
+			name="groups][' . $name . '][country"
 			type="list"
 			label="' . $title . '"
 			default="0"
 			class="inputbox"
+			labelclass="form-label cmc-label"
 			' . $req . '
 			>';
 
