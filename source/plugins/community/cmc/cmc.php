@@ -56,7 +56,7 @@ class PlgCommunityCmc extends JPlugin
 		$interests = $this->params->get('interests', '');
 		$fields = $this->params->get('fields', '');
 
-		$renderer = CmcHelperRegistrationrender::getInstance();
+		$renderer = CmcHelperXmlbuilder::getInstance();
 		$renderer->phoneFormat = $this->params->get("phoneFormat", "inter");
 		$renderer->dateFormat = $this->params->get("dateFormat", "%Y-%m-%d");
 		$renderer->address2 = $this->params->get("address2", 0);

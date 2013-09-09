@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since  1.4
  */
-class CmcHelperRegistrationrender
+class CmcHelperXmlbuilder
 {
 	public $dateFormat, $phoneFormat, $address2;
 
@@ -25,7 +25,7 @@ class CmcHelperRegistrationrender
 	/**
 	 * Gets a instance (SINGLETON) of this class
 	 *
-	 * @return CmcHelperRegistrationrender
+	 * @return CmcHelperXmlbuilder
 	 */
 	public static function getInstance()
 	{
