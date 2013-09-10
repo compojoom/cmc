@@ -287,7 +287,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function radio($params)
 	{
@@ -319,7 +319,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function date($params)
 	{
@@ -343,7 +343,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function birthday($params)
 	{
@@ -366,7 +366,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function phone($params)
 	{
@@ -397,7 +397,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function address($params)
 	{
@@ -459,10 +459,10 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   string  $name  - Name of the select
-	 * @param   int     $id    - The date format for this field
-	 * @param   string  $title - The field name prefix
-	 * @param   boolean $req   - Is the field required?
+	 * @param   string   $name   - Name of the select
+	 * @param   int      $id     - The date format for this field
+	 * @param   string   $title  - The field name prefix
+	 * @param   boolean  $req    - Is the field required?
 	 *
 	 * @return string
 	 */
