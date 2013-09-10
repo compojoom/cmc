@@ -146,6 +146,9 @@ class PlgUserCmc extends JPlugin
 
 	function onUserAfterSave($data, $isNew, $result, $error)
 	{
+		var_dump($data);
+		die();
+
 		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
 		if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))

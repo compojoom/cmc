@@ -62,7 +62,7 @@ class CmcHelperXmlbuilder
 						type="checkbox"
 						id="newsletter"
 						description="PLG_USER_CMC_NEWSLETTER_DESC"
-						value="1"
+						value="0"
 						default="0"
 						label="PLG_USER_CMC_NEWSLETTER"
 					/>
@@ -81,9 +81,10 @@ class CmcHelperXmlbuilder
 			//$html .= '</fieldset>';
 		}
 
-		if (is_array($interests))
+		if (is_array($interests) )
 		{
-			//$html .= '<fieldset name="interests">';
+			$html .= '</fieldset>';
+			$html .= '<fieldset name="interests" label="interests">';
 
 			foreach ($interests as $i)
 			{
@@ -126,7 +127,7 @@ class CmcHelperXmlbuilder
 				}
 			}
 
-			//$html .= '</fieldset>';
+			$html .= '</fieldset>';
 		}
 
 		// Output the hidden stuff
@@ -134,7 +135,7 @@ class CmcHelperXmlbuilder
 		$html .= '<field type="hidden" name="listid" value="' . $listid . '" />';
 		//$html .= '</fieldset>';
 
-		$html .= '</fieldset>';
+//		$html .= '</fieldset>';
 		$html .= '</fields>';
 		$html .= '</form>';
 
@@ -299,9 +300,8 @@ class CmcHelperXmlbuilder
 		$radio = '<field
 			name="' . $params[0] . '"
 			type="radio"
-			' . $req . '
 			default="0"
-			class="inputbox"
+			class="inputbox ' . $req . '"
 			labelclass="form-label cmc-label"
 			label="' . $title . '">';
 
