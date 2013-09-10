@@ -1,0 +1,24 @@
+input.phone.cmc-us-format-area {
+	width: 30px!important;
+}
+.cmc-us-format-detail1 {
+	width: 30px!important;
+}
+.cmc-us-format-detail2 {
+	width: 40px!important;
+}
+
+.cmc-checkboxes ul {
+	list-style: none;
+}
+
+.cmc-checkboxes ul li input[type="checkbox"] {
+	float: left!important;
+}
+.cmc-checkboxes ul li label {
+	margin-left: 20px;
+}
+
+.cmc-birthday {
+	margin-right: 5px!important;
+}
