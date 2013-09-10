@@ -81,6 +81,22 @@ class PlgUserCmc extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
 
+		JHtml::script(JURI::root() . '/media/plg_user_cmc/js/cmc.js');
+		JFactory::getDocument()->addScriptDeclaration("
+			window.addEvent('domready', function(){
+				document.id('jform_cmc_newsletter').addEvent('click', function() {
+					if(this.checked)
+					{
+						$$('input.cmc_req').addClass('required');
+					}
+					else
+					{
+						$$('input.cmc_req').removeClass('required');
+					}
+				});
+			});
+		");
+
 		$listid = $this->params->get('listid', "");
 		$interests = $this->params->get('interests', '');
 		$fields = $this->params->get('fields', '');

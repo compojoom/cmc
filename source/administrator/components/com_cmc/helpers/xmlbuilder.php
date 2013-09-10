@@ -221,6 +221,8 @@ class CmcHelperXmlbuilder
 
 		$title = JText::_($field[2]);
 
+		$req = ($field[3]) ? ' cmc_req' : '';
+
 		$x = "<field\n";
 		$x .= "name=\"" . $field[0] . "\"\n";
 		$x .= "type=\"" . $type . "\"\n";
@@ -229,7 +231,7 @@ class CmcHelperXmlbuilder
 		// Do we want a description here?
 		$x .= "description=\"\"\n";
 		$x .= "filter=\"string\"\n";
-		$x .= 'class="inputbox input-medium" ';
+		$x .= 'class="inputbox input-medium' . $req . '" ';
 		$x .= 'labelclass="form-label cmc-label" ';
 		$x .= "label=\"" . $title . "\"\n";
 
@@ -254,7 +256,7 @@ class CmcHelperXmlbuilder
 	public function dropdown($params)
 	{
 		$choices = explode('##', $params[4]);
-		$req = ($params[3]) ? ' required="required" ' : '';
+		$req = ($params[3]) ? ' cmc_req' : '';
 		$title = JText::_($params[2]);
 
 		$select = '<field
@@ -264,8 +266,7 @@ class CmcHelperXmlbuilder
 			label="' . $title . '"
 			labelclass="form-label cmc-label"
 			default="0"
-			' . $req . '
-			class="inputbox">';
+			class="inputbox' . $req . '">';
 
 		if (!$params[3])
 		{
@@ -292,7 +293,7 @@ class CmcHelperXmlbuilder
 	public function radio($params)
 	{
 		$choices = explode('##', $params[4]);
-		$req = ($params[3]) ? 'required="required"' : '';
+		$req = ($params[3]) ? 'cmcreq' : '';
 		$title = JText::_($params[2]);
 
 		$radio = '<field
@@ -324,16 +325,15 @@ class CmcHelperXmlbuilder
 	public function date($params)
 	{
 		$title = JText::_($params[2]);
-		$req = $params[3] ? 'required="required"' : '';
+		$req = ($params[3]) ? ' cmc_req' : '';
 
 		return '<field
 			name="' . $params[0] . '"
 			type="calendar"
-			class="inputbox input-small"
+			class="inputbox input-small' . $req . '"
 			labelclass="form-label cmc-label"
 			label="' . $title . '"
 			format="' . $this->dateFormat . '"
-			' . $req . '
 			maxlength="10"
 		/>';
 	}
@@ -347,15 +347,14 @@ class CmcHelperXmlbuilder
 	 */
 	public function birthday($params)
 	{
-		$req = ($params[3]) ? 'required="required"' : '';
+		$req = ($params[3]) ? ' cmc_req' : '';
 		$title = JText::_($params[2]);
 
 		$address = '<field type="birthday"
 					id="' . $params[0] . '_month"
 					name="birthday"
-					class="inputbox input-small cmc-birthday"
+					class="inputbox input-small cmc-birthday' . $req . '"
 					labelclass="form-label cmc-label"
-					' . $req . '
 					label="' . $title . '" />';
 
 		return $address;
@@ -370,7 +369,7 @@ class CmcHelperXmlbuilder
 	 */
 	public function phone($params)
 	{
-		$req = ($params[3]) ? 'required="required"' : '';
+		$req = ($params[3]) ? ' cmc_req' : '';
 		$title = JText::_($params[2]);
 		$inter = '';
 
@@ -383,7 +382,7 @@ class CmcHelperXmlbuilder
 		<field name="' . $params[0] . '"
 		type="phone"
 		id="cmc-phone-' . $params[0] . '"
-		class="phone validate-digits ' . $inter . '"
+		class="phone validate-digits ' . $inter . $req . '"
 		labelclass="form-label cmc-label"
 		size="40"
 		label="' . $title . '"
@@ -401,7 +400,7 @@ class CmcHelperXmlbuilder
 	 */
 	public function address($params)
 	{
-		$req = $params[3] ? 'required="required "' : '';
+		$req = ($params[3]) ? ' cmc_req' : '';
 		$title = JText::_($params[2]);
 
 		$address = '<field type="spacer" name="addr" label="' . $title . '" />';
@@ -409,9 +408,8 @@ class CmcHelperXmlbuilder
                 name="' . $params[0] . '][addr1"
                 type="text" default=""
                 label="' . JText::_('CMC_STREET_ADDRESS') . '"
-                class="inputbox input-medium"
+                class="inputbox input-medium' . $req . '"
                 labelclass="form-label cmc-label"
-                ' . $req . '
                 />';
 
 		if ($this->address2)
@@ -420,9 +418,8 @@ class CmcHelperXmlbuilder
 	                name="' . $params[0] . '][addr2"
 	                type="text" default=""
 	                label="' . JText::_('CMC_STREET_ADDRESS2') . '"
-	                class="inputbox input-medium"
+	                class="inputbox input-medium' . $req . '"
 	                labelclass="form-label cmc-label"
-	                ' . $req . '
 	                />';
 		}
 
@@ -430,25 +427,22 @@ class CmcHelperXmlbuilder
                 name="' . $params[0] . '][city"
                 type="text" default=""
                 label="' . JText::_('CMC_CITY') . '"
-                class="inputbox input-medium"
+                class="inputbox input-medium' . $req . '"
                 labelclass="form-label cmc-label"
-                ' . $req . '
-                />';
+                 />';
 		$address .= '<field
                 name="' . $params[0] . '][state"
                 type="text" default=""
                 label="' . JText::_('CMC_STATE') . '"
-                class="inputbox input-medium"
+                class="inputbox input-medium' . $req . '"
                 labelclass="form-label cmc-label"
-                ' . $req . '
                 />';
 		$address .= '<field
                 name="' . $params[0] . '][zip"
                 type="text" default=""
                 label="' . JText::_('CMC_ZIP') . '"
-                class="inputbox input-medium"
+                class="inputbox input-medium' . $req . '"
                 labelclass="form-label cmc-label"
-                ' . $req . '
                 />';
 
 		$address .= $this->getCountryDropdown($params[0], $params[0], JText::_('CMC_COUNTRY'), $req) . '<br />';
@@ -469,7 +463,6 @@ class CmcHelperXmlbuilder
 	private function getCountryDropdown($name, $id, $title, $req)
 	{
 		$options = CmcHelperCountries::getCountries();
-
 		$select = '<field
 			id="' . $id . '"
 			name="' . $name . '][country"
@@ -478,7 +471,6 @@ class CmcHelperXmlbuilder
 			default="0"
 			class="inputbox"
 			labelclass="form-label cmc-label"
-			' . $req . '
 			>';
 
 		$select .= '<option value=""></option>';
