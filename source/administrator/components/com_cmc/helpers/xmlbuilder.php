@@ -94,7 +94,7 @@ class CmcHelperXmlbuilder
 				switch ($interest[1])
 				{
 					case 'checkboxes':
-						$html .= '<field type="checkboxes" name="interests][' . $interest[0] . '"
+						$html .= '<field type="checkboxes" name="' . $interest[0] . '"
 								class="submitMerge inputbox cmc-checkboxes"
 								labelclass="form-label cmc-label"
 								label="' . $interest[2] . '"
@@ -110,7 +110,7 @@ class CmcHelperXmlbuilder
 						break;
 					case 'radio':
 						$html .= '<field
-							name="interests][' . $interest[0] . '"
+							name="' . $interest[0] . '"
 							type="radio"
 							default="0"
 							label="' . $interest[2] . '"
