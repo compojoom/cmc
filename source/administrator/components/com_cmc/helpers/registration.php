@@ -41,6 +41,16 @@ class CmcHelperRegistration
 
 		$postdata['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
+		if (isset($postdata['cmc_groups']))
+		{
+		$postdata['groups'] = $postdata['cmc_groups'];
+		}
+
+		if (isset($postdata['cmc_interests']))
+		{
+		$postdata['interests'] = $postdata['cmc_interests'];
+		}
+
 		$query->insert("#__cmc_register")->columns("user_id, params, plg")
 			->values(
 				$db->quote($user->id) . ',' . $db->quote(json_encode($postdata))

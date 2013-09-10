@@ -62,15 +62,22 @@ class CmcHelperXmlbuilder
 						type="checkbox"
 						id="newsletter"
 						description="PLG_USER_CMC_NEWSLETTER_DESC"
-						value="0"
+						value="1"
 						default="0"
 						label="PLG_USER_CMC_NEWSLETTER"
 					/>
 					';
 
+		$html .= '<field type="hidden" name="listid" value="' . $listid . '" />';
+
 		if (is_array($fields))
 		{
 			//$html .= '<fieldset name="groups">';
+			$html .= '</fieldset>';
+			$html .= '</fields>';
+			$html .= '<fields name="cmc_groups">';
+			$html .= '<fieldset name="cmc_groups" label="groups">';
+
 
 			foreach ($fields as $f)
 			{
@@ -84,7 +91,9 @@ class CmcHelperXmlbuilder
 		if (is_array($interests) )
 		{
 			$html .= '</fieldset>';
-			$html .= '<fieldset name="interests" label="interests">';
+			$html .= '</fields>';
+			$html .= '<fields name="cmc_interests">';
+			$html .= '<fieldset name="cmc_interests" label="interests">';
 
 			foreach ($interests as $i)
 			{
@@ -126,16 +135,13 @@ class CmcHelperXmlbuilder
 						break;
 				}
 			}
-
-			$html .= '</fieldset>';
 		}
 
 		// Output the hidden stuff
 		//$html .= '<fieldset name="defaults">';
-		$html .= '<field type="hidden" name="listid" value="' . $listid . '" />';
 		//$html .= '</fieldset>';
 
-//		$html .= '</fieldset>';
+		$html .= '</fieldset>';
 		$html .= '</fields>';
 		$html .= '</form>';
 
