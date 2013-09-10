@@ -58,7 +58,7 @@ class CmcHelperRegistration
 	 * @param   object  $params  - The cmc post data
 	 * @param   int     $plg     - Which plugin triggerd the save method
 	 *
-	 * @return bool
+	 * @return  bool
 	 */
 	public static function activateDirectUser($user, $params, $plg = _CPLG_JOOMLA)
 	{
@@ -123,7 +123,7 @@ class CmcHelperRegistration
 	 *
 	 * @param   object  $user  - the users data
 	 *
-	 * @return   boolean
+	 * @return  boolean
 	 */
 	public static function activateTempUser($user)
 	{
@@ -206,7 +206,7 @@ class CmcHelperRegistration
 	 *
 	 * @param   object  $user  - The Joomla user object
 	 *
-	 * @return boolean
+	 * @return  boolean
 	 */
 
 	public static function deleteUser($user)

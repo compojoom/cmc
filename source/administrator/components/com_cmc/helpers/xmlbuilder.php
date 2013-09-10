@@ -18,71 +18,74 @@ defined('_JEXEC') or die('Restricted access');
  */
 class CmcHelperXmlbuilder
 {
-	/**
-	 * @var CmcHelperXmlbuilder
-	 */
-	private static $instance = null;
+	public $dateFormat, $phoneFormat, $address2;
 
-	/**
-	 * The constructor
-	 *
-	 * @param   JRegistry  $options  - config object with everything we need
-	 */
-	public function __construct($options)
-	{
-		$this->phoneFormat = $options->get("phoneFormat", "inter");
-		$this->dateFormat = $options->get("dateFormat", "%Y-%m-%d");
-		$this->address2 = $options->get("address2", 0);
-		$this->listId = $options->get('listid', "");
-		$this->interests = $options->get('interests', '');
-		$this->fields = $options->get('fields', '');
-	}
+	private static $instance = null;
 
 	/**
 	 * Gets a instance (SINGLETON) of this class
 	 *
-	 * @param   JRegistry  $config  - configration object
-	 *
 	 * @return CmcHelperXmlbuilder
 	 */
-	public static function getInstance($config)
+	public static function getInstance()
 	{
 		if (null === self::$instance)
 		{
-			self::$instance = new CmcHelperXmlbuilder($config);
+			self::$instance = new self;
 		}
+
+		$lang = JFactory::getLanguage();
+		$lang->load('com_cmc', JPATH_ADMINISTRATOR);
 
 		return self::$instance;
 	}
 
 	/**
-	 * Builds the necessary XML for JForm
+	 * Renders the Plugin form
+	 *
+	 * @param   array   $fields     - The fields array
+	 * @param   array   $interests  - The interests
+	 * @param   string  $listid     - the list id
 	 *
 	 * @return string
 	 */
-	public function build()
+	public function renderForm($fields, $interests, $listid)
 	{
 		$html = "<form>";
 		$html .= '<fields name="cmc">';
+		$html .= '<fieldset name="cmc" label="COM_CMC_NEWSLETTER">';
 
-		if (is_array($this->fields))
+		// Adding Newsletter Checkbox
+		$html .= '
+					<field
+						name="newsletter"
+						type="checkbox"
+						id="newsletter"
+						description="PLG_USER_CMC_NEWSLETTER_DESC"
+						value="1"
+						default="0"
+						label="PLG_USER_CMC_NEWSLETTER"
+					/>
+					';
+
+		if (is_array($fields))
 		{
-			$html .= '<fieldset name="groups">';
+			//$html .= '<fieldset name="groups">';
 
-			foreach ($this->fields as $f)
+			foreach ($fields as $f)
 			{
 				$field = explode(';', $f);
 				$html .= $this->createXmlField($field);
 			}
 
-			$html .= '</fieldset>';
+			//$html .= '</fieldset>';
 		}
 
-		if (is_array($this->interests))
+		if (is_array($interests))
 		{
-			$html .= '<fieldset name="interests">';
+			//$html .= '<fieldset name="interests">';
 
-			foreach ($this->interests as $i)
+			foreach ($interests as $i)
 			{
 				$interest = explode(';', $i);
 				$groups = explode('####', $interest[3]);
@@ -123,14 +126,15 @@ class CmcHelperXmlbuilder
 				}
 			}
 
-			$html .= '</fieldset>';
+			//$html .= '</fieldset>';
 		}
 
 		// Output the hidden stuff
-		$html .= '<fieldset name="cmc-defaults">';
-		$html .= '<field type="hidden" default="' . $this->listId . '" name="listid" />';
-		$html .= '</fieldset>';
+		//$html .= '<fieldset name="defaults">';
+		$html .= '<field type="hidden" name="listid" value="' . $listid . '" />';
+		//$html .= '</fieldset>';
 
+		$html .= '</fieldset>';
 		$html .= '</fields>';
 		$html .= '</form>';
 
@@ -218,7 +222,7 @@ class CmcHelperXmlbuilder
 		$title = JText::_($field[2]);
 
 		$x = "<field\n";
-		$x .= "name=\"groups][" . $field[0] . "\"\n";
+		$x .= "name=\"" . $field[0] . "\"\n";
 		$x .= "type=\"" . $type . "\"\n";
 		$x .= "id=\"" . $field[0] . "\"\n";
 
@@ -231,7 +235,8 @@ class CmcHelperXmlbuilder
 
 		if ($field[3])
 		{
-			$x .= "required=\"required\"\n";
+			// TODO add alternative
+			//$x .= "required=\"required\"\n";
 		}
 
 		$x .= "/>\n";
@@ -254,7 +259,7 @@ class CmcHelperXmlbuilder
 
 		$select = '<field
 			id="' . $params[0] . '"
-			name="groups][' . $params[0] . '"
+			name="' . $params[0] . '"
 			type="list"
 			label="' . $title . '"
 			labelclass="form-label cmc-label"
@@ -282,7 +287,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function radio($params)
 	{
@@ -291,7 +296,7 @@ class CmcHelperXmlbuilder
 		$title = JText::_($params[2]);
 
 		$radio = '<field
-			name="groups][' . $params[0] . '"
+			name="' . $params[0] . '"
 			type="radio"
 			' . $req . '
 			default="0"
@@ -314,7 +319,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function date($params)
 	{
@@ -322,7 +327,7 @@ class CmcHelperXmlbuilder
 		$req = $params[3] ? 'required="required"' : '';
 
 		return '<field
-			name="groups][' . $params[0] . '"
+			name="' . $params[0] . '"
 			type="calendar"
 			class="inputbox input-small"
 			labelclass="form-label cmc-label"
@@ -338,7 +343,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function birthday($params)
 	{
@@ -361,7 +366,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function phone($params)
 	{
@@ -375,7 +380,7 @@ class CmcHelperXmlbuilder
 		}
 
 		$phone = '
-		<field name="groups][' . $params[0] . '"
+		<field name="' . $params[0] . '"
 		type="phone"
 		id="cmc-phone-' . $params[0] . '"
 		class="phone validate-digits ' . $inter . '"
@@ -392,7 +397,7 @@ class CmcHelperXmlbuilder
 	 *
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	public function address($params)
 	{
@@ -401,7 +406,7 @@ class CmcHelperXmlbuilder
 
 		$address = '<field type="spacer" name="addr" label="' . $title . '" />';
 		$address .= '<field
-                name="groups][' . $params[0] . '][addr1"
+                name="' . $params[0] . '][addr1"
                 type="text" default=""
                 label="' . JText::_('CMC_STREET_ADDRESS') . '"
                 class="inputbox input-medium"
@@ -412,7 +417,7 @@ class CmcHelperXmlbuilder
 		if ($this->address2)
 		{
 			$address .= '<field
-	                name="groups][' . $params[0] . '][addr2"
+	                name="' . $params[0] . '][addr2"
 	                type="text" default=""
 	                label="' . JText::_('CMC_STREET_ADDRESS2') . '"
 	                class="inputbox input-medium"
@@ -422,7 +427,7 @@ class CmcHelperXmlbuilder
 		}
 
 		$address .= '<field
-                name="groups][' . $params[0] . '][city"
+                name="' . $params[0] . '][city"
                 type="text" default=""
                 label="' . JText::_('CMC_CITY') . '"
                 class="inputbox input-medium"
@@ -430,7 +435,7 @@ class CmcHelperXmlbuilder
                 ' . $req . '
                 />';
 		$address .= '<field
-                name="groups][' . $params[0] . '][state"
+                name="' . $params[0] . '][state"
                 type="text" default=""
                 label="' . JText::_('CMC_STATE') . '"
                 class="inputbox input-medium"
@@ -438,7 +443,7 @@ class CmcHelperXmlbuilder
                 ' . $req . '
                 />';
 		$address .= '<field
-                name="groups][' . $params[0] . '][zip"
+                name="' . $params[0] . '][zip"
                 type="text" default=""
                 label="' . JText::_('CMC_ZIP') . '"
                 class="inputbox input-medium"
@@ -467,7 +472,7 @@ class CmcHelperXmlbuilder
 
 		$select = '<field
 			id="' . $id . '"
-			name="groups][' . $name . '][country"
+			name="' . $name . '][country"
 			type="list"
 			label="' . $title . '"
 			default="0"
