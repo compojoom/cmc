@@ -43,12 +43,12 @@ class CmcHelperRegistration
 
 		if (isset($postdata['cmc_groups']))
 		{
-		$postdata['groups'] = $postdata['cmc_groups'];
+			$postdata['groups'] = $postdata['cmc_groups'];
 		}
 
 		if (isset($postdata['cmc_interests']))
 		{
-		$postdata['interests'] = $postdata['cmc_interests'];
+			$postdata['interests'] = $postdata['cmc_interests'];
 		}
 
 		$query->insert("#__cmc_register")->columns("user_id, params, plg")

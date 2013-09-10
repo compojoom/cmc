@@ -105,6 +105,8 @@ class PlgUserCmc extends JPlugin
 		$renderer->phoneFormat = $this->params->get("phoneFormat", "inter");
 		$renderer->dateFormat = $this->params->get("dateFormat", "%Y-%m-%d");
 		$renderer->address2 = $this->params->get("address2", 0);
+		$renderer->introText = $this->params->get("intro-text", "");
+		$renderer->outroText = $this->params->get("outro-text", "");
 
 		// Render Content
 		$html = $renderer->renderForm(

@@ -18,7 +18,7 @@ defined('_JEXEC') or die('Restricted access');
  */
 class CmcHelperXmlbuilder
 {
-	public $dateFormat, $phoneFormat, $address2;
+	public $dateFormat, $phoneFormat, $address2, $introText, $outroText;
 
 	private static $instance = null;
 
@@ -55,6 +55,22 @@ class CmcHelperXmlbuilder
 		$html .= '<fields name="cmc">';
 		$html .= '<fieldset name="cmc" label="COM_CMC_NEWSLETTER">';
 
+		// Intro-Text
+		if (isset($this->introText))
+		{
+			$html .= '
+						<field
+							name="intro-text"
+							type="spacer"
+							class="text"
+							label="' . JText::_($this->introText) . '"
+						/>
+						';
+		}
+
+//		$filter = JFilterInput::getInstance();
+//		$introtext = $filter->clean($this->params->get('intro-text'), "string");
+
 		// Adding Newsletter Checkbox
 		$html .= '
 					<field
@@ -72,11 +88,10 @@ class CmcHelperXmlbuilder
 
 		if (is_array($fields))
 		{
-			//$html .= '<fieldset name="groups">';
 			$html .= '</fieldset>';
 			$html .= '</fields>';
 			$html .= '<fields name="cmc_groups">';
-			$html .= '<fieldset name="cmc_groups" label="groups">';
+			$html .= '<fieldset name="cmc_groups" label="COM_CMC_NEWSLETTER_DATA">';
 
 
 			foreach ($fields as $f)
@@ -93,7 +108,7 @@ class CmcHelperXmlbuilder
 			$html .= '</fieldset>';
 			$html .= '</fields>';
 			$html .= '<fields name="cmc_interests">';
-			$html .= '<fieldset name="cmc_interests" label="interests">';
+			$html .= '<fieldset name="cmc_interests" label="COM_CMC_NEWSLETTER_INTERESTS">';
 
 			foreach ($interests as $i)
 			{
@@ -137,9 +152,18 @@ class CmcHelperXmlbuilder
 			}
 		}
 
-		// Output the hidden stuff
-		//$html .= '<fieldset name="defaults">';
-		//$html .= '</fieldset>';
+		// Intro-Text
+		if (isset($this->outroText))
+		{
+			$html .= '
+						<field
+							name="outro-text"
+							type="spacer"
+							class="text"
+							label="' . JText::_($this->outroText) . '"
+						/>
+						';
+		}
 
 		$html .= '</fieldset>';
 		$html .= '</fields>';

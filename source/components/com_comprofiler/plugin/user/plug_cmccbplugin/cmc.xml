@@ -17,7 +17,8 @@
     </files>
     <params description="Plugin which integrates CMC - Mailchimp for Joomla! into Community Builder">
         <param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text:"
-               description="This text will be displayed above your signup form."/>
+               description="This text will be displayed above your signup form." />
+
         <param name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="Text above submit"
                description="This text will be displayed above the submit button."/>
         <param name="outro-text-2" type="textarea" default="" cols="25" rows="2" label="Text below submit"
