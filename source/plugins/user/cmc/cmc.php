@@ -101,17 +101,10 @@ class PlgUserCmc extends JPlugin
 		$interests = $this->params->get('interests', '');
 		$fields = $this->params->get('fields', '');
 
-		$renderer = CmcHelperXmlbuilder::getInstance();
-		$renderer->phoneFormat = $this->params->get("phoneFormat", "inter");
-		$renderer->dateFormat = $this->params->get("dateFormat", "%Y-%m-%d");
-		$renderer->address2 = $this->params->get("address2", 0);
-		$renderer->introText = $this->params->get("intro-text", "");
-		$renderer->outroText = $this->params->get("outro-text", "");
+		$renderer = CmcHelperXmlbuilder::getInstance($this->params);
 
 		// Render Content
-		$html = $renderer->renderForm(
-			$fields, $interests, $listid
-		);
+		$html = $renderer->build();
 
 		// Inject fields into the form
 		$form->load($html, false);
