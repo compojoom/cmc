@@ -23,8 +23,8 @@ class PlgCommunityCmc extends JPlugin
 	/**
 	 * Constructor
 	 *
-	 * @param   object &$subject The object to observe
-	 * @param   array  $config   An optional associative array of configuration settings.
+	 * @param   object  &$subject  - The object to observe
+	 * @param   array   $config    - An optional associative array of configuration settings.
 	 */
 	public function __construct(&$subject, $config = array())
 	{
@@ -42,7 +42,7 @@ class PlgCommunityCmc extends JPlugin
 	/**
 	 * Manupulates the registration form
 	 *
-	 * @param   string &$data - registration form data
+	 * @param   string  &$data  - registration form data
 	 *
 	 * @return mixed
 	 */
@@ -63,24 +63,16 @@ class PlgCommunityCmc extends JPlugin
 		$form->addFieldPath(JPATH_ADMINISTRATOR . '/components/com_cmc/models/fields');
 		$form->load($xml);
 
-		$html[] = '<li>';
-		$html[] = '<label class="form-label" for="cmc_newsletter">' . JText::_('COM_CMC_NEWSLETTER') . '</label>';
-		$html[] = '<div class="form-field">';
-		$html[] = '<input type="checkbox" name="cmc_newsletter" id="cmc_newsletter" value="1" style="float:left" />';
-		$html[] = '<label for="cmc_newsletter" id="cmc_newsletter-lbl" style="margin-left: 20px">'
-			. JText::_('COM_CMC_NEWSLETTER_SUBSCRIBE') . '</label>';
-		$html[] = '</div>';
-		$html[] = '</li>';
-
 		$fieldsets = $form->getFieldsets();
 
 		foreach ($fieldsets as $key => $value)
 		{
+			$html[] = '<div class="ctitle"><h2>' . JText::_($value->label) . '</h2></div>';
 			$fields = $form->getFieldset($key);
 
 			foreach ($fields as $field)
 			{
-				$html[] = '<li class="cmc-newsletter" style="display: none">';
+				$html[] = '<li class="cmc-newsletter">';
 				$html[] = $field->label;
 				$html[] = '<div class="form-field">' . $field->input . '</div>';
 				$html[] = '</li>';
@@ -91,44 +83,129 @@ class PlgCommunityCmc extends JPlugin
 		$data = substr($data, 0, $pos) . implode('', $html) . substr($data, $pos);
 	}
 
-	public function onRegisterValidate($params)
+	/**
+	 * Saaves a temporary subscription if necessary
+	 *
+	 * @param   array  $data  - post data
+	 *
+	 * @return bool
+	 */
+	public function onRegisterValidate($data)
 	{
-		var_dump($params);
-		die();
-		$input = JFactory::getApplication()->input;
-		if ($input->getInt("cmc_newsletter") != "1")
+		// If newsletter was selected - save the user data!
+		if (isset($data['cmc']) && ((int) $data['cmc']['newsletter'] === 1))
 		{
-			// Abort if Newsletter is not checked
-			return true;
-		}
-		else
-		{
-			CmcHelperRegistration::saveTempUser($data["id"], $data["cmc"], _CPLG_JOMSOCIAL);
-		}
-
-		if ($data["block"] == 1)
-		{
-			// Temporary save user
-			CmcHelperRegistration::saveTempUser($data["id"], $data["cmc"], _CPLG_JOOMLA);
-		}
-		else
-		{
-			if (!$isNew)
-			{
-				// Activate User to Mailchimp
-				CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
-			}
-			var_dump($params);
-			die();
+			// Jomsocial doesn't create a user_id until the very last step
+			// that's why we will save the user token for referrence later on
+			$token = $this->getUserToken($data['authkey']);
+			CmcHelperRegistration::saveTempUser(
+				$token,
+				array_merge($data["cmc"], $data['cmc_groups'], $data['cmc_interests']),
+				_CPLG_JOMSOCIAL
+			);
 		}
 	}
 
-	function onUserAfterSave($data, $isNew, $isNew, $error)
+	/**
+	 * Checks if we have a subscription and then does what is necessary - either activating it
+	 * on the fly
+	 *
+	 * @param   array    $data    - the user data
+	 * @param   boolean  $isNew   - true if the user is new
+	 * @param   boolean  $result  - the result of the save
+	 * @param   object   $error   - the error if any
+	 *
+	 * @return void
+	 */
+	public function onUserAfterSave($data, $isNew, $result, $error)
 	{
-		var_dump($data);
-		var_dump($isNew);
-		var_dump($isNew);
-		var_dump($error);
-		die('onuseraftersave');
+		// If we have a token, let us check if we have a subscription
+		// And if we do, set the correct user_id
+		if (isset($data['token']))
+		{
+			$subscription = $this->getSubscription($data['token']);
+
+			if ($subscription)
+			{
+				$this->updateUserId($data['id'], $data['token']);
+			}
+		}
+
+		// Now let us check if we have a subscription for the user id, this time using the user id
+		$subscription = $this->getSubscription($data['id']);
+
+		if ($subscription)
+		{
+			if ($data["block"] == 0)
+			{
+				$json = json_decode($subscription->params, true);
+
+				// Directly activate user
+				CmcHelperRegistration::activateDirectUser(
+					JFactory::getUser($data["id"]), $json, _CPLG_JOMSOCIAL
+				);
+			}
+		}
+	}
+
+	/**
+	 * Gets a user subscription
+	 *
+	 * @param   string  $token  - the user token
+	 *
+	 * @return mixed
+	 */
+	private function getSubscription($token)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('*')->from('#__cmc_register')
+			->where($db->qn('user_id') . '=' . $db->q($token));
+
+		$db->setQuery($query);
+
+		return $db->loadObject();
+	}
+
+	/**
+	 * Updates the user id and changes the token to a real id
+	 *
+	 * @param   int     $id     - the user id
+	 * @param   string  $token  - the user token
+	 *
+	 * @return void
+	 */
+	private function updateUserId($id, $token)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->update($db->qn('#__cmc_register'))->set(
+			$db->qn('user_id') . '=' . $db->q($id)
+		)
+			->where($db->qn('user_id') . '=' . $db->q($token));
+		$db->setQuery($query);
+
+		$db->execute();
+	}
+
+	/**
+	 * Gets the user token by using the user auth_key
+	 *
+	 * @param   string  $key  - the key
+	 *
+	 * @return bool
+	 */
+	private function getUserToken($key)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn('token'))->from($db->qn('#__community_register_auth_token'))
+			->where($db->qn('auth_key') . '=' . $db->q($key));
+		$db->setQuery($query);
+
+		$result = $db->loadObject();
+
+		return $result ? $result->token : false;
 	}
 }

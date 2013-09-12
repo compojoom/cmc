@@ -52,6 +52,8 @@ class CmcHelperXmlbuilder
 		if (null === self::$instance)
 		{
 			self::$instance = new CmcHelperXmlbuilder($config);
+			$lang = JFactory::getLanguage();
+			$lang->load('com_cmc', JPATH_ADMINISTRATOR);
 		}
 
 		return self::$instance;
@@ -90,14 +92,16 @@ class CmcHelperXmlbuilder
 						name="newsletter"
 						type="checkbox"
 						id="newsletter"
-						description="PLG_USER_CMC_NEWSLETTER_DESC"
+						description="COM_CMC_NEWSLETTER_SUBSCRIBE"
 						value="1"
 						default="0"
-						label="PLG_USER_CMC_NEWSLETTER"
+						class="submitMerge inputbox cmc-checkboxes"
+						labelclass="form-label cmc-label"
+						label="COM_CMC_NEWSLETTER"
 					/>
 					';
 
-		$html .= '<field type="hidden" name="listid" value="' . $this->listId . '" />';
+		$html .= '<field type="hidden" name="listid" default="' . $this->listId . '" />';
 
 		if (is_array($this->fields))
 		{

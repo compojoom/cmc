@@ -97,10 +97,6 @@ class PlgUserCmc extends JPlugin
 			});
 		");
 
-		$listid = $this->params->get('listid', "");
-		$interests = $this->params->get('interests', '');
-		$fields = $this->params->get('fields', '');
-
 		$renderer = CmcHelperXmlbuilder::getInstance($this->params);
 
 		// Render Content
@@ -141,8 +137,8 @@ class PlgUserCmc extends JPlugin
 
 	function onUserAfterSave($data, $isNew, $result, $error)
 	{
-		var_dump($data);
-		die();
+//		var_dump($data);
+//		die();
 
 		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
