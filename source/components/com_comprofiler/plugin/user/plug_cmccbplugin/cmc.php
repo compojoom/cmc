@@ -85,6 +85,26 @@ class GetCmcTab extends cbTabHandler
 		// Create the xml for JForm
 		$builder = CmcHelperXmlbuilder::getInstance($this->params);
 
+		// Load JS & Co
+		JHtml::script(JURI::root() . '/media/plg_cb_cmc/js/cbcmc.js');
+
+		JFactory::getDocument()->addScriptDeclaration("
+			window.addEvent('domready', function(){
+				document.id('cmc_check_newsletter').addEvent('click', function() {
+					if(this.checked)
+					{
+						$$('input.cmc_req').addClass('required');
+						$('cmc_newsletter').show();
+					}
+					else
+					{
+						$$('input.cmc_req').removeClass('required');
+						$('cmc_newsletter').hide();
+					}
+				});
+			});
+		");
+
 		// We have to set the fields / interests manually for cb because they are no array! See explode
 		if (!empty($fields))
 		{
@@ -110,7 +130,7 @@ class GetCmcTab extends cbTabHandler
 		$ret .= "\t\t<td class='fieldCell'>";
 
 		// Display
-		$ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc[newsletter]" value="1" />';
+		$ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc_check_newsletter" value="1" />';
 		$ret .= '<label for="cmc[newsletter]" id="cmc[newsletter]-lbl">' . JText::_('PLG_CMCCB_NEWSLETTER') . '</label>';
 		$ret .= "</td>\n";
 		$ret .= "</tr>\n";
@@ -119,7 +139,6 @@ class GetCmcTab extends cbTabHandler
 		$ret .= "<div id=\"cmc_newsletter\" style=\"display: block;\">\n";
 
 		// Render Content
-
 		foreach ($fieldsets as $key => $value)
 		{
 			if ($key != "cmc")
@@ -150,14 +169,6 @@ class GetCmcTab extends cbTabHandler
 		$ret .= "</td>\n";
 		$ret .= "</tr>\n";
 		$ret .= "\t</tr>\n";
-
-		// TODO move to document.ready in separate file
-		$ret .= "<script type=\"text/javascript\">";
-		$ret .= 'document.id("cmc[newsletter]").addEvent("click", function() {';
-		$ret .= 'document.id("cmc_newsletter").setStyle("display", "block");';
-		$ret .= "});";
-		$ret .= "</script>";
-
 
 		return $ret;
 	}
@@ -306,7 +317,7 @@ class GetCmcTab extends cbTabHandler
 	 * Saves the edited tab
 	 *
 	 * @param   object  $tab       - The tab
-	 * @param   JUser   $user      - The user
+	 * @param   JUser   &$user     - The user
 	 * @param   object  $ui        - The ui
 	 * @param   object  $postdata  - The postdata
 	 *
@@ -395,7 +406,7 @@ class GetCmcTab extends cbTabHandler
 
 				if ($field[$key] == 'EMAIL')
 				{
-					if (!is_array($this->value))
+					if (isset($this->value) && !is_array($this->value))
 					{
 						$oldValue = $this->value;
 						$this->value = array();
