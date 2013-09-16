@@ -102,6 +102,8 @@ class GetCmcTab extends cbTabHandler
 						$('cmc_newsletter').hide();
 					}
 				});
+
+				$('cmc_newsletter').hide();
 			});
 		");
 
@@ -163,6 +165,7 @@ class GetCmcTab extends cbTabHandler
 			}
 		}
 
+		$ret .= '<input type="hidden" name="cmc[listid]" id="cmc_listid" value="' . $listid . '" />';
 
 		// End open tables / divs
 		$ret .= "</div>\n";
@@ -229,7 +232,11 @@ class GetCmcTab extends cbTabHandler
 			}
 			else
 			{
-				// Temporary save user in cmc databse
+				// Merge arrays to correct namespace
+				$postdata['cmc']['groups'] = $postdata['cmc_groups'];
+				$postdata['cmc']['interests'] = $postdata['cmc_interests'];
+
+				// Temporary save user in cmc database
 				CmcHelperRegistration::saveTempUser($user, $postdata['cmc'], _CPLG_CB);
 			}
 		}

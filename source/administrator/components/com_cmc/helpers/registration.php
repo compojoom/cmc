@@ -44,17 +44,19 @@ class CmcHelperRegistration
 		if (isset($postdata['cmc_groups']))
 		{
 			$postdata['groups'] = $postdata['cmc_groups'];
+			unset($postdata['cmc_groups']);
 		}
 
 		if (isset($postdata['cmc_interests']))
 		{
 			$postdata['interests'] = $postdata['cmc_interests'];
+			unset($postdata['cmc_interests']);
 		}
 
-		$query->insert("#__cmc_register")->columns("user_id, params, plg")
+		$query->insert("#__cmc_register")->columns("user_id, params, plg, created")
 			->values(
-				$db->quote($user) . ',' . $db->quote(json_encode($postdata))
-				. ',' . $db->quote($plg)
+				$db->quote($user->id) . ',' . $db->quote(json_encode($postdata))
+				. ',' . $db->quote($plg) . ',' . $db->quote(JFactory::getDate()->toSql())
 			);
 
 		$db->setQuery($query);

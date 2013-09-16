@@ -84,7 +84,7 @@ class PlgCommunityCmc extends JPlugin
 	}
 
 	/**
-	 * Saaves a temporary subscription if necessary
+	 * Saves a temporary subscription if necessary
 	 *
 	 * @param   array  $data  - post data
 	 *
