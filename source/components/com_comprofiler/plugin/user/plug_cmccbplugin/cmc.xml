@@ -16,13 +16,12 @@
         <filename>index.html</filename>
     </files>
     <params description="Plugin which integrates CMC - Mailchimp for Joomla! into Community Builder">
-        <param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text:"
+        <param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text"
                description="This text will be displayed above your signup form." />
 
         <param name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="Text above submit"
                description="This text will be displayed above the submit button."/>
-        <param name="outro-text-2" type="textarea" default="" cols="25" rows="2" label="Text below submit"
-               description="This text will be displayed below the submit button."/>
+
         <param name="thankyou" type="textarea"
                default="Thank you! Please check your email and confirm the newsletter subscription." cols="25"
                rows="2" label="ThankYou Message" description="This message will be displayed after a successfull signup. (You can also use a placeholder and add it to the language files.)"/>

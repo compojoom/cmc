@@ -23,8 +23,8 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the data
 	 *
-	 * @param   string $context - the context
-	 * @param   object $data - the data object
+	 * @param   string  $context  - the context
+	 * @param   object  $data     - the data object
 	 *
 	 * @return bool
 	 */
@@ -137,9 +137,6 @@ class PlgUserCmc extends JPlugin
 
 	function onUserAfterSave($data, $isNew, $result, $error)
 	{
-//		var_dump($data);
-//		die();
-
 		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
 		if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))
@@ -173,7 +170,6 @@ class PlgUserCmc extends JPlugin
 					);
 				}
 			}
-
 		}
 
 		return true;
@@ -194,13 +190,15 @@ class PlgUserCmc extends JPlugin
 
 	function onUserAfterDelete($user, $success, $msg)
 	{
-		if (!$success) {
+		if (!$success)
+		{
 			return false;
 		}
 
 		$userId = JArrayHelper::getValue($user, 'id', 0, 'int');
 
-		if ($userId) {
+		if ($userId)
+		{
 			// Delete User from mailing list?
 		}
 
