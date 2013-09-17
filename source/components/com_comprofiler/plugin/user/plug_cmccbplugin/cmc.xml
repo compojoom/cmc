@@ -22,13 +22,6 @@
         <param name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="Text above submit"
                description="This text will be displayed above the submit button."/>
 
-        <param name="thankyou" type="textarea"
-               default="Thank you! Please check your email and confirm the newsletter subscription." cols="25"
-               rows="2" label="ThankYou Message" description="This message will be displayed after a successfull signup. (You can also use a placeholder and add it to the language files.)"/>
-        <param name="updateMsg" type="textarea"
-               default="You were already subscribed to this list. Your settings have been updated. Thank you!"
-               cols="25" rows="2" label="Update Message" description="This message will be displayed if the user has already been signed up to the list. In that case the selected fields/groups will be updated. (You can also use a placeholder and add it to the language files.)"/>
-
         <param name="listid" required="true" type="custom" class="getCmcTab" method="loadLists" default="" cols="25" rows="2" label="List"
                description="Select the subscriber list to which people will sign up to."/>
 

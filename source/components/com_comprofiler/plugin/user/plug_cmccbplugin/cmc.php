@@ -29,9 +29,17 @@ $_PLUGINS->registerFunction('onAfterDeleteUser', 'userDelete', 'getCmcTab');
 $_PLUGINS->registerFunction('onBeforeUserBlocking', 'onBeforeUserBlocking', 'getCmcTab');
 
 $language = JFactory::getLanguage();
+
+// Load language
 $language->load('plg_cmccb', JPATH_ADMINISTRATOR, 'en-GB', true);
 $language->load('plg_cmccb', JPATH_ADMINISTRATOR, $language->getDefault(), true);
 $language->load('plg_cmccb', JPATH_ADMINISTRATOR, null, true);
+$jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
+$jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+$jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
+$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
+$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
 /**
  * Class getCmcTab
@@ -69,14 +77,6 @@ class GetCmcTab extends cbTabHandler
 	{
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
 		JHtml::_('behavior.framework', true);
-
-		$jlang = JFactory::getLanguage();
-		$jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
-		$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
 		$listid = $this->params->get('listid', "");
 		$interests = $this->params->get('interests', '');
@@ -312,11 +312,35 @@ class GetCmcTab extends cbTabHandler
 
 	function getEditTab($tab, $user, $ui)
 	{
-		$return = '';
+		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
+		JHtml::_('behavior.framework', true);
 
-		$return .= "<table><tr><td>I love cmc</td></tr>";
+		$listId = $this->params->get('listid', "");
 
-		return $return;
+		if (empty($listId))
+		{
+			return  JText::_("COM_CMC_LIST_NOT_SET");
+		}
+
+		$chimp = new cmcHelperChimp;
+
+		$userlists = $chimp->listsForEmail($user->email);
+
+		$html = '';
+
+		if ($userlists && in_array($listId, $userlists))
+		{
+			// User is in list
+			$html .= "<table><tr><td>" . JText::_("COM_CMC_SUBSCRIBED") . "</td></tr></table>";
+		}
+		else
+		{
+			// User has no subscription
+			$html .= "<table><tr><td>" . JText::_("COM_CMC_NO_SUBSCRIPTION") . "</td></tr></table>";
+		}
+
+
+		return $html;
 	}
 
 
@@ -432,7 +456,7 @@ class GetCmcTab extends cbTabHandler
 		if ($options)
 		{
 			$content = "";
-			$content = "Fields: " . $this->params->get('fields', "");
+			//$content = "Fields: " . $this->params->get('fields', "");
 
 			$content .= JHtml::_('select.genericlist', $options, 'params[fields][]', $attribs, $key, $val, explode("|*|", $this->params->get('fields', "")));
 
