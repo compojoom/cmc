@@ -34,12 +34,12 @@ $language = JFactory::getLanguage();
 $language->load('plg_cmccb', JPATH_ADMINISTRATOR, 'en-GB', true);
 $language->load('plg_cmccb', JPATH_ADMINISTRATOR, $language->getDefault(), true);
 $language->load('plg_cmccb', JPATH_ADMINISTRATOR, null, true);
-$jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
-$jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-$jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
-$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
-$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
+$language->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
+$language->load('com_cmc', JPATH_ADMINISTRATOR, $language->getDefault(), true);
+$language->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
+$language->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
+$language->load('com_cmc.sys', JPATH_ADMINISTRATOR, $language->getDefault(), true);
+$language->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
 /**
  * Class getCmcTab
@@ -189,7 +189,7 @@ class GetCmcTab extends cbTabHandler
 	function getDisplayTab($tab, $user, $ui)
 	{
 		// Show the CMC Subscription options
-
+		return $this->getEditTab($tab, $user, $ui);
 	}
 
 	/**
