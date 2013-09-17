@@ -65,6 +65,6 @@ CREATE TABLE `#__cmc_register` (
   `user_id` int(11) NOT NULL,
   `params` text NOT NULL,
   `plg` tinyint(2) NOT NULL DEFAULT '0',
-  `created` datetime NOT NULL,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 );
