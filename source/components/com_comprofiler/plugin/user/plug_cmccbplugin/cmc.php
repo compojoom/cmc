@@ -133,7 +133,7 @@ class GetCmcTab extends cbTabHandler
 
 		// Display
 		$ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc_check_newsletter" value="1" />';
-		$ret .= '<label for="cmc[newsletter]" id="cmc[newsletter]-lbl">' . JText::_('PLG_CMCCB_NEWSLETTER') . '</label>';
+		$ret .= '<label for="cmc_check_newsletter" id="cmc_newsletter_lbl">' . JText::_('PLG_CMCCB_NEWSLETTER') . '</label>';
 		$ret .= "</td>\n";
 		$ret .= "</tr>\n";
 		$ret .= "\t<tr>\n";
