@@ -58,7 +58,6 @@ class GetCmcTab extends cbTabHandler
 
 	function getCmcTab()
 	{
-		// TODO insert a installation check
 		$this->cbTabHandler();
 	}
 
