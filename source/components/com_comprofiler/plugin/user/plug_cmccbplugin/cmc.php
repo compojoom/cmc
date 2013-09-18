@@ -189,7 +189,7 @@ class GetCmcTab extends cbTabHandler
 	function getDisplayTab($tab, $user, $ui)
 	{
 		// Show the CMC Subscription options
-		return $this->getEditTab($tab, $user, $ui);
+		// return $this->getEditTab($tab, $user, $ui);
 	}
 
 	/**
@@ -208,34 +208,22 @@ class GetCmcTab extends cbTabHandler
 		// Save User to temporary table- not active here
 		if (!empty($postdata['cmc']['newsletter']))
 		{
-			// Check if user email already registered
-			$chimp = new cmcHelperChimp;
-
-			$userlists = $chimp->listsForEmail($user->email);
-
 			// For the hidden field
 			$listId = $postdata['cmc']['listid'];
 
-			if ($userlists && in_array($listId, $userlists))
-			{
-				$updated = true;
-			}
-			else
-			{
-				$updated = false;
-			}
+			$updated = CmcHelperRegistration::isSubscribed($listId, $user->email);
+
+			// Merge arrays to correct namespace
+			$postdata['cmc']['groups'] = $postdata['cmc_groups'];
+			$postdata['cmc']['interests'] = $postdata['cmc_interests'];
 
 			if ($updated)
 			{
-				// Update user data
-
+				// Update users subscription with the new data
+				CmcHelperRegistration::updateSubscription($user, $postdata['cmc']);
 			}
 			else
 			{
-				// Merge arrays to correct namespace
-				$postdata['cmc']['groups'] = $postdata['cmc_groups'];
-				$postdata['cmc']['interests'] = $postdata['cmc_interests'];
-
 				// Temporary save user in cmc database
 				CmcHelperRegistration::saveTempUser($user, $postdata['cmc'], _CPLG_CB);
 			}
@@ -312,6 +300,8 @@ class GetCmcTab extends cbTabHandler
 
 	function getEditTab($tab, $user, $ui)
 	{
+		return null;
+
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
 		JHtml::_('behavior.framework', true);
 

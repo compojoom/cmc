@@ -250,4 +250,100 @@ class CmcHelperRegistration
 
 		return true;
 	}
+
+	/**
+	 * Updates an existing subscription
+	 *
+	 * @param   JUser  $user      - The JUser Obj
+	 * @param   array  $postdata  - The params
+	 *
+	 * @return  boolean
+	 */
+	public static function updateSubscription($user, $postdata)
+	{
+		// We just update the users subscription to mailchimp (not db checking here)
+		if (isset($postdata['cmc_groups']))
+		{
+			$postdata['groups'] = $postdata['cmc_groups'];
+			unset($postdata['cmc_groups']);
+		}
+
+		if (isset($postdata['cmc_interests']))
+		{
+			$postdata['interests'] = $postdata['cmc_interests'];
+			unset($postdata['cmc_interests']);
+		}
+
+		$chimp = new cmcHelperChimp;
+
+		$userlists = $chimp->listsForEmail($user->email);
+
+		// Hidden field
+		$listId = $postdata['listid'];
+
+		if ($userlists && in_array($listId, $userlists))
+		{
+			// Already in list, we don't update here, we update on form send
+			return null;
+		}
+
+		// Activate E-Mail in mailchimp
+		if (isset($params['groups']))
+		{
+			foreach ($params['groups'] as $key => $group)
+			{
+				$mergeVars[$key] = $group;
+			}
+		}
+
+		// Interests
+		if (isset($params['interests']))
+		{
+			foreach ($params['interests'] as $key => $interest)
+			{
+				// Take care of interests that contain a comma (,)
+				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
+				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
+			}
+		}
+
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+
+		if (!$chimp->errorCode)
+		{
+			return true;
+		}
+		else
+		{
+			echo "Error: " . $chimp->errorMessage;
+
+			return false;
+		}
+	}
+
+	/**
+	 * Checks if the user is already subscribed to the list
+	 *
+	 * @param   string  $listId  - The listid
+	 * @param   string  $email   - The E-Mail
+	 *
+	 * @return bool
+	 */
+
+	public static function isSubscribed($listId, $email)
+	{
+		// Check if user email already registered
+		$chimp = new cmcHelperChimp;
+
+		$userlists = $chimp->listsForEmail($email);
+
+		if ($userlists && in_array($listId, $userlists))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
