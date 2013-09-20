@@ -111,6 +111,15 @@ class PlgUserCmc extends JPlugin
 				}
 			}
 		}
+		else
+		{
+			// We only do something if the user is unblocked
+			if ($data["block"] == 0)
+			{
+				// Checking if user exists etc. is taken place in activate function
+				CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+			}
+		}
 
 		return true;
 	}
