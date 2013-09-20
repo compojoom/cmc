@@ -21,34 +21,6 @@ JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
 class PlgUserCmc extends JPlugin
 {
 	/**
-	 * Prepares the data
-	 *
-	 * @param   string  $context  - the context
-	 * @param   object  $data     - the data object
-	 *
-	 * @return bool
-	 */
-
-	function onContentPrepareData($context, $data)
-	{
-		// Check we are manipulating a valid form.
-		if (!in_array(
-			$context, array(
-			'com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')
-		))
-		{
-			return true;
-		}
-
-		if (is_object($data))
-		{
-			// Extend form
-		}
-
-		return true;
-	}
-
-	/**
 	 * Prepares the form
 	 *
 	 * @param   string  $form  - the form
@@ -57,7 +29,7 @@ class PlgUserCmc extends JPlugin
 	 * @return bool
 	 */
 
-	function onContentPrepareForm($form, $data)
+	public function onContentPrepareForm($form, $data)
 	{
 		if (!($form instanceof JForm))
 		{
@@ -84,13 +56,22 @@ class PlgUserCmc extends JPlugin
 		JHtml::script(JURI::root() . '/media/plg_user_cmc/js/cmc.js');
 		JFactory::getDocument()->addScriptDeclaration("
 			window.addEvent('domready', function(){
+				var fieldsets = new Elements;
+				$$('label.cmc-label ! fieldset').each(function(el) {
+					if(!el.getElement('input.cmc-checkbox-subscribe')) {
+						fieldsets.push(el);
+					}
+				});
+				fieldsets.setStyle('display', 'none');
 				document.id('jform_cmc_newsletter').addEvent('click', function() {
 					if(this.checked)
 					{
+						fieldsets.setStyle('display', 'block');
 						$$('input.cmc_req').addClass('required');
 					}
 					else
 					{
+						fieldsets.setStyle('display', 'none');
 						$$('input.cmc_req').removeClass('required');
 					}
 				});
@@ -108,21 +89,6 @@ class PlgUserCmc extends JPlugin
 		return true;
 	}
 
-	/**
-	 * Prepares the form
-	 *
-	 * @param   string   $user   - the not saved user obj
-	 * @param   boolean  $isNew  - is the user new
-	 * @param   object   $data   - the data object
-	 *
-	 * @return   void
-	 */
-
-	function onUserBeforeSave($user, $isNew, $data)
-	{
-		// Tab
-	}
-
 
 	/**
 	 * Prepares the form
@@ -135,15 +101,12 @@ class PlgUserCmc extends JPlugin
 	 * @return   boolean
 	 */
 
-	function onUserAfterSave($data, $isNew, $result, $error)
+	public function onUserAfterSave($data, $isNew, $result, $error)
 	{
 		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
 		if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))
 		{
-			// Save data
-			var_dump($data);
-
 			if ($data["cmc"]["newsletter"] != "1" && $isNew != false)
 			{
 				// Abort if Newsletter is not checked
@@ -170,36 +133,6 @@ class PlgUserCmc extends JPlugin
 					);
 				}
 			}
-		}
-
-		return true;
-	}
-
-
-	/**
-	 * Remove all Cmc information for the given user ID
-	 *
-	 * Method is called after user data is deleted from the database
-	 *
-	 * @param   array    $user     - Holds the user data
-	 * @param   boolean  $success  - True if user was succesfully stored in the database
-	 * @param   string   $msg      - Message
-	 *
-	 * @return boolean
-	 */
-
-	function onUserAfterDelete($user, $success, $msg)
-	{
-		if (!$success)
-		{
-			return false;
-		}
-
-		$userId = JArrayHelper::getValue($user, 'id', 0, 'int');
-
-		if ($userId)
-		{
-			// Delete User from mailing list?
 		}
 
 		return true;
