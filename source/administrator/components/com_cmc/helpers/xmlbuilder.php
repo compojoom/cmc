@@ -36,8 +36,8 @@ class CmcHelperXmlbuilder
 		$this->listId = $options->get('listid', "");
 		$this->interests = $options->get('interests', '');
 		$this->fields = $options->get('fields', '');
-		$this->introText = $options->get("intro-text", "");
-		$this->outroText = $options->get("outro-text", "");
+		$this->introText = $options->get("intro-text");
+		$this->outroText = $options->get("outro-text");
 	}
 
 	/**
@@ -83,9 +83,6 @@ class CmcHelperXmlbuilder
 						';
 		}
 
-//		$filter = JFilterInput::getInstance();
-//		$introtext = $filter->clean($this->params->get('intro-text'), "string");
-
 		// Adding Newsletter Checkbox
 		$html .= '
 					<field
@@ -95,7 +92,7 @@ class CmcHelperXmlbuilder
 						description="COM_CMC_NEWSLETTER_SUBSCRIBE"
 						value="1"
 						default="0"
-						class="submitMerge inputbox cmc-checkboxes"
+						class="submitMerge inputbox cmc-checkboxes cmc-checkbox-subscribe"
 						labelclass="form-label cmc-label"
 						label="COM_CMC_NEWSLETTER"
 					/>
