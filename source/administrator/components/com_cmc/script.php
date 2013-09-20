@@ -29,6 +29,8 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 
 	private $type = '';
 
+	private $status;
+
 	private $installationQueue = array(
 		// Modules => { (folder) => { (module) => { (position), (published) } }* }*
 		'modules' => array(
@@ -44,6 +46,7 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 			)
 		),
 		'plugins' => array(
+			'plg_community_cmc' => 0,
 			'plg_system_ecom360' => 0,
 			'plg_system_ecom360akeeba' => 0,
 			'plg_system_ecom360hika' => 0,
@@ -51,6 +54,10 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 			'plg_system_ecom360payplans' => 0,
 			'plg_system_ecom360redshop' => 0,
 			'plg_system_ecom360virtuemart' => 0,
+			'plg_user_cmc' => '0'
+		),
+		'cbplugins' => array(
+			'plug_cmc'
 		)
 	);
 
@@ -95,10 +102,54 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 	public function postflight($type, $parent)
 	{
 		$this->loadLanguage();
+		$path = $parent->getParent()->getPath('source');
+		$this->status = new stdClass;
 
 		// Let us install the modules
 		$this->status->plugins = $this->installPlugins($this->installationQueue['plugins']);
 		$this->status->modules = $this->installModules($this->installationQueue['modules']);
+
+		$this->status->cb = false;
+
+		if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/library/cb/cb.installer.php'))
+		{
+			global $_CB_framework;
+			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php';
+			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.class.php';
+			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/comprofiler.class.php';
+
+			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/library/cb/cb.installer.php';
+
+			foreach ($this->installationQueue['cbplugins'] as $plugin)
+			{
+				$cbInstaller = new cbInstallerPlugin;
+
+				if ($cbInstaller->install($path . '/components/com_comprofiler/plugin/user/' . $plugin . '/'))
+				{
+					$langPath = $parent->getParent()->getPath('source') . '/components/com_comprofiler/plugin/user/' . $plugin . '/administrator/language';
+
+					$cbNames = explode('_', $plugin);
+
+					if (JFolder::exists($langPath))
+					{
+						$languages = JFolder::folders($langPath);
+
+						foreach ($languages as $language)
+						{
+							if (JFolder::exists(JPATH_ROOT . '/administrator/language/' . $language))
+							{
+								JFile::copy(
+									$langPath . '/' . $language . '/' . $language . '.plg_' . $cbNames[1] . '.ini',
+									JPATH_ROOT . '/administrator/language/' . $language . '/' . $language . '.plg_' . $cbNames[1] . '.ini'
+								);
+							}
+						}
+					}
+
+					$this->status->cb = true;
+				}
+			}
+		}
 
 		echo $this->displayInfoInstallation();
 
@@ -113,6 +164,10 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 	{
 		$html[] = '<div class="alert alert-info">' . JText::_(strtoupper($this->extension) . '_INSTALLATION_SUCCESS') . '</div>';
 
+		if ($this->status->cb)
+		{
+			$html[] = '<p>' . JText::_('COM_CMC_CB_DETECTED_PLUGINS_INSTALLED') . '<br /></p>';
+		}
 
 		if ($this->status->plugins)
 		{
@@ -156,7 +211,7 @@ class CompojoomInstaller
 	public function loadLanguage()
 	{
 		$extension = $this->extension;
-		$jlang =& JFactory::getLanguage();
+		$jlang = JFactory::getLanguage();
 		$path = $this->parent->getParent()->getPath('source') . '/administrator';
 		$jlang->load($extension, $path, 'en-GB', true);
 		$jlang->load($extension, $path, $jlang->getDefault(), true);

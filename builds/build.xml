@@ -13,9 +13,9 @@
     <taskdef name="extfile" classname="phingext.listJPackageFilesTask"/>
     <taskdef name="gitversion" classname="phingext.GitVersionTask"/>
     <taskdef name="explode" classname="phingext.explodeTask"/>
-    <taskdef name="indexhtml" classname="phingext.indexHtmlTask" />
 
     <import file="plugin.xml" optional="true"/>
+	<import file="plugincb.xml" optional="true"/>
     <import file="module.xml" optional="true"/>
 
     <target name="setup-properties">
@@ -137,6 +137,13 @@
             </then>
         </if>
 
+	    <if>
+		    <isset property="pluginscb"/>
+		    <then>
+			    <foreach list="${pluginscb}" param="plugin" target="buildPluginCB"/>
+		    </then>
+	    </if>
+
         <if>
             <isset property="modules_admin"/>
             <then>
@@ -151,8 +158,6 @@
             </then>
         </if>
 
-        <echo message="Now add the index.html files!" />
-        <indexhtml dir="${destination.dir}" />
     </target>
 
     <target name="dev-release" description="Makes everything except the documentation"

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cbinstall version="1.0.0" type="plugin" group="user">
-    <name>CMC CB Plugin</name>
+<cbinstall version="@@VERSION@@" type="plugin" group="user" method="upgrade">
+    <name>CMC - Newsletter registration</name>
     <author>Compojoom - Yves Hoppe</author>
     <creationDate>@@DATE@@</creationDate>
     <copyright>(C) 2013 compojoom.com</copyright>
     <license>GNU/GPL version 2</license>
     <authorEmail>contact-us@compjoom.com</authorEmail>
     <authorUrl>www.compojoom.com</authorUrl>
-    <version>1.2</version>
+    <version>1.0</version>
     <description>
         A Community Builder plugin for CMC.
     </description>
     <files>
         <filename plugin="cmc">cmc.php</filename>
-        <filename>index.html</filename>
     </files>
     <params description="Plugin which integrates CMC - Mailchimp for Joomla! into Community Builder">
         <param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Generic build plugin
+    ${plugin} should be mod_something...
+-->
+
+<project name="plugincb" default="buildPluginCB">
+
+	<target name="buildPluginCB">
+		<!--<explode propertyName="pluginType" string="${plugin}" delimiter="_" key="0" />-->
+		<explode propertyName="pluginName" string="${plugin}" delimiter="_" key="1"/>
+
+		<!--do we have a media folder?-->
+		<if>
+			<equals arg1="${adminLang.exist}" arg2="1"/>
+			<then>
+				<copy todir="${destination.dir}/components/com_comprofiler/plugin/user/${plugin}/administrator/language/">
+					<fileset dir="${dirs.source}/administrator/language/">
+						<include name="**/*.plg_${plugin}.**"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+
+		<copy todir="${destination.dir}/components/com_comprofiler/plugin/user/${plugin}">
+			<fileset dir="${dirs.source}/components/com_comprofiler/plugin/user/${plugin}" includes="**/*.*"/>
+		</copy>
+
+		<copy file="${dirs.source}/components/com_comprofiler/plugin/user/${plugin}/${pluginName}.xml"
+		      tofile="${destination.dir}/components/com_comprofiler/plugin/user/${plugin}/${pluginName}.xml"
+		      overwrite="true">
+
+			<filterchain>
+
+				<replacetokens begintoken="@@" endtoken="@@">
+					<token key="DATE" value="${build.date}"/>
+					<token key="VERSION" value="${build.version}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+	</target>
+
+</project>

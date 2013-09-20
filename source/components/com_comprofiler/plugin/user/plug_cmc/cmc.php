@@ -355,7 +355,7 @@ class GetCmcTab extends cbTabHandler
 	 *
 	 * @return mixed
 	 */
-	function loadLists()
+	public function loadLists()
 	{
 		$api = new cmcHelperChimp;
 		$lists = $api->lists();

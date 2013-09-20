@@ -54,9 +54,6 @@
             </filterchain>
         </copy>
 
-        <echo message="Now add the index.html files!" />
-        <indexhtml dir="${destination.dir}/plugins/${pluginType}/${pluginName}" />
-
         <extfile file="${destination.dir}/plugins/${pluginType}/${pluginName}/${pluginName}.xml"
                  sourceDir="${destination.dir}/plugins/${pluginType}/${pluginName}"
                  component="${plugin}"
