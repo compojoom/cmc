@@ -67,7 +67,6 @@ class PlgCommunityCmc extends JPlugin
 
 		foreach ($fieldsets as $key => $value)
 		{
-			$html[] = '<div class="ctitle"><h2>' . JText::_($value->label) . '</h2></div>';
 			$fields = $form->getFieldset($key);
 
 			foreach ($fields as $field)
@@ -98,8 +97,10 @@ class PlgCommunityCmc extends JPlugin
 			// Jomsocial doesn't create a user_id until the very last step
 			// that's why we will save the user token for referrence later on
 			$token = $this->getUserToken($data['authkey']);
+			$user = new stdClass;
+			$user->id = $token;
 			CmcHelperRegistration::saveTempUser(
-				$token,
+				$user,
 				array_merge($data["cmc"], $data['cmc_groups'], $data['cmc_interests']),
 				_CPLG_JOMSOCIAL
 			);

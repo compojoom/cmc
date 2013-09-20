@@ -28,9 +28,9 @@ class CmcHelperRegistration
 	 * Temporary saves the user merge_vars after the registration, no processing
 	 * Does not check if user E-Mail already exists (this has to be done before!)
 	 *
-	 * @param   int    $user      - joomla user obj
-	 * @param   array  $postdata  - only cmc data
-	 * @param   int    $plg       - which plugin triggerd the save method
+	 * @param   object  $user      - joomla user obj
+	 * @param   array   $postdata  - only cmc data
+	 * @param   int     $plg       - which plugin triggerd the save method
 	 *
 	 * @return void
 	 */
@@ -60,7 +60,7 @@ class CmcHelperRegistration
 			);
 
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 
 	/**
@@ -119,7 +119,7 @@ class CmcHelperRegistration
 			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
 				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		else
 		{
@@ -203,7 +203,7 @@ class CmcHelperRegistration
 			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
 				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		else
 		{

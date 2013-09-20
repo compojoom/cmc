@@ -15,7 +15,7 @@
 		##ADMINLANGUAGEFILES##
 	</languages>
 	<config>
-		<fields name="params" addfieldpath="/plugins/user/cmc/fields">
+		<fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
 			<fieldset name="basic">
 				<field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
 				       description="MOD_CMC_INTRO_TEXT_DESC"/>

@@ -53,31 +53,8 @@ class PlgUserCmc extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
 
-		JHtml::script(JURI::root() . '/media/plg_user_cmc/js/cmc.js');
-		JFactory::getDocument()->addScriptDeclaration("
-			window.addEvent('domready', function(){
-				var fieldsets = new Elements;
-				$$('label.cmc-label ! fieldset').each(function(el) {
-					if(!el.getElement('input.cmc-checkbox-subscribe')) {
-						fieldsets.push(el);
-					}
-				});
-				fieldsets.setStyle('display', 'none');
-				document.id('jform_cmc_newsletter').addEvent('click', function() {
-					if(this.checked)
-					{
-						fieldsets.setStyle('display', 'block');
-						$$('input.cmc_req').addClass('required');
-					}
-					else
-					{
-						fieldsets.setStyle('display', 'none');
-						$$('input.cmc_req').removeClass('required');
-					}
-				});
-			});
-		");
-
+		JHtml::_('behavior.framework');
+		JHtml::script('media/plg_user_cmc/js/cmc.js');
 		$renderer = CmcHelperXmlbuilder::getInstance($this->params);
 
 		// Render Content
