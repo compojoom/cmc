@@ -14,16 +14,23 @@ window.addEvent('domready', function(){
 		}
 	});
 	fieldsets.setStyle('display', 'none');
+	fieldsets.each(function(el){
+		var fields = el.getElements('input').set('disabled', 'disabled')
+	});
 	document.id('jform_cmc_newsletter').addEvent('click', function() {
 		if(this.checked)
 		{
 			fieldsets.setStyle('display', 'block');
-			$$('input.cmc_req').addClass('required');
+			fieldsets.each(function(el) {
+				el.getElements('input').removeProperty('disabled');
+			});
 		}
 		else
 		{
 			fieldsets.setStyle('display', 'none');
-			$$('input.cmc_req').removeClass('required');
+			fieldsets.each(function(el) {
+				el.getElements('input').set('disabled', 'disabled');
+			});
 		}
 	});
 });

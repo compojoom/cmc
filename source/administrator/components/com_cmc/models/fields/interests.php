@@ -27,7 +27,7 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * Class JFormFieldInterests
  *
- * @since  1.0
+ * @since 1.0
  */
 class JFormFieldInterests extends CmcField
 {
@@ -64,7 +64,7 @@ class JFormFieldInterests extends CmcField
 			}
 		}
 
-		$attribs = 'multiple="multiple" size="8"';
+		$attribs = 'multiple="multiple" size="8" class="chzn-done"';
 
 		if ($options)
 		{

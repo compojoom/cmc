@@ -99,9 +99,13 @@ class PlgCommunityCmc extends JPlugin
 			$token = $this->getUserToken($data['authkey']);
 			$user = new stdClass;
 			$user->id = $token;
+			$postData = array();
+			$postData['listid'] = $data['cmc']['listid'];
+			$postData['cmc_groups'] = $data['cmc_groups'];
+			$postData['cmc_interests'] = $data['cmc_interests'];
 			CmcHelperRegistration::saveTempUser(
 				$user,
-				array_merge($data["cmc"], $data['cmc_groups'], $data['cmc_interests']),
+				$postData,
 				_CPLG_JOMSOCIAL
 			);
 		}

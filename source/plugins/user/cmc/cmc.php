@@ -23,8 +23,8 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the form
 	 *
-	 * @param   string  $form  - the form
-	 * @param   object  $data  - the data object
+	 * @param   string $form - the form
+	 * @param   object $data - the data object
 	 *
 	 * @return bool
 	 */
@@ -38,30 +38,40 @@ class PlgUserCmc extends JPlugin
 			return false;
 		}
 
+		$needToValidate = true;
+
 		// Check we are manipulating a valid form.
 		$name = $form->getName();
 
-		if (!in_array(
-			$name, array('com_admin.profile', 'com_users.user',
-				'com_users.profile', 'com_users.registration'
-			)
-		))
+		if (!in_array($name, array('com_users.registration')))
 		{
 			return true;
 		}
 
-		$lang = JFactory::getLanguage();
-		$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
+		$input = JFactory::getApplication()->input;
+		$task = $input->get('task');
 
-		JHtml::_('behavior.framework');
-		JHtml::script('media/plg_user_cmc/js/cmc.js');
-		$renderer = CmcHelperXmlbuilder::getInstance($this->params);
+		if (in_array($task, array('register', 'apply', 'save')))
+		{
+			$needToValidate = isset($data->cmc) && isset($data->cmc['newsletter']);
+		}
 
-		// Render Content
-		$html = $renderer->build();
+		if ($needToValidate)
+		{
+			$lang = JFactory::getLanguage();
+			$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
 
-		// Inject fields into the form
-		$form->load($html, false);
+			JHtml::_('behavior.framework');
+			JHtml::script('media/plg_user_cmc/js/cmc.js');
+			$renderer = CmcHelperXmlbuilder::getInstance($this->params);
+
+			// Render Content
+			$html = $renderer->build();
+
+			// Inject fields into the form
+			$form->load($html, false);
+
+		}
 
 		return true;
 	}
@@ -105,9 +115,14 @@ class PlgUserCmc extends JPlugin
 				else
 				{
 					// Directly activate user
-					CmcHelperRegistration::activateDirectUser(
+					$activated = CmcHelperRegistration::activateDirectUser(
 						JFactory::getUser($data["id"]), $data["cmc"], _CPLG_JOOMLA
 					);
+
+					if ($activated)
+					{
+						JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_VE_BEEN_SUBSCRIBED_BUT_CONFIRMATION_IS_NEEDED'));
+					}
 				}
 			}
 		}

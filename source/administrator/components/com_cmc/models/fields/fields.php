@@ -75,7 +75,7 @@ class JFormFieldFields extends CmcField
 			}
 		}
 
-		$attribs = 'multiple="multiple" size="8"';
+		$attribs = 'multiple="multiple" size="8" class="chzn-done"';
 
 		if ($options)
 		{

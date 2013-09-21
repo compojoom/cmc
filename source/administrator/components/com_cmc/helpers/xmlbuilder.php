@@ -282,8 +282,7 @@ class CmcHelperXmlbuilder
 
 		if ($field[3])
 		{
-			// TODO add alternative
-			//$x .= "required=\"required\"\n";
+			$x .= ' required="required"';
 		}
 
 		$x .= "/>\n";
@@ -309,8 +308,9 @@ class CmcHelperXmlbuilder
 			name="' . $params[0] . '"
 			type="list"
 			label="' . $title . '"
-			labelclass="form-label cmc-label"
-			default="0"
+			labelclass="form-label cmc-label"'
+			. ($params[3] ? ' required="required" ' : ' ') .
+			'default="0"
 			class="inputbox' . $req . '">';
 
 		if (!$params[3])
@@ -345,8 +345,9 @@ class CmcHelperXmlbuilder
 			name="' . $params[0] . '"
 			type="radio"
 			default="0"
-			class="inputbox ' . $req . '"
-			labelclass="form-label cmc-label"
+			class="inputbox ' . $req . '"'
+			. ($params[3] ? ' required="required" ' : ' ') .
+			'labelclass="form-label cmc-label"
 			label="' . $title . '">';
 
 		foreach ($choices as $ch)
@@ -376,8 +377,9 @@ class CmcHelperXmlbuilder
 			type="calendar"
 			class="inputbox input-small' . $req . '"
 			labelclass="form-label cmc-label"
-			label="' . $title . '"
-			format="' . $this->dateFormat . '"
+			label="' . $title . '" '
+			. ($params[3] ? ' required="required" ' : ' ') .
+			'format="' . $this->dateFormat . '"
 			maxlength="10"
 		/>';
 	}
@@ -398,8 +400,9 @@ class CmcHelperXmlbuilder
 					id="' . $params[0] . '_month"
 					name="birthday"
 					class="inputbox input-small cmc-birthday' . $req . '"
-					labelclass="form-label cmc-label"
-					label="' . $title . '" />';
+					labelclass="form-label cmc-label"'
+					. ($params[3] ? ' required="required" ' : ' ') .
+					'label="' . $title . '" />';
 
 		return $address;
 	}
@@ -427,8 +430,9 @@ class CmcHelperXmlbuilder
 		type="phone"
 		id="cmc-phone-' . $params[0] . '"
 		class="phone validate-digits ' . $inter . $req . '"
-		labelclass="form-label cmc-label"
-		size="40"
+		labelclass="form-label cmc-label"'
+		. ($params[3] ? ' required="required" ' : ' ') .
+		'size="40"
 		label="' . $title . '"
 		' . $req . ' />';
 
@@ -453,6 +457,7 @@ class CmcHelperXmlbuilder
                 type="text" default=""
                 label="' . JText::_('CMC_STREET_ADDRESS') . '"
                 class="inputbox input-medium' . $req . '"
+                ' . ($params[3] ? ' required="required" ' : ' ') . '
                 labelclass="form-label cmc-label"
                 />';
 
@@ -463,6 +468,7 @@ class CmcHelperXmlbuilder
 	                type="text" default=""
 	                label="' . JText::_('CMC_STREET_ADDRESS2') . '"
 	                class="inputbox input-medium' . $req . '"
+	                ' . ($params[3] ? ' required="required" ' : ' ') . '
 	                labelclass="form-label cmc-label"
 	                />';
 		}
@@ -472,6 +478,7 @@ class CmcHelperXmlbuilder
                 type="text" default=""
                 label="' . JText::_('CMC_CITY') . '"
                 class="inputbox input-medium' . $req . '"
+                ' . ($params[3] ? ' required="required" ' : ' ') . '
                 labelclass="form-label cmc-label"
                  />';
 		$address .= '<field
@@ -479,6 +486,7 @@ class CmcHelperXmlbuilder
                 type="text" default=""
                 label="' . JText::_('CMC_STATE') . '"
                 class="inputbox input-medium' . $req . '"
+                ' . ($params[3] ? ' required="required" ' : ' ') . '
                 labelclass="form-label cmc-label"
                 />';
 		$address .= '<field
@@ -486,6 +494,7 @@ class CmcHelperXmlbuilder
                 type="text" default=""
                 label="' . JText::_('CMC_ZIP') . '"
                 class="inputbox input-medium' . $req . '"
+                ' . ($params[3] ? ' required="required" ' : ' ') . '
                 labelclass="form-label cmc-label"
                 />';
 
@@ -514,6 +523,7 @@ class CmcHelperXmlbuilder
 			label="' . $title . '"
 			default="0"
 			class="inputbox"
+			' . ($req ? ' required="required" ' : ' ') . '
 			labelclass="form-label cmc-label"
 			>';
 

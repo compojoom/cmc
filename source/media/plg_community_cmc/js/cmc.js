@@ -8,16 +8,17 @@ window.addEvent('domready', function(){
 		}
 	});
 	fields.setStyle('display', 'none');
+	fields.removeProperty('required');
 	document.id('cmc_newsletter').addEvent('click', function() {
 		if(this.checked)
 		{
 			fields.setStyle('display', 'block');
-			$$('.cmc_req').addClass('required');
+			$$('.cmc_req').addClass('required').set('required', 'required');
 		}
 		else
 		{
 			fields.setStyle('display', 'none');
-			$$('.cmc_req').removeClass('required');
+			$$('.cmc_req').removeClass('required').removeProperty('required');
 		}
 	});
 });

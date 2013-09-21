@@ -106,24 +106,16 @@ class CmcHelperRegistration
 			}
 		}
 
-		$mergeVars['OPTINIP'] = $params['OPTINIP'];
+		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
 		// Double OPTIN false
 		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', true, true, true, false);
 
-		if (!$chimp->errorCode)
+		if ($chimp->errorCode)
 		{
-			$db = JFactory::getDBO();
-			$query = $db->getQuery(true);
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_WERE_NOT_SUBSCRIBED_TO_NEWSLETTER') . ':' . $chimp->errorMessage);
 
-			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
-				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
-			$db->setQuery($query);
-			$db->execute();
-		}
-		else
-		{
-			echo "Error: " . $chimp->errorMessage;
+			return false;
 		}
 
 		return true;
@@ -160,13 +152,14 @@ class CmcHelperRegistration
 		// Check if user is already activated
 		// We want a assoc array here
 		$params = json_decode($res->params, true);
-
+var_dump($params);
 		$chimp = new cmcHelperChimp;
 
 		$userlists = $chimp->listsForEmail($user->email);
 
 		// Hidden field
 		$listId = $params['listid'];
+
 
 		if ($userlists && in_array($listId, $userlists))
 		{
@@ -188,12 +181,20 @@ class CmcHelperRegistration
 			foreach ($params['interests'] as $key => $interest)
 			{
 				// Take care of interests that contain a comma (,)
-				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
+				if (is_array($interest))
+				{
+					array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
+					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
+				}
+				else
+				{
+					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => $interest);
+				}
 			}
 		}
 
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
+
 
 		// Double OPTIN false
 		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
