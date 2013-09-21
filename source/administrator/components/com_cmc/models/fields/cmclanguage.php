@@ -18,6 +18,11 @@ $language->load('mod_cmc', JPATH_SITE, null, true);
 $language->load('mod_cmc', JPATH_SITE, $language->getDefault(), true);
 $language->load('mod_cmc', JPATH_SITE, null, true);
 
+/**
+ * Class JFormFieldCmcLanguage
+ *
+ * @since  1.3
+ */
 class JFormFieldCmcLanguage extends JFormField
 {
 	/**
@@ -26,7 +31,7 @@ class JFormFieldCmcLanguage extends JFormField
 	 * @var    string
 	 * @since  11.1
 	 */
-	protected $type = 'HotspotsLanguage';
+	protected $type = 'CmcLanguage';
 
 	/**
 	 * Method to get the field input markup.
