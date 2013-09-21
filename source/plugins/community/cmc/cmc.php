@@ -124,6 +124,14 @@ class PlgCommunityCmc extends JPlugin
 	 */
 	public function onUserAfterSave($data, $isNew, $result, $error)
 	{
+		/**
+		 * Jomsocial is calling the onUserAfterSave function around 3 times
+		 * During the registration process. Because of that we end up sending 3
+		 * Emails telling the user to subscribe. Since this is stupid, we'll mark
+		 * if we've sent a mail and won't try to do it over and over again
+		 */
+		static $mailSent = false;
+
 		// If we have a token, let us check if we have a subscription
 		// And if we do, set the correct user_id
 		if (isset($data['token']))
@@ -139,7 +147,7 @@ class PlgCommunityCmc extends JPlugin
 		// Now let us check if we have a subscription for the user id, this time using the user id
 		$subscription = $this->getSubscription($data['id']);
 
-		if ($subscription)
+		if ($subscription && !$mailSent)
 		{
 			if ($data["block"] == 0)
 			{
@@ -149,6 +157,8 @@ class PlgCommunityCmc extends JPlugin
 				CmcHelperRegistration::activateDirectUser(
 					JFactory::getUser($data["id"]), $json, _CPLG_JOMSOCIAL
 				);
+
+				$mailSent = true;
 			}
 		}
 	}
