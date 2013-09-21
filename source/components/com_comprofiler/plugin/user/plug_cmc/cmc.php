@@ -436,7 +436,16 @@ class GetCmcTab extends cbTabHandler
 					$this->value[] = $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices;
 				}
 
-				$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+				if ($req)
+				{
+					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
+					. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
+					);
+				}
+				else
+				{
+					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+				}
 			}
 		}
 
@@ -448,7 +457,6 @@ class GetCmcTab extends cbTabHandler
 			//$content = "Fields: " . $this->params->get('fields', "");
 
 			$content .= JHtml::_('select.genericlist', $options, 'params[fields][]', $attribs, $key, $val, explode("|*|", $this->params->get('fields', "")));
-
 
 			$content .= '<script type="text/javascript">
 				window.addEvent(\'domready\',function() {

@@ -62,7 +62,16 @@ class JFormFieldFields extends CmcField
 					$this->value[] = $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices;
 				}
 
-				$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+				if ($req)
+				{
+					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
+						. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
+					);
+				}
+				else
+				{
+					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+				}
 			}
 		}
 
@@ -71,6 +80,7 @@ class JFormFieldFields extends CmcField
 		if ($options)
 		{
 			$content = JHtml::_('select.genericlist', $options, 'jform[params][fields][]', $attribs, $key, $val, $this->value, $this->id);
+
 			$content .= '<script type="text/javascript">
 				window.addEvent(\'domready\',function() {
 				    $("jform_params_fields").addEvent( \'change\', function(){
