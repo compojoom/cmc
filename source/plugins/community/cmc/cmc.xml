@@ -17,18 +17,11 @@
 	<config>
 		<fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
 			<fieldset name="basic">
+				<field name="invisible_load_language" type="cmcLanguage" hidden="true" />
 				<field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
 				       description="MOD_CMC_INTRO_TEXT_DESC"/>
 				<field name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_1"
 				       description="MOD_CMC_OUTRO_TEXT_1_DESC"/>
-				<field name="outro-text-2" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_2"
-				       description="MOD_CMC_OUTRO_TEXT_2_DESC"/>
-				<field name="thankyou" type="textarea"
-				       default="Thank you! Please check your email and confirm the newsletter subscription." cols="25"
-				       rows="2" label="MOD_CMC_THANKYOU_MESSAGE" description="MOD_CMC_THANK_YOU_DESC"/>
-				<field name="updateMsg" type="textarea"
-				       default="You were already subscribed to this list. Your settings have been updated. Thank you!"
-				       cols="25" rows="2" label="MOD_CMC_UPDATE_MESSAGE" description="MOD_CMC_UPDATE_DESC"/>
 				<field name="listid" required="true" type="cmclists" default="" cols="25" rows="2" label="MOD_CMC_LIST"
 				       description="MOD_CMC_LIST_DESC"/>
 				<field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"/>
