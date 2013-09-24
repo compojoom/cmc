@@ -71,7 +71,7 @@ class CmcHelperUsers
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
-		$query->delete('#__cmc_users')->where('mc_id=' . $db->quote($listId));
+		$query->delete($db->qn('#__cmc_users'))->where($db->qn('list_id') . '=' . $db->quote($listId));
 		$db->setQuery($query);
 
 		return $db->execute();
