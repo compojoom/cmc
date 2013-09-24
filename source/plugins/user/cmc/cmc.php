@@ -23,8 +23,8 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the form
 	 *
-	 * @param   string $form - the form
-	 * @param   object $data - the data object
+	 * @param   string  $form  - the form
+	 * @param   object  $data  - the data object
 	 *
 	 * @return bool
 	 */
@@ -70,7 +70,6 @@ class PlgUserCmc extends JPlugin
 
 			// Inject fields into the form
 			$form->load($html, false);
-
 		}
 
 		return true;

@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="user" method="upgrade">
-    <name>User - CMC Registration plugin</name>
-    <author>compojoom.com</author>
-    <creationDate>@@DATE@@</creationDate>
-    <copyright>Copyright (C) 2013 Yves Hoppe - compojoom.com. All rights reserved.</copyright>
-    <license>GNU/GPL http://www.gnu.org/licenses/gpl-3.0.html</license>
-    <authorUrl>http://compojoom.com</authorUrl>
-    <version>@@VERSION@@</version>
-    <description>PLG_CMC_USER_REGISTRATION_DESCRIPTION</description>
-    <files>
-        ##PACKAGEFILESPLUGIN##
-    </files>
-    <languages folder="administrator/language">
-        ##ADMINLANGUAGEFILES##
-    </languages>
-    <config>
-        <fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
-            <fieldset name="basic">
-	            <field name="invisible_load_language" type="cmcLanguage" hidden="true" />
-                <field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
-                       description="MOD_CMC_INTRO_TEXT_DESC"/>
-                <field name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_1"
-                       description="MOD_CMC_OUTRO_TEXT_1_DESC"/>
-                <field name="listid" required="true" type="cmclists" default="" cols="25" rows="2" label="MOD_CMC_LIST"
-                       description="MOD_CMC_LIST_DESC"/>
-                <field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"/>
-                <field name="interests" type="interests" default="" label="MOD_CMC_INTERESTS"
-                       description="MOD_CMC_INTERESTS_DESC"/>
-                <field name="dateFormat" type="text" default="%Y-%m-%d" label="MOD_CMC_DATE_FORMAT"
-                       description="MOD_CMC_DATE_FORMAT_DESC"/>
-                <field name="phoneFormat" type="radio" default="inter" label="MOD_CMC_PHONE_FORMAT"
-                       description="MOD_CMC_PHONE_FORMAT_DESC">
-                    <option value="us">MOD_CMC_US_FORMAT</option>
-                    <option value="inter">MOD_CMC_INTERNATIONAL_FORMAT</option>
-                </field>
-                <field name="address2" type="radio" default="0" label="MOD_CMC_SHOW_ADDRESS2"
-                       description="MOD_CMC_SHOW_ADDRESS2_DESC">
-                    <option value="0">JNO</option>
-                    <option value="1">JYES</option>
-                </field>
-            </fieldset>
-            <fieldset name="advanced">
-                <field
-                        name="layout"
-                        type="modulelayout"
-                        label="JFIELD_ALT_LAYOUT_LABEL"
-                        description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
-                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
-                       description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-            </fieldset>
-        </fields>
-    </config>
+	<name>User - CMC Registration plugin</name>
+	<author>compojoom.com</author>
+	<creationDate>@@DATE@@</creationDate>
+	<copyright>Copyright (C) 2013 Yves Hoppe - compojoom.com. All rights reserved.</copyright>
+	<license>GNU/GPL http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorUrl>http://compojoom.com</authorUrl>
+	<version>@@VERSION@@</version>
+	<description>PLG_CMC_USER_REGISTRATION_DESCRIPTION</description>
+	<files>
+		##PACKAGEFILESPLUGIN##
+	</files>
+	<languages folder="administrator/language">
+		##ADMINLANGUAGEFILES##
+	</languages>
+	<config>
+		<fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
+			<fieldset name="basic">
+				<field name="invisible_load_language" type="cmcLanguage" hidden="true"/>
+				<field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
+				       description="MOD_CMC_INTRO_TEXT_DESC"/>
+				<field name="outro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_1"
+				       description="MOD_CMC_OUTRO_TEXT_1_DESC"/>
+				<field name="listid" required="true" type="cmclists" default="" cols="25" rows="2" label="MOD_CMC_LIST"
+				       description="MOD_CMC_LIST_DESC"/>
+				<field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"/>
+				<field name="interests" type="interests" default="" label="MOD_CMC_INTERESTS"
+				       description="MOD_CMC_INTERESTS_DESC"/>
+				<field name="dateFormat" type="text" default="%Y-%m-%d" label="MOD_CMC_DATE_FORMAT"
+				       description="MOD_CMC_DATE_FORMAT_DESC"/>
+				<field name="phoneFormat" type="radio" default="inter" label="MOD_CMC_PHONE_FORMAT"
+				       description="MOD_CMC_PHONE_FORMAT_DESC">
+					<option value="us">MOD_CMC_US_FORMAT</option>
+					<option value="inter">MOD_CMC_INTERNATIONAL_FORMAT</option>
+				</field>
+				<field name="address2" type="radio" default="0" label="MOD_CMC_SHOW_ADDRESS2"
+				       description="MOD_CMC_SHOW_ADDRESS2_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">
+				<field
+						name="layout"
+						type="modulelayout"
+						label="JFIELD_ALT_LAYOUT_LABEL"
+						description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+				       description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
 </extension>

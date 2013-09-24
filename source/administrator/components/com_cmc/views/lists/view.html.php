@@ -48,6 +48,8 @@ class CmcViewLists extends JViewLegacy
 			'window.parent.location.reload()', 'COM_CMC_SYNC_HEADING'
 		);
 
+		JToolBarHelper::title(JText::_('COM_CMC_LISTS'), 'lists');
+
 		JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_WANT_TO_REMOVE_LIST'), 'lists.delete');
 	}
 }
