@@ -129,7 +129,7 @@ class CmcControllerSync extends CmcController
 			else
 			{
 				$state->header = JText::_('COM_CMC_SYNC_COMPLETE');
-				$state->message = JText::_('COM_CMC_SYNC_COMPLETE_DESC');
+				$state->message = '<div class="alert alert-info">' . JText::_('COM_CMC_SYNC_COMPLETE_DESC') . '</div>';
 
 			}
 		}
