@@ -36,8 +36,8 @@ class CmcHelperUsers
 		foreach ($users as $member)
 		{
 			$item = array();
-			$item['mc_id'] = $db->quote($mcListId);
-			$item['list_id'] = $db->quote($jListId);
+			$item['mc_id'] = $db->quote(null);
+			$item['list_id'] = $db->quote($mcListId);
 			$item['email'] = $db->quote($member['email']);
 			$item['timestamp'] = $db->quote($member['timestamp']);
 			$item['status'] = $db->quote('subscribed');
