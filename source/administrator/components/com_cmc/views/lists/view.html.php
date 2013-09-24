@@ -47,5 +47,7 @@ class CmcViewLists extends JViewLegacy
 			'Popup', 'archive', 'COM_CMC_SYNC', 'index.php?option=com_cmc&view=sync&tmpl=component', 500, 300, 0, 0,
 			'window.parent.location.reload()', 'COM_CMC_SYNC_HEADING'
 		);
+
+		JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_WANT_TO_REMOVE_LIST'), 'lists.delete');
 	}
 }

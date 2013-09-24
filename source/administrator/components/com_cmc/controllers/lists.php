@@ -18,5 +18,34 @@ jimport('joomla.application.component.controller');
  */
 class CmcControllerLists extends CmcController
 {
-	// Nothing for now
+	/**
+	 * Delete list and users (only from the database, not from Mailchimp)
+	 *
+	 * @return void
+	 */
+	public function delete()
+	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+
+		// Let us quote the values
+		foreach ($cid as $key => $value)
+		{
+			$cid[$key] = $db->quote($value);
+		}
+
+		$query->delete('#__cmc_lists')->where('mc_id IN (' . implode(',', $cid) . ')');
+
+		$db->setQuery($query);
+		$db->execute();
+
+		$query->clear();
+		$query->delete('#__cmc_users')->where('list_id IN (' . implode(',', $cid) . ')');
+
+		$db->setQuery($query);
+		$db->execute();
+
+		$this->setRedirect('index.php?option=com_cmc&view=lists');
+	}
 }

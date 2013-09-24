@@ -118,7 +118,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
             <tr class="<?php echo "row" . $i % 2; ?>">
                 <td><?php echo $this->pagination->getRowOffset($i); ?></td>
                 <td>
-                    <?php echo JHTML::_('grid.id', $i, $item->id);; ?>
+                    <?php echo JHTML::_('grid.id', $i, $item->id); ?>
                 </td>
                 <td align="center">
                     <img src="http://www.gravatar.com/avatar/<?php echo md5($item->email); ?>?s=20"
