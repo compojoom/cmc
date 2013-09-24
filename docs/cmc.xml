@@ -49,6 +49,20 @@
 
           <revremark>1st Draft</revremark>
         </revision>
+      </revhistory><revhistory>
+        <revision>
+          <revnumber>CMC - 1.4.0 - Revision 0.2</revnumber>
+
+          <date>21.09.2013</date>
+
+          <author>
+            <firstname>Daniel</firstname>
+
+            <surname>Dimitrov</surname>
+          </author>
+
+          <revremark>1st Draft</revremark>
+        </revision>
       </revhistory></para>
   </article>
 
@@ -104,7 +118,7 @@
       order with the newest release always on top. Click on the release number
       and then download the ZIP package.</para>
 
-      <para>The installation package can be installed on Joomla 2.5 &amp; 3.1.
+      <para>The installation package can be installed on Joomla 2.5 &amp; 3.x.
       You can use the installation package to update from previous version as
       well; just install it, without uninstalling the old package.</para>
     </section>
@@ -265,12 +279,12 @@
     <section>
       <title>Lists</title>
 
-      <para>Currently the Lists view is really simple. We obviously show you
-      the lists you have and some additional information about each list. On
-      the top right of the screen you'll see a First Sync button. You need to
-      click this one the first time after your installation. This will
-      download all your lists and users from <ulink
-      url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>.</para>
+      <para>On the list view you'll see the lists that you have currently
+      synced up with <ulink
+      url="https://mailchimp.com/?pid=compojoom&amp;source=website">Mailchimp</ulink>.
+      If this is a new installation you'll have to sync the lists that you
+      want to manage on this site. Just click on the Sync button and follow
+      the steps on the screen.</para>
     </section>
 
     <section>
@@ -292,76 +306,84 @@
     </section>
 
     <section>
-      <title>Ecommerce360 tracking</title>
+      <title>Plugins</title>
 
-      <para>Mailchimp's Ecommerce360 tracking is designed to help you measure
-      the ROI of your email campaigns. Now to make use of this feature in
-      Joomla all you need to do is to activate one of the plugins for the
-      supported shopping carts/subscription extensions. We currently
-      support</para>
-
-      <itemizedlist>
-        <listitem>
-          <para><ulink
-          url="https://www.akeebabackup.com/products/akeeba-subscriptions.html">Akeebasubs</ulink></para>
-        </listitem>
-
-        <listitem>
-          <para><ulink url="http://www.hikashop.com/">Hika</ulink></para>
-        </listitem>
-
-        <listitem>
-          <para><ulink
-          url="https://compojoom.com/joomla-extensions/matukio-events-management-made-easy">Matukio</ulink></para>
-        </listitem>
-
-        <listitem>
-          <para><ulink url="http://www.jpayplans.com/">Payplans</ulink></para>
-        </listitem>
-
-        <listitem>
-          <para><ulink
-          url="http://redcomponent.com/redcomponent/redshop">Redshop</ulink></para>
-        </listitem>
-
-        <listitem>
-          <para><ulink url="http://virtuemart.net/">Virtuemart</ulink></para>
-        </listitem>
-      </itemizedlist>
+      <para/>
 
       <section>
-        <title>Enabling Ecommerce360 tracking</title>
+        <title>Ecommerce360 tracking</title>
 
-        <para>First when you are sending a new campaign in Mailchimp enable
-        the ecommerce tracking feature there. This will ensure that the links
-        in your email contain the necessary tracking information.</para>
+        <para>Mailchimp's Ecommerce360 tracking is designed to help you
+        measure the ROI of your email campaigns. Now to make use of this
+        feature in Joomla all you need to do is to activate one of the plugins
+        for the supported shopping carts/subscription extensions. We currently
+        support</para>
 
-        <para>Then login into the backend of your Joomla website and go to
-        Extensions -&gt; Plugin Manager. Enable the "CMC - Ecom360" plugin and
-        one of the available plugins for your shopping cart/subscription
-        system ( see the previous section on information about currently
-        supported systems).</para>
-      </section>
+        <itemizedlist>
+          <listitem>
+            <para><ulink
+            url="https://www.akeebabackup.com/products/akeeba-subscriptions.html">Akeebasubs</ulink></para>
+          </listitem>
 
-      <section>
-        <title>Developing your own ecommerce360 tracking plugin</title>
+          <listitem>
+            <para><ulink url="http://www.hikashop.com/">Hika</ulink></para>
+          </listitem>
 
-        <para>Developing a plugin for your own shopping cart is very easy.
-        Prerequisites are that you know PHP.</para>
+          <listitem>
+            <para><ulink
+            url="https://compojoom.com/joomla-extensions/matukio-events-management-made-easy">Matukio</ulink></para>
+          </listitem>
 
-        <para>The easiest way to understand the ecommerce360 plugins would be
-        to look at the already existing plugins in plugins/system/ (all
-        ecommerce360 plugins start with ecom360 in their name). You'll notice
-        that in each plugin we have the following line:</para>
+          <listitem>
+            <para><ulink
+            url="http://www.jpayplans.com/">Payplans</ulink></para>
+          </listitem>
 
-        <programlisting>JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');</programlisting>
+          <listitem>
+            <para><ulink
+            url="http://redcomponent.com/redcomponent/redshop">Redshop</ulink></para>
+          </listitem>
 
-        <para>With it we are including all available CMC Helpers. This ensures
-        that you can call the CmcHelperEcom360::sendOrderInformations function
-        and pass to it all the necessary parameters with your order
-        information.</para>
+          <listitem>
+            <para><ulink
+            url="http://virtuemart.net/">Virtuemart</ulink></para>
+          </listitem>
+        </itemizedlist>
 
-        <programlisting>public static function sendOrderInformations(
+        <section>
+          <title>Enabling Ecommerce360 tracking</title>
+
+          <para>First when you are sending a new campaign in Mailchimp enable
+          the ecommerce tracking feature there. This will ensure that the
+          links in your email contain the necessary tracking
+          information.</para>
+
+          <para>Then login into the backend of your Joomla website and go to
+          Extensions -&gt; Plugin Manager. Enable the "CMC - Ecom360" plugin
+          and one of the available plugins for your shopping cart/subscription
+          system ( see the previous section on information about currently
+          supported systems).</para>
+        </section>
+
+        <section>
+          <title>Developing your own ecommerce360 tracking plugin</title>
+
+          <para>Developing a plugin for your own shopping cart is very easy.
+          Prerequisites are that you know PHP.</para>
+
+          <para>The easiest way to understand the ecommerce360 plugins would
+          be to look at the already existing plugins in plugins/system/ (all
+          ecommerce360 plugins start with ecom360 in their name). You'll
+          notice that in each plugin we have the following line:</para>
+
+          <programlisting>JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');</programlisting>
+
+          <para>With it we are including all available CMC Helpers. This
+          ensures that you can call the
+          CmcHelperEcom360::sendOrderInformations function and pass to it all
+          the necessary parameters with your order information.</para>
+
+          <programlisting>public static function sendOrderInformations(
 		$store_id,
 		$store_name = "Store name",
 		$order_id = 0,
@@ -381,22 +403,106 @@
 					)
 	)</programlisting>
 
-        <para>$store_id = unique id for the store sending the order (20 bytes
-        max)</para>
+          <para>$store_id = unique id for the store sending the order (20
+          bytes max)</para>
 
-        <para>$store_name = a "nice" name for the store - typically the base
-        web address (ie, "store.mailchimp.com")</para>
+          <para>$store_name = a "nice" name for the store - typically the base
+          web address (ie, "store.mailchimp.com")</para>
 
-        <para>$order_id = the Order id</para>
+          <para>$order_id = the Order id</para>
 
-        <para>$total_amount = The Order Total</para>
+          <para>$total_amount = The Order Total</para>
 
-        <para>$tax_amount = the total tax paid</para>
+          <para>$tax_amount = the total tax paid</para>
 
-        <para>$shipping_amount = the total paid for Shipping Fees</para>
+          <para>$shipping_amount = the total paid for Shipping Fees</para>
 
-        <para>$products = an array containing the individual products(items)
-        for each order.</para>
+          <para>$products = an array containing the individual products(items)
+          for each order.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Registration plugins</title>
+
+        <para/>
+
+        <section>
+          <title>User - CMC Registration plugin</title>
+
+          <para>If you want to subscribe your users to your newsletter during
+          the registration process on your site and if you use the standard
+          joomla registration, then you can use this plugin to show a
+          newsletter checkbox. Not only this, but you have the option to
+          select any field from your subscription form (that you've created on
+          mailchimp.com). In the basic settings select the list that you want
+          your users to be subscribed to, configure which fields should be
+          shown during the registration process &amp; just enable the plugin
+          after that. That is all you have to do. Now when you navigate to
+          your registration page you should see a "newsletter checkbox", once
+          selected the configured fields should show up. </para>
+
+          <important>
+            <para>Please not that any required field that you've created on
+            mailchimp.com needs to be selected in the plugin settings (except
+            for the E-Mail field). If you don't do this, then users won't be
+            able to subscribe to your newsletter as the required fields won't
+            be shown during the registration process.</para>
+          </important>
+
+          <note>
+            <para>If new user account activation is turned off and your users
+            are immediatly registered on your site, then we will also register
+            them for the newsletter, but they will have first to confirm this
+            by clicking the "subscribe me" button in the email that they will
+            receive from Mailchimp.</para>
+
+            <para>If new user account activation is set to self (which means
+            that they will receive an activation email), then we will activate
+            their subscription without sending them a second mail. Whenever
+            they click the activation link they will be subscribed to your
+            newsletter as well.</para>
+
+            <para>In both cases this makes sure that we follow the double
+            opt-in process.</para>
+          </note>
+        </section>
+
+        <section>
+          <title>Community - CMC Registration plugin (Jomsocial
+          plugin)</title>
+
+          <para>If you use Jomsocial and you want to subscribe your users to
+          your newsletter during the registration on your site you'll need to
+          activate and configure this plugin. </para>
+
+          <important>
+            <para>Make sure that the User - CMC Registration plugin is turned
+            on! Otherwise this plugin won't function properly &amp; your users
+            won't be subscribed to the newsletter when they click the
+            activation link in the confirmation email.</para>
+          </important>
+        </section>
+
+        <section>
+          <title>Community Builder plugin</title>
+
+          <para>The Community Builder (CB) plugin allows you to show a
+          newsletter checkbox during the registration process on your site if
+          you use CB for registrations. This plugin will show a checkbox and
+          all the fields that you want your users to fill up in order to be
+          subscribed for your newsletter. To enable the plugin navigate to
+          your joomla backend -&gt; components -&gt; community builder -&gt;
+          plugin Manager -&gt; CMC - Newsletter registration</para>
+
+          <important>
+            <para>This plugin is automatically installed with CMC if we detect
+            CB during the installation. If you have installed CMC first and
+            after that CB, then you'll have to install CMC again in order for
+            the plugin to be installed. You don't need to uninstall first -
+            you can just install the same version over the old one.</para>
+          </important>
+        </section>
       </section>
     </section>
   </chapter>
