@@ -38,7 +38,6 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 				'mod_ccc_cmc_icons' => array('ccc_cmc_left', 1),
 				'mod_ccc_cmc_mailchimp' => array('ccc_cmc_slider', 1),
 				'mod_ccc_cmc_newsfeed' => array('ccc_cmc_slider', 1),
-				'mod_ccc_cmc_overview' => array('ccc_cmc_slider', 1),
 				'mod_ccc_cmc_update' => array('ccc_cmc_slider', 1)
 			),
 			'site' => array(
@@ -104,6 +103,20 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 		$this->loadLanguage();
 		$path = $parent->getParent()->getPath('source');
 		$this->status = new stdClass;
+
+		switch ($this->version)
+		{
+			case '1.0':
+			case '1.1':
+			case '1.2':
+			case '1.2.1':
+			case '1.3':
+			case '1.3.1':
+				CmcDatabaseUpdate::updateDbTo1_4();
+				break;
+			default:
+				break;
+		}
 
 		// Let us install the modules
 		$this->status->plugins = $this->installPlugins($this->installationQueue['plugins']);
@@ -432,7 +445,7 @@ class CompojoomInstaller
 	public function getParam($name)
 	{
 		$db = JFactory::getDbo();
-		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE name = ' . $db->quote($name));
+		$db->setQuery('SELECT manifest_cache FROM #__extensions WHERE name = ' . $db->quote('com_cmc'));
 		$manifest = json_decode($db->loadResult(), true);
 
 		return $manifest[$name];
@@ -611,7 +624,7 @@ class CompojoomInstaller
 	public function preflight($type, $parent)
 	{
 		$jversion = new JVersion;
-
+		$this->version = $this->getParam('version');
 		// Extract the version number from the manifest file
 		$this->release = $parent->get("manifest")->version;
 
@@ -669,5 +682,34 @@ class CompojoomInstaller
 	{
 		$this->parent = $parent;
 
+	}
+}
+
+/**
+ * Class databaseUpdate
+ *
+ * @since  1.4
+ */
+class CmcDatabaseUpdate
+{
+	/**
+	 * Update to 1.4
+	 *
+	 * @return void
+	 */
+	public static function updateDbTo1_4()
+	{
+		$db = JFactory::getDbo();
+
+		$db->setQuery("CREATE TABLE IF NOT EXISTS " . $db->qn('#__cmc_register') . " (
+		  " . $db->qn('id') . " int(11) NOT NULL AUTO_INCREMENT,
+		  " . $db->qn('user_id') . " int(11) NOT NULL,
+		  " . $db->qn('params') . " text NOT NULL,
+		  " . $db->qn('plg') . " tinyint(2) NOT NULL DEFAULT '0',
+		  " . $db->qn('created') . " datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+		  PRIMARY KEY (" . $db->qn('id') . ")
+		);");
+
+		$db->execute();
 	}
 }

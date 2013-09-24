@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `#__cmc_users` (
 );
 
 
-CREATE TABLE `#__cmc_register` (
+CREATE TABLE IF NOT EXISTS `#__cmc_register` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `params` text NOT NULL,
