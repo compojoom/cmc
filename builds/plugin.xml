@@ -32,7 +32,7 @@
         <if>
             <equals arg1="${mod.media.exist}" arg2="1"/>
             <then>
-                <copy todir="${destination.dir}/modules/${pluginType}/${pluginName}/media/${plugin}">
+                <copy todir="${destination.dir}/plugins/${pluginType}/${pluginName}/media/${plugin}">
                     <fileset dir="${dirs.source}/media/${plugin}">
                         <include name="**/*.*"/>
                         <exclude name="kml/*.*"/>

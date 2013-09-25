@@ -11,6 +11,9 @@
 	<files>
 		##PACKAGEFILESPLUGIN##
 	</files>
+	<media destination="plg_community_cmc" folder="media/plg_community_cmc">
+		##MEDIAPACKAGEFILES##
+	</media>
 	<languages folder="administrator/language">
 		##ADMINLANGUAGEFILES##
 	</languages>

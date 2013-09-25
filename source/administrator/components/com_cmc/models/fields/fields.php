@@ -50,18 +50,6 @@ class JFormFieldFields extends CmcField
 
 				$req = ($field['req']) ? 1 : 0;
 
-				if ($field[$key] == 'EMAIL')
-				{
-					if (!is_array($this->value))
-					{
-						$oldValue = $this->value;
-						$this->value = array();
-						$this->value[] = $oldValue;
-					}
-
-					$this->value[] = $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices;
-				}
-
 				if ($req)
 				{
 					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
@@ -80,15 +68,6 @@ class JFormFieldFields extends CmcField
 		if ($options)
 		{
 			$content = JHtml::_('select.genericlist', $options, 'jform[params][fields][]', $attribs, $key, $val, $this->value, $this->id);
-
-			$content .= '<script type="text/javascript">
-				window.addEvent(\'domready\',function() {
-				    $("jform_params_fields").addEvent( \'change\', function(){
-					$("jform_params_fields").options[0].setProperty(\'selected\', \'selected\');
-
-				    });
-				});
-				</script>';
 		}
 		else
 		{
