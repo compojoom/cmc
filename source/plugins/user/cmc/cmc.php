@@ -53,7 +53,8 @@ class PlgUserCmc extends JPlugin
 
 		if (in_array($task, array('register', 'apply', 'save')))
 		{
-			$needToValidate = isset($data->cmc) && isset($data->cmc['newsletter']);
+			$requestData = JFactory::getApplication()->input->get('jform', array(), 'array');
+			$needToValidate = isset($requestData['cmc']) && isset($requestData['cmc']['newsletter']);
 		}
 
 		if ($needToValidate)
@@ -99,23 +100,25 @@ class PlgUserCmc extends JPlugin
 				return true;
 			}
 
+			$user = JFactory::getUser($data["id"]);
+
 			if ($data["block"] == 1)
 			{
 				// Temporary save user
-				CmcHelperRegistration::saveTempUser($data["id"], $data["cmc"], _CPLG_JOOMLA);
+				CmcHelperRegistration::saveTempUser($user, $data["cmc"], _CPLG_JOOMLA);
 			}
 			else
 			{
 				if (!$isNew)
 				{
 					// Activate User to Mailchimp
-					CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+					CmcHelperRegistration::activateTempUser($user);
 				}
 				else
 				{
 					// Directly activate user
 					$activated = CmcHelperRegistration::activateDirectUser(
-						JFactory::getUser($data["id"]), $data["cmc"], _CPLG_JOOMLA
+						$user, $data["cmc"], _CPLG_JOOMLA
 					);
 
 					if ($activated)
