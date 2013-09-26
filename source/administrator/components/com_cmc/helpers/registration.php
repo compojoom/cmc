@@ -152,7 +152,7 @@ class CmcHelperRegistration
 		// Check if user is already activated
 		// We want a assoc array here
 		$params = json_decode($res->params, true);
-var_dump($params);
+
 		$chimp = new cmcHelperChimp;
 
 		$userlists = $chimp->listsForEmail($user->email);
@@ -208,7 +208,9 @@ var_dump($params);
 		}
 		else
 		{
-			echo "Error: " . $chimp->errorMessage;
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_WERE_NOT_SUBSCRIBED_TO_NEWSLETTER') . ':' . $chimp->errorMessage);
+
+			return false;
 		}
 
 		return true;
