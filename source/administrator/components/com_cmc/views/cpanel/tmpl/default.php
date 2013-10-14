@@ -46,6 +46,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                             echo JText::_($newsfeedModule->title);
                             ?>
                         </a>
+	                </li>
                     <li>
                         <a href="#update" data-toggle="tab">
                             <?php
