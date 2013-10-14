@@ -88,19 +88,19 @@ class CmcControllerSubscription extends JControllerLegacy
 		}
 		else
 		{
-			if ($updated)
+			if (!$updated)
 			{
 				$query->insert('#__cmc_users')->columns('list_id,email,merges')
 					->values($db->quote($listId) . ',' . $db->quote($email) . ',' . $db->quote(json_encode($mergeVars)));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 			else
 			{
 				$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
 					->where('email = ' . $db->quote($email) . ' AND list_id = ' . $db->quote($listId));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 
 			$response['html'] = ($updated) ? 'updated' : 'saved';
