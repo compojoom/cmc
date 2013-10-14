@@ -113,7 +113,7 @@ class CmcControllerSync extends CmcController
 			$state->message = JText::sprintf('COM_CMC_BATCH_SYNC_PROGRESS', $state->offset * $state->batchSize, $state->batchSize);
 		}
 
-		if ($state->offset > $pages)
+		if ($state->offset >= $pages)
 		{
 			// First list in the array was synced, lets remove it
 			$oldList = array_shift($state->lists);
