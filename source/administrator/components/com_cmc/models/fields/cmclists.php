@@ -25,6 +25,7 @@ class JFormFieldCmclists extends CmcField
 	 */
 	public function getInput()
 	{
+		$content = '';
 		$api = new cmcHelperChimp;
 		$lists = $api->lists();
 
@@ -38,7 +39,7 @@ class JFormFieldCmclists extends CmcField
 		}
 
 		$option = JFactory::getApplication()->input->get('option');
-		$controller = ($option == 'com_modules' ? 'module' : 'plugin');
+		$controller = in_array($option, array('com_modules', 'com_advancedmodules')) ? 'module' : 'plugin';
 
 		$attribs = "onchange='submitbutton(\"$controller.apply\")'";
 
