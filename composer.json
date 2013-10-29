@@ -1,0 +1,10 @@
+{
+	"name": "compojoom/com_cmc",
+	"description": "Cmc is a Joomla extension that works with the Mailchimp API",
+	"keywords": ["joomla","framework","compojoom","mailchimp"],
+	"homepage": "https://compojoom.com",
+	"license": "GPL-2.0+",
+	"require": {
+		"php": ">=5.3.10"
+	}
+}
