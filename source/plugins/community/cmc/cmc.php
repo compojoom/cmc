@@ -49,7 +49,7 @@ class PlgCommunityCmc extends JPlugin
 	public function onUserRegisterFormDisplay(&$data)
 	{
 		// Load the funky stuff
-		Jhtml::_('behavior.framework');
+		JHtml::_('behavior.framework');
 		JHtml::stylesheet('media/plg_community_cmc/css/style.css');
 		JHtml::script('media/plg_community_cmc/js/cmc.js');
 
