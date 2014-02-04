@@ -80,7 +80,7 @@ class PlgUserCmc extends JPlugin
 	/**
 	 * Prepares the form
 	 *
-	 * @param   object   $data    - the users data
+	 * @param   array    $data    - the users data
 	 * @param   boolean  $isNew   - is the user new
 	 * @param   object   $result  - the db result
 	 * @param   string   $error   - the error message
@@ -105,7 +105,7 @@ class PlgUserCmc extends JPlugin
 			if ($data["block"] == 1)
 			{
 				// Temporary save user
-				CmcHelperRegistration::saveTempUser($user, $data["cmc"], _CPLG_JOOMLA);
+				CmcHelperRegistration::saveTempUser($user, $data, _CPLG_JOOMLA);
 			}
 			else
 			{
