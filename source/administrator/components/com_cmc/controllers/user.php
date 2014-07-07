@@ -30,16 +30,17 @@ class CmcControllerUser extends JControllerForm
 	public function save($key = null, $urlVar = null)
 	{
 		$row = JTable::getInstance('users', 'CmcTable');
+		$input = JFactory::getApplication()->input;
 		$params = JComponentHelper::getParams('com_cmc');
 		$api_key = $params->get("api_key", '');
 		$post = JRequest::get('post');
-		$id = JRequest::getInt('id', 0);
+		$id = $input->getInt('id', 0);
 		$post['id'] = $id;
-		$list_id = JRequest::getVar('list_id', '');
-		$email = JRequest::getVar('email', '');
-		$firstname = JRequest::getVar('firstname', '');
-		$lastname = JRequest::getVar('lastname', '');
-		$email_type = JRequest::getVar('email_type', '');
+		$list_id = $input->get('list_id', '');
+		$email = $input->get('email', '');
+		$firstname = $input->get('firstname', '');
+		$lastname = $input->get('lastname', '');
+		$email_type = $input->get('email_type', '');
 
 		$user = JFactory::getUser();
 

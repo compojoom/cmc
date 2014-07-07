@@ -90,7 +90,8 @@ class CmcHelperBasic
 
 		if ($api->errorCode)
 		{
-			return (JError::raiseError(JTEXT::_("COM_CMC_LOAD_USER_FAILED")) . " " . $api->errorCode . " / " . $api->errorMessage);
+			JFactory::getApplication()->enqueueMessage(JTEXT::_("COM_CMC_LOAD_USER_FAILED") . " " . $api->errorCode . " / " . $api->errorMessage, 'error');
+			return false;
 		}
 		else
 		{
@@ -160,7 +161,7 @@ class CmcHelperBasic
 
 				//$item['interests'] = $user['merges']['INTERESTS'];
 
-				$item['status'] = $user['status'];;
+				$item['status'] = $user['status'];
 				$item['ip_opt'] = $user['ip_opt'];
 				$item['ip_signup'] = $user['ip_signup'];
 				$item['language'] = $user['language'];
@@ -231,7 +232,8 @@ class CmcHelperBasic
 
 		if ($api->errorCode)
 		{
-			return (JError::raiseError(JTEXT::_("COM_CMC_SUBSCRIBE_FAILED")) . " " . $api->errorCode . " / " . $api->errorMessage);
+			JFactory::getApplication()->enqueueMessage(JTEXT::_("COM_CMC_SUBSCRIBE_FAILED") . " " . $api->errorCode . " / " . $api->errorMessage, 'error');
+			return false;
 		}
 		else
 		{
@@ -288,7 +290,8 @@ class CmcHelperBasic
 
 		if ($api->errorCode)
 		{
-			return (JError::raiseError(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED")) . " " . $api->errorCode . " / " . $api->errorMessage);
+			JFactory::getApplication()->enqueueMessage(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED"). " " . $api->errorCode . " / " . $api->errorMessage, 'error');
+			return false;
 		}
 		else
 		{
@@ -359,7 +362,11 @@ class CmcHelperBasic
 
 		if ($api->errorCode)
 		{
-			return (JError::raiseError(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED")) . " " . $api->errorCode . " / " . $api->errorMessage);
+			JFactory::getApplication()->enqueueMessage(
+				JText::_("COM_CMC_UNSUBSCRIBE_FAILED") . " " . $api->errorCode . " / " . $api->errorMessage,
+				'error'
+			);
+			return false;
 		}
 		else
 		{

@@ -13,7 +13,6 @@ $updateModule = JModuleHelper::getModule('mod_ccc_cmc_update');
 $mailchimpOutput = JModuleHelper::renderModule($mailchimpModule);
 $iconsOutput = JModuleHelper::renderModule($iconsModule);
 $newsfeedOutput = JModuleHelper::renderModule($newsfeedModule);
-$updateOutput = JModuleHelper::renderModule($updateModule);
 
 JHTML::_('behavior.tooltip');
 CmcHelperBasic::bootstrap();
@@ -64,9 +63,6 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                         <?php echo $newsfeedOutput; ?>
                     </div>
 
-                    <div class="tab-pane" id="update">
-                        <?php echo $updateOutput; ?>
-                    </div>
                 </div>
             </div>
         </div>

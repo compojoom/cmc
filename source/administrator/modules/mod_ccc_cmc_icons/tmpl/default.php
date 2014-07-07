@@ -13,7 +13,6 @@ defined('_JEXEC') or die();
 $lang = JFactory::getLanguage();
 $lang->load('com_hotspots.sys',JPATH_ADMINISTRATOR);
 $path = JURI::root() . '/media/com_cmc/backend/images/';
-require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
 ?>
 
 
@@ -34,5 +33,4 @@ require_once( JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php');
                 <span><?php echo JText::_('COM_CMC_USERS'); ?></span>
             </a>
         </div>
-        <?php echo LiveUpdate::getIcon(); ?>
     </div>

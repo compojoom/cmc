@@ -191,7 +191,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 			// Droping the email from the list
 			$query->delete('#__cmc_users')->where('email =' . $db->quote($email) . ' AND list_id = ' . $db->quote($data['list_id']));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		else
 		{
@@ -200,7 +200,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 			$query->update('#__cmc_users')->set('status = ' . $db->quote('unsubscribed'))
 				->where('email =' . $db->quote($email) . ' AND list_id = ' . $db->quote($data['list_id']));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 

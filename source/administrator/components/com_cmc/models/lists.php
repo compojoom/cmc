@@ -134,7 +134,7 @@ class CmcModelLists extends JModelList
 			if ($this->getState('lists.id') == 0)
 			{
 				$app = JFactory::getApplication();
-				$data->set('id', JRequest::getInt('id', $app->getUserState('com_cmc.lists.filter.list_id')));
+				$data->set('id', JFactory::getApplication()->input->getInt('id', $app->getUserState('com_cmc.lists.filter.list_id')));
 			}
 		}
 

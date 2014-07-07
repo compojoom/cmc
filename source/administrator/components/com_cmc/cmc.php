@@ -14,7 +14,9 @@ defined('_JEXEC') or die('Restricted access');
 // Access check.
 if (!JFactory::getUser()->authorise('core.manage', 'com_cmc'))
 {
-	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+	JFactory::getApplication()->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+
+	return false;
 }
 
 // In J3.0 the toolbar is not loaded automatically, so let us load it ourselves.
@@ -38,15 +40,6 @@ $jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
-// Live updater
-if ($input->getCmd('view', '') == 'liveupdate')
-{
-	require_once JPATH_COMPONENT_ADMINISTRATOR . '/liveupdate/liveupdate.php';
-	LiveUpdate::handleRequest();
-
-	return;
-}
-
 /*
  * this part is a little crazy because of the redirects...
  * Show a warning only if we are in the cpanel view
@@ -56,7 +49,7 @@ if (!cmcHelperBasic::checkRequiredSettings())
 {
 	if ($input->getCmd('view', '') == 'cpanel')
 	{
-		JError::raiseWarning('NO_KEY', JText::_('COM_CMC_YOU_NEED_TO_PROVIDE_API_KEYS'));
+		JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_NEED_TO_PROVIDE_API_KEYS'), 'error');
 	}
 
 	if ($input->getCmd('view', '') != 'cpanel')

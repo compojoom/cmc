@@ -47,7 +47,7 @@ class CmcViewUsers extends JViewLegacy
 		array_shift($options);
 		$this->addToList = JHtml::_('select.genericlist', $options, 'addtolist', '', 'value', 'text', $this->state->get('filter.list'));
 
-		$this->assignRef('filter', $filter);
+		$this->filter = $filter;
 
 		$this->addToolbar();
 		parent::display($tpl);

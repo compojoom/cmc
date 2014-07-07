@@ -297,7 +297,7 @@ class CompojoomInstaller
 							$sql .= ', params = ' . $db->quote($installer->getParams());
 							$sql .= ' WHERE `module`=' . $db->Quote($module);
 							$db->setQuery($sql);
-							$db->query();
+							$db->execute();
 
 							// Get module id
 							$db->setQuery('SELECT id FROM #__modules WHERE module = ' . $db->quote($module));
@@ -307,7 +307,7 @@ class CompojoomInstaller
 							$query = 'INSERT INTO #__modules_menu(moduleid, menuid) VALUES (' . $db->quote($moduleId) . ' ,0 );';
 							$db->setQuery($query);
 
-							$db->query();
+							$db->execute();
 						}
 					}
 				}
@@ -393,7 +393,7 @@ class CompojoomInstaller
 			{
 				$query = "UPDATE #__extensions SET enabled=1 WHERE element=" . $db->Quote($pluginName) . " AND folder=" . $db->Quote($pluginType);
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -633,9 +633,9 @@ class CompojoomInstaller
 
 		if (version_compare($jversion->getShortVersion(), $this->minimum_joomla_release, 'lt'))
 		{
-			Jerror::raiseWarning(
-				null, 'Cannot install ' . $this->extension . ' in a Joomla release prior to '
-				. $this->minimum_joomla_release
+			JFactory::getApplication()->enqueueMessage(
+				'Cannot install ' . $this->extension . ' in a Joomla release prior to '
+				. $this->minimum_joomla_release, 'warning'
 			);
 
 			return false;
@@ -651,7 +651,7 @@ class CompojoomInstaller
 			{
 				if (version_compare($this->release, $oldRelease, 'lt'))
 				{
-					Jerror::raiseWarning(null, 'Incorrect version sequence. Cannot upgrade ' . $rel);
+					JFactory::getApplication()->enqueueMessage('Incorrect version sequence. Cannot upgrade ' . $rel, 'warning')
 
 					return false;
 				}

@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
 $language = JFactory::getLanguage();
 $language->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
-$view = JRequest::getCmd('view');
+$view = JFactory::getApplication()->input->getCmd('view');
 
 $subMenus = array(
 	'cpanel' => 'COM_CMC_CPANEL',

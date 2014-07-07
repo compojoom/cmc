@@ -441,7 +441,7 @@ class cmcForm
         if(method_exists($this, $function)) {
             return call_user_func_array(array($this, $function), $arguments);
         } else {
-            JError::raiseWarning('404',JText::sprintf('MOD_CMC_UNSUPPORTED_FIELD', $function));
+	        JFactory::getApplication()->enqueueMessage(JText::sprintf('MOD_CMC_UNSUPPORTED_FIELD', $function), 'warning');
         }
 
     }

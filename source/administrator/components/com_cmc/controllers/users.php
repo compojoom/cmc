@@ -43,7 +43,8 @@ class CmcControllerUsers extends JControllerAdmin
 	 */
 	public function delete()
 	{
-		$cid = JRequest::getVar('cid', array(), '', 'array');
+		$input = JFactory::getApplication()->input;
+		$cid = $input->get('cid', array(), 'array');
 		$params = JComponentHelper::getParams('com_cmc');
 		$api_key = $params->get("api_key", '');
 		$db = JFactory::getDBO();
@@ -75,7 +76,7 @@ class CmcControllerUsers extends JControllerAdmin
 			$query = "DELETE FROM #__cmc_users where id IN ( $cids )";
 			$db->setQuery($query);
 
-			if (!$db->query())
+			if (!$db->execute())
 			{
 				echo "<script> alert('" . $db->getErrorMsg() . "'); window.history.go (-1); </script>\n";
 			}

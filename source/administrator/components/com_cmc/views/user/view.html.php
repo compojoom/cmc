@@ -68,11 +68,11 @@ class CmcViewUser extends JViewLegacy
 
 		$status_select = JHTML::_('select.genericlist', $status_options, 'status', null, 'value', 'text', $user->status);
 
-		$this->assignRef('list_select', $list_select);
-		$this->assignRef('lists', $lists);
-		$this->assignRef('status_select', $status_select);
-		$this->assignRef('email_type_select', $email_type_select);
-		$this->assignRef('user', $user);
+		$this->list_select = $list_select;
+		$this->lists = $lists;
+		$this->status_select = $status_select;
+		$this->email_type_select = $email_type_select;
+		$this->user = $user;
 
 		$this->addToolbar();
 		parent::display($tpl);

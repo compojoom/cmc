@@ -156,8 +156,8 @@ class CmcControllerSync extends CmcController
 		if ($data instanceof Exception)
 		{
 			JLog::add($data->getMessage(), JLog::ERROR);
-			JResponse::setHeader('status', $data->getCode());
-			JResponse::sendHeaders();
+			JFactory::getApplication()->setHeader('status', $data->getCode());
+			JFactory::getApplication()->sendHeaders();
 		}
 
 		// Create the response object.
