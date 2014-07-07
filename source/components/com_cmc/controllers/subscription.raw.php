@@ -36,17 +36,17 @@ class CmcControllerSubscription extends JControllerLegacy
 		$input = JFactory::getApplication()->input;
 		$form = $input->get('jform', '', 'array');
 
-		if (isset($form['groups']))
+		if (isset($form['cmc_groups']))
 		{
-			foreach ($form['groups'] as $key => $group)
+			foreach ($form['cmc_groups'] as $key => $group)
 			{
 				$mergeVars[$key] = $group;
 			}
 		}
 
-		if (isset($form['interests']))
+		if (isset($form['cmc_interests']))
 		{
-			foreach ($form['interests'] as $key => $interest)
+			foreach ($form['cmc_interests'] as $key => $interest)
 			{
 				// Take care of interests that contain a comma (,)
 				if (is_array($interest))
@@ -63,7 +63,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
-		$listId = $form['listid'];
+		$listId = $form['cmc']['listid'];
 		$email = $mergeVars['EMAIL'];
 
 		// Check if the user is in the list already

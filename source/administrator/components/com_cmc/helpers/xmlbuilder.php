@@ -30,6 +30,7 @@ class CmcHelperXmlbuilder
 	 */
 	public function __construct($options)
 	{
+		$this->newsletterCheckbox = $options->get('newsletterCheckbox', 1);
 		$this->phoneFormat = $options->get("phoneFormat", "inter");
 		$this->dateFormat = $options->get("dateFormat", "%Y-%m-%d");
 		$this->address2 = $options->get("address2", 0);
@@ -78,13 +79,15 @@ class CmcHelperXmlbuilder
 							name="intro-text"
 							type="spacer"
 							class="text"
-							label="' . JText::_($this->introText) . '"
+							label="' . htmlspecialchars(JText::_($this->introText)) . '"
 						/>
 						';
 		}
 
 		// Adding Newsletter Checkbox
-		$html .= '
+		if ($this->newsletterCheckbox)
+		{
+			$html .= '
 					<field
 						name="newsletter"
 						type="checkbox"
@@ -97,6 +100,7 @@ class CmcHelperXmlbuilder
 						label="COM_CMC_NEWSLETTER"
 					/>
 					';
+		}
 
 		$html .= '<field type="hidden" name="listid" default="' . $this->listId . '" />';
 
@@ -174,7 +178,7 @@ class CmcHelperXmlbuilder
 							name="outro-text"
 							type="spacer"
 							class="text"
-							label="' . JText::_($this->outroText) . '"
+							label="' . htmlspecialchars(JText::_($this->outroText)) . '"
 						/>
 						';
 		}

@@ -22,7 +22,7 @@
         <fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
             <fieldset name="basic">
                 <field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
-                       description="MOD_CMC_INTRO_TEXT_DESC"/>
+                       description="MOD_CMC_INTRO_TEXT_DESC" filter="raw"/>
                 <field name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_1"
                        description="MOD_CMC_OUTRO_TEXT_1_DESC"/>
                 <field name="outro-text-2" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_2"
@@ -35,9 +35,10 @@
                        cols="25" rows="2" label="MOD_CMC_UPDATE_MESSAGE" description="MOD_CMC_UPDATE_DESC"/>
                 <field name="listid" required="true" type="cmclists" default="" cols="25" rows="2" label="MOD_CMC_LIST"
                        description="MOD_CMC_LIST_DESC"/>
-                <field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"/>
+                <field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"
+	                class="chzn-none chzn-done"/>
                 <field name="interests" type="interests" default="" label="MOD_CMC_INTERESTS"
-                       description="MOD_CMC_INTERESTS_DESC"/>
+                       description="MOD_CMC_INTERESTS_DESC" class="chzn-none chzn-done"/>
                 <field name="dateFormat" type="text" default="%Y-%m-%d" label="MOD_CMC_DATE_FORMAT"
                        description="MOD_CMC_DATE_FORMAT_DESC"/>
                 <field name="phoneFormat" type="radio" default="inter" label="MOD_CMC_PHONE_FORMAT"
@@ -50,6 +51,7 @@
                     <option value="0">JNO</option>
                     <option value="1">JYES</option>
                 </field>
+	            <field name="newsletterCheckbox" type="hidden" value="0" default="0"/>
             </fieldset>
             <fieldset name="advanced">
                 <field
