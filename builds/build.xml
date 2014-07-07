@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        Hotspots build file for Phing
+        CMC build file for Phing
         written by Daniel Dimitrov - https://compojoom.com
         
         Run "phing -f component.xml"
@@ -10,13 +10,15 @@
 <project name="com_cmc" default="buildZip">
     <property file="./build.properties"/>
 
-    <taskdef name="extfile" classname="phingext.listJPackageFilesTask"/>
-    <taskdef name="gitversion" classname="phingext.GitVersionTask"/>
-    <taskdef name="explode" classname="phingext.explodeTask"/>
+	<taskdef name="extfile" classname="phingext.listJPackageFilesTask" classpath="../../buildtools"/>
+	<taskdef name="gitversion" classname="phingext.GitVersionTask" classpath="../../buildtools"/>
+	<taskdef name="explode" classname="phingext.explodeTask" classpath="../../buildtools"/>
 
-    <import file="plugin.xml" optional="true"/>
-	<import file="plugincb.xml" optional="true"/>
-    <import file="module.xml" optional="true"/>
+	<import file="../../buildtools/helper.xml" optional="true"/>
+	<import file="../../buildtools/plugin.xml" optional="true"/>
+	<import file="../../buildtools/plugincb.xml" optional="true"/>
+	<import file="../../buildtools/module.xml" optional="true"/>
+	<import file="../../buildtools/library.xml" optional="true"/>
 
     <target name="setup-properties">
         <!-- Initialize the version if it's not set -->
@@ -157,6 +159,16 @@
                 <foreach list="${modules}" param="module" target="buildModule"/>
             </then>
         </if>
+
+	    <if>
+		    <isset property="libraries"/>
+		    <then>
+			    <foreach list="${libraries}" param="library" target="build-library-sources">
+				    <property name="destination.dir" value="${destination.dir}/libraries/${library}" override="true"/>
+			    </foreach>
+			    <property name="destination.dir" value="${destination.dir}" override="true"/>
+		    </then>
+	    </if>
 
     </target>
 

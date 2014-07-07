@@ -5,6 +5,7 @@ modules=mod_cmc
 modules_admin=mod_ccc_cmc_icons,mod_ccc_cmc_newsfeed,mod_ccc_cmc_update,mod_ccc_cmc_mailchimp
 plugins=plg_community_cmc, plg_system_ecom360,plg_system_ecom360akeeba,plg_system_ecom360hika,plg_system_ecom360matukio,plg_system_ecom360payplans,plg_system_ecom360redshop,plg_system_ecom360virtuemart, plg_user_cmc
 pluginscb=plug_cmc
+libraries=compojoom
 ; FTP Options
 ftp.host=ftp.example.com
 ftp.port=21
