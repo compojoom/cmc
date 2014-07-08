@@ -4,3 +4,11 @@
     border-color: #B94A48!important;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
+
+.cmc-loading {
+	opacity: 0.5;
+	pointer-events: none;
+	transition-duration: 0.16s;
+	transition-property: opacity;
+	transition-timing-function: ease-out;
+}

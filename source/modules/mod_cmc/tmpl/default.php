@@ -14,10 +14,12 @@ $renderer = CmcHelperXmlbuilder::getInstance($params);
 
 // Render Content
 $html = $renderer->build();
+
 $form = JForm::getInstance('mod_cmc', $html, array('control' => 'jform'));
 $moduleId = $module->id;
 
 JHtml::_('behavior.framework', true);
+JHtml::_('behavior.formvalidation');
 JHtml::script(JURI::root() . '/media/mod_cmc/js/cmc.js');
 JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
 
@@ -31,7 +33,7 @@ $script = 'window.addEvent("domready", function() {
         },
         spinner : "spinner-' . $moduleId . '"
     }
-    new cmc("cmc-signup-form-' . $moduleId . '", options);
+    new cmc("#cmc-signup-form-' . $moduleId . '", options);
 });';
 
 $document->addScriptDeclaration($script);
@@ -41,8 +43,15 @@ JText::script($params->get('updateMsg'));
 
 <div id="cmc-signup-<?php echo $moduleId; ?>"
      class="cmc-signup <?php echo $params->get('moduleclass_sfx', ''); ?>">
+	<div class="cmc-updated" style="display:none">
+		<?php echo JText::_($params->get('updateMsg')); ?>
+	</div>
+	<div class="cmc-saved" style="display:none">
+		<?php echo JText::_($params->get('thankyou')); ?>
+	</div>
 	<form action="<?php echo JRoute::_('index.php?option=com_cmc&format=raw&task=subscription.save'); ?>" method="post"
 	      id="cmc-signup-form-<?php echo $moduleId; ?>"
+	      class="form-validate"
 	      name="cmc<?php echo $moduleId; ?>">
 
 
@@ -118,17 +127,15 @@ JText::script($params->get('updateMsg'));
 				</div>
 			<?php endif; ?>
 
-				<input type="submit" class="button btn btn-primary" value="<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>"
-				       id="cmc-signup-submit-<?php echo $moduleId; ?>"/>
+			<button class="btn btn-primary">
+				<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
+				<img width="16" height="16" class="cmc-spinner" style="display: none;" src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg">
+			</button>
 
 			<?php if ($params->get('outro-text-2')) : ?>
 				<div id="outro2_<?php echo $moduleId; ?>" class="outro2">
 					<p class="outro"><?php echo JText::_($params->get('outro-text-2')); ?></p>
 				</div>
 			<?php endif; ?>
-
-			<div id="spinner-<?php echo $moduleId; ?>" style="text-align:center;display:none;"><img
-							src="<?php echo JURI::root(); ?>media/mod_cmc/images/ajax-loader.gif" alt="Please wait"/>
-			</div>
 	</form>
 </div>

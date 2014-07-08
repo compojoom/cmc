@@ -27,7 +27,7 @@ class CmcControllerSubscription extends JControllerLegacy
 	public function save()
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
+		$appl = JFactory::getApplication();
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
@@ -35,6 +35,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		$input = JFactory::getApplication()->input;
 		$form = $input->get('jform', '', 'array');
+		$isAjax = $input->get('ajax');
 
 		if (isset($form['cmc_groups']))
 		{
@@ -107,6 +108,14 @@ class CmcControllerSubscription extends JControllerLegacy
 			$response['error'] = false;
 		}
 
-		echo json_encode($response);
+		if ($isAjax)
+		{
+			echo json_encode($response);
+			jexit();
+		}
+
+		$appl->enqueueMessage($response['html']);
+		$appl->redirect($_SERVER['HTTP_REFERER']);
+
 	}
 }

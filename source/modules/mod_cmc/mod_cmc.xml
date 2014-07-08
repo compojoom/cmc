@@ -36,9 +36,9 @@
                 <field name="listid" required="true" type="cmclists" default="" cols="25" rows="2" label="MOD_CMC_LIST"
                        description="MOD_CMC_LIST_DESC"/>
                 <field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"
-	                class="chzn-none chzn-done"/>
+	                class="chzn-none chzn-done"  filter="raw"/>
                 <field name="interests" type="interests" default="" label="MOD_CMC_INTERESTS"
-                       description="MOD_CMC_INTERESTS_DESC" class="chzn-none chzn-done"/>
+                       description="MOD_CMC_INTERESTS_DESC" class="chzn-none chzn-done" filter="raw"/>
                 <field name="dateFormat" type="text" default="%Y-%m-%d" label="MOD_CMC_DATE_FORMAT"
                        description="MOD_CMC_DATE_FORMAT_DESC"/>
                 <field name="phoneFormat" type="radio" default="inter" label="MOD_CMC_PHONE_FORMAT"

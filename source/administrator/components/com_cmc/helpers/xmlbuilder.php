@@ -256,6 +256,7 @@ class CmcHelperXmlbuilder
 			'phone' => 'validate-digits'
 		);
 
+		$class = array();
 		$type = isset($config['type']) ? $config['type'] : 'text';
 
 		if (isset($config['class']))
@@ -268,7 +269,7 @@ class CmcHelperXmlbuilder
 			$class[] = $validate[$field[1]];
 		}
 
-		$title = JText::_($field[2]);
+		$title = htmlentities(htmlspecialchars(JText::_($field[2])));
 
 		$req = ($field[3]) ? ' cmc_req' : '';
 
@@ -280,8 +281,9 @@ class CmcHelperXmlbuilder
 		// Do we want a description here?
 		$x .= "description=\"\"\n";
 		$x .= "filter=\"string\"\n";
-		$x .= 'class="inputbox input-medium' . $req . '" ';
+		$x .= 'class="inputbox input-medium' . $req . ' ' . implode(' ', $class) . '" ';
 		$x .= 'labelclass="form-label cmc-label" ';
+		$x .= 'hint="' . $title . '" ';
 		$x .= "label=\"" . $title . "\"\n";
 
 		if ($field[3])
