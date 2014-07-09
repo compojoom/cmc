@@ -20,79 +20,49 @@ jimport('joomla.application.component.controllerform');
 class CmcControllerUser extends JControllerForm
 {
 	/**
-	 * Saves the user in the db
+	 * Add/update the user in Mailchimp
 	 *
-	 * @param   int     $key     - the key
-	 * @param   object  $urlVar  - url vars
+	 * @param   JModelLegacy  $model      - the model object
+	 * @param   array         $validData  - the valid data
 	 *
-	 * @return bool|void
+	 * @return void
 	 */
-	public function save($key = null, $urlVar = null)
+	public function postSaveHook($model, $validData)
 	{
-		$row = JTable::getInstance('users', 'CmcTable');
-		$input = JFactory::getApplication()->input;
 		$params = JComponentHelper::getParams('com_cmc');
 		$api_key = $params->get("api_key", '');
-		$post = JRequest::get('post');
-		$id = $input->getInt('id', 0);
-		$post['id'] = $id;
-		$list_id = $input->get('list_id', '');
-		$email = $input->get('email', '');
-		$firstname = $input->get('firstname', '');
-		$lastname = $input->get('lastname', '');
-		$email_type = $input->get('email_type', '');
-
 		$user = JFactory::getUser();
 
-		if (!$row->bind($post))
-		{
-			echo "<script> alert('" . $row->getError() . "'); window.history.go (-1); </script>\n";
-			exit();
-		}
-
 		// Updating it to mailchimp
-
-		if (empty($id))
+		if ($model->getState('user.new'))
 		{
-			CmcHelperBasic::subscribeList($api_key, $list_id, $email, $firstname, $lastname, $user, null, $email_type, false);
+			CmcHelperBasic::subscribeList(
+				$api_key,
+				$validData['list_id'],
+				$validData['email'],
+				$validData['firstname'],
+				$validData['lastname'],
+				$user,
+				null,
+				$validData['email_type'],
+				false
+			);
 		}
 		else
 		{
 			// Updating to MC
-			CmcHelperBasic::subscribeList($api_key, $list_id, $email, $firstname, $lastname, $user, null, $email_type, true);
+			CmcHelperBasic::subscribeList(
+				$api_key,
+				$validData['list_id'],
+				$validData['email'],
+				$validData['firstname'],
+				$validData['lastname'],
+				$user,
+				null,
+				$validData['email_type'],
+				true
+			);
 		}
 
-		if (!$row->store())
-		{
-			echo "<script> alert('" . $row->getError() . "'); window.history.go (-1); </script>\n";
-			exit();
-		}
-
-		switch ($this->task)
-		{
-			case 'apply':
-				$msg = JText::_('COM_CMC_USER_APPLY');
-				$link = 'index.php?option=com_cmc&view=user&layout=edit&id=' . $row->id;
-				break;
-
-			case 'save':
-			default:
-				$msg = JText::_('COM_CMC_USER_SAVE');
-				$link = 'index.php?option=com_cmc&view=users';
-				break;
-		}
-
-		$this->setRedirect($link, $msg);
-	}
-
-	/**
-	 * Cancel and redirect
-	 *
-	 * @return bool|void
-	 */
-	public function cancel()
-	{
-		$link = 'index.php?option=com_cmc&view=users';
-		$this->setRedirect($link);
 	}
 }

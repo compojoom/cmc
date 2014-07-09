@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL"
+		       readonly="true" class="readonly"
+		       description="JGLOBAL_FIELD_ID_DESC"/>
+
+		<field name="firstname" type="text" class="inputbox"
+		       size="40" label="COM_CMC_FIRSTNAME" />
+
+		<field name="lastname" type="text" class="inputbox"
+		       size="40" label="COM_CMC_LASTNAME" />
+
+		<field name="email" type="text" class="inputbox"
+		       size="40" label="COM_CMC_EMAIL" required="true" />
+
+		<field name="list_id" type="cmclistid" class="inputbox"
+		       size="1" label="COM_CMC_LIST" required="true" />
+
+		<field  name="status"
+		        type="list"
+		        label="COM_CMC_STATUS"
+		        class="inputbox"
+		        size="1"
+		        default="1">
+			<option	value="subscribed">COM_CMC_SUBSCRIBED</option>
+			<option value="unsubscribed">COM_CMC_UNSUBSCRIBED</option>
+			<option value="cleaned">COM_CMC_CLEANED</option>
+			<option value="pending">COM_CMC_PENDING</option>
+		</field>
+
+		<field  name="email_type"
+		        type="list"
+		        label="COM_CMC_EMAIL_TYPE"
+		        class="inputbox"
+		        size="1"
+		        default="1">
+			<option	value="html">COM_CMC_HTML</option>
+			<option value="text">COM_CMC_TEXT</option>
+			<option value="mobile">COM_CMC_MOBILE</option>
+		</field>
+
+	</fieldset>
+
+</form>

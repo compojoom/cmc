@@ -27,6 +27,7 @@ class CmcViewUser extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$user = $this->get('Item');
+		$this->form = $this->get('Form');
 
 		if (!$user->get('id'))
 		{

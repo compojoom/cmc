@@ -44,53 +44,52 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                 -->
                     <tr>
                         <td width="200" align="left" class="key">
-                            <?php echo JText::_('COM_CMC_FIRSTNAME'); ?>:
+	                        <?php echo $this->form->getLabel('firstname'); ?>
                         </td>
                         <td>
-                            <input class="required" type="text" name="firstname" id="firstname" size="50"
-                                   maxlength="250" value="<?php echo $this->user->firstname; ?>"/>
+	                        <?php echo $this->form->getInput('firstname'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td width="200" align="left" class="key">
-                            <?php echo JText::_('COM_CMC_LASTNAME'); ?>:
+	                        <?php echo $this->form->getLabel('lastname'); ?>
                         </td>
                         <td>
-                            <input class="required" type="text" name="lastname" id="lastname" size="50" maxlength="250"
-                                   value="<?php echo $this->user->lastname; ?>"/>
+	                        <?php echo $this->form->getInput('lastname'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td width="200" align="left" class="key">
-                            <?php echo JText::_('COM_CMC_EMAIL'); ?>:
+	                        <?php echo $this->form->getLabel('email'); ?>
                         </td>
                         <td>
-                            <input class="required" type="text" name="email" id="email" size="50" maxlength="250"
-                                   value="<?php echo $this->user->email; ?>"/>
+	                        <?php echo $this->form->getInput('email'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td width="200" align="left" class="key">
-                            <?php echo JText::_('COM_CMC_LIST'); ?>:
+	                        <?php echo $this->form->getLabel('list_id'); ?>
                         </td>
                         <td>
-                            <?php echo $this->list_select; ?>
+                            <?php echo $this->form->getInput('list_id'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td width="200" align="left" class="key">
-                            <?php echo JText::_('COM_CMC_STATUS'); ?>:
+	                        <?php echo $this->form->getLabel('status'); ?>
                         </td>
                         <td>
-                            <?php echo $this->status_select; ?>
+	                        <?php echo $this->form->getInput('status'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td width="200" align="left" class="key">
-                            <?php echo JText::_('COM_CMC_EMAIL_TYPE'); ?>:
+
+	                        <?php echo $this->form->getLabel('email_type'); ?>
                         </td>
                         <td>
-                            <?php echo $this->email_type_select; ?>
+
+	                        <?php echo $this->form->getInput('email_type'); ?>
                         </td>
                     </tr>
                     <tr>

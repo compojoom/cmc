@@ -42,7 +42,32 @@ class CmcModelUser extends JModelAdmin
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
-		// Do nothing for now
-		return false;
+		// Get the form.
+		$form = $this->loadForm('com_cmc.user', 'user', array('control' => 'jform', 'load_data' => $loadData));
+
+		if (empty($form))
+		{
+			return false;
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return    mixed    The data for the form
+	 */
+	protected function loadFormData()
+	{
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState('com_cmc.edit.user.data', array());
+
+		if (empty($data))
+		{
+			$data = $this->getItem();
+		}
+
+		return $data;
 	}
 }
