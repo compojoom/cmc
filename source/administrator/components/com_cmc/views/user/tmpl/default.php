@@ -11,8 +11,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-$editor = JFactory::getEditor();
-
 JHTML::_('behavior.framework');
 JHTML::_('behavior.tooltip');
 CmcHelperBasic::bootstrap();

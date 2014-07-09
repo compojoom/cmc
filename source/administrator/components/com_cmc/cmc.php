@@ -19,6 +19,9 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmc'))
 	return false;
 }
 
+// Load Compojoom library
+require_once JPATH_LIBRARIES . '/compojoom/include.php';
+
 // In J3.0 the toolbar is not loaded automatically, so let us load it ourselves.
 require_once 'toolbar.cmc.php';
 

@@ -46,18 +46,6 @@ class CmcHelperBasic
 	}
 
 	/**
-	 * Gets te list name
-	 *
-	 * @param   string  $list_id  - the list id
-	 *
-	 * @return mixed
-	 */
-	public static function getListName($list_id)
-	{
-		return $list_id;
-	}
-
-	/**
 	 * Gets the lists
 	 *
 	 * @return mixed
@@ -85,6 +73,7 @@ class CmcHelperBasic
 	public static function getUserDetailsMC($api_key, $list_id, $email, $id = null, $store = true)
 	{
 		$api = new MCAPI($api_key);
+		$appl = JFactory::getApplication();
 
 		$retval = $api->listMemberInfo($list_id, $email);
 
@@ -184,19 +173,17 @@ class CmcHelperBasic
 				{
 					$row = JTable::getInstance('users', 'CmcTable');
 
-					if (!$row->bind($item))
+					try
 					{
-						return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+						$row->bind($item);
+						$row->check();
+						$row->store();
 					}
-
-					if (!$row->check())
+					catch (Exception $e)
 					{
-						return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
-					}
+						$appl->enqueueMessage(JText::_('COM_CMC_LIST_ERROR_SAVING') . $e->getMessage());
 
-					if (!$row->store())
-					{
-						return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+						return false;
 					}
 				}
 			}
@@ -242,20 +229,16 @@ class CmcHelperBasic
 	}
 
 	/**
-	 * @static
+	 * Unsubscribes a user from the mailchimp list
 	 *
-	 * @param      $api_key
-	 * @param      $list_id
-	 * @param      $email
-	 * @param null $user
+	 * @param $user
 	 *
+	 * @throws Exception
 	 * @return bool|string
 	 */
 	public static function unsubscribeList($user)
 	{
 		$api = new cmcHelperChimp();
-		$appl = JFactory::getApplication();
-
 
 		$api->listUnsubscribe($user->list_id, $user->email, true);
 		if ($api->errorCode)
@@ -265,7 +248,6 @@ class CmcHelperBasic
 
 		return true;
 	}
-
 
 	/**
 	 * @static

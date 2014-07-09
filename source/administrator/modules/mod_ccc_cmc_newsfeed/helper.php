@@ -35,7 +35,13 @@ abstract class modCCCNewsfeedHelper
         $filter = JFilterInput::getInstance();
 
         //  get RSS parsed object
-        $rssDoc = JFactory::getFeedParser($rssurl);
+//        $rssDoc = JFeedFactory::getFeed($rssurl);
+
+	    var_dump($rssurl);
+	    die();
+	    $feed   = new JFeedFactory;
+	    $rssDoc = $feed->getFeed($rssurl);
+
 
 //	    var_dump($rssDoc);
         // echo "feed " + $rssurl;

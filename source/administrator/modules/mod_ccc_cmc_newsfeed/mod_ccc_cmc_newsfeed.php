@@ -24,6 +24,7 @@ if (!is_writable($cacheDir))
     return;
 }
 
+var_dump($params);
 $rssurl	= $params->get('feedurl', '');
 
 //check if feed URL has been set

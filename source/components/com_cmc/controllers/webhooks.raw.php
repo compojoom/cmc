@@ -139,19 +139,17 @@ class CmcControllerWebhooks extends JControllerLegacy
 
 		$row = JTable::getInstance('users', 'CmcTable');
 
-		if (!$row->bind($item))
+		try
 		{
-			return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+			$row->bind($item);
+			$row->check();
+			$row->store();
 		}
-
-		if (!$row->check())
+		catch (Exception $e)
 		{
-			return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
-		}
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_LIST_ERROR_SAVING') . $e->getMessage());
 
-		if (!$row->store())
-		{
-			return JError::raiseError(JText::_('COM_CMC_LIST_ERROR_SAVING') . " " . $row->getErrorMsg());
+			return false;
 		}
 	}
 

@@ -76,9 +76,13 @@ class CmcControllerUsers extends JControllerAdmin
 			$query = "DELETE FROM #__cmc_users where id IN ( $cids )";
 			$db->setQuery($query);
 
-			if (!$db->execute())
+			try
 			{
-				echo "<script> alert('" . $db->getErrorMsg() . "'); window.history.go (-1); </script>\n";
+				$db->execute();
+			}
+			catch (Exception $e)
+			{
+				JFactory::getApplication()->enqueueMessage($e->getMessage());
 			}
 		}
 

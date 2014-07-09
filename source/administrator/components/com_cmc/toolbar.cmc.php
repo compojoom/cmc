@@ -19,12 +19,11 @@ $view = JFactory::getApplication()->input->getCmd('view');
 $subMenus = array(
 	'cpanel' => 'COM_CMC_CPANEL',
 	'lists' => 'COM_CMC_LISTS',
-	'users' => 'COM_CMC_USERS',
-	'liveupdate' => 'COM_CMC_LIVEUPDATE'
+	'users' => 'COM_CMC_USERS'
 );
 
 foreach ($subMenus as $key => $name)
 {
 	$active = ($view == $key);
-	JSubMenuHelper::addEntry(JText::_($name), 'index.php?option=com_cmc&view=' . $key, $active);
+	JHtmlSidebar::addEntry(JText::_($name), 'index.php?option=com_cmc&view=' . $key, $active);
 }

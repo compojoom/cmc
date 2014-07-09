@@ -37,6 +37,7 @@ class CmcViewUsers extends JViewLegacy
 
 		foreach ($lists as $list)
 		{
+			$this->listNames[$list->mc_id] = $list->list_name;
 			$options[] = array(
 				'value' => $list->mc_id,
 				'text' => $list->list_name
@@ -47,8 +48,7 @@ class CmcViewUsers extends JViewLegacy
 		array_shift($options);
 		$this->addToList = JHtml::_('select.genericlist', $options, 'addtolist', '', 'value', 'text', $this->state->get('filter.list'));
 
-		$this->filter = $filter;
-
+		$this->sidebar = JHtmlSidebar::render();
 		$this->addToolbar();
 		parent::display($tpl);
 	}

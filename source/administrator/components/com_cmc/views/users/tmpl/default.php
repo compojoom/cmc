@@ -33,8 +33,11 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
     }
 </script>
 <div class="compojoom-bootstrap">
+	<div id="j-sidebar-container" class="span2">
+		<?php echo $this->sidebar; ?>
+	</div>
     <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm"
-          id="adminForm">
+          id="adminForm" class="span10">
         <div id="filter-bar" class="btn-toolbar">
             <div class="filter-search fltlft btn-group pull-left">
                 <label class="filter-search-lbl element-invisible"
@@ -133,7 +136,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                     <?php echo $item->id; ?>
                 </td>
                 <td align="center">
-                    <?php echo CmcHelperBasic::getListName($item->list_id); ?>
+                    <?php echo $this->listNames[$item->list_id]; ?>
                 </td>
                 <td align="center">
                     <?php echo $item->timestamp; ?>

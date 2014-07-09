@@ -23,7 +23,11 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 
 ?>
 <div class="compojoom-bootstrap">
-    <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>" method="post" name="adminForm" id="adminForm">
+	<div id="j-sidebar-container" class="span2">
+		<?php echo $this->sidebar; ?>
+	</div>
+    <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>" method="post"
+          name="adminForm" id="adminForm" class="span10">
         <?php if(count($this->items)) : ?>
 		    <div id="filter-bar" class="btn-toolbar">
 	            <div class="filter-search fltlft btn-group pull-left">

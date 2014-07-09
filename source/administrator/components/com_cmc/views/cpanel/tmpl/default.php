@@ -7,12 +7,12 @@ jimport('joomla.application.module.helper');
 
 $mailchimpModule = JModuleHelper::getModule('mod_ccc_cmc_mailchimp');
 $iconsModule = JModuleHelper::getModule('mod_ccc_cmc_icons');
-$newsfeedModule = JModuleHelper::getModule('mod_ccc_cmc_newsfeed');
 $updateModule = JModuleHelper::getModule('mod_ccc_cmc_update');
+
 
 $mailchimpOutput = JModuleHelper::renderModule($mailchimpModule);
 $iconsOutput = JModuleHelper::renderModule($iconsModule);
-$newsfeedOutput = JModuleHelper::renderModule($newsfeedModule);
+
 
 JHTML::_('behavior.tooltip');
 CmcHelperBasic::bootstrap();
@@ -20,7 +20,10 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 ?>
 
 <div class="compojoom-bootstrap" xmlns="http://www.w3.org/1999/html">
-    <div class="cpanel">
+	<div id="j-sidebar-container" class="span2">
+		<?php echo $this->sidebar; ?>
+	</div>
+    <div class="cpanel" class="span10">
         <div class="row-fluid compojoom-margin">
             <div class="span6">
                 <?php
@@ -41,9 +44,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a href="#newsfeed" data-toggle="tab">
-                            <?php
-                            echo JText::_($newsfeedModule->title);
-                            ?>
+                            <?php echo JText::_('COM_CMC_LATEST_NEWS'); ?>
                         </a>
 	                </li>
                     <li>
@@ -60,7 +61,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="newsfeed">
-                        <?php echo $newsfeedOutput; ?>
+                        <?php echo CompojoomHtmlFeed::renderFeed('https://compojoom.com/about/blog/tags/listings/cmc?format=feed&amp;type=rss'); ?>
                     </div>
 
                 </div>
