@@ -1,29 +1,25 @@
-var cmcUsers = new Class({
+var cmcUsers = function(){
+	var $ = jQuery;
 
-    initialize:function () {
-        var groups = document.id('groups');
-        var overflow = new Element('div', {
-            style:'top:0;left:0;width:100%;height:100%;background:#000;position:absolute;opacity:0.8;z-index:9998'
+    var initialize = function() {
+        var groups = $('#groups'), form = $('#addGroup');
+
+	    groups.css('display', 'block').addClass('animated bounceIn');
+
+	    form.on('submit', function() {
+	        var usergroups = form.find('input[type=checkbox]:checked');
+	        if (usergroups.length) {
+		        return true;
+	        } else {
+		        alert('Select group please');
+				return false;
+	        }
         });
 
-        overflow.inject(document.body);
-
-        groups.setStyle('display', 'block');
-
-        var form = document.id('addGroup');
-        form.addEvent('submit', function () {
-            var usergroups = form.getElements('input[name=usergroups[]]:checked');
-            if (usergroups.length) {
-                return true;
-            } else {
-                alert('Select group please');
-                return false;
-            }
+        $('#close').on('click', function () {
+            groups.css('display', 'none').removeClass('animated bounceIn');
         });
+    };
 
-        document.id('close').addEvent('click', function () {
-            overflow.destroy();
-            groups.setStyle('display', 'none');
-        });
-    }
-});
+	initialize();
+};

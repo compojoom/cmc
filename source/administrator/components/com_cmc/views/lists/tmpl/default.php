@@ -15,19 +15,35 @@ JHTML::_('behavior.tooltip');
 jimport('joomla.filter.output');
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 
+JHtml::script('media/com_cmc/backend/js/jquery.iframe-auto-height.js');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 
-CmcHelperBasic::bootstrap();
-JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
-
+echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'lists', 'COM_CMC_LISTS', '');
 ?>
-<div class="compojoom-bootstrap">
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
+<script type="text/javascript">
+	var $ = jQuery;
+
+	function closeIFrame(){
+		$('#lists-to-sync').css('display', 'none');
+	}
+
+	Joomla.submitbutton = function (pressbutton) {
+		if (pressbutton == 'lists.sync') {
+			$('#lists-to-sync').css('display', 'block');
+		} else {
+			Joomla.submitform(pressbutton);
+		}
+	}
+</script>
+
+<iframe id="lists-to-sync" class="box-info full"
+        src="index.php?option=com_cmc&view=sync&tmpl=component"
+        style="display: none;" height="350px"></iframe>
+<div class="box-info full">
+
     <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=lists'); ?>" method="post"
-          name="adminForm" id="adminForm" class="span10">
+          name="adminForm" id="adminForm">
         <?php if(count($this->items)) : ?>
 		    <div id="filter-bar" class="btn-toolbar">
 	            <div class="filter-search fltlft btn-group pull-left">
@@ -56,66 +72,68 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 	        </div>
 	        <div class="clr"></div>
 
-	        <table class="adminlist table">
-	            <thead>
-	            <tr>
-	                <th width="5">#</th>
-		            <th width="5">
-			            <input type="checkbox" name="checkall-toggle" value=""
-			                   title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
-		            </th>
-	                <th class="title">
-	                    <?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'cc.list_name', $listDirn, $listOrder); ?>
-	                </th>
-	                <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
-	                <th width="10%"><?php echo JText::_('COM_CMC_MC_ID'); ?></th>
-	                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_NAME'); ?></th>
-	                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_MAIL'); ?></th>
-	                <th width="10%"><?php echo JText::_('COM_CMC_DEFAULT_LANGUAGE'); ?></th>
-	                <th width="5%" nowrap="nowrap"><?php echo JText::_('COM_CMC_VISIBILITY'); ?></th>
-	            </tr>
-	            </thead>
-	            <tfoot>
-	            <tr>
-	                <td colspan="10"><?php echo $this->pagination->getListFooter(); ?></td>
-	            </tr>
-	            </tfoot>
-	            <tbody>
-	            <?php foreach ($this->items as $i => $item) : ?>
-	            <tr class="<?php echo "row" . $i % 2; ?>">
-	                <td><?php echo $this->pagination->getRowOffset($i); ?></td>
+	        <div class="table-responsive">
+		        <table class="table table-hover table-striped">
+		            <thead>
+		            <tr>
+		                <th width="5">#</th>
+			            <th width="5">
+				            <input type="checkbox" name="checkall-toggle" value=""
+				                   title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+			            </th>
+		                <th class="title">
+		                    <?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'cc.list_name', $listDirn, $listOrder); ?>
+		                </th>
+		                <th width="10%"><?php echo JText::_('JGRID_HEADING_ID'); ?></th>
+		                <th width="10%"><?php echo JText::_('COM_CMC_MC_ID'); ?></th>
+		                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_NAME'); ?></th>
+		                <th width="20%"><?php echo JText::_('COM_CMC_DEFAULT_FROM_MAIL'); ?></th>
+		                <th width="10%"><?php echo JText::_('COM_CMC_DEFAULT_LANGUAGE'); ?></th>
+		                <th width="5%" nowrap="nowrap"><?php echo JText::_('COM_CMC_VISIBILITY'); ?></th>
+		            </tr>
+		            </thead>
+		            <tfoot>
+		            <tr>
+		                <td colspan="10"><?php echo $this->pagination->getListFooter(); ?></td>
+		            </tr>
+		            </tfoot>
+		            <tbody>
+		            <?php foreach ($this->items as $i => $item) : ?>
+		            <tr>
+		                <td><?php echo $this->pagination->getRowOffset($i); ?></td>
 
-	                <td>
-	                    <?php echo JHTML::_('grid.id', $i, $item->mc_id); ?>
-	                </td>
-	                <td>
-	                    <!--                <a href="-->
-	                        <?php //echo JRoute::_('index.php?option=com_cmc&task=list.edit&id=' . $item->id);; ?><!--">-->
-	                        <?php //echo $item->list_name; ?><!--</a>-->
-	                    <?php echo $item->list_name; ?>
-	                </td>
-	                <td align="center">
-	                    <?php echo $item->id; ?>
-	                </td>
-	                <td align="center">
-	                    <?php echo $item->mc_id; ?>
-	                </td>
-	                <td align="center">
-	                    <?php echo $item->default_from_name; ?>
-	                </td>
-	                <td align="center">
-	                    <?php echo $item->default_from_email; ?>
-	                </td>
-	                <td>
-	                    <?php echo $item->default_language; ?>
-	                </td>
-	                <td align="center">
-	                    <?php echo $item->visibility; ?>
-	                </td>
-	            </tr>
-	                <?php endforeach; ?>
-	            </tbody>
-	        </table>
+		                <td>
+		                    <?php echo JHTML::_('grid.id', $i, $item->mc_id); ?>
+		                </td>
+		                <td>
+		                    <!--                <a href="-->
+		                        <?php //echo JRoute::_('index.php?option=com_cmc&task=list.edit&id=' . $item->id);; ?><!--">-->
+		                        <?php //echo $item->list_name; ?><!--</a>-->
+		                    <?php echo $item->list_name; ?>
+		                </td>
+		                <td align="center">
+		                    <?php echo $item->id; ?>
+		                </td>
+		                <td align="center">
+		                    <?php echo $item->mc_id; ?>
+		                </td>
+		                <td align="center">
+		                    <?php echo $item->default_from_name; ?>
+		                </td>
+		                <td align="center">
+		                    <?php echo $item->default_from_email; ?>
+		                </td>
+		                <td>
+		                    <?php echo $item->default_language; ?>
+		                </td>
+		                <td align="center">
+		                    <?php echo $item->visibility; ?>
+		                </td>
+		            </tr>
+		                <?php endforeach; ?>
+		            </tbody>
+		        </table>
+	        </div>
 		<?php else : ?>
 	        <div style="text-align: center;" class="alert alert-info"><?php echo JText::_('COM_CMC_NO_LISTS'); ?></div>
 	    <?php endif; ?>
@@ -128,5 +146,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
     </form>
 
     <div class="clear"></div>
-    <?php echo CmcHelperBasic::footer(); ?>
 </div>
+<?php
+// Show Footer
+echo CompojoomHtmlCTemplate::getFooter(CmcHelperBasic::footer());

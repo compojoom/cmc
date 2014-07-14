@@ -12,6 +12,10 @@
 defined('_JEXEC') or die('Restricted access');
 
 JHTML::_('behavior.tooltip');
+if (JVERSION > 3)
+{
+	JHtml::_('formbehavior.chosen', 'select');
+}
 jimport('joomla.filter.output');
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 JHTML::_('script', 'media/com_cmc/backend/js/users.js', true);
@@ -20,8 +24,6 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 $filterStatus = $this->escape($this->state->get('filter.status'));
 
-CmcHelperBasic::bootstrap();
-JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function (pressbutton) {
@@ -32,12 +34,39 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
         }
     }
 </script>
-<div class="compojoom-bootstrap">
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
+<?php
+echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', 'COM_CMC_USERS', '');
+?>
+	<div id="groups" style="display: none;" class="box-info">
+		<h2>
+			<?php echo JText::_('COM_CMC_SELECT_LIST'); ?>
+		</h2>
+		<div class="additional-box">
+			<button id="close" class="btn">Close</button>
+		</div>
+
+		<div class="alert alert-warning fltlft">
+			<?php echo JText::_('COM_CMC_ADD_USERS_FROM_GROUP_INFO'); ?>
+		</div>
+
+		<form id="addGroup" name="addGroup" action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>"
+		      method="post">
+			<?php echo $this->addToList; ?>
+			<br/>
+			<br/>
+			<?php echo JText::_('COM_CMC_SELECT_JOOMLA_USERGROUPS'); ?> <br/>
+			<?php echo JHtml::_('access.usergroups', 'usergroups', ''); ?>
+			<input type="hidden" name="task" value="users.addGroup"/>
+
+			<button class="btn btn-primary"><?php echo JText::_('COM_CMC_ADD_USERS_NOW'); ?></button>
+
+			<?php echo JHTML::_('form.token'); ?>
+		</form>
 	</div>
+<div class="box-info full">
+
     <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>" method="post" name="adminForm"
-          id="adminForm" class="span10">
+          id="adminForm">
         <div id="filter-bar" class="btn-toolbar">
             <div class="filter-search fltlft btn-group pull-left">
                 <label class="filter-search-lbl element-invisible"
@@ -63,7 +92,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                 <?php endif; ?>
             </div>
             <div class="filter-select fltrt pull-right">
-                <select name="filter_status" class="inputbox" onchange="this.form.submit()">
+                <select name="filter_status" class="inputbox chzn-single" onchange="this.form.submit()">
                     <option value=""><?php echo JText::_('COM_CMC_STATUS');?></option>
                     <?php
                     $subs = $subu = $subup = $subc = "";
@@ -155,32 +184,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
 
         <?php echo JHTML::_('form.token'); ?>
     </form>
-
-    <div class="clear"></div>
-    <?php echo CmcHelperBasic::footer(); ?>
-
-    <div id="groups">
-        <span id="close" class="close fltrt">close</span>
-
-        <div class="clr"></div>
-        <form id="addGroup" name="addGroup" action="<?php echo JRoute::_('index.php?option=com_cmc&view=users'); ?>"
-              method="post">
-            <?php echo JText::_('COM_CMC_SELECT_LIST'); ?> <br/>
-            <?php echo $this->addToList; ?>
-            <br/>
-            <br/>
-            <?php echo JText::_('COM_CMC_SELECT_JOOMLA_USERGROUPS'); ?> <br/>
-            <?php echo JHtml::_('access.usergroups', 'usergroups', ''); ?>
-            <input type="hidden" name="task" value="users.addGroup"/>
-
-            <br/><br/>
-        <span class="important">
-            <?php echo JText::_('COM_CMC_ADD_USERS_FROM_GROUP_INFO'); ?>
-        </span>
-            <br/>
-            <button><?php echo JText::_('COM_CMC_ADD_USERS_NOW'); ?></button>
-
-            <?php echo JHTML::_('form.token'); ?>
-        </form>
-    </div>
 </div>
+<?php
+// Show Footer
+echo CompojoomHtmlCTemplate::getFooter(CmcHelperBasic::footer());

@@ -22,8 +22,10 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmc'))
 // Load Compojoom library
 require_once JPATH_LIBRARIES . '/compojoom/include.php';
 
-// In J3.0 the toolbar is not loaded automatically, so let us load it ourselves.
-require_once 'toolbar.cmc.php';
+// Load language
+CompojoomLanguage::load('com_cmc', JPATH_SITE);
+CompojoomLanguage::load('com_cmc', JPATH_ADMINISTRATOR);
+CompojoomLanguage::load('com_cmc.sys', JPATH_ADMINISTRATOR);
 
 $input = JFactory::getApplication()->input;
 JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
@@ -33,15 +35,6 @@ require_once JPATH_COMPONENT . '/controller.php';
 JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/libraries/mailchimp/MCAPI.class.php');
 JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
 
-// Thank you for this black magic Nickolas :)
-// Magic: merge the default translation with the current translation
-$jlang = JFactory::getLanguage();
-$jlang->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
-$jlang->load('com_cmc', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-$jlang->load('com_cmc', JPATH_ADMINISTRATOR, null, true);
-$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
-$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-$jlang->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 
 /*
  * this part is a little crazy because of the redirects...

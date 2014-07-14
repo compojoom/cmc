@@ -26,14 +26,14 @@
 }
 
 #groups {
-    position: absolute;
-    left: 40%;
-    top: 20%;
-    display: none;
-    z-index: 9999;
-    background: #FFF;
-    padding: 20px;
-    width: 300px;
+    /*position: absolute;*/
+    /*left: 40%;*/
+    /*top: 20%;*/
+    /*display: none;*/
+    /*z-index: 9999;*/
+    /*background: #FFF;*/
+    /*padding: 20px;*/
+    /*width: 300px;*/
 }
 
 ul.usergroups {
@@ -52,5 +52,5 @@ ul.usergroups li {
 }
 
 #cmc-progress-container {
-	width: 100%;
+	/*width: 100%;*/
 }

@@ -6,10 +6,18 @@ var cmcSync = new Class({
 
 	path: 'index.php?option=com_cmc&format=json',
 	initialize: function () {
+
 		this.offset = 0;
 		this.progress = 0;
-		this.pb = new Fx.ProgressBar(document.id('cmc-progress-container'));
+		this.pb = jQuery('#cmc-progress-container');
 		this.path = this.path + '&' + document.id('cmc-indexer-token').get('name') + '=1';
+
+		jQuery('#close').on('click', function() {
+			console.log(jQuery(this).parent('iframe'));
+			parent.closeIFrame();
+			jQuery(this).parent('iframe').css('display', 'none');
+			console.log('click');
+		});
 
 		$$('input[type=checkbox]').addEvent('click',function(){
 			if(this.get('checked')) {
@@ -100,7 +108,8 @@ var cmcSync = new Class({
 		document.id('cmc-progress-header').set('html', header);
 		document.id('cmc-progress-message').set('html', message);
 		if (this.pb && this.progress < 100) {
-			this.pb.set(this.progress);
+			console.log('set progress', this.progress);
+			this.pb.css('width', this.progress + '%');
 		} else if (this.pb) {
 			document.id(this.pb.element).dispose();
 			this.pb = false;

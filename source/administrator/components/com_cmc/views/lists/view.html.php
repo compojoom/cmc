@@ -46,10 +46,10 @@ class CmcViewLists extends JViewLegacy
 		$toolbar = JToolbar::getInstance('toolbar');
 		$toolbar->appendButton(
 			'Popup', 'archive', 'COM_CMC_SYNC', 'index.php?option=com_cmc&view=sync&tmpl=component', 500, 300, 0, 0,
-			'window.parent.location.reload()', 'COM_CMC_SYNC_HEADING'
+			'window.parent.location.reload()', ''
 		);
 
-		JToolBarHelper::title(JText::_('COM_CMC_LISTS'), 'lists');
+		JToolBarHelper::custom('lists.sync', 'refresh', '', JText::_('COM_CMC_SYNC_HEADING'), false);
 
 		JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_WANT_TO_REMOVE_LIST'), 'lists.delete');
 	}

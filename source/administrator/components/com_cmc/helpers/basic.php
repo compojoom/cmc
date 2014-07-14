@@ -406,19 +406,6 @@ class CmcHelperBasic
 		return $footer;
 	}
 
-	/**
-	 * include the bootstrap css and js if necessary
-	 */
-	public static function bootstrap()
-	{
-		if (JVERSION < 3.0)
-		{
-			JHTML::_('stylesheet', 'media/com_cmc/css/bootstrap.css');
-			JHTML::_('script', 'media/com_cmc/backend/js/jquery.min.js');
-			JHTML::_('script', 'media/com_cmc/backend/js/bootstrap.min.js');
-		}
-	}
-
 	private static function _load($option)
 	{
 		$db = JFactory::getDbo();
@@ -446,6 +433,46 @@ class CmcHelperBasic
 		}
 
 		return $db->loadObject();
+	}
+
+	/**
+	 * Generates the menu
+	 *
+	 * @return  array
+	 */
+	public static function getMenu()
+	{
+		$menu = array(
+			'cpanel' => array(
+				'link' => 'index.php?option=com_cmc&view=cpanel',
+				'title' => 'COM_CMC_CPANEL',
+				'icon' => 'fa-dashboard',
+				'anchor' => '',
+				'children' => array(),
+				'label' => '',
+				'keywords' => 'dashboard home overview cpanel'
+			),
+			'lists' => array(
+				'link' => 'index.php?option=com_cmc&view=lists',
+				'title' => 'COM_CMC_LISTS',
+				'icon' => 'fa-list-alt',
+				'anchor' => '',
+				'children' => array(),
+				'label' => '',
+				'keywords' => 'lists'
+			),
+			'users' => array(
+				'link' => 'index.php?option=com_cmc&view=users',
+				'title' => 'COM_CMC_USERS',
+				'icon' => 'fa-users',
+				'anchor' => '',
+				'children' => array(),
+				'label' => '',
+				'keywords' => 'users'
+			)
+		);
+
+		return $menu;
 	}
 
 

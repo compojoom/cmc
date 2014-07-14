@@ -13,13 +13,14 @@ defined('_JEXEC') or die('Restricted access');
 
 JHTML::_('behavior.framework');
 JHTML::_('behavior.tooltip');
-CmcHelperBasic::bootstrap();
+
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
-JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
-
 ?>
-
-<div class="compojoom-bootstrap">
+<?php
+echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '');
+?>
+<div class="box-info full">
+	<h2><?php echo JText::_('COM_CMC_EDIT_USER'); ?></h2>
     <div id="cmc" class="cmc">
         <form action="<?php echo JRoute::_('index.php?option=com_cmc&view=user&layout=edit&id=' . (int)$this->user->id); ?>"
               method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
@@ -28,7 +29,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
                     <img src="http://www.gravatar.com/avatar/<?php echo md5($this->user->email); ?>?s=140"
                          alt="<?php echo $this->user->firstname . " " . $this->user->lastname; ?>"/>
                 </div>
-                <legend><?php echo JText::_('COM_CMC_EDIT_USER'); ?></legend>
+
                 <table width="80%">
                     <!--
                 <tr>
@@ -173,7 +174,7 @@ JHTML::_('stylesheet', 'media/com_cmc/css/strapper.css');
         </form>
     </div>
 
-    <div class="clear"></div>
-    <?php echo CmcHelperBasic::footer(); ?>
-
 </div>
+<?php
+// Show Footer
+echo CompojoomHtmlCTemplate::getFooter(CmcHelperBasic::footer());

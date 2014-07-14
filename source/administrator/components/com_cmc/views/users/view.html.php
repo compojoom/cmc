@@ -61,11 +61,10 @@ class CmcViewUsers extends JViewLegacy
 	public function addToolbar()
 	{
 		// Set toolbar items for the page
-		JToolBarHelper::title(JText::_('COM_CMC_USERS'), 'users');
-		JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_USERS'), 'users.delete');
-		JToolBarHelper::editList('user.edit');
 		JToolBarHelper::addNew('user.add');
-		JToolBarHelper::custom('users.addGroup', 'group.png', '', JText::_('COM_CMC_ADD_GROUP'), false);
-		JToolBarHelper::custom('users.export', 'csv.png', '', 'CSV', false);
+		JToolBarHelper::editList('user.edit');
+		JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_REALLY_WANTO_TO_REMOVE_THIS_USERS'), 'users.delete');
+		JToolBarHelper::custom('users.addGroup', 'plus', '', JText::_('COM_CMC_ADD_GROUP'), false);
+		JToolBarHelper::custom('users.export', 'download', '', 'CSV', false);
 	}
 }

@@ -42,4 +42,26 @@ class CmcViewCpanel extends JViewLegacy
 		JToolBarHelper::title(JText::_('COM_CMC_CPANEL'), 'cpanel');
 		JToolBarHelper::preferences('com_cmc');
 	}
+
+	/**
+	 * Gets the account details from mailchimp
+	 *
+	 * @return mixed
+	 */
+	public function getAccountDetails()
+	{
+		$cache = JFactory::getCache('mod_ccc_cmc_mailchimp', 'output');
+		$cache->setCaching(true);
+		$details = $cache->get('details');
+
+		if (!$details)
+		{
+			$chimp = new cmcHelperChimp;
+			$data = $chimp->getAccountDetails();
+			$details = serialize($data);
+			$cache->store(($details), 'details');
+		};
+
+		return unserialize($details);
+	}
 }

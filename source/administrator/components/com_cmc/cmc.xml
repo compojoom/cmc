@@ -26,7 +26,6 @@
         <submenu>
             <menu img="../media/com_cmc/backend/images/lists-16px.png" view="lists">COM_CMC_LISTS</menu>
             <menu img="../media/com_cmc/backend/images/users-16px.png" view="users">COM_CMC_USERS</menu>
-            <menu img="../media/com_cmc/backend/images/live-update.png" view="liveupdate">COM_CMC_LIVEUPDATE</menu>
         </submenu>
         <files folder="administrator/components/com_cmc">
             ##ADMINCOMPONENTPACKAGEFILES##

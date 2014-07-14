@@ -34,12 +34,7 @@ class Com_CmcInstallerScript extends CompojoomInstaller
 	private $installationQueue = array(
 		// Modules => { (folder) => { (module) => { (position), (published) } }* }*
 		'modules' => array(
-			'admin' => array(
-				'mod_ccc_cmc_icons' => array('ccc_cmc_left', 1),
-				'mod_ccc_cmc_mailchimp' => array('ccc_cmc_slider', 1),
-				'mod_ccc_cmc_newsfeed' => array('ccc_cmc_slider', 1),
-				'mod_ccc_cmc_update' => array('ccc_cmc_slider', 1)
-			),
+			'admin' => array(),
 			'site' => array(
 				'mod_cmc' => array('left', 0)
 			)
