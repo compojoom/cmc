@@ -8,14 +8,7 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
-JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
-$renderer = CmcHelperXmlbuilder::getInstance($params);
-
-// Render Content
-$html = $renderer->build();
-
-$form = JForm::getInstance('mod_cmc', $html, array('control' => 'jform'));
 $moduleId = $module->id;
 
 JHtml::_('behavior.framework', true);

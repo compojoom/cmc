@@ -39,6 +39,8 @@
 	                class="chzn-none chzn-done"  filter="raw"/>
                 <field name="interests" type="interests" default="" label="MOD_CMC_INTERESTS"
                        description="MOD_CMC_INTERESTS_DESC" class="chzn-none chzn-done" filter="raw"/>
+	            <field name="mapfields" type="textarea" label="MOD_CMC_MAP_FIELDS_LABEL"
+	                   description="MOD_CMC_MAP_FIELDS_DESC" filter="raw" />
                 <field name="dateFormat" type="text" default="%Y-%m-%d" label="MOD_CMC_DATE_FORMAT"
                        description="MOD_CMC_DATE_FORMAT_DESC"/>
                 <field name="phoneFormat" type="radio" default="inter" label="MOD_CMC_PHONE_FORMAT"
@@ -52,15 +54,6 @@
                     <option value="1">JYES</option>
                 </field>
 	            <field name="newsletterCheckbox" type="hidden" value="0" default="0"/>
-            </fieldset>
-            <fieldset name="advanced">
-                <field
-                        name="layout"
-                        type="modulelayout"
-                        label="JFIELD_ALT_LAYOUT_LABEL"
-                        description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
-                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
-                       description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
             </fieldset>
         </fields>
     </config>
