@@ -118,7 +118,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', 'COM_CM
         </div>
         <div class="clr"></div>
 
-        <table class="adminlist table">
+        <table class="adminlist table table-hover table-striped">
             <thead>
             <tr>
                 <th width="5">#</th>

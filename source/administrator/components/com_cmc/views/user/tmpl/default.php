@@ -11,7 +11,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-JHTML::_('behavior.framework');
 JHTML::_('behavior.tooltip');
 
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
@@ -31,16 +30,6 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
                 </div>
 
                 <table width="80%">
-                    <!--
-                <tr>
-                    <td width="200" align="left" class="key">
-                        <?php // echo JText::_('COM_CMC_ID'); ?>:
-                    </td>
-                    <td>
-                        <?php //echo $this->user->id; ?> / Mailchimp Id: <?php //echo $this->user->mc_id; ?>
-                    </td>
-                </tr>
-                -->
                     <tr>
                         <td width="200" align="left" class="key">
 	                        <?php echo $this->form->getLabel('firstname'); ?>

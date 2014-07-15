@@ -11,7 +11,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-JHTML::_('behavior.tooltip');
 jimport('joomla.filter.output');
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 

@@ -1,58 +1,51 @@
-var cmcSync = new Class({
-	totalItems: null,
-	batchSize: null,
-	offset: null,
-	progress: null,
+var cmcSync = function(){
+	var totalItems = null,
+	batchSize = null,
+	offset = null,
+	progress = null,
+	$ = jQuery,
+	path = 'index.php?option=com_cmc&format=json&' + $('#cmc-indexer-token').prop('name') + '=1';
 
-	path: 'index.php?option=com_cmc&format=json',
-	initialize: function () {
-
-		this.offset = 0;
-		this.progress = 0;
-		this.pb = jQuery('#cmc-progress-container');
-		this.path = this.path + '&' + document.id('cmc-indexer-token').get('name') + '=1';
-
+	var initialize = function () {
 		jQuery('#close').on('click', function() {
-			console.log(jQuery(this).parent('iframe'));
 			parent.closeIFrame();
-			jQuery(this).parent('iframe').css('display', 'none');
-			console.log('click');
 		});
 
-		$$('input[type=checkbox]').addEvent('click',function(){
-			if(this.get('checked')) {
-				document.id('sync').set('disabled', '');
+		$('input[type=checkbox]').on('click',function(){
+			if($(this).prop('checked')) {
+				$('#sync').prop('disabled', '');
 			} else {
-				if(!$$('input[type=checkbox]:checked').length) {
-					document.id('sync').set('disabled', 'disabled');
+				if(!$('input[type=checkbox]:checked').length) {
+					$('#sync').prop('disabled', 'disabled');
 				}
 			}
 		});
 
-		document.id('sync').addEvent('click', function() {
+		$('#sync').on('click', function() {
 	        var lists = $$('input:checked'), data = [];
 			lists.each(function(list) {
 		       data.push(list.name);
 			});
 
-			document.id('sync').set('disabled', true);
-			document.id('sync').addClass('disabled');
-			$$('input[type=checkbox]').addClass('disabled');
-			$$('input[type=checkbox]').set('disabled', true);
-			this.getRequest('task=sync.start&lists='+data.join(',')).send();
+			$('#sync').prop('disabled', true).addClass('disabled');
+			$('input[type=checkbox]').addClass('disabled').prop('disabled', true);
+			getRequest('task=sync.start&lists='+data.join(','));
 
-		}.bind(this));
-	},
-	getRequest: function (data) {
-		return new Request.JSON({
-			url: this.path,
+		});
+	};
+
+	var getRequest = function (data) {
+		return $.ajax({
+			dataType: "json",
+			url: path,
 			method: 'get',
 			data: data,
-			onSuccess: this.handleResponse.bind(this),
-			onFailure: this.handleFailure.bind(this)
+			success: handleResponse,
+			error: handleFailure
 		});
-	},
-	handleResponse: function (json, resp) {
+	};
+
+	var handleResponse = function (json, resp) {
 		try {
 			if (json === null) {
 				throw resp;
@@ -62,57 +55,59 @@ var cmcSync = new Class({
 			}
 
 			if(json.lists.length) {
-				this.totalItems = json.lists[0].toSync;
-				this.offset = json.offset*json.batchSize;
-				this.updateProgress(json.header, json.message);
+				totalItems = json.lists[0].toSync;
+				offset = json.offset*json.batchSize;
+				updateProgress(json.header, json.message);
 
 				if (json.offset * json.batchSize < json.lists[0].toSync) {
-					this.getRequest('task=sync.batch').send();
+					getRequest('task=sync.batch');
 				}
 			} else {
-				this.offset = json.offset*json.batchSize;
-				this.updateProgress(json.header, json.message);
+				console.log('no lists anymore');
+				offset = json.offset*json.batchSize;
+				updateProgress(json.header, json.message);
 			}
 		} catch (error) {
-			if (this.pb) document.id(this.pb.element).dispose();
 			try {
 				if (json.error) {
-					document.id('cmc-progress-header').set('html', json.header).addClass('cmc-error');
-					document.id('cmc-progress-message').set('html', json.message).addClass('cmc-error');
+					$('#cmc-progress-header').html(json.header).addClass('cmc-error');
+					$('#cmc-progress-message').html(json.message).addClass('cmc-error');
 				}
 			} catch (ignore) {
 				if (error == '') {
 					error = Joomla.JText._('COM_cmc_NO_ERROR_RETURNED');
 				}
-				document.id('cmc-progress-header').set('html', Joomla.JText._('COM_cmc_AN_ERROR_HAS_OCCURRED')).addClass('cmc-error');
-				document.id('cmc-progress-message').set('html', error).addClass('cmc-error');
+				$('#cmc-progress-header').html(Joomla.JText._('COM_cmc_AN_ERROR_HAS_OCCURRED')).addClass('cmc-error');
+				$('#cmc-progress-message').html(error).addClass('cmc-error');
 			}
 		}
 		return true;
-	},
-	handleFailure: function (xhr) {
+	};
+
+	var handleFailure = function (xhr) {
 		json = (typeof xhr == 'object' && xhr.responseText) ? xhr.responseText : null;
 		json = json ? JSON.decode(json, true) : null;
-		if (this.pb) document.id(this.pb.element).dispose();
 		if (json) {
 			json = json.responseText != null ? Json.evaluate(json.responseText, true) : json;
 		}
 		var header = json ? json.header : Joomla.JText._('COM_CMC_AN_ERROR_HAS_OCCURRED');
-		var message = json ? json.message : Joomla.JText._('COM_cmc_MESSAGE_RETURNED') + ' <br />' + json
-		document.id('cmc-progress-header').set('html', header).addClass('cmc-error');
-		document.id('cmc-progress-message').set('html', message).addClass('cmc-error');
-	},
-	updateProgress: function (header, message) {
-		this.progress = (this.offset / this.totalItems) * 100;
+		var message = json ? json.message : Joomla.JText._('COM_cmc_MESSAGE_RETURNED') + ' <br />' + json;
+		$('cmc-progress-header').html(header).addClass('cmc-error');
+		$('cmc-progress-message').html(message).addClass('cmc-error');
+	};
 
-		document.id('cmc-progress-header').set('html', header);
-		document.id('cmc-progress-message').set('html', message);
-		if (this.pb && this.progress < 100) {
-			console.log('set progress', this.progress);
-			this.pb.css('width', this.progress + '%');
-		} else if (this.pb) {
-			document.id(this.pb.element).dispose();
-			this.pb = false;
+	var updateProgress = function (header, message) {
+		progress = (offset / totalItems) * 100;
+		var pb = $('#cmc-progress-container');
+		$('#cmc-progress-header').html(header);
+		$('#cmc-progress-message').html(message);
+
+		if (pb && progress < 100) {
+			pb.css('width', progress + '%').parent('div').removeClass('active');
+		} else if (progress >= 100) {
+			pb.css('width', '100%');
 		}
-	}
-});
+	};
+
+	initialize();
+};

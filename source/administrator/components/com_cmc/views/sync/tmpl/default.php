@@ -9,20 +9,20 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-JHtml::_('behavior.framework', 1);
+CompojoomHtmlBehavior::bootstrap31(true, true, true, false);
 jimport('joomla.filter.output');
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 JHTML::_('script', 'media/com_cmc/backend/js/sync.js');
-JHtml::_('script', 'system/progressbar.js', true, true);
+
 // Load bootstrap
-CompojoomHtmlBehavior::bootstrap31(true, true, true, false);
+
 
 $chimp = new CmcHelperChimp;
 $lists = $chimp->lists();
 ?>
 
 <script type="text/javascript">
-	window.addEvent('domready', function () {
+	jQuery(document).ready(function () {
 		new cmcSync();
 	});
 </script>
