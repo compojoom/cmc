@@ -1,8 +1,8 @@
 <?php
 /**
  * Compojoom Community-Builder Plugin
- * @package Joomla!
- * @Copyright (C) 2013 - Yves Hoppe - compojoom.com
+ * @Copyright (C) 2013 - Yves Hoppe <yves@compojoom.com>
+ * @Copyright (C) 2013 - Daniel Dimitrov <daniel@compojoom.com>
  * @All rights reserved
  * @Joomla! is Free Software
  * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
@@ -48,15 +48,15 @@ $language->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
  */
 class GetCmcTab extends cbTabHandler
 {
-	var $installed = true;
+	public $installed = true;
 
-	var $errormsg = "This plugin can't work without the CMC Component";
+	public $errormsg = "This plugin can't work without the CMC Component";
 
 	/**
 	 * Gets the handler
 	 */
 
-	function getCmcTab()
+	public function getCmcTab()
 	{
 		$this->cbTabHandler();
 	}
@@ -72,10 +72,10 @@ class GetCmcTab extends cbTabHandler
 	 * @return string
 	 */
 
-	function getDisplayRegistration($tab, $user, $ui, $postdata)
+	public function getDisplayRegistration($tab, $user, $ui, $postdata)
 	{
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
-		JHtml::_('behavior.framework', true);
+		JHtml::_('jquery.framework', true);
 
 		$listid = $this->params->get('listid', "");
 		$interests = $this->params->get('interests', '');
@@ -85,24 +85,24 @@ class GetCmcTab extends cbTabHandler
 		$builder = CmcHelperXmlbuilder::getInstance($this->params);
 
 		// Load JS & Co
-		JHtml::script(JURI::root() . '/media/plg_cb_cmc/js/cbcmc.js');
-
 		JFactory::getDocument()->addScriptDeclaration("
-			window.addEvent('domready', function(){
-				document.id('cmc_check_newsletter').addEvent('click', function() {
-					if(this.checked)
+			jQuery(document).ready(function(){
+				var $ = jQuery;
+
+				$('#cmc_check_newsletter').on('click', function() {
+					if($(this).prop('checked'))
 					{
-						$$('input.cmc_req').addClass('required');
-						$('cmc_newsletter').show();
+						$('input.cmc_req').addClass('required');
+						$('#cmc_newsletter').show();
 					}
 					else
 					{
-						$$('input.cmc_req').removeClass('required');
-						$('cmc_newsletter').hide();
+						$('input.cmc_req').removeClass('required');
+						$('#cmc_newsletter').hide();
 					}
 				});
 
-				$('cmc_newsletter').hide();
+				$('#cmc_newsletter').hide();
 			});
 		");
 
@@ -185,7 +185,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	function getDisplayTab($tab, $user, $ui)
+	public function getDisplayTab($tab, $user, $ui)
 	{
 		// Show the CMC Subscription options
 		// return $this->getEditTab($tab, $user, $ui);
@@ -202,7 +202,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	function saveRegistrationTab($tab, &$user, $ui, $postdata)
+	public function saveRegistrationTab($tab, &$user, $ui, $postdata)
 	{
 		// Save User to temporary table- not active here
 		if (!empty($postdata['cmc']['newsletter']))
@@ -239,7 +239,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	function userDelete($user, $success)
+	public function userDelete($user, $success)
 	{
 		if (!$success)
 		{
@@ -260,7 +260,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	function userActivated($user, $success)
+	public function userActivated($user, $success)
 	{
 		if (!$success)
 		{
@@ -282,7 +282,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	function onBeforeUserBlocking($user, $block)
+	public function onBeforeUserBlocking($user, $block)
 	{
 		// May follow in a later release
 	}
@@ -297,12 +297,11 @@ class GetCmcTab extends cbTabHandler
 	 * @return  string
 	 */
 
-	function getEditTab($tab, $user, $ui)
+	public function getEditTab($tab, $user, $ui)
 	{
 		return null;
 
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
-		JHtml::_('behavior.framework', true);
 
 		$listId = $this->params->get('listid', "");
 
@@ -344,7 +343,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	function saveEditTab($tab, &$user, $ui, $postdata)
+	public function saveEditTab($tab, &$user, $ui, $postdata)
 	{
 		// Check if user is in CMC
 	}
@@ -389,7 +388,7 @@ class GetCmcTab extends cbTabHandler
 	 * @return  mixed
 	 */
 
-	function loadFields()
+	public function loadFields()
 	{
 		$listid = $this->params->get('listid', "");
 
@@ -454,18 +453,9 @@ class GetCmcTab extends cbTabHandler
 		if ($options)
 		{
 			$content = "";
-			//$content = "Fields: " . $this->params->get('fields', "");
 
 			$content .= JHtml::_('select.genericlist', $options, 'params[fields][]', $attribs, $key, $val, explode("|*|", $this->params->get('fields', "")));
 
-			$content .= '<script type="text/javascript">
-				window.addEvent(\'domready\',function() {
-				    $("jform_params_fields").addEvent( \'change\', function(){
-					$("jform_params_fields").options[0].setProperty(\'selected\', \'selected\');
-
-				    });
-				});
-				</script>';
 		}
 		else
 		{
@@ -480,7 +470,7 @@ class GetCmcTab extends cbTabHandler
 	 *
 	 * @return  mixed|string
 	 */
-	function loadInterests()
+	public function loadInterests()
 	{
 		$listid = $this->params->get('listid', "");
 

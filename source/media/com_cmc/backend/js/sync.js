@@ -22,8 +22,8 @@ var cmcSync = function(){
 		});
 
 		$('#sync').on('click', function() {
-	        var lists = $$('input:checked'), data = [];
-			lists.each(function(list) {
+	        var lists = $('input:checked'), data = [];
+			lists.each(function(key, list) {
 		       data.push(list.name);
 			});
 
