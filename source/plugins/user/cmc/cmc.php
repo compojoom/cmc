@@ -62,7 +62,7 @@ class PlgUserCmc extends JPlugin
 			$lang = JFactory::getLanguage();
 			$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
 
-			JHtml::_('behavior.framework');
+			JHtml::_('jquery.framework');
 			JHtml::script('media/plg_user_cmc/js/cmc.js');
 			$renderer = CmcHelperXmlbuilder::getInstance($this->params);
 

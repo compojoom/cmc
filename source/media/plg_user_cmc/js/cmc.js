@@ -6,30 +6,33 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-window.addEvent('domready', function(){
-	var fieldsets = new Elements;
-	$$('label.cmc-label ! fieldset').each(function(el) {
-		if(!el.getElement('input.cmc-checkbox-subscribe')) {
-			fieldsets.push(el);
+jQuery(document).ready(function(){
+	var $ = jQuery;
+	var fieldsets = [];
+	$('label.cmc-label').closest('fieldset').each(function(key, el) {
+		if(!$(el).find('input.cmc-checkbox-subscribe').length) {
+			fieldsets.push($(el));
 		}
 	});
-	fieldsets.setStyle('display', 'none');
+
 	fieldsets.each(function(el){
-		var fields = el.getElements('input').set('disabled', 'disabled')
+		console.log(el.find('input'));
+		el.css('display', 'none');
+		el.find('input').prop('disabled', 'disabled');
 	});
-	document.id('jform_cmc_newsletter').addEvent('click', function() {
-		if(this.checked)
+	$('#jform_cmc_newsletter').on('click', function() {
+		if($(this).prop('checked'))
 		{
-			fieldsets.setStyle('display', 'block');
 			fieldsets.each(function(el) {
-				el.getElements('input').removeProperty('disabled');
+				el.css('display', 'block');
+				el.find('input').removeProp('disabled');
 			});
 		}
 		else
 		{
-			fieldsets.setStyle('display', 'none');
 			fieldsets.each(function(el) {
-				el.getElements('input').set('disabled', 'disabled');
+				el.css('display', 'none');
+				el.find('input').prop('disabled', 'disabled');
 			});
 		}
 	});
