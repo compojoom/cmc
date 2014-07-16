@@ -1,24 +1,26 @@
 /**
  * Created by DanielDimitrov on 09.09.13.
  */
-window.addEvent('domready', function(){
-	var fields = $$('li.cmc-newsletter').filter(function(item, index) {
-		if(!item.getElement('input#cmc_newsletter')) {
-			return item;
+jQuery(document).ready(function(){
+	var $ = jQuery;
+	var fields = $('li.cmc-newsletter').filter(function(index, item) {
+		if(!$(item).find('input#cmc_newsletter').length) {
+			return $(item);
 		}
 	});
-	fields.setStyle('display', 'none');
-	fields.removeProperty('required');
-	document.id('cmc_newsletter').addEvent('click', function() {
-		if(this.checked)
+
+	fields.css('display', 'none');
+	fields.removeProp('required');
+	$('#cmc_newsletter').on('click', function() {
+		if($(this).prop('checked'))
 		{
-			fields.setStyle('display', 'block');
-			$$('.cmc_req').addClass('required').set('required', 'required');
+			fields.css('display', 'block');
+			$('.cmc_req').addClass('required').prop('required', 'required');
 		}
 		else
 		{
-			fields.setStyle('display', 'none');
-			$$('.cmc_req').removeClass('required').removeProperty('required');
+			fields.css('display', 'none');
+			$('.cmc_req').removeClass('required').removeProp('required');
 		}
 	});
 });
