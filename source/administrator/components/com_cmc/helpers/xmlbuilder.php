@@ -50,14 +50,16 @@ class CmcHelperXmlbuilder
 	 */
 	public static function getInstance($config)
 	{
-		if (null === self::$instance)
+		$md5 = md5($config);
+
+		if (!isset(self::$instance[$md5]))
 		{
-			self::$instance = new CmcHelperXmlbuilder($config);
+			self::$instance[$md5] = new CmcHelperXmlbuilder($config);
 			$lang = JFactory::getLanguage();
 			$lang->load('com_cmc', JPATH_ADMINISTRATOR);
 		}
 
-		return self::$instance;
+		return self::$instance[$md5];
 	}
 
 	/**
