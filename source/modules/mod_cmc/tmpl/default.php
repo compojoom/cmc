@@ -11,22 +11,14 @@ defined('_JEXEC') or die('Restricted access');
 
 $moduleId = $module->id;
 
-JHtml::_('behavior.framework', true);
+JHtml::_('jquery.framework');
 JHtml::_('behavior.formvalidation');
 JHtml::script(JURI::root() . '/media/mod_cmc/js/cmc.js');
 JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
 
 $document = JFactory::getDocument();
-$script = 'window.addEvent("domready", function() {
-	Locale.use("' . JFactory::getLanguage()->getTag() . '");
-    var options = {
-        language : {
-            "updated" : ' . json_encode(JText::_($params->get('updateMsg'))) . ',
-             "saved" : ' . json_encode(JText::_($params->get('thankyou'))) . '
-        },
-        spinner : "spinner-' . $moduleId . '"
-    }
-    new cmc("#cmc-signup-form-' . $moduleId . '", options);
+$script = 'jQuery(document).ready(function() {
+    new cmc("#cmc-signup-form-' . $moduleId . '");
 });';
 
 $document->addScriptDeclaration($script);
