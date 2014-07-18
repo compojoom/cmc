@@ -28,6 +28,8 @@
 
         <param name="interests" type="custom" class="getCmcTab" method="loadInterests" default="" label="Interests"
                description="These interest groups will be displayed on the signup form."/>
+	    <param name="mapfields" type="textarea" label="Field mapping"
+	           description="Here you can define a field mapping between Mailchimp and Joomla. Format is mailchimpField=joomlaUserfield - one per line." filter="raw" />
         <param name="dateFormat" type="text" default="%Y-%m-%d" label="Date format"
                description="If you are using a date field you can define the format here."/>
         <param name="phoneFormat" type="radio" default="inter" label="Phone Format"

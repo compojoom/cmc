@@ -30,6 +30,8 @@
 				<field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"/>
 				<field name="interests" type="interests" default="" label="MOD_CMC_INTERESTS"
 				       description="MOD_CMC_INTERESTS_DESC"/>
+				<field name="mapfields" type="textarea" label="MOD_CMC_MAP_FIELDS_LABEL"
+				       description="MOD_CMC_MAP_FIELDS_DESC" filter="raw" />
 				<field name="dateFormat" type="text" default="%Y-%m-%d" label="MOD_CMC_DATE_FORMAT"
 				       description="MOD_CMC_DATE_FORMAT_DESC"/>
 				<field name="phoneFormat" type="radio" default="inter" label="MOD_CMC_PHONE_FORMAT"

@@ -210,21 +210,25 @@ class GetCmcTab extends cbTabHandler
 			// For the hidden field
 			$listId = $postdata['cmc']['listid'];
 
-			$updated = CmcHelperRegistration::isSubscribed($listId, $user->email);
+			$mappedData = $this->getMapping($this->params->get('mapfields'), $postdata);
 
-			// Merge arrays to correct namespace
-			$postdata['cmc']['groups'] = $postdata['cmc_groups'];
-			$postdata['cmc']['interests'] = $postdata['cmc_interests'];
+			if (count($mappedData))
+			{
+				$mergedGroups = array_merge($mappedData, $postdata['cmc_groups']);
+				$postdata = array_merge($postdata, array('cmc_groups' => $mergedGroups));
+			}
+
+			$updated = CmcHelperRegistration::isSubscribed($listId, $user->email);
 
 			if ($updated)
 			{
 				// Update users subscription with the new data
-				CmcHelperRegistration::updateSubscription($user, $postdata['cmc']);
+				CmcHelperRegistration::updateSubscription($user, $postdata);
 			}
 			else
 			{
 				// Temporary save user in cmc database
-				CmcHelperRegistration::saveTempUser($user, $postdata['cmc'], _CPLG_CB);
+				CmcHelperRegistration::saveTempUser($user, $postdata, _CPLG_CB);
 			}
 		}
 	}
@@ -518,5 +522,45 @@ class GetCmcTab extends cbTabHandler
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Creates an array with the mapped data
+	 *
+	 * @param   string  $raw   - the raw mapping definition as taken out of the params
+	 * @param   array   $user  - array with the user data
+	 *
+	 * @return array
+	 */
+	public static function getMapping($raw, $user)
+	{
+		if (!$raw)
+		{
+			return array();
+		}
+
+		$lines = explode("\n", trim($raw));
+		$groups = array();
+
+		foreach ($lines as $line)
+		{
+			$map = explode('=', $line);
+
+			if (strstr($map[1], ':'))
+			{
+				$parts = explode(':', $map[1]);
+				$field = explode(' ', $user[$parts[0]]);
+
+				$value = trim($field[(int) $parts[1]]);
+			}
+			else
+			{
+				$value = $user[trim($map[1])];
+			}
+
+			$groups[$map[0]] = $value;
+		}
+
+		return $groups;
 	}
 }

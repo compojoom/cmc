@@ -100,6 +100,14 @@ class PlgUserCmc extends JPlugin
 				return true;
 			}
 
+			$mappedData = $this->getMapping($this->params->get('mapfields'), $data);
+
+			if (count($mappedData))
+			{
+				$mergedGroups = array_merge($mappedData, $data['cmc_groups']);
+				$data = array_merge($data, array('cmc_groups' => $mergedGroups));
+			}
+
 			$user = JFactory::getUser($data["id"]);
 
 			if ($data["block"] == 1)
@@ -139,5 +147,45 @@ class PlgUserCmc extends JPlugin
 		}
 
 		return true;
+	}
+
+	/**
+	 * Creates an array with the mapped data
+	 *
+	 * @param   string  $raw   - the raw mapping definition as taken out of the params
+	 * @param   array   $user  - array with the user data
+	 *
+	 * @return array
+	 */
+	public static function getMapping($raw, $user)
+	{
+		if (!$raw)
+		{
+			return array();
+		}
+
+		$lines = explode("\n", trim($raw));
+		$groups = array();
+
+		foreach ($lines as $line)
+		{
+			$map = explode('=', $line);
+
+			if (strstr($map[1], ':'))
+			{
+				$parts = explode(':', $map[1]);
+				$field = explode(' ', $user[$parts[0]]);
+
+				$value = trim($field[(int) $parts[1]]);
+			}
+			else
+			{
+				$value = $user[trim($map[1])];
+			}
+
+			$groups[$map[0]] = $value;
+		}
+
+		return $groups;
 	}
 }
