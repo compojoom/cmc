@@ -83,6 +83,19 @@ class modCMCHelper {
 		return array('cmc_groups' => $groups);
 	}
 
+	public static function getNewsletterStatus($id)
+	{
+		$user = JFactory::getUser();
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('status')->from('#__cmc_users')
+			->where('(' . $db->qn('user_id') . '=' . $db->q($user->get('id')) . ' OR email = ' . $db->q($user->email) . ')')
+			->where($db->qn('list_id') . '=' . $db->q($id));
+		$db->setQuery($query);
+
+		return $db->loadObject();
+	}
+
 	public static function hasSignedForNewsletter($id)
 	{
 		$user = JFactory::getUser();

@@ -13,8 +13,8 @@ $moduleId = $module->id;
 
 JHtml::_('jquery.framework');
 JHtml::_('behavior.formvalidation');
-JHtml::script(JURI::root() . '/media/mod_cmc/js/cmc.js');
-JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
+JHtml::script('/media/mod_cmc/js/cmc.js');
+JHtml::_('stylesheet', 'media/mod_cmc/css/cmc.css');
 
 $document = JFactory::getDocument();
 $script = 'jQuery(document).ready(function() {
@@ -75,6 +75,12 @@ JText::script($params->get('updateMsg'));
 							</div>
 							<div class="controls">
 								<?php echo $field->input; ?>
+								<?php if ($field->fieldname == 'EMAIL') : ?>
+									<div class="help-inline alert alert-error cmc-exist hide">
+										<?php echo JText::sprintf('MOD_CMC_YOU_ARE_ALREADY_SUBSCRIBED', ''); ?>
+										<a href=""><?php echo JText::_('MOD_CMC_CLICK_HERE_TO_UPDATE'); ?></a>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -104,23 +110,26 @@ JText::script($params->get('updateMsg'));
 		</div>
 
 
+		<input type="hidden" class="cmc_exist" name="<?php echo $form->getFormControl(); ?>[exists]" value="0" />
 
-			<?php echo JHTML::_('form.token'); ?>
-			<?php if ($params->get('outro-text-1')) : ?>
-				<div id="outro1_<?php echo $moduleId; ?>" class="outro1">
-					<p class="outro"><?php echo JText::_($params->get('outro-text-1')); ?></p>
-				</div>
-			<?php endif; ?>
+		<?php echo JHTML::_('form.token'); ?>
 
-			<button class="btn btn-primary">
-				<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
-				<img width="16" height="16" class="cmc-spinner" style="display: none;" src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg">
-			</button>
+		<?php if ($params->get('outro-text-1')) : ?>
+			<div id="outro1_<?php echo $moduleId; ?>" class="outro1">
+				<p class="outro"><?php echo JText::_($params->get('outro-text-1')); ?></p>
+			</div>
+		<?php endif; ?>
 
-			<?php if ($params->get('outro-text-2')) : ?>
-				<div id="outro2_<?php echo $moduleId; ?>" class="outro2">
-					<p class="outro"><?php echo JText::_($params->get('outro-text-2')); ?></p>
-				</div>
-			<?php endif; ?>
+		<button class="btn btn-primary">
+			<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
+			<img width="16" height="16" class="cmc-spinner" style="display: none;"
+			     src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg">
+		</button>
+
+		<?php if ($params->get('outro-text-2')) : ?>
+			<div id="outro2_<?php echo $moduleId; ?>" class="outro2">
+				<p class="outro"><?php echo JText::_($params->get('outro-text-2')); ?></p>
+			</div>
+		<?php endif; ?>
 	</form>
 </div>

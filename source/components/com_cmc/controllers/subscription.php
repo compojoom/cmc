@@ -19,6 +19,58 @@ jimport('joomla.application.component.controllerlegacy');
  */
 class CmcControllerSubscription extends JControllerLegacy
 {
+	public function update()
+	{
+		$appl = JFactory::getApplication();
+		$input = $appl->input;
+		$listId = $input->getString('listid');
+		$email = $input->getString('email');
+		$mailer = JFactory::getMailer();
+		$chimp = new cmcHelperChimp;
+
+		if (!$listId && !$email)
+		{
+			$appl->enqueueMessage(JText::_('COM_CMC_INVALID_LIST_OR_EMAIL'));
+			$appl->redirect($_SERVER['HTTP_REFERER']);
+			return false;
+		}
+		$dc = "us1";
+
+		if (strstr($chimp->api_key, "-"))
+		{
+			list($key, $dc) = explode("-", $chimp->api_key, 2);
+
+			if (!$dc)
+			{
+				$dc = "us1";
+			}
+		}
+
+		$account = $chimp->getAccountDetails();
+		$memberInfo = $chimp->listMemberInfo($listId, $email);
+		$listInfo = $chimp->lists(array('list_id' => $listId));
+
+		$url = 'http://' . $account['username'] . '.' . $dc . '.list-manage.com/profile?u='
+				. $account['user_id'] . '&id=' . $listId . '&e=' . $memberInfo['data'][0]['euid'];
+
+		$subject = JText::sprintf('COM_CMC_CHANGE_YOUR_SUBSCRIPTION_PREFERENCES_EMAIL_TITLE', $listInfo['data'][0]['name']);
+		$text = JText::sprintf('COM_CMC_CHANGE_YOUR_SUBSCRIPTION_PREFERENCES_EMAIL_CONTENT', $listInfo['data'][0]['name'], $url);
+
+		$config = JFactory::getConfig();
+
+		if ($mailer->sendMail($config->get('mailfrom'), $config->get('fromname'), $email, $subject, $text,true))
+		{
+			$appl->enqueueMessage(JText::sprintf('COM_CMC_EMAIL_WITH_FURTHER_INSTRUCTIONS_UPDATE', $email));
+			$appl->redirect($_SERVER['HTTP_REFERER']);
+
+			return true;
+		}
+
+		$appl->enqueueMessage(JText::_('COM_CMC_SOMETHING_WENT_WRONG'));
+		$appl->redirect($_SERVER['HTTP_REFERER']);
+
+		return false;
+	}
 	/**
 	 * Delete the user subscription
 	 *

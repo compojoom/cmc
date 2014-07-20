@@ -12,8 +12,12 @@ defined('_JEXEC') or die('Restricted access');
 
 ?>
 
+<div class="alert alert-info">
 <?php echo JText::_('MOD_CMC_ALREADY_ON_THE_LIST'); ?>
-
-<a href="<?php echo JText::_('index.php?option=com_cmc&task=subscription.delete&listid='.$params->get('listid').'&'.JFactory::getSession()->getFormToken().'=1'); ?>" class="btn">
-	<?php echo JText::_('MOD_CMC_UNSUBSCRIBE'); ?>
-</a>
+</div>
+<div>
+<?php echo JText::sprintf('MOD_CMC_IF_YOU_WISH_TO_CHANGE', JRoute::_('index.php?option=com_cmc&task=subscription.update&email=' . JFactory::getUser()->get('email') . '&listid='.$params->get('listid'))); ?>
+</div>
+<div>
+<?php echo JText::sprintf('MOD_CMC_IF_YOU_WISH_TO_UNSUBSCRIBE', JRoute::_('index.php?option=com_cmc&task=subscription.delete&listid='.$params->get('listid').'&'.JFactory::getSession()->getFormToken().'=1')); ?>
+</div>

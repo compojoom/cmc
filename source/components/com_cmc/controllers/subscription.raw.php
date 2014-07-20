@@ -37,6 +37,42 @@ class CmcControllerSubscription extends JControllerLegacy
 		$form = $input->get('jform', '', 'array');
 		$isAjax = $input->get('ajax');
 
+		$mergeVars = $this->mergeVars($form);
+
+		$listId = $form['cmc']['listid'];
+		$email = $mergeVars['EMAIL'];
+
+		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, false, false);
+
+		if ($chimp->errorCode)
+		{
+			$response['html'] = $chimp->errorMessage;
+			$response['error'] = true;
+		}
+		else
+		{
+			$query->insert('#__cmc_users')->columns('list_id,email,merges,status')
+				->values($db->quote($listId) . ',' . $db->quote($email) . ',' . $db->quote(json_encode($mergeVars)). ','.$db->q('applied'));
+
+			$db->setQuery($query);
+			$db->execute();
+
+			$response['html'] = 'saved';
+			$response['error'] = false;
+		}
+
+		if ($isAjax)
+		{
+			echo json_encode($response);
+			jexit();
+		}
+
+		$appl->enqueueMessage($response['html']);
+		$appl->redirect($_SERVER['HTTP_REFERER']);
+	}
+
+	private function mergeVars($form)
+	{
 		if (isset($form['cmc_groups']))
 		{
 			foreach ($form['cmc_groups'] as $key => $group)
@@ -64,58 +100,38 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
-		$listId = $form['cmc']['listid'];
+		return $mergeVars;
+	}
+
+	public function exist() {
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+		$chimp = new cmcHelperChimp;
+
+		$input = JFactory::getApplication()->input;
+		$form = $input->get('jform', '', 'array');
+
+		$mergeVars = $this->mergeVars($form);
+
 		$email = $mergeVars['EMAIL'];
+		$listId = $form['cmc']['listid'];
 
 		// Check if the user is in the list already
 		$userlists = $chimp->listsForEmail($email);
 
 		if ($userlists && in_array($listId, $userlists))
 		{
-			$updated = true;
+			$exist = true;
+			$url = JRoute::_('index.php?option=com_cmc&task=subscription.update&email=' . $email . '&listid=' . $listId);
 		}
 		else
 		{
-			$updated = false;
+			$exist = false;
+			$url = '';
 		}
 
-		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, true, false);
-
-
-		if ($chimp->errorCode)
-		{
-			$response['html'] = $chimp->errorMessage;
-			$response['error'] = true;
-		}
-		else
-		{
-			if (!$updated)
-			{
-				$query->insert('#__cmc_users')->columns('list_id,email,merges')
-					->values($db->quote($listId) . ',' . $db->quote($email) . ',' . $db->quote(json_encode($mergeVars)));
-				$db->setQuery($query);
-				$db->execute();
-			}
-			else
-			{
-				$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
-					->where('email = ' . $db->quote($email) . ' AND list_id = ' . $db->quote($listId));
-				$db->setQuery($query);
-				$db->execute();
-			}
-
-			$response['html'] = ($updated) ? 'updated' : 'saved';
-			$response['error'] = false;
-		}
-
-		if ($isAjax)
-		{
-			echo json_encode($response);
-			jexit();
-		}
-
-		$appl->enqueueMessage($response['html']);
-		$appl->redirect($_SERVER['HTTP_REFERER']);
+		echo json_encode(array('exists' => $exist, 'url' => $url));
+		jexit();
 
 	}
 }

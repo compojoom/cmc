@@ -18,9 +18,19 @@ $layout = 'default';
 
 if (!$user->guest)
 {
-	if (modCMCHelper::hasSignedForNewsletter($params->get('listid')))
+	$status = modCMCHelper::getNewsletterStatus($params->get('listid'));
+
+	if ($status)
 	{
-		$layout = 'signed';
+		if ($status->status == 'applied')
+		{
+			$layout = 'applied';
+		}
+
+		if ($status->status == 'subscribed')
+		{
+			$layout = 'signed';
+		}
 	}
 }
 

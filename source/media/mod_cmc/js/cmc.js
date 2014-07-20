@@ -11,6 +11,9 @@ var cmc = function(form) {
 		form = jQuery(form);
 		form.submit(function(e) {
 			e.preventDefault();
+			if(form.find('button').hasClass('disabled') ) {
+				return;
+			}
 			jQuery.ajax({
 				type: "POST",
 				url: form.attr('action'),
@@ -40,6 +43,37 @@ var cmc = function(form) {
 
 			return false;
 		});
+
+		var t;
+		form.find('input[type=email]').keyup(function() {
+
+			clearTimeout (t);
+
+			t = setTimeout(sub_exist, 400);
+
+		});
+
+
+		function sub_exist() {
+			jQuery.ajax({
+				type: 'POST',
+				dataType: "json",
+				url: form.attr('action').replace('subscription.save', 'subscription.exist'),
+				data: form.serialize() + '&ajax=true'
+			}).done(function(data) {
+				var message = jQuery('.cmc-exist'), button = form.find('button');
+				message.addClass('hide');
+				button.removeClass('disabled');
+				if(data.exists) {
+					message.removeClass('hide');
+					message.find('a').attr('href', data.url);
+					button.addClass('disabled');
+				}
+
+			});
+
+		}
+
 	};
 
 	// Initialize handlers and attach validation to form

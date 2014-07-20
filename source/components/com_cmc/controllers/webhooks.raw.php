@@ -109,9 +109,21 @@ class CmcControllerWebhooks extends JControllerLegacy
 		 * "data[ip_opt]": "10.20.10.30",
 		 * "data[ip_signup]": "10.20.10.30"
 		 */
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$item = array('id' => null);
 
-		$item = array();
-		$item['id'] = null;
+		$query->select('id')->from('#__cmc_users')->where('email=' . $db->q($data['email']))
+			->where('list_id=' . $db->q($data['list_id']));
+
+		$db->setQuery($query);
+		$update = $db->loadObject();
+
+		if ($update)
+		{
+			$item['id'] = $update->id;
+		}
+
 		$item['mc_id'] = $data['id'];
 		$item['list_id'] = $data['list_id'];
 
@@ -131,9 +143,9 @@ class CmcControllerWebhooks extends JControllerLegacy
 		$item['ip_signup'] = $data['ip_signup'];
 
 		$item['created_user_id'] = 0;
-		$item['created_time'] = JFactory::getDate()->toMySQL();
+		$item['created_time'] = JFactory::getDate()->toSql();
 		$item['modified_user_id'] = 0;
-		$item['modified_time'] = JFactory::getDate()->toMySQL();
+		$item['modified_time'] = JFactory::getDate()->toSql();
 		$item['access'] = 1;
 		$item['query_data'] = json_encode($data);
 
@@ -147,9 +159,12 @@ class CmcControllerWebhooks extends JControllerLegacy
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_LIST_ERROR_SAVING') . $e->getMessage());
-
-			return false;
+			// Log the request to the log file
+			$message = array(
+				'save - subscribed error',
+				$data
+			);
+			JLog::add(json_encode($message));
 		}
 	}
 
