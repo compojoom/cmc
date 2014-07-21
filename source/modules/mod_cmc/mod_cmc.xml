@@ -30,9 +30,6 @@
                 <field name="thankyou" type="textarea"
                        default="Thank you! Please check your email and confirm the newsletter subscription." cols="25"
                        rows="2" label="MOD_CMC_THANKYOU_MESSAGE" description="MOD_CMC_THANK_YOU_DESC"/>
-                <field name="updateMsg" type="textarea"
-                       default="You were already subscribed to this list. Your settings have been updated. Thank you!"
-                       cols="25" rows="2" label="MOD_CMC_UPDATE_MESSAGE" description="MOD_CMC_UPDATE_DESC"/>
                 <field name="listid" required="true" type="cmclists" default="" cols="25" rows="2" label="MOD_CMC_LIST"
                        description="MOD_CMC_LIST_DESC"/>
                 <field name="fields" type="fields" default="" label="MOD_CMC_FIELDS" description="MOD_CMC_FIELDS_DESC"

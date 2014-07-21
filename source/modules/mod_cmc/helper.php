@@ -17,16 +17,17 @@ JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
  *
  * @since  1.5
  */
-class modCMCHelper {
-
+class ModCMCHelper
+{
 	/**
 	 * Creates a JForm
 	 *
+	 * @param   int     $id      - the module id. We use it to create unique jform instance
 	 * @param   object  $params  - the module params
 	 *
 	 * @return object
 	 */
-	public static function getForm ($params)
+	public static function getForm ($id, $params)
 	{
 		$renderer = CmcHelperXmlbuilder::getInstance($params);
 
@@ -35,7 +36,7 @@ class modCMCHelper {
 
 		$mapping = self::getMapping($params->get('mapfields'));
 
-		$form = JForm::getInstance('mod_cmc', $xml, array('control' => 'jform'));
+		$form = JForm::getInstance('mod_cmc_' . $id, $xml, array('control' => 'jform'));
 		$form->bind($mapping);
 
 		return $form;
@@ -83,25 +84,19 @@ class modCMCHelper {
 		return array('cmc_groups' => $groups);
 	}
 
+	/**
+	 * Checks the subscribe status of the logged in user
+	 *
+	 * @param   int  $id  - the list_id
+	 *
+	 * @return mixed
+	 */
 	public static function getNewsletterStatus($id)
 	{
 		$user = JFactory::getUser();
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('status')->from('#__cmc_users')
-			->where('(' . $db->qn('user_id') . '=' . $db->q($user->get('id')) . ' OR email = ' . $db->q($user->email) . ')')
-			->where($db->qn('list_id') . '=' . $db->q($id));
-		$db->setQuery($query);
-
-		return $db->loadObject();
-	}
-
-	public static function hasSignedForNewsletter($id)
-	{
-		$user = JFactory::getUser();
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*')->from('#__cmc_users')
 			->where('(' . $db->qn('user_id') . '=' . $db->q($user->get('id')) . ' OR email = ' . $db->q($user->email) . ')')
 			->where($db->qn('list_id') . '=' . $db->q($id));
 		$db->setQuery($query);

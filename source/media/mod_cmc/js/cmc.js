@@ -16,6 +16,7 @@ var cmc = function(form) {
 			}
 			jQuery.ajax({
 				type: "POST",
+				dataType: "json",
 				url: form.attr('action'),
 				data: form.serialize() + '&ajax=true',
 				beforeSend: function() {

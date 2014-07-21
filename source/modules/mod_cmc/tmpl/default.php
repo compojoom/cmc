@@ -22,15 +22,11 @@ $script = 'jQuery(document).ready(function() {
 });';
 
 $document->addScriptDeclaration($script);
-JText::script($params->get('thankyou'));
-JText::script($params->get('updateMsg'));
 ?>
 
 <div id="cmc-signup-<?php echo $moduleId; ?>"
      class="cmc-signup <?php echo $params->get('moduleclass_sfx', ''); ?>">
-	<div class="cmc-updated" style="display:none">
-		<?php echo JText::_($params->get('updateMsg')); ?>
-	</div>
+	<div class="cmc-error alert alert-error" style="display:none"></div>
 	<div class="cmc-saved" style="display:none">
 		<?php echo JText::_($params->get('thankyou')); ?>
 	</div>

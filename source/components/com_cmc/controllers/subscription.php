@@ -19,6 +19,11 @@ jimport('joomla.application.component.controllerlegacy');
  */
 class CmcControllerSubscription extends JControllerLegacy
 {
+	/**
+	 * Sends an email with information how to update the form
+	 *
+	 * @return bool
+	 */
 	public function update()
 	{
 		$appl = JFactory::getApplication();
@@ -32,8 +37,10 @@ class CmcControllerSubscription extends JControllerLegacy
 		{
 			$appl->enqueueMessage(JText::_('COM_CMC_INVALID_LIST_OR_EMAIL'));
 			$appl->redirect($_SERVER['HTTP_REFERER']);
+
 			return false;
 		}
+
 		$dc = "us1";
 
 		if (strstr($chimp->api_key, "-"))
@@ -58,7 +65,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		$config = JFactory::getConfig();
 
-		if ($mailer->sendMail($config->get('mailfrom'), $config->get('fromname'), $email, $subject, $text,true))
+		if ($mailer->sendMail($config->get('mailfrom'), $config->get('fromname'), $email, $subject, $text, true))
 		{
 			$appl->enqueueMessage(JText::sprintf('COM_CMC_EMAIL_WITH_FURTHER_INSTRUCTIONS_UPDATE', $email));
 			$appl->redirect($_SERVER['HTTP_REFERER']);
@@ -71,6 +78,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		return false;
 	}
+
 	/**
 	 * Delete the user subscription
 	 *

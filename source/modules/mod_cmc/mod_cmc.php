@@ -12,7 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once JPATH_SITE . '/modules/mod_cmc/helper.php';
 
 $user = JFactory::getUser();
-$form = modCMCHelper::getForm($params);
+$form = modCMCHelper::getForm($module->id, $params);
 
 $layout = 'default';
 
