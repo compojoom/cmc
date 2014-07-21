@@ -55,6 +55,10 @@ class Com_CmcInstallerScript
 		),
 		'cbplugins' => array(
 			'plug_cmc'
+		),
+		// Key is the name without the lib_ prefix, value if the library should be autopublished
+		'libraries' => array(
+			'compojoom' => 1
 		)
 	);
 
@@ -130,6 +134,7 @@ class Com_CmcInstallerScript
 		// Let us install the modules
 		$this->status->plugins = $this->installer->installPlugins($this->installationQueue['plugins']);
 		$this->status->modules = $this->installer->installModules($this->installationQueue['modules']);
+		$this->status->libraries = $this->installer->installLibraries($this->installationQueue['libraries']);
 
 		$this->status->cb = false;
 
@@ -190,6 +195,11 @@ class Com_CmcInstallerScript
 		if ($this->status->cb)
 		{
 			$html[] = '<p>' . JText::_('COM_CMC_CB_DETECTED_PLUGINS_INSTALLED') . '<br /></p>';
+		}
+
+		if ($this->status->libraries)
+		{
+			$html[] = $this->installer->renderLibraryInfoInstall($this->status->libraries);
 		}
 
 		if ($this->status->plugins)
