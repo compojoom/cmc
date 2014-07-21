@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema>
+    <!-- Metadata -->
+    <meta>
+        <!-- Supported driver types -->
+        <drivers>
+            <driver>mysql</driver>
+            <driver>mysqli</driver>
+        </drivers>
+    </meta>
+
+    <!-- SQL commands to run on installation and update -->
+    <sql>
+        <action table="#__cmc_lists" canfail="0">
+            <condition type="missing" value="" />
+            <query><![CDATA[
 CREATE TABLE IF NOT EXISTS `#__cmc_lists` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mc_id` varchar(10) NOT NULL,
@@ -23,7 +39,12 @@ CREATE TABLE IF NOT EXISTS `#__cmc_lists` (
   `query_data` text,
   PRIMARY KEY (`id`)
 );
+            ]]></query>
+        </action>
 
+        <action table="#__cmc_users" canfail="0">
+            <condition type="missing" value="" />
+            <query><![CDATA[
 CREATE TABLE IF NOT EXISTS `#__cmc_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mc_id` varchar(255) DEFAULT NULL,
@@ -58,8 +79,12 @@ CREATE TABLE IF NOT EXISTS `#__cmc_users` (
   `query_data` text COMMENT 'json',
   PRIMARY KEY (`id`)
 );
+            ]]></query>
+        </action>
 
-
+        <action table="#__cmc_register" canfail="0">
+            <condition type="missing" value="" />
+            <query><![CDATA[
 CREATE TABLE IF NOT EXISTS `#__cmc_register` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) NOT NULL,
@@ -68,3 +93,16 @@ CREATE TABLE IF NOT EXISTS `#__cmc_register` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 );
+            ]]></query>
+        </action>
+
+			<action table="#__cmc_register" canfail="0">
+				<condition type="type" value="user_id" coltype="int(11)"/>
+				<query><![CDATA[
+ALTER TABLE `#__cmc_register` CHANGE `user_id` `user_id` VARCHAR( 255 ) NOT NULL;
+            ]]></query>
+			</action>
+
+
+    </sql>
+</schema>

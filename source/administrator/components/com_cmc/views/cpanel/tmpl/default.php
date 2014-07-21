@@ -6,7 +6,6 @@ defined('_JEXEC') or die;
 jimport('joomla.application.module.helper');
 
 JHTML::_('behavior.tooltip');
-
 echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'cpanel', 'COM_CMC_CPANEL', '');
 ?>
 
