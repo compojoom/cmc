@@ -285,7 +285,7 @@ class CmcHelperXmlbuilder
 		$x .= "filter=\"string\"\n";
 		$x .= 'class="inputbox input-medium' . $req . ' ' . implode(' ', $class) . '" ';
 		$x .= 'labelclass="form-label cmc-label" ';
-		$x .= 'hint="' . $title . '" ';
+		$x .= 'hint="' . $title . ' ' . ($req ? '*' : '') . '" ';
 		$x .= "label=\"" . $title . "\"\n";
 
 		if ($field[3])
