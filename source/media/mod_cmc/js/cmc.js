@@ -46,14 +46,10 @@ var cmc = function(form) {
 		});
 
 		var t;
-		form.find('input[type=email]').keyup(function() {
-
+		form.find('input[name*="EMAIL"]').keyup(function() {
 			clearTimeout (t);
-
 			t = setTimeout(sub_exist, 400);
-
 		});
-
 
 		function sub_exist() {
 			jQuery.ajax({
@@ -72,9 +68,7 @@ var cmc = function(form) {
 				}
 
 			});
-
 		}
-
 	};
 
 	// Initialize handlers and attach validation to form
