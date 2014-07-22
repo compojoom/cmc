@@ -30,7 +30,6 @@ class CmcViewLists extends JViewLegacy
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
-		$this->sidebar = JHtmlSidebar::render();
 
 		$this->addToolbar();
 		parent::display($tpl);

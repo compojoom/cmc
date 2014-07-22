@@ -11,7 +11,7 @@ defined('_JEXEC') or die('Restricted access');
 
 $moduleId = $module->id;
 
-JHtml::_('jquery.framework');
+CompojoomHtmlBehavior::jquery();
 JHtml::_('behavior.formvalidation');
 JHtml::script('media/mod_cmc/js/cmc.js');
 JHtml::_('stylesheet', 'media/mod_cmc/css/cmc.css');

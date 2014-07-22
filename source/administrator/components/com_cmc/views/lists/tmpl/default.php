@@ -110,22 +110,22 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'lists', 'COM_CM
 		                        <?php //echo $item->list_name; ?><!--</a>-->
 		                    <?php echo $item->list_name; ?>
 		                </td>
-		                <td align="center">
+		                <td>
 		                    <?php echo $item->id; ?>
 		                </td>
-		                <td align="center">
+		                <td>
 		                    <?php echo $item->mc_id; ?>
 		                </td>
-		                <td align="center">
+		                <td>
 		                    <?php echo $item->default_from_name; ?>
 		                </td>
-		                <td align="center">
+		                <td>
 		                    <?php echo $item->default_from_email; ?>
 		                </td>
 		                <td>
 		                    <?php echo $item->default_language; ?>
 		                </td>
-		                <td align="center">
+		                <td>
 		                    <?php echo $item->visibility; ?>
 		                </td>
 		            </tr>

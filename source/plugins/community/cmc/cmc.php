@@ -12,6 +12,9 @@ defined('_JEXEC') or die('Restricted access');
 
 JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
+// Load Compojoom library
+require_once JPATH_LIBRARIES . '/compojoom/include.php';
+
 /**
  * Class PlgCommunityCmc
  *
@@ -19,7 +22,6 @@ JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
  */
 class PlgCommunityCmc extends JPlugin
 {
-
 	/**
 	 * Constructor
 	 *
@@ -49,7 +51,7 @@ class PlgCommunityCmc extends JPlugin
 	public function onUserRegisterFormDisplay(&$data)
 	{
 		// Load the funky stuff
-		JHtml::_('jquery.framework');
+		CompojoomHtmlBehavior::jquery();
 		JHtml::stylesheet('media/plg_community_cmc/css/style.css');
 		JHtml::script('media/plg_community_cmc/js/cmc.js');
 

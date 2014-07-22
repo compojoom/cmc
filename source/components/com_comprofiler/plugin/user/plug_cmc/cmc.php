@@ -20,6 +20,9 @@ if (!@include_once JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/xmlbuilder
 	return;
 }
 
+// Load Compojoom library
+require_once JPATH_LIBRARIES . '/compojoom/include.php';
+
 JLoader::register('CmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
 JLoader::register('CmcHelperRegistrationrender', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registrationrender.php');
 
@@ -75,7 +78,7 @@ class GetCmcTab extends cbTabHandler
 	public function getDisplayRegistration($tab, $user, $ui, $postdata)
 	{
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
-		JHtml::_('jquery.framework', true);
+		CompojoomHtmlBehavior::jquery();
 
 		$listid = $this->params->get('listid', "");
 		$interests = $this->params->get('interests', '');

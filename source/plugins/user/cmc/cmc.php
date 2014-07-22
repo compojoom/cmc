@@ -13,6 +13,9 @@ defined('_JEXEC') or die('Restricted access');
 
 JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
+// Load Compojoom library
+require_once JPATH_LIBRARIES . '/compojoom/include.php';
+
 /**
  * Class PlgUserCmc
  *
@@ -62,7 +65,7 @@ class PlgUserCmc extends JPlugin
 			$lang = JFactory::getLanguage();
 			$lang->load('plg_user_cmc', JPATH_ADMINISTRATOR);
 
-			JHtml::_('jquery.framework');
+			CompojoomHtmlBehavior::jquery();
 			JHtml::script('media/plg_user_cmc/js/cmc.js');
 			$renderer = CmcHelperXmlbuilder::getInstance($this->params);
 

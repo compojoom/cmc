@@ -29,7 +29,6 @@ class CmcViewCpanel extends JViewLegacy
 	{
 		$this->checkAndFixDatabase();
 		$this->addToolbar();
-		$this->sidebar = JHtmlSidebar::render();
 		parent::display($tpl);
 	}
 

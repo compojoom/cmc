@@ -9,6 +9,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+// Load Compojoom library
+require_once JPATH_LIBRARIES . '/compojoom/include.php';
+
 require_once JPATH_SITE . '/modules/mod_cmc/helper.php';
 
 $user = JFactory::getUser();
