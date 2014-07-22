@@ -10,11 +10,6 @@
     <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
     <description><![CDATA[Mailchimp list management for Joomla!]]></description>
     <scriptfile>script.php</scriptfile>
-    <install>
-        <sql>
-            <file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
-        </sql>
-    </install>
     <files folder="components/com_cmc">
         ##FRONTENDCOMPONENTPACKAGEFILES##
     </files>
