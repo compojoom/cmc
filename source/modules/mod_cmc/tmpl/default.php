@@ -13,7 +13,7 @@ $moduleId = $module->id;
 
 JHtml::_('jquery.framework');
 JHtml::_('behavior.formvalidation');
-JHtml::script('/media/mod_cmc/js/cmc.js');
+JHtml::script('media/mod_cmc/js/cmc.js');
 JHtml::_('stylesheet', 'media/mod_cmc/css/cmc.css');
 
 $document = JFactory::getDocument();
