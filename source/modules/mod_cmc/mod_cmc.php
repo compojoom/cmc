@@ -37,4 +37,9 @@ if (!$user->guest)
 	}
 }
 
+if (!$form)
+{
+	$layout = 'error';
+}
+
 require JModuleHelper::getLayoutPath('mod_cmc', $layout);

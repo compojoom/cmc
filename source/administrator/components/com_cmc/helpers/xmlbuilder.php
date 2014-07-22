@@ -69,7 +69,8 @@ class CmcHelperXmlbuilder
 	 */
 	public function build()
 	{
-		$html = "<form>";
+		$html = '<?xml version="1.0" encoding="UTF-8" ?>';
+		$html .= "<form>";
 		$html .= '<fields name="cmc">';
 		$html .= '<fieldset name="cmc" label="COM_CMC_NEWSLETTER">';
 
@@ -119,8 +120,6 @@ class CmcHelperXmlbuilder
 				$field = explode(';', $f);
 				$html .= $this->createXmlField($field);
 			}
-
-			//$html .= '</fieldset>';
 		}
 
 		if (is_array($this->interests) )
@@ -241,6 +240,18 @@ class CmcHelperXmlbuilder
 	}
 
 	/**
+	 * Function that double encodes the entities in a text - removing any html tags from text
+	 *
+	 * @param   string  $text  - the text
+	 *
+	 * @return string
+	 */
+	private function noEntities($text)
+	{
+		return htmlspecialchars(htmlspecialchars($text));
+	}
+
+	/**
 	 * Returns an xml formatted form field
 	 *
 	 * @param   array  $field   - the field array
@@ -271,7 +282,8 @@ class CmcHelperXmlbuilder
 			$class[] = $validate[$field[1]];
 		}
 
-		$title = htmlentities(htmlspecialchars(JText::_($field[2])));
+		// Double escape as we don't allow html in the label
+		$title = $this->noEntities(JText::_($field[2]));
 
 		$req = ($field[3]) ? ' cmc_req' : '';
 
@@ -309,7 +321,9 @@ class CmcHelperXmlbuilder
 	{
 		$choices = explode('##', $params[4]);
 		$req = ($params[3]) ? ' cmc_req' : '';
-		$title = JText::_($params[2]);
+
+		// Double escape as we don't allow html in the label
+		$title = $this->noEntities(JText::_($params[2]));
 
 		$select = '<field
 			id="' . $params[0] . '"
@@ -347,7 +361,7 @@ class CmcHelperXmlbuilder
 	{
 		$choices = explode('##', $params[4]);
 		$req = ($params[3]) ? 'cmcreq' : '';
-		$title = JText::_($params[2]);
+		$title = $this->noEntities(JText::_($params[2]));
 
 		$radio = '<field
 			name="' . $params[0] . '"
@@ -377,7 +391,7 @@ class CmcHelperXmlbuilder
 	 */
 	public function date($params)
 	{
-		$title = JText::_($params[2]);
+		$title = $this->noEntities(JText::_($params[2]));
 		$req = ($params[3]) ? ' cmc_req' : '';
 
 		return '<field
@@ -402,7 +416,7 @@ class CmcHelperXmlbuilder
 	public function birthday($params)
 	{
 		$req = ($params[3]) ? ' cmc_req' : '';
-		$title = JText::_($params[2]);
+		$title = $this->noEntities(JText::_($params[2]));
 
 		$address = '<field type="birthday"
 					id="' . $params[0] . '_month"
@@ -425,7 +439,7 @@ class CmcHelperXmlbuilder
 	public function phone($params)
 	{
 		$req = ($params[3]) ? ' cmc_req' : '';
-		$title = JText::_($params[2]);
+		$title = $this->noEntities(JText::_($params[2]));
 		$inter = '';
 
 		if ($this->phoneFormat == 'inter')
@@ -457,7 +471,7 @@ class CmcHelperXmlbuilder
 	public function address($params)
 	{
 		$req = ($params[3]) ? ' cmc_req' : '';
-		$title = JText::_($params[2]);
+		$title = $this->noEntities(JText::_($params[2]));
 
 		$address = '<field type="spacer" name="addr" label="' . $title . '" />';
 		$address .= '<field
@@ -528,7 +542,7 @@ class CmcHelperXmlbuilder
 			id="' . $id . '"
 			name="' . $name . '][country"
 			type="list"
-			label="' . $title . '"
+			label="' . $this->noEntities($title) . '"
 			default="0"
 			class="inputbox"
 			' . ($req ? ' required="required" ' : ' ') . '

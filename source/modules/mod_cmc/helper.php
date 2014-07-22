@@ -36,8 +36,16 @@ class ModCMCHelper
 
 		$mapping = self::getMapping($params->get('mapfields'));
 
-		$form = JForm::getInstance('mod_cmc_' . $id, $xml, array('control' => 'jform'));
-		$form->bind($mapping);
+		try
+		{
+			$form = JForm::getInstance('mod_cmc_' . $id, $xml, array('control' => 'jform'));
+			$form->bind($mapping);
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
+
 
 		return $form;
 	}
