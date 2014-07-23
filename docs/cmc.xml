@@ -129,32 +129,14 @@
       <section>
         <title>Checking for the latest version and upgrading</title>
 
-        <para>You can easily check for the latest published version of CMC by
-        visiting https://compojoom.com and going to Downloads-&gt;CMC.</para>
+        <para>The easiest way to check for a new version of CMC is to navigate
+        to your Joomla backend -&gt; Extensions -&gt; Extension manager -&gt;
+        Update. Click on find updates. If we've issues a CMC update that is
+        compatible with your Joomla version it show up in the list.</para>
 
-        <para>Updating CMC to the latest version is by no means different than
-        installing the component! You do not have to uninstall the previous
-        version; in fact, you are discouraged from doing so. Simply follow the
-        installation instructions so as to install the latest CMC version over
-        the existing installation. That's all! All your settings are
-        preserved.</para>
-      </section>
-
-      <section>
-        <title>Live update</title>
-
-        <para>There is also an alternate update path, if your server supports
-        it. It is called the "Live Update" feature (thanks to Nicholas K.
-        Dionysopoulos from http://akeebabackup.com) . Whenever you click on
-        the Live update button in the Navigation toolbar, it will
-        automatically check for the existence of an updated version and it
-        will notify you. Clicking on the update button allows you to perform a
-        live update without further interaction. Do note that if your server
-        is protected by a firewall you'll have to enable port 80 and 443 TCP
-        traffic to https://compojoom.com for this feature to work
-        properly.</para>
-
-        <para><graphic fileref="images/live-update.PNG"/></para>
+        <para>Another way to check for the latest updates is to visit our site
+        https://compojoom.com and go to Downloads-&gt;CMC. The latest
+        available version is going to be on the top.</para>
       </section>
     </section>
   </chapter>
@@ -210,8 +192,8 @@
 
         <para>In order for the component to work you will need to provide your
         Mailchimp API key. To get the key log into your profile on
-        mailchimp.com . Then on the top go your account -&gt; API keys &amp;
-        Authorized Apps.</para>
+        mailchimp.com . Then on the left click on your name -&gt; Account
+        Settings -&gt; Extras -&gt; API keys -&gt; API keys.</para>
 
         <graphic fileref="images/mailchimp_api_key.png"/>
 
@@ -259,7 +241,7 @@
         <graphic fileref="images/lists.PNG"/>
 
         <para>Once you've reached the list view at the top you'll see a bar
-        with settings related to your list. Click on "List tools" -&gt;
+        with settings related to your list. Click on "Settings" -&gt;
         "Webhooks" as shown in the screen shot below</para>
 
         <graphic fileref="images/webhooks-select.png"/>
@@ -440,14 +422,27 @@
           shown during the registration process &amp; just enable the plugin
           after that. That is all you have to do. Now when you navigate to
           your registration page you should see a "newsletter checkbox", once
-          selected the configured fields should show up. </para>
+          selected the configured fields should show up.</para>
 
           <important>
-            <para>Please not that any required field that you've created on
-            mailchimp.com needs to be selected in the plugin settings (except
-            for the E-Mail field). If you don't do this, then users won't be
-            able to subscribe to your newsletter as the required fields won't
-            be shown during the registration process.</para>
+            <para>Please note that any required field that you've created on
+            mailchimp.com needs to be selected in the plugin settings. If you
+            don't do this, then users won't be able to subscribe to your
+            newsletter as the required fields won't be shown during the
+            registration process.</para>
+
+            <para>There is an exception to this - if you use the field
+            mapping. You most probably don't want to ask the user for his
+            email, first name and last name - as he already entered those in
+            registration form. If you enter the above code in the field
+            mapping, then we will read the email, fname and last name out of
+            the information that the user has provided in the form. This makes
+            the subscription process easier as the users don't have to enter
+            the same information twice. </para>
+
+            <programlisting>EMAIL=email
+FNAME=name:0
+LNAME=name:1</programlisting>
           </important>
 
           <note>
@@ -474,13 +469,25 @@
 
           <para>If you use Jomsocial and you want to subscribe your users to
           your newsletter during the registration on your site you'll need to
-          activate and configure this plugin. </para>
+          activate and configure this plugin.</para>
 
           <important>
             <para>Make sure that the User - CMC Registration plugin is turned
             on! Otherwise this plugin won't function properly &amp; your users
             won't be subscribed to the newsletter when they click the
             activation link in the confirmation email.</para>
+          </important>
+
+          <important>
+            <para>Read the chapter on "User - CMC Registration plugin"! The
+            fields that are required in mailchimp have to be present in the
+            newsletter form, unless you've configured a field mapping. The
+            standard field mapping for email, first name and last name looks
+            like this:</para>
+
+            <programlisting>EMAIL=jsemail
+FNAME=jsname:0
+LNAME=jsname:1</programlisting>
           </important>
         </section>
 
@@ -502,6 +509,17 @@
             the plugin to be installed. You don't need to uninstall first -
             you can just install the same version over the old one.</para>
           </important>
+
+          <important>
+            <para>The fields that are required in mailchimp have to be present
+            in the newsletter form, unless you've configured a field mapping.
+            The standard field mapping for email, first name and last name
+            looks like this:</para>
+
+            <programlisting>EMAIL=email
+FNAME=name:0
+LNAME=name:1</programlisting>
+          </important>
         </section>
       </section>
     </section>
@@ -522,6 +540,32 @@
     to this:</para>
 
     <graphic fileref="images/mod_cmc_basic_options.PNG"/>
+
+    <note>
+      <para>You are already asking - what is the field "field mapping" for?
+      Your newsletter form generally requests information from the user that
+      you could possibly have. For example for logged in users you have their
+      email and name. So why should you ask your login users to type all this?
+      You could prefill the form with their e-mail and name and just ask them
+      to hit the submit button. This is where the field mapping comes in
+      handy. There is no way for us to guess which field in mailchimp
+      corresponds to the user object in Joomla. That is why we need you to
+      provide this information manually. For example here is a standard
+      configuration that would fill out the email, first name and last
+      name:</para>
+
+      <programlisting>EMAIL=email
+FNAME=name:0
+LNAME=name:1</programlisting>
+
+      <para>On the left you have the field tag as specified in Mailchimp. On
+      the right you have the corresponding Joomla user property. Maybe you are
+      already asking yourself - what is the 0 and the 1 after the name? Well,
+      in Joomla the first name and last name are stored in the same database
+      field. We take the value in this field, we create an array out of it. 0
+      is basically the first value in the array, the 1 the second. So in our
+      case 0 is the first name and 1 the second name. </para>
+    </note>
 
     <para>You need to select a list from the drop down field. Once you do this
     the page will refresh and you'll be presented with the fields and interest
@@ -555,10 +599,17 @@
     <section>
       <title>Styling the CMC module</title>
 
-      <para>The module frontend presentation doesn't include any CSS file.
-      We've left the presentation to your template. However if you are not
-      happy with the way the module is styled you can always add the CSS rule
-      to your template CSS file.</para>
+      <para>The module comes with 2 css files: cmc.css &amp;
+      bootstrap-form.css both located in media/mod_cmc/css . In the settings
+      of the module you have the option to turn off the bootstrap-form.css
+      file. You don't need it if your template is using the bootstrap
+      framework. </para>
+
+      <para>If you are not happy with the way the module look you'll have to
+      style it :) Unfortunatly we can't give you any tips here. Except maybe
+      if you don't know how you <ulink
+      url="https://compojoom.com/blog/entry/how-to-use-firebug-to-change-the-css-of-a-joomla-extension">should
+      learn to use firebug for css editing</ulink>.</para>
     </section>
   </chapter>
 
