@@ -333,7 +333,7 @@ class CmcHelperXmlbuilder
 			labelclass="form-label cmc-label"'
 			. ($params[3] ? ' required="required" ' : ' ') .
 			'default="0"
-			class="inputbox' . $req . '">';
+			class="inputbox input-medium' . $req . '">';
 
 		if (!$params[3])
 		{
@@ -451,7 +451,7 @@ class CmcHelperXmlbuilder
 		<field name="' . $params[0] . '"
 		type="phone"
 		id="cmc-phone-' . $params[0] . '"
-		class="phone validate-digits ' . $inter . $req . '"
+		class="phone input-medium validate-digits ' . $inter . $req . '"
 		labelclass="form-label cmc-label"'
 		. ($params[3] ? ' required="required" ' : ' ') .
 		'size="40"
@@ -544,7 +544,7 @@ class CmcHelperXmlbuilder
 			type="list"
 			label="' . $this->noEntities($title) . '"
 			default="0"
-			class="inputbox"
+			class="inputbox input-medium"
 			' . ($req ? ' required="required" ' : ' ') . '
 			labelclass="form-label cmc-label"
 			>';

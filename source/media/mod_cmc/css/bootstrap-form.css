@@ -1,0 +1,210 @@
+.cmc-signup .alert {
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
+	border-radius: 4px;
+	margin-bottom: 18px;
+	padding: 8px 35px 8px 14px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cmc-signup .alert-error {
+	background-color: #f2dede;
+	border-color: #eed3d7;
+	color: #b94a48;
+}
+
+.cmc-signup .help-inline {
+	display: inline-block;
+	padding-left: 5px;
+	vertical-align: middle;
+}
+
+.cmc-signup .hide {
+	display: none;
+}
+
+.cmc-signup select,
+.cmc-signup textarea,
+.cmc-signup input[type="text"],
+.cmc-signup input[type="password"],
+.cmc-signup input[type="datetime"],
+.cmc-signup input[type="datetime-local"],
+.cmc-signup input[type="date"],
+.cmc-signup input[type="month"],
+.cmc-signup input[type="time"],
+.cmc-signup input[type="week"],
+.cmc-signup input[type="number"],
+.cmc-signup input[type="email"],
+.cmc-signup input[type="url"],
+.cmc-signup input[type="search"],
+.cmc-signup input[type="tel"],
+.cmc-signup input[type="color"],
+.cmc-signup .uneditable-input {
+	border-radius: 3px;
+	color: #555;
+	display: inline-block;
+	font-size: 13px;
+	height: 18px;
+	line-height: 18px;
+	margin-bottom: 9px;
+	padding: 4px 6px;
+	vertical-align: middle;
+}
+
+.cmc-signup .input-medium {
+	width: 150px;
+}
+
+.cmc-signup select {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	width: 220px;
+	height: 28px;
+}
+
+.cmc-signup textarea,
+.cmc-signup input[type="text"],
+.cmc-signup input[type="password"],
+.cmc-signup input[type="datetime"],
+.cmc-signup input[type="datetime-local"],
+.cmc-signup input[type="date"],
+.cmc-signup input[type="month"],
+.cmc-signup input[type="time"],
+.cmc-signup input[type="week"],
+.cmc-signup input[type="number"],
+.cmc-signup input[type="email"],
+.cmc-signup input[type="url"],
+.cmc-signup input[type="search"],
+.cmc-signup input[type="tel"],
+.cmc-signup input[type="color"],
+.cmc-signup .uneditable-input {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+.cmc-signup  textarea:focus,
+.cmc-signup  input[type="text"]:focus,
+.cmc-signup  input[type="password"]:focus,
+.cmc-signup  input[type="datetime"]:focus,
+.cmc-signup  input[type="datetime-local"]:focus,
+.cmc-signup  input[type="date"]:focus,
+.cmc-signup  input[type="month"]:focus,
+.cmc-signup  input[type="time"]:focus,
+.cmc-signup  input[type="week"]:focus,
+.cmc-signup  input[type="number"]:focus,
+.cmc-signup  input[type="email"]:focus,
+.cmc-signup  input[type="url"]:focus,
+.cmc-signup  input[type="search"]:focus,
+.cmc-signup  input[type="tel"]:focus,
+.cmc-signup  input[type="color"]:focus,
+.cmc-signup  .uneditable-input:focus {
+	border-color: rgba(82, 168, 236, 0.8);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	outline: 0 none;
+}
+
+.cmc-signup label {
+	display: block;
+	margin-bottom: 5px;
+}
+.cmc-signup label,
+.cmc-signup input,
+.cmc-signup button,
+.cmc-signup select,
+.cmc-signup textarea {
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 18px;
+}
+
+.cmc-signup .radio,
+.cmc-signup .checkbox {
+	min-height: 18px;
+	padding-left: 20px;
+}
+
+
+.cmc-signup .radio input[type="radio"],
+.cmc-signup .checkbox input[type="checkbox"] {
+	float: left;
+	margin-left: -20px;
+}
+
+.cmc-signup .controls > .radio:first-child,
+.cmc-signup .controls > .checkbox:first-child {
+	padding-top: 5px;
+}
+
+.cmc-signup fieldset {
+	margin: 0;
+	padding: 0;
+}
+
+.cmc-signup .control-group {
+	margin-bottom: 9px;
+}
+
+.cmc-signup .btn {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #f5f5f5;
+	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+	background-repeat: repeat-x;
+	border-color: #bbb #bbb #a2a2a2;
+	border-image: none;
+	border-radius: 4px;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+	color: #333;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 13px;
+	line-height: 18px;
+	margin-bottom: 0;
+	padding: 4px 12px;
+	text-align: center;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+	vertical-align: middle;
+}
+
+.cmc-signup .btn-primary {
+	background-color: #006dcc;
+	background-image: linear-gradient(to bottom, #08c, #0044cc);
+	background-repeat: repeat-x;
+	border-color: #0044cc #0044cc #002a80;
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.cmc-signup .btn:hover,
+.cmc-signup .btn:focus,
+.cmc-signup .btn:active,
+.cmc-signup .btn.active,
+.cmc-signup .btn.disabled,
+.cmc-signup .btn[disabled] {
+	background-color: #e6e6e6;
+	color: #333;
+}
+
+.cmc-signup .btn.disabled,
+.cmc-signup .btn[disabled] {
+	background-image: none;
+	box-shadow: none;
+	cursor: default;
+	opacity: 0.65;
+}
+
+.cmc-signup .btn-primary:hover,
+.cmc-signup .btn-primary:focus,
+.cmc-signup .btn-primary:active,
+.cmc-signup .btn-primary.active,
+.cmc-signup .btn-primary.disabled,
+.cmc-signup .btn-primary[disabled] {
+	background-color: #0044cc;
+	color: #fff;
+}

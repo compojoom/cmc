@@ -11,10 +11,19 @@ defined('_JEXEC') or die('Restricted access');
 
 $moduleId = $module->id;
 
-CompojoomHtmlBehavior::jquery();
+if ($params->get('jquery', 1))
+{
+	CompojoomHtmlBehavior::jquery();
+}
+
 JHtml::_('behavior.formvalidation');
 JHtml::script('media/mod_cmc/js/cmc.js');
 JHtml::_('stylesheet', 'media/mod_cmc/css/cmc.css');
+
+if ($params->get('bootstrap_form', 1))
+{
+	JHtml::_('stylesheet', 'media/mod_cmc/css/bootstrap-form.css');
+}
 
 $document = JFactory::getDocument();
 $script = 'jQuery(document).ready(function() {

@@ -52,6 +52,18 @@
                 </field>
 	            <field name="newsletterCheckbox" type="hidden" value="0" default="0"/>
             </fieldset>
+	        <fieldset name="advanced">
+		        <field name="jquery" type="radio" class="radio btn-group btn-group-yesno" default="1" label="MOD_CMC_JQUERY_LABEL"
+		               description="MOD_CMC_JQUERY_DESC">
+			        <option value="0">JNO</option>
+			        <option value="1">JYES</option>
+		        </field>
+		        <field name="bootstrap_form" type="radio" class="radio btn-group btn-group-yesno" default="1" label="MOD_CMC_BOOTSTRAP_LABEL"
+		               description="MOD_CMC_BOOTSTRAP_DESC">
+			        <option value="0">JNO</option>
+			        <option value="1">JYES</option>
+		        </field>
+	        </fieldset>
         </fields>
     </config>
 </extension>
