@@ -50,7 +50,7 @@ class CmcHelperXmlbuilder
 	 */
 	public static function getInstance($config)
 	{
-		$md5 = md5($config);
+		$md5 = md5(serialize($config));
 
 		if (!isset(self::$instance[$md5]))
 		{

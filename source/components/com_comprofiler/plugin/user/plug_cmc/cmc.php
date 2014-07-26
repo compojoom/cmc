@@ -24,6 +24,7 @@ if (!@include_once JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/xmlbuilder
 require_once JPATH_LIBRARIES . '/compojoom/include.php';
 
 JLoader::register('CmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
+JLoader::register('CmcHelperRegistration', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registration.php');
 JLoader::register('CmcHelperRegistrationrender', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registrationrender.php');
 
 global $_PLUGINS;
