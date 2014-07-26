@@ -7,7 +7,7 @@
  */
 
 var cmc = function(form) {
-	initialize = function(form) {
+	var initialize = function(form) {
 		form = jQuery(form);
 		form.submit(function(e) {
 			e.preventDefault();
