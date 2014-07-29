@@ -454,9 +454,10 @@ class CmcHelperXmlbuilder
 		class="phone input-medium validate-digits ' . $inter . $req . '"
 		labelclass="form-label cmc-label"'
 		. ($params[3] ? ' required="required" ' : ' ') .
-		'size="40"
-		label="' . $title . '"
-		' . $req . ' />';
+		'size="40" ' .
+		'hint="' . $title . ' ' . ($req ? '*' : '') . '" ' .
+		'label="' . $title . '"
+		/>';
 
 		return $phone;
 	}
