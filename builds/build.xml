@@ -177,9 +177,10 @@
     </target>
 
     <target name="ftpdeploy" depends="setup-properties">
+	    <input propertyName="ftp.password" message="The ftp password?" />
         <gitversion workingCopy="${dirs.root}" propertyName="git.lastrevision"/>
         <!-- Core release -->
-        <echo>Uploading Hotspots nightly build</echo>
+        <echo>Uploading CMC nightly build</echo>
         <ftpdeploy
                 host="${ftp.host}"
                 port="${ftp.port}"
