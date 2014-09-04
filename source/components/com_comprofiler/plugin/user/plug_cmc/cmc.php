@@ -35,9 +35,9 @@ $_PLUGINS->registerFunction('onBeforeUserBlocking', 'onBeforeUserBlocking', 'get
 $language = JFactory::getLanguage();
 
 // Load language
-$language->load('plg_cmccb', JPATH_ADMINISTRATOR, 'en-GB', true);
-$language->load('plg_cmccb', JPATH_ADMINISTRATOR, $language->getDefault(), true);
-$language->load('plg_cmccb', JPATH_ADMINISTRATOR, null, true);
+$language->load('plg_plug_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
+$language->load('plg_plug_cmc', JPATH_ADMINISTRATOR, $language->getDefault(), true);
+$language->load('plg_plug_cmc', JPATH_ADMINISTRATOR, null, true);
 $language->load('com_cmc', JPATH_ADMINISTRATOR, 'en-GB', true);
 $language->load('com_cmc', JPATH_ADMINISTRATOR, $language->getDefault(), true);
 $language->load('com_cmc', JPATH_ADMINISTRATOR, null, true);

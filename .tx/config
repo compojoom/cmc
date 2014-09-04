@@ -15,6 +15,12 @@ source_file = source\administrator\language\en-GB\en-GB.com_cmc.sys.ini
 source_lang = en_GB
 minimum_perc = 80
 
+[compojoom-cmc.plg_plug_cmc]
+file_filter = source\administrator\language\<lang>\<lang>.plg_plug_cmc.ini
+source_file = source\administrator\language\en-GB\en-GB.plg_plug_cmc.ini
+source_lang = en_GB
+minimum_perc = 80
+
 [compojoom-cmc.frontend_com_cmc]
 file_filter = source\language\<lang>\<lang>.com_cmc.ini
 source_file = source\language\en-GB\en-GB.com_cmc.ini
