@@ -164,6 +164,7 @@
 		    <isset property="libraries"/>
 		    <then>
 			    <foreach list="${libraries}" param="library" target="build-library-sources">
+				    <property name="lib.source" value="../../lib_${library}/source" override="true"/>
 				    <property name="destination.dir" value="${destination.dir}/libraries/${library}" override="true"/>
 			    </foreach>
 			    <property name="destination.dir" value="${destination.dir}" override="true"/>
