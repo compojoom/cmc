@@ -43,7 +43,7 @@ JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
  * Show a warning only if we are in the cpanel view
  * Redirect only if we are not in the cpanel view
  */
-if (!cmcHelperBasic::checkRequiredSettings())
+if (!cmcHelperBasic::checkRequiredSettings() && $input->getCmd('task', '') !== 'update.updateinfo')
 {
 	if ($input->getCmd('view', '') == 'cpanel')
 	{
