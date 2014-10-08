@@ -20,6 +20,9 @@
 	<import file="../../buildtools/module.xml" optional="true"/>
 	<import file="../../buildtools/library.xml" optional="true"/>
 
+	<property name="dirs.root" value="${project.basedir}/../"/>
+	<property name="dirs.source" value="${dirs.root}source"/>
+
 	<tstamp>
 		<format property="build.date" pattern="%Y-%m-%d"/>
 	</tstamp>
@@ -34,9 +37,6 @@
 
     <target name="setup-properties">
         <!-- Initialize the version if it's not set -->
-
-        <property name="dirs.root" value="${project.basedir}/../"/>
-        <property name="dirs.source" value="${dirs.root}source"/>
 
         <property name="destination.dir"
                   value="${dirs.root}/packages/components/com_${component.name}/com_${component.name}-${build.version}"/>
@@ -70,9 +70,18 @@
              basedir="${destination.dir}/../com_${component.name}-${build.version}"/>
     </target>
 
-    <target name="buildComponent">
+	<fileset dir="${dirs.source}" id="component-core">
+		<include name="administrator/language/en-GB/*.com_cmc.**"/>
+		<include name="language/en-GB/*.com_cmc.**"/>
+	</fileset>
 
-        <copy todir="${destination.dir}/administrator/components/com_${component.name}">
+	<target name="buildComponent">
+
+		<copy todir="${destination.dir}">
+			<fileset refid="component-core"/>
+		</copy>
+
+		<copy todir="${destination.dir}/administrator/components/com_${component.name}">
             <fileset dir="${dirs.source}/administrator/components/com_${component.name}">
                 <include name="**/*.*"/>
             </fileset>
@@ -85,21 +94,8 @@
             </fileset>
         </copy>
 
-        <copy todir="${destination.dir}/administrator/language/">
-            <fileset dir="${dirs.source}/administrator/language/">
-                <include name="**/*.com_${component.name}.**"/>
-            </fileset>
-        </copy>
-
         <copy todir="${destination.dir}/components/com_${component.name}">
             <fileset dir="${dirs.source}/components/com_${component.name}" includes="**/*.*"/>
-        </copy>
-
-
-        <copy todir="${destination.dir}/language/">
-            <fileset dir="${dirs.source}/language/">
-                <include name="**/*.com_${component.name}.ini"/>
-            </fileset>
         </copy>
 
         <if>
@@ -151,7 +147,7 @@
         </copy>
 
         <extfile file="${destination.dir}/${component.name}.xml"
-                 sourceDir="${dirs.source}"
+                 sourceDir="${destination.dir}"
                  component="com_${component.name}"
                 />
 
