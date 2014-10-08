@@ -19,6 +19,8 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmc'))
 	return false;
 }
 
+require_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
+
 // Load Compojoom library
 require_once JPATH_LIBRARIES . '/compojoom/include.php';
 

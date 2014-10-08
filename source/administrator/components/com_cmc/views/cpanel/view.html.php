@@ -27,7 +27,13 @@ class CmcViewCpanel extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->checkAndFixDatabase();
+		$updateModel = JModelLegacy::getInstance('Updates', 'CmcModel');
+
+		// Run the automatic database check
+		$updateModel->checkAndFixDatabase();
+
+		$this->currentVersion = $updateModel->getVersion();
+
 		$this->addToolbar();
 		parent::display($tpl);
 	}
@@ -63,22 +69,5 @@ class CmcViewCpanel extends JViewLegacy
 		};
 
 		return unserialize($details);
-	}
-
-	/**
-	 * Checks the database for missing / outdated tables and installs or
-	 * updates the database using the SQL xml file if necessary.
-	 *
-	 * @return	void
-	 */
-	public function checkAndFixDatabase()
-	{
-		$dbInstaller = new CompojoomDatabaseInstaller(
-			array(
-			'dbinstaller_directory'	=> JPATH_ADMINISTRATOR . '/components/com_cmc/sql/xml'
-			)
-		);
-
-		$dbInstaller->updateSchema();
 	}
 }

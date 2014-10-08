@@ -105,6 +105,21 @@
             </then>
         </if>
 
+	    <!-- Copy the CHANGELOG -->
+	    <copy file="${dirs.root}/CHANGELOG" tofile="${destination.dir}/administrator/components/com_${component.name}/CHANGELOG.php" overwrite="true">
+	    </copy>
+
+	    <copy file="./templates/version.php"
+	          tofile="${destination.dir}/administrator/components/com_${component.name}/version.php" overwrite="true">
+		    <filterchain refid="standard-tokens-core"/>
+		    <filterchain>
+			    <replacetokens begintoken="@@" endtoken="@@">
+				    <token key="PRO" value="0"/>
+				    <token key="PRO_DISABLED_CLASS" value=""/>
+				    <token key="PRO_LABEL" value=""/>
+			    </replacetokens>
+		    </filterchain>
+	    </copy>
 
         <copy file="${dirs.source}/administrator/components/com_${component.name}/${component.name}.xml"
               tofile="${destination.dir}/${component.name}.xml" overwrite="true">
