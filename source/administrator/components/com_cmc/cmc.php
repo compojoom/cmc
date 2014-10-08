@@ -37,7 +37,6 @@ require_once JPATH_COMPONENT . '/controller.php';
 JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/libraries/mailchimp/MCAPI.class.php');
 JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
 
-
 /*
  * this part is a little crazy because of the redirects...
  * Show a warning only if we are in the cpanel view
