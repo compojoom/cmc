@@ -14,6 +14,14 @@ if (!(defined('_VALID_CB') || defined('_JEXEC') || defined('_VALID_MOS')))
 	die('Direct Access to this location is not allowed.');
 }
 
+use CBLib\Input\Get;
+use CBLib\Language\CBTxt;
+use CBLib\Registry\GetterInterface;
+use CBLib\Registry\RegistryInterface;
+use CB\Database\Table\PluginTable;
+use CB\Database\Table\TabTable;
+use CB\Database\Table\UserTable;
+
 // Check if CMC is installed
 if (!@include_once JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/xmlbuilder.php")
 {
@@ -25,6 +33,7 @@ require_once JPATH_LIBRARIES . '/compojoom/include.php';
 
 JLoader::register('CmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
 JLoader::register('CmcHelperRegistration', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registration.php');
+JLoader::register('CmcHelperCountries', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/countries.php');
 JLoader::register('CmcHelperRegistrationrender', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registrationrender.php');
 
 global $_PLUGINS;
@@ -53,8 +62,15 @@ $language->load('com_cmc.sys', JPATH_ADMINISTRATOR, null, true);
 class GetCmcTab extends cbTabHandler
 {
 	public $installed = true;
-
 	public $errormsg = "This plugin can't work without the CMC Component";
+
+	/**
+	 * Constructor
+	 */
+	public function __construct( )
+	{
+		parent::__construct();
+	}
 
 	/**
 	 * Gets the handler
@@ -80,13 +96,15 @@ class GetCmcTab extends cbTabHandler
 	{
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
 		CompojoomHtmlBehavior::jquery();
+		$plugin = GetCmcTab::getPlugin();
 
-		$listid = $this->params->get('listid', "");
-		$interests = $this->params->get('interests', '');
-		$fields = $this->params->get('fields', '');
+
+		$listid = $plugin->params->get('listid', "");
+		$interests = $plugin->params->get('interests', '');
+		$fields = $plugin->params->get('fields', '');
 
 		// Create the xml for JForm
-		$builder = CmcHelperXmlbuilder::getInstance($this->params);
+		$builder = CmcHelperXmlbuilder::getInstance($plugin->params);
 
 		// Load JS & Co
 		JFactory::getDocument()->addScriptDeclaration("
@@ -113,13 +131,13 @@ class GetCmcTab extends cbTabHandler
 		// We have to set the fields / interests manually for cb because they are no array! See explode
 		if (!empty($fields))
 		{
-			$fields = explode("|*|", $this->params->get('fields', ''));
+			$fields = explode("|*|", $plugin->params->get('fields', ''));
 			$builder->fields = $fields;
 		}
 
 		if (!empty($interests))
 		{
-			$interests = explode("|*|", $this->params->get('interests', ''));
+			$interests = explode("|*|", $plugin->params->get('interests', ''));
 			$builder->interests = $interests;
 		}
 
@@ -130,17 +148,20 @@ class GetCmcTab extends cbTabHandler
 
 		$fieldsets = $form->getFieldsets();
 
-		$ret = "\t<tr>\n";
-		$ret .= "\t\t<td class='titleCell'>" . JText::_('PLG_CMCCB_SUBSCRIPTION') . ":</td>\n";
-		$ret .= "\t\t<td class='fieldCell'>";
+		$ret = '<div class="cbFieldsContentsTab">';
+		$ret .= '<div class="sectiontableentry1 cbft_predefined cbtt_input form-group cb_form_line clearfix">';
 
-		// Display
-		$ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc_check_newsletter" value="1" />';
+		$ret .= '<label for="name" id="cblabname" class="control-label col-sm-3">' . JText::_('PLG_CMCCB_SUBSCRIPTION') . '</label>';
+
+		$ret .= '<div class="cb_field col-sm-9">';
+
+		$ret .= '<input type="checkbox" name="cmc[newsletter]" id="cmc_check_newsletter" value="1" /> ';
 		$ret .= '<label for="cmc_check_newsletter" id="cmc_newsletter_lbl">' . JText::_('PLG_CMCCB_NEWSLETTER') . '</label>';
-		$ret .= "</td>\n";
-		$ret .= "</tr>\n";
-		$ret .= "\t<tr>\n";
-		$ret .= "<td colspan='2' id='cmc_td_newsletter' style=''>\n";
+		$ret .= "</div>\n";
+
+		$ret .= "</div>";
+
+		$ret .= "<div id='cmc_td_newsletter' style='' class=\"cbFieldsContentsTab\">\n";
 		$ret .= "<div id=\"cmc_newsletter\" style=\"display: block;\">\n";
 
 		// Render Content
@@ -148,23 +169,22 @@ class GetCmcTab extends cbTabHandler
 		{
 			if ($key != "cmc")
 			{
-				$ret .= '<div class="ctitle"><h3>' . JText::_($value->label) . '</h3></div>';
+				$ret .= '<div class="sectiontableentry1 cbft_predefined cbtt_input form-group cb_form_line clearfix">';
+				$ret .= '<label class="col-sm-12">' . JText::_($value->label) . '</label>';
+				$ret .= '</div>';
 				$fields = $form->getFieldset($key);
-				$ret .= "<table class=\"contentpane " . $key . "\" style=\"width: 100%\">";
 
 				foreach ($fields as $field)
 				{
-					$ret .= '<tr>';
-					$ret .= '<td class="titleCell">';
-					$ret .= $field->label;
-					$ret .= '</td>';
-					$ret .= '<td class="fieldCell">';
-					$ret .= '<div class="form-field">' . $field->input . '</div>';
-					$ret .= '</td>';
-					$ret .= '</tr>';
+					$ret .= '<div class="sectiontableentry1 cbft_predefined cbtt_input form-group cb_form_line clearfix">';
+					$ret .= '<div class="control-label col-sm-3">' . $field->label . '</div>';
+
+					$ret .= '<div class="cb_field col-sm-9">';
+					$ret .=  $field->input;
+					$ret .= '</div>';
+					$ret .= '</div>';
 				}
 
-				$ret .= "</table>";
 			}
 		}
 
@@ -172,9 +192,7 @@ class GetCmcTab extends cbTabHandler
 
 		// End open tables / divs
 		$ret .= "</div>\n";
-		$ret .= "</td>\n";
-		$ret .= "</tr>\n";
-		$ret .= "\t</tr>\n";
+		$ret .= "</div>\n";
 
 		return $ret;
 	}
@@ -191,6 +209,8 @@ class GetCmcTab extends cbTabHandler
 
 	public function getDisplayTab($tab, $user, $ui)
 	{
+		global $_CB_framework, $_CB_database, $ueConfig;
+
 		// Show the CMC Subscription options
 		// return $this->getEditTab($tab, $user, $ui);
 	}
@@ -206,15 +226,16 @@ class GetCmcTab extends cbTabHandler
 	 * @return  void
 	 */
 
-	public function saveRegistrationTab($tab, &$user, $ui, $postdata)
+	function saveRegistrationTab($tab, &$user, $ui, $postdata)
 	{
 		// Save User to temporary table- not active here
 		if (!empty($postdata['cmc']['newsletter']))
 		{
 			// For the hidden field
 			$listId = $postdata['cmc']['listid'];
+			$plugin = GetCmcTab::getPlugin();
 
-			$mappedData = $this->getMapping($this->params->get('mapfields'), $postdata);
+			$mappedData = $this->getMapping($plugin->params->get('mapfields'), $postdata);
 
 			if (count($mappedData))
 			{
@@ -310,8 +331,9 @@ class GetCmcTab extends cbTabHandler
 		return null;
 
 		JHtml::_('stylesheet', JURI::root() . 'media/mod_cmc/css/cmc.css');
+		$plugin = GetCmcTab::getPlugin();
 
-		$listId = $this->params->get('listid', "");
+		$listId = $plugin->params->get('listid', "");
 
 		if (empty($listId))
 		{
@@ -356,6 +378,33 @@ class GetCmcTab extends cbTabHandler
 		// Check if user is in CMC
 	}
 
+	/**
+	 * Gets the plugin
+	 *
+	 * @todo   Do not change system objects, nor extend attributes to it.
+	 *
+	 * @return PluginTable
+	 */
+	static public function getPlugin( )
+	{
+		global $_PLUGINS;
+
+		static $plugin					=	null;
+
+		if ( ! isset( $plugin ) ) {
+			$plugin						=	$_PLUGINS->getLoadedPlugin( 'user', 'cmc' );
+
+			if ( $plugin !== null ) {
+				$plugin->relPath		=	$_PLUGINS->getPluginRelPath( $plugin );
+				$plugin->livePath		=	$_PLUGINS->getPluginLivePath( $plugin );
+				$plugin->absPath		=	$_PLUGINS->getPluginPath( $plugin );
+				$plugin->xml			=	$_PLUGINS->getPluginXmlPath( $plugin );
+				$plugin->params			=	$_PLUGINS->getPluginParams( $plugin );
+			}
+		}
+
+		return $plugin;
+	}
 
 	/**
 	 * Loads the list values for the plugin
@@ -367,6 +416,9 @@ class GetCmcTab extends cbTabHandler
 		$api = new cmcHelperChimp;
 		$lists = $api->lists();
 
+		// Get the plugin (No this->params) any longer
+		$plugin = GetCmcTab::getPlugin();
+
 		$key = 'id';
 		$val = 'name';
 		$options[] = array($key => '', $val => '-- ' . JText::_('Please select') . ' --');
@@ -376,13 +428,13 @@ class GetCmcTab extends cbTabHandler
 			$options[] = array($key => $list[$key], $val => $list[$val]);
 		}
 
-		$attribs = "onchange='submitbutton(\"applyPlugin\")'";
+		$attribs = "onchange='submitbutton(\"act=apply\")'";
 
 		if ($options)
 		{
 			$content = JHtml::_(
 				'select.genericlist', $options, 'params[listid]', $attribs, $key,
-				$val, $this->params->get('listid', "")
+				$val, $plugin->params->get('listid', "")
 			);
 		}
 
@@ -398,7 +450,10 @@ class GetCmcTab extends cbTabHandler
 
 	public function loadFields()
 	{
-		$listid = $this->params->get('listid', "");
+		$plugin = GetCmcTab::getPlugin();
+
+
+		$listid = $plugin->params->get('listid', "");
 
 		if (empty($listid))
 		{
@@ -446,7 +501,7 @@ class GetCmcTab extends cbTabHandler
 				if ($req)
 				{
 					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
-					. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
+						. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
 					);
 				}
 				else
@@ -462,7 +517,7 @@ class GetCmcTab extends cbTabHandler
 		{
 			$content = "";
 
-			$content .= JHtml::_('select.genericlist', $options, 'params[fields][]', $attribs, $key, $val, explode("|*|", $this->params->get('fields', "")));
+			$content .= JHtml::_('select.genericlist', $options, 'params[fields][]', $attribs, $key, $val, explode("|*|", $plugin->params->get('fields', "")));
 
 		}
 		else
@@ -480,7 +535,8 @@ class GetCmcTab extends cbTabHandler
 	 */
 	public function loadInterests()
 	{
-		$listid = $this->params->get('listid', "");
+		$plugin = GetCmcTab::getPlugin();
+		$listid = $plugin->params->get('listid', "");
 
 		if (empty($listid))
 		{
@@ -518,7 +574,7 @@ class GetCmcTab extends cbTabHandler
 
 		if ($options)
 		{
-			$content = JHtml::_('select.genericlist', $options, 'params[interests][]', $attribs, $key, $val, explode("|*|", $this->params->get('interests', "")));
+			$content = JHtml::_('select.genericlist', $options, 'params[interests][]', $attribs, $key, $val, explode("|*|", $plugin->params->get('interests', "")));
 		}
 		else
 		{

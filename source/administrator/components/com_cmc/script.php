@@ -68,13 +68,33 @@ class Com_CmcInstallerScript
 	 * @param   string                      $type    - the type of th einstallation
 	 * @param   JInstallerAdapterComponent  $parent  - the parent JInstaller obeject
 	 *
+	 * @throws  Exception  - if library is not found
+	 *
 	 * @return boolean - true if everything is OK and we should continue with the installation
 	 */
 	public function preflight($type, $parent)
 	{
 		$path = $parent->getParent()->getPath('source') . '/libraries/compojoom/libraries/compojoom/include.php';
 
-		require_once $path;
+		// Check if the file exists (on discover install it won't)
+		if (JFile::exists($path))
+		{
+			require_once $path;
+		}
+		else
+		{
+			// Try fallback to installed one
+			$path = JPATH_ROOT . '/libraries/compojoom/include.php';
+
+			if (JFile::exists($path))
+			{
+				require_once $path;
+			}
+			else
+			{
+				throw new Exception("Compojoom library not found", 404);
+			}
+		}
 
 		$this->installer = new CompojoomInstaller($type, $parent, 'com_cmc');
 

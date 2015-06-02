@@ -1,62 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cbinstall version="@@VERSION@@" type="plugin" group="user" method="upgrade">
-    <name>CMC - Newsletter registration</name>
-    <author>Compojoom - Yves Hoppe</author>
-    <creationDate>@@DATE@@</creationDate>
-    <copyright>(C) 2013 compojoom.com</copyright>
-    <license>GNU/GPL version 2</license>
-    <authorEmail>contact-us@compjoom.com</authorEmail>
-    <authorUrl>www.compojoom.com</authorUrl>
-    <version>1.0</version>
-    <description>
-        A Community Builder plugin for CMC.
-    </description>
-    <files>
-        <filename plugin="cmc">cmc.php</filename>
-    </files>
-    <params description="Plugin which integrates CMC - Mailchimp for Joomla! into Community Builder">
-        <param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text"
-               description="This text will be displayed above your signup form." />
+<cbinstall version="1.0" type="plugin" group="user" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../../../../../validation/ahawow.xsd">
+	<name>CMC - Newsletter registration</name>
+	<author>Compojoom - Yves Hoppe</author>
+	<creationDate>@@DATE@@</creationDate>
+	<copyright>(C) 2013 compojoom.com</copyright>
+	<license>GNU/GPL version 2</license>
+	<authorEmail>contact-us@compjoom.com</authorEmail>
+	<authorUrl>www.compojoom.com</authorUrl>
+	<version>2.0.0</version>
+	<description>
+		A Community Builder plugin for CMC.
+	</description>
+	<files>
+		<filename plugin="cmc">cmc.php</filename>
+	</files>
+	<params description="Plugin which integrates CMC - Mailchimp for Joomla! into Community Builder">
+		<param name="intro-text" type="textarea" default="" cols="25" rows="2" label="Intro-Text"
+		       description="This text will be displayed above your signup form." />
 
-        <param name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="Text above submit"
-               description="This text will be displayed above the submit button."/>
+		<param name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="Text above submit"
+		       description="This text will be displayed above the submit button."/>
 
-        <param name="listid" required="true" type="custom" class="getCmcTab" method="loadLists" default="" cols="25" rows="2" label="List"
-               description="Select the subscriber list to which people will sign up to."/>
+		<param name="listid" required="true" type="custom" class="getCmcTab" method="loadLists" default="" cols="25" rows="2" label="List"
+		       description="Select the subscriber list to which people will sign up to."/>
 
-        <param name="fields" type="custom" class="getCmcTab" method="loadFields" default="" label="Fields" description="These list fields (merge tags) will be displayed on the signup form. FNAME, LNAME and EMAIL are already supplied by CB!"/>
+		<param name="fields" type="custom" class="getCmcTab" method="loadFields" default="" label="Fields" description="These list fields (merge tags) will be displayed on the signup form. FNAME, LNAME and EMAIL are already supplied by CB!"/>
 
-        <param name="interests" type="custom" class="getCmcTab" method="loadInterests" default="" label="Interests"
-               description="These interest groups will be displayed on the signup form."/>
-	    <param name="mapfields" type="textarea" label="Field mapping"
-	           description="Here you can define a field mapping between Mailchimp and Joomla. Format is mailchimpField=joomlaUserfield - one per line." filter="raw" />
-        <param name="dateFormat" type="text" default="%Y-%m-%d" label="Date format"
-               description="If you are using a date field you can define the format here."/>
-        <param name="phoneFormat" type="radio" default="inter" label="Phone Format"
-               description="If you are using a phone field select whether to display it in US or international format. US =  (###) ### - #### ; International = ##########">
-            <option value="us">US Format</option>
-            <option value="inter">International</option>
-        </param>
-        <param name="address2" type="radio" default="0" label="Show address 2"
-               description="If you are using address fields, do you want to display the address line 2 field?">
-            <option value="0">No</option>
-            <option value="1">Yes</option>
-        </param>
-    </params>
+		<param name="interests" type="custom" class="getCmcTab" method="loadInterests" default="" label="Interests"
+		       description="These interest groups will be displayed on the signup form."/>
+		<param name="mapfields" type="textarea" label="Field mapping"
+		       description="Here you can define a field mapping between Mailchimp and Joomla. Format is mailchimpField=joomlaUserfield - one per line." filter="raw" />
+		<param name="dateFormat" type="text" default="%Y-%m-%d" label="Date format"
+		       description="If you are using a date field you can define the format here."/>
+		<param name="phoneFormat" type="radio" default="inter" label="Phone Format"
+		       description="If you are using a phone field select whether to display it in US or international format. US =  (###) ### - #### ; International = ##########">
+			<option value="us">US Format</option>
+			<option value="inter">International</option>
+		</param>
+		<param name="address2" type="radio" default="0" label="Show address 2"
+		       description="If you are using address fields, do you want to display the address line 2 field?">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
 
-    <tabs>
-        <tab name="Mailing Lists" description="Enables the user to manage his subscription to the Cmc Lists"
-             class="getCmcTab" fields="0" position="cb_tabmain" displaytype="tab">
-            <params>
-            </params>
-            <fields>
-            </fields>
-        </tab>
-    </tabs>
-    <install>
-    </install>
-    <uninstall>
-    </uninstall>
-    <database>
-    </database>
+	<tabs>
+		<tab name="Mailing Lists" description="Enables the user to manage his subscription to the Cmc Lists"
+		     class="getCmcTab" fields="0" position="cb_tabmain" displaytype="tab">
+			<params>
+			</params>
+			<fields>
+			</fields>
+		</tab>
+	</tabs>
+	<database>
+	</database>
 </cbinstall>
