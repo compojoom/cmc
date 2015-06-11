@@ -3,9 +3,9 @@
 	<name>Community - CMC Registration plugin</name>
 	<author>compojoom.com</author>
 	<creationDate>@@DATE@@</creationDate>
-	<copyright>Copyright (C) 2013 Daniel Dimitrov - compojoom.com. All rights reserved.</copyright>
+	<copyright>Copyright (C) 2013-2015 compojoom.com. All rights reserved.</copyright>
 	<license>GNU/GPL http://www.gnu.org/licenses/gpl-3.0.html</license>
-	<authorUrl>http://compojoom.com</authorUrl>
+	<authorUrl>https://compojoom.com</authorUrl>
 	<version>@@VERSION@@</version>
 	<description>PLG_COMMUNITY_USER_REGISTRATION_DESCRIPTION</description>
 	<files>
