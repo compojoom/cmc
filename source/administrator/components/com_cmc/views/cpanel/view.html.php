@@ -28,11 +28,13 @@ class CmcViewCpanel extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$updateModel = JModelLegacy::getInstance('Updates', 'CmcModel');
+        $statsModel = JModelLegacy::getInstance('Stats', 'CmcModel');
 
 		// Run the automatic database check
 		$updateModel->checkAndFixDatabase();
 
 		$this->currentVersion = $updateModel->getVersion();
+        $this->updateStats = $statsModel->needsUpdate();
 
 		$this->addToolbar();
 		parent::display($tpl);

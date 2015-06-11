@@ -188,6 +188,20 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'cpanel', 'COM_C
 	})(jQuery);
 </script>
 
+<?php if($this->updateStats): ?>
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function(){
+                $.ajax('index.php?option=com_cmc&task=stats.send&tmpl=component&<?php echo JSession::getFormToken(); ?>=1', {
+                    dataType: 'json',
+                    success: function(msg) {}
+                });
+            });
+        })(jQuery);
+    </script>
+<?php endif; ?>
+
+
 <?php
 // Show Footer
 echo CompojoomHtmlCTemplate::getFooter(CmcHelperBasic::footer());
