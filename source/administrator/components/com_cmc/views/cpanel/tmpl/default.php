@@ -82,7 +82,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'cpanel', 'COM_C
 					?>
 				</div>
 				<div id="rss" class="tab-pane">
-					<?php echo CompojoomHtmlFeed::renderFeed('https://compojoom.com/about/blog/tags/listings/cmc?format=feed&amp;type=rss'); ?>
+					<?php echo CompojoomHtmlFeed::renderFeed('https://compojoom.com/blog/tags/listings/cmc?format=feed&amp;type=rss'); ?>
 				</div>
 				<div id="version" class="tab-pane">
 					<?php echo $this->loadTemplate('version'); ?>
