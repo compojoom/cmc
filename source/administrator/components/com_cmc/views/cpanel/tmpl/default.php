@@ -9,6 +9,7 @@ JHTML::_('behavior.tooltip');
 echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'cpanel', 'COM_CMC_CPANEL', '');
 ?>
 <div id="updateNotice"></div>
+<div id="jedNotice"></div>
 
 <div class="row">
 	<div class="col-sm-6">
@@ -183,7 +184,20 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'cpanel', 'COM_C
 						$('#updateNotice').html(data);
 					}
 				}
-			})
+			});
+            $.ajax('index.php?option=com_cmc&task=jed.reviewed&tmpl=component&<?php echo JSession::getFormToken(); ?>=1', {
+                success: function(msg, textStatus, jqXHR)
+                {
+                    // Get rid of junk before and after data
+                    var match = msg.match(/###([\s\S]*?)###/);
+                    data = match[1];
+
+                    if (data.length)
+                    {
+                        $('#jedNotice').html(data);
+                    }
+                }
+            });
 		});
 	})(jQuery);
 </script>
