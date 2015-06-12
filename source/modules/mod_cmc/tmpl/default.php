@@ -39,6 +39,9 @@ $document->addScriptDeclaration($script);
 	<div class="cmc-saved" style="display:none">
 		<?php echo JText::_($params->get('thankyou')); ?>
 	</div>
+	<div class="cmc-updated" style="display:none">
+		Your subscription was updated.
+	</div>
 	<form action="<?php echo JRoute::_('index.php?option=com_cmc&format=raw&task=subscription.save'); ?>" method="post"
 	      id="cmc-signup-form-<?php echo $moduleId; ?>"
 	      class="form-validate"

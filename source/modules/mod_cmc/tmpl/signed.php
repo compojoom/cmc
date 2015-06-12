@@ -10,14 +10,29 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+if ($params->get('jquery', 1))
+{
+	CompojoomHtmlBehavior::jquery();
+}
+
+JHtml::_('behavior.formvalidation');
+JHtml::script('media/mod_cmc/js/cmc.js');
+JHtml::_('stylesheet', 'media/mod_cmc/css/cmc.css');
 ?>
 
 <div class="alert alert-info">
 <?php echo JText::_('MOD_CMC_ALREADY_ON_THE_LIST'); ?>
 </div>
 <div>
-<?php echo JText::sprintf('MOD_CMC_IF_YOU_WISH_TO_CHANGE', JRoute::_('index.php?option=com_cmc&task=subscription.update&email=' . JFactory::getUser()->get('email') . '&listid='.$params->get('listid'))); ?>
+	<span class="btn btn-link cmc-toggle-sub">
+		<?php echo JText::_('MOD_CMC_IF_YOU_WISH_TO_CHANGE_YOUR_SUB'); ?>
+	</span>
 </div>
+
+<div class="cmc-existing hide">
+	<?php require JModuleHelper::getLayoutPath('mod_cmc', 'default'); ?>
+</div>
+
 <div>
 <?php echo JText::sprintf('MOD_CMC_IF_YOU_WISH_TO_UNSUBSCRIBE', JRoute::_('index.php?option=com_cmc&task=subscription.delete&listid='.$params->get('listid').'&'.JFactory::getSession()->getFormToken().'=1')); ?>
 </div>

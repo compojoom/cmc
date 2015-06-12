@@ -69,6 +69,11 @@ var cmc = function(form) {
 
 			});
 		}
+
+        jQuery('.cmc-toggle-sub').on('click', function() {
+            console.log(form);
+            jQuery(form).closest('.cmc-existing').toggleClass('hide');
+        });
 	};
 
 	// Initialize handlers and attach validation to form

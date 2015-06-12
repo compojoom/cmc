@@ -30,6 +30,7 @@ class ModCMCHelper
 	public static function getForm ($id, $params)
 	{
 		$renderer = CmcHelperXmlbuilder::getInstance($params);
+		$user = JFactory::getUser();
 
 		// Generate the xml for the form
 		$xml = $renderer->build();
@@ -40,12 +41,22 @@ class ModCMCHelper
 		{
 			$form = JForm::getInstance('mod_cmc_' . $id, $xml, array('control' => 'jform'));
 			$form->bind($mapping);
+
+			// If we are not dealing with a guest, try to load the already existing profile merges and add them to the form
+			if (!$user->guest)
+			{
+				$subscriptionData = CmcHelperUsers::getSubscription($user->email, $params->get('listid'));
+
+				if ($subscriptionData)
+				{
+					$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+				}
+			}
 		}
 		catch (Exception $e)
 		{
 			return false;
 		}
-
 
 		return $form;
 	}

@@ -28,24 +28,24 @@ class CmcHelperUsers
 	 */
 	public static function save($users, $jListId, $mcListId)
 	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$user = JFactory::getUser();
+		$db      = JFactory::getDbo();
+		$query   = $db->getQuery(true);
+		$user    = JFactory::getUser();
 		$members = array();
 
 		foreach ($users as $member)
 		{
-			$item = array();
-			$item['mc_id'] = $db->quote(null);
-			$item['list_id'] = $db->quote($mcListId);
-			$item['email'] = $db->quote($member['email']);
-			$item['timestamp'] = $db->quote($member['timestamp']);
-			$item['status'] = $db->quote('subscribed');
-			$item['created_user_id'] = $db->quote($user->id);
-			$item['created_time'] = $db->quote(JFactory::getDate()->toSql());
+			$item                     = array();
+			$item['mc_id']            = $db->quote(null);
+			$item['list_id']          = $db->quote($mcListId);
+			$item['email']            = $db->quote($member['email']);
+			$item['timestamp']        = $db->quote($member['timestamp']);
+			$item['status']           = $db->quote('subscribed');
+			$item['created_user_id']  = $db->quote($user->id);
+			$item['created_time']     = $db->quote(JFactory::getDate()->toSql());
 			$item['modified_user_id'] = $db->quote($user->id);
-			$item['modified_time'] = $db->quote(JFactory::getDate()->toSql());
-			$item['query_data'] = $db->quote(json_encode($member));
+			$item['modified_time']    = $db->quote(JFactory::getDate()->toSql());
+			$item['query_data']       = $db->quote(json_encode($member));
 
 			$members[] = implode(',', $item);
 		}
@@ -68,12 +68,36 @@ class CmcHelperUsers
 	 */
 	public static function delete($listId)
 	{
-		$db = JFactory::getDbo();
+		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$query->delete($db->qn('#__cmc_users'))->where($db->qn('list_id') . '=' . $db->quote($listId));
 		$db->setQuery($query);
 
 		return $db->execute();
+	}
+
+	/**
+	 * Load a user subscription from the db
+	 *
+	 * @param   string  $email   - the email of the user
+	 * @param   string  $listId  - the list id
+	 *
+	 * @return bool|mixed
+	 */
+	public static function getSubscription($email, $listId)
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('*')
+			->from('#__cmc_users')
+			->where($db->qn('list_id') . '=' . $db->q($listId))
+			->where($db->qn('email') . '=' . $db->q($email));
+		$db->setQuery($query);
+
+		$subscription = $db->loadObject();
+
+		return $subscription ? $subscription : false;
 	}
 }
