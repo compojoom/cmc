@@ -80,33 +80,11 @@ class CmcHelperBasic
 		if ($api->errorCode)
 		{
 			JFactory::getApplication()->enqueueMessage(JTEXT::_("COM_CMC_LOAD_USER_FAILED") . " " . $api->errorCode . " / " . $api->errorMessage, 'error');
+
 			return false;
 		}
 		else
 		{
-//            echo "Success:".$retval['success']."\n";
-//            echo "Errors:".sizeof($retval['error'])."\n";
-//            //below is stupid code specific to what is returned
-//            //Don't actually do something like this.
-//            $i = 0;
-//            foreach($retval['data'] as $k=>$v){
-//                echo 'Member #'.(++$i)."\n";
-//                if (is_array($v)){
-//                    //handle the merges
-//                    foreach($v as $l=>$w){
-//                        if (is_array($w)){
-//                            echo "\t$l:\n";
-//                            foreach($w as $m=>$x){
-//                                echo "\t\t$m = $x\n";
-//                            }
-//                        } else {
-//                            echo "\t$l = $w\n";
-//                        }
-//                    }
-//                } else {
-//                    echo "$k = $v\n";
-//                }
-//            }
 			/**
 			 * @return array array of list members with their info in an array (see Returned Fields for details)
 			 * @returnf int success the number of subscribers successfully found on the list
@@ -209,9 +187,7 @@ class CmcHelperBasic
 
 		$api = new MCAPI($api_key);
 
-		$merge_vars = array('FNAME' => $firstname, 'LNAME' => $lastname,
-			$groupings
-		);
+		$merge_vars = array_merge(array('FNAME' => $firstname, 'LNAME' => $lastname), $groupings);
 
 		// By default this sends a confirmation email - you will not see new members
 		// until the link contained in it is clicked!
@@ -330,9 +306,6 @@ class CmcHelperBasic
 	public static function subscribeListBatch($api_key, $list_id, $batchlist, $optin = true, $up_exist = true, $replace_int = false)
 	{
 		$api = new MCAPI($api_key);
-
-//        $batch[] = array('EMAIL'=>$my_email, 'FNAME'=>'Joe');
-//        $batch[] = array('EMAIL'=>$boss_man_email, 'FNAME'=>'Me', 'LNAME'=>'Chimp');
 
 		// Todo check rights
 

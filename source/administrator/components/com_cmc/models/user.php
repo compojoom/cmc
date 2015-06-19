@@ -45,6 +45,64 @@ class CmcModelUser extends JModelAdmin
 		// Get the form.
 		$form = $this->loadForm('com_cmc.user', 'user', array('control' => 'jform', 'load_data' => $loadData));
 
+		$userData = $this->getItem();
+
+		// If the user data is stored in the session we are dealing with arrays, if we are loading from DB with object
+		if (is_array($userData))
+		{
+			$old = $userData;
+			$userData = new JRegistry;
+			$userData->set('list_id', $old['list_id']);
+			$userData->set('email', $old['cmc_groups']['email']);
+		}
+		elseif (is_object($userData) && !$userData->get('id'))
+		{
+			$userData = new JRegistry;
+			$userData->set('list_id', isset($data['list_id']) ? $data['list_id'] : '');
+			$userData->set('email', isset($data['cmc_groups']['EMAIL']) ? $data['cmc_groups']['EMAIL'] : '');
+		}
+
+		$listId = $userData->get('list_id', JFactory::getApplication()->input->get('filter_list'));
+
+		// Get the merge fields and create a new form
+		if ($listId)
+		{
+			$params = new JRegistry;
+			$params->set('listid', $listId);
+
+			$fields = array_map(
+				function($value) {
+					return $value['tag'];
+				},
+				CmcHelperList::getMergeFields($listId)
+			);
+
+			$interests = array_map(
+				function($value) {
+					return $value['id'];
+				},
+				CmcHelperList::getInterestsFields($listId)
+			);
+
+			$params->set('fields', $fields);
+			$params->set('interests', $interests);
+
+			$renderer = CmcHelperXmlbuilder::getInstance($params);
+
+			// Generate the xml for the form
+			$xml = $renderer->build();
+
+			$form->load($xml, true);
+
+			$subscriptionData = CmcHelperUsers::getSubscription($userData->get('email'), $userData->get('list_id'));
+
+			// Bind the data to the form
+			if ($subscriptionData)
+			{
+				$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+			}
+		}
+
 		if (empty($form))
 		{
 			return false;
@@ -69,5 +127,34 @@ class CmcModelUser extends JModelAdmin
 		}
 
 		return $data;
+	}
+
+
+	/**
+	 * Since we now have a dynamic form we have to go around the validation somehow
+	 *
+	 * @param   JForm   $form   The form to validate against.
+	 * @param   array   $data   The data to validate.
+	 * @param   string  $group  The name of the field group to validate.
+	 *
+	 * @return  mixed  Array of filtered data if valid, false otherwise.
+	 */
+	public function validate($form, $data, $group = null)
+	{
+		// The data that we are receiving should have a cmc_groups
+		if (isset($data['cmc_groups']['EMAIL']))
+		{
+			$data['email'] = $data['cmc_groups']['EMAIL'];
+			$data['firstname'] = $data['cmc_groups']['FNAME'];
+			$data['lastname'] = $data['cmc_groups']['LNAME'];
+		}
+		else
+		{
+			JFactory::getApplication()->enqueueMessage('Your list doesn\'t have a EMAIL field or you are using a different field name for email(the field name should be EMAIL)');
+
+			return false;
+		}
+
+		return parent::validate($form, $data);
 	}
 }

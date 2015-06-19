@@ -26,21 +26,15 @@ class CmcViewUser extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$user = $this->get('Item');
-		$this->form = $this->get('Form');
+		$this->user = $this->get('Item');
 
-		if (!$user->get('id'))
+		if (!$this->user->get('id'))
 		{
 			// Create new empty list item
-			$user = JTable::getInstance('users', 'CmcTable');
-		}
-		else
-		{
-			// Update User from Mailchimp
-			$user = CmcHelperBasic::getUserDetailsMC(JComponentHelper::getParams('com_cmc')->get("api_key", ''), $user->list_id, $user->email, $user->id, true);
+			$this->user = JTable::getInstance('users', 'CmcTable');
 		}
 
-		$this->user = $user;
+		$this->form = $this->get('Form');
 
 		$this->addToolbar();
 		parent::display($tpl);

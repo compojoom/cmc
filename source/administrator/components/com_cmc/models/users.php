@@ -86,7 +86,6 @@ class CmcModelUsers extends JModelList
 
 		$query->select('*')->from('#__cmc_users AS u');
 
-
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
@@ -178,10 +177,8 @@ class CmcModelUsers extends JModelList
 			return false;
 		}
 
-
 		return $form;
 	}
-
 
 	/**
 	 * Method to get the data that should be injected in the form.

@@ -43,7 +43,7 @@ class CmcControllerUser extends JControllerForm
 				$validData['firstname'],
 				$validData['lastname'],
 				$user,
-				null,
+				CmcHelperList::mergeVars($validData),
 				$validData['email_type'],
 				false
 			);
@@ -58,11 +58,41 @@ class CmcControllerUser extends JControllerForm
 				$validData['firstname'],
 				$validData['lastname'],
 				$user,
-				null,
+				CmcHelperList::mergeVars($validData),
 				$validData['email_type'],
 				true
 			);
 		}
+	}
 
+	/**
+	 * Do some tricks here to hae the list_id in the url
+	 *
+	 * @param   integer  $recordId  The primary key id for the item.
+	 * @param   string   $urlVar    The name of the URL variable for the id.
+	 *
+	 * @return  string  The arguments to append to the redirect URL.
+	 *
+	 * @throws Exception
+	 */
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
+	{
+		$input = JFactory::getApplication()->input;
+		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
+
+		if ($input->get('addtolist'))
+		{
+			return $append . '&filter_list=' . $input->get('addtolist');
+		}
+
+		// Get the form data
+		$formData = new JInput($input->get('jform', '', 'array'));
+
+		if ($formData->get('list_id'))
+		{
+			return $append . '&filter_list=' . $formData->get('list_id');
+		}
+
+		return $append;
 	}
 }

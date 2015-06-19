@@ -39,6 +39,7 @@ class ModCMCHelper
 
 		try
 		{
+			JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_cmc/models/fields');
 			$form = JForm::getInstance('mod_cmc_' . $id, $xml, array('control' => 'jform'));
 			$form->bind($mapping);
 

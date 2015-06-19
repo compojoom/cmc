@@ -35,37 +35,29 @@ class JFormFieldPhone extends JFormFieldText
 	 */
 	protected function getInput()
 	{
-		$name = (string) $this->element['name'];
-		$title = JText::_((string) $this->element['label']);
-		$id = (string) $this->element['id'];
 		$class = $this->element['class'] ? (string) $this->element['class'] : '';
 
-		if ($this->required)
-		{
-			$class .= ' requried';
-			$title = $title . ' *';
-		}
 
 		if (strstr($class, 'inter'))
 		{
-			$phone = '<input name="' . $this->group . '[' . $name . ']' . '" id="' . $id . '" '
-				. ' class="' . $class . '"'
-				. ' type="text" value="" title="' . $title . '" />';
+			$phone = parent::getInput();
 		}
 		else
 		{
-			$phone = '(<input name="' . $this->group . '[' . $name . '][area]" id="' . $id . '-area" '
-				. ' class="' . $class . ' cmc-us-format-area"'
-				. ' type="text" value="" title="' . $title . '" size="2" maxlength="3" />)';
+			$name = $this->name;
+			$value = explode('-', $this->value);
+			$this->name = $name . '[area]';
+			$this->value = isset($value[0]) ? $value[0] : '';
+			$phone = '(' . parent::getInput() . ')';
 
-			$phone .= ' <input name="' . $this->group . '[' . $name . '][detail1]" id="' . $id . '-detail1" '
-				. ' class="' . $class . ' cmc-us-format-detail1"'
-				. ' type="text" value="" title="' . $title . '" size="2" maxlength="3" />';
+			$this->name = $name . '[detail1]';
+			$this->value = isset($value[1]) ? $value[1] : '';
+			$phone .= parent::getInput();
 
+			$this->name = $name . '[detail2]';
+			$this->value = isset($value[2]) ? $value[2] : '';
 
-			$phone .= ' - <input name="' . $this->group . '[' . $name . '][detail2]" id="' . $this->id . '-detail2" '
-				. ' class="' . $class . ' cmc-us-format-detail2"'
-				. ' type="text" value="" title="' . $title . '" size="2" maxlength="4" />';
+			$phone .= parent::getInput();
 		}
 
 		return $phone;

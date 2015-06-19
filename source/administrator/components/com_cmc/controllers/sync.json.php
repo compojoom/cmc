@@ -42,15 +42,15 @@ class CmcControllerSync extends CmcController
 		$input = JFactory::getApplication()->input;
 		$lists = $input->getString('lists');
 
-		$chimp = new CmcHelperChimp;
+		$chimp     = new CmcHelperChimp;
 		$listStats = $chimp->lists(array('list_id' => $lists));
-		$names = array();
+		$names     = array();
 
 		foreach ($listStats['data'] as $key => $list)
 		{
-			$state->lists[$key] = array();
-			$state->lists[$key]['mc_id'] = $list['id'];
-			$state->lists[$key]['name'] = $list['name'];
+			$state->lists[$key]           = array();
+			$state->lists[$key]['mc_id']  = $list['id'];
+			$state->lists[$key]['name']   = $list['name'];
 			$state->lists[$key]['toSync'] = $list['stats']['member_count'];
 
 			$names[] = $list['name'];
@@ -70,69 +70,10 @@ class CmcControllerSync extends CmcController
 		}
 
 
-		$state->header = JText::sprintf('COM_CMC_LISTS_TO_SYNC', count($state->lists));
+		$state->header  = JText::sprintf('COM_CMC_LISTS_TO_SYNC', count($state->lists));
 		$state->message = JText::sprintf('COM_CMC_LISTS_TO_SYNC_DESC', '"' . implode('", "', $names) . '"', $state->lists[0]['name']);
 
 		$state->offset = 0;
-
-		CmcSyncerState::setState($state);
-
-		$this->sendResponse($state);
-	}
-
-	/**
-	 * Syncs the users of the list
-	 *
-	 * @return void
-	 */
-	public function batch()
-	{
-		// Check for a valid token. If invalid, send a 403 with the error message.
-		JSession::checkToken('request') or $this->sendResponse(new Exception(JText::_('JINVALID_TOKEN'), 403));
-
-		// Put in a buffer to silence noise.
-		ob_start();
-
-		// Remove the script time limit.
-		@set_time_limit(0);
-
-		$state = CmcSyncerState::getState();
-
-		$chimp = new CmcHelperChimp;
-
-		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', null, $state->offset, $state->batchSize);
-
-		CmcHelperUsers::save($members['data'], $state->lists[0]['id'], $state->lists[0]['mc_id']);
-
-		$pages = $state->lists[0]['toSync'] / $state->batchSize;
-
-		if ($state->offset < $pages)
-		{
-			$state->offset = $state->offset + 1;
-			$state->header = JText::sprintf('COM_CMC_BATCH_SYNC_IN_LIST', $state->lists[0]['name']);
-			$state->message = JText::sprintf('COM_CMC_BATCH_SYNC_PROGRESS', $state->offset * $state->batchSize, $state->batchSize);
-		}
-
-		if ($state->offset >= $pages)
-		{
-			// First list in the array was synced, lets remove it
-			$oldList = array_shift($state->lists);
-
-			// If we still have lists, then let us reset the offset
-			if (count($state->lists))
-			{
-				$state->header = JText::sprintf('COM_CMC_BATCH_SYNC_IN_OLD_LIST_COMPLETE', $oldList['name']);
-				$state->message = JText::sprintf('COM_CMC_BATCH_SYNC_IN_OLD_LIST_COMPLETE_DESC', $oldList['toSync'], $oldList['name'], $state->lists[0]['name']);
-
-				$state->offset = 0;
-			}
-			else
-			{
-				$state->header = JText::_('COM_CMC_SYNC_COMPLETE');
-				$state->message = '<div class="alert alert-info">' . JText::_('COM_CMC_SYNC_COMPLETE_DESC') . '</div>';
-
-			}
-		}
 
 		CmcSyncerState::setState($state);
 
@@ -171,5 +112,90 @@ class CmcControllerSync extends CmcController
 
 		// Close the application.
 		JFactory::getApplication()->close();
+	}
+
+	/**
+	 * Syncs the users of the list
+	 *
+	 * @return void
+	 */
+	public function batch()
+	{
+		// Check for a valid token. If invalid, send a 403 with the error message.
+		JSession::checkToken('request') or $this->sendResponse(new Exception(JText::_('JINVALID_TOKEN'), 403));
+
+		// Put in a buffer to silence noise.
+		ob_start();
+
+		// Remove the script time limit.
+		@set_time_limit(0);
+
+		$state = CmcSyncerState::getState();
+
+		$chimp = new CmcHelperChimp;
+
+		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', null, $state->offset, $state->batchSize);
+
+		// Split the array of emails to 50 items - the max number possible for the listMemberInfo function
+		$emails = array_chunk(
+			array_map(
+				function ($ar)
+				{
+					return $ar['email'];
+				},
+				$members['data']
+			),
+			50
+		);
+
+		$info = array();
+
+		// Let's fetch all the info about our members
+		foreach ($emails as $chunks)
+		{
+			$memberInfo = $chimp->listMemberInfo($state->lists[0]['mc_id'], $chunks);
+
+			if (!$memberInfo['errors'])
+			{
+				$info = array_merge($info, $memberInfo['data']);
+			}
+		}
+
+		// Save the users in our database
+		CmcHelperUsers::save($info, $state->lists[0]['id'], $state->lists[0]['mc_id']);
+
+		$pages = $state->lists[0]['toSync'] / $state->batchSize;
+
+		if ($state->offset < $pages)
+		{
+			$state->offset  = $state->offset + 1;
+			$state->header  = JText::sprintf('COM_CMC_BATCH_SYNC_IN_LIST', $state->lists[0]['name']);
+			$state->message = JText::sprintf('COM_CMC_BATCH_SYNC_PROGRESS', $state->offset * $state->batchSize, $state->batchSize);
+		}
+
+		if ($state->offset >= $pages)
+		{
+			// First list in the array was synced, lets remove it
+			$oldList = array_shift($state->lists);
+
+			// If we still have lists, then let us reset the offset
+			if (count($state->lists))
+			{
+				$state->header  = JText::sprintf('COM_CMC_BATCH_SYNC_IN_OLD_LIST_COMPLETE', $oldList['name']);
+				$state->message = JText::sprintf('COM_CMC_BATCH_SYNC_IN_OLD_LIST_COMPLETE_DESC', $oldList['toSync'], $oldList['name'], $state->lists[0]['name']);
+
+				$state->offset = 0;
+			}
+			else
+			{
+				$state->header  = JText::_('COM_CMC_SYNC_COMPLETE');
+				$state->message = '<div class="alert alert-info">' . JText::_('COM_CMC_SYNC_COMPLETE_DESC') . '</div>';
+
+			}
+		}
+
+		CmcSyncerState::setState($state);
+
+		$this->sendResponse($state);
 	}
 }

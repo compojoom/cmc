@@ -5,7 +5,7 @@
 		       readonly="true" class="readonly"
 		       description="JGLOBAL_FIELD_ID_DESC"/>
 
-		<field name="firstname" type="text" class="inputbox"
+		<field name="firstname" type="text" class="inputbox form-label"
 		       size="40" label="COM_CMC_FIRSTNAME" />
 
 		<field name="lastname" type="text" class="inputbox"
@@ -14,13 +14,15 @@
 		<field name="email" type="text" class="inputbox"
 		       size="40" label="COM_CMC_EMAIL" required="true" />
 
-		<field name="list_id" type="cmclistid" class="inputbox"
+		<field name="list_id" type="cmclistid"  class="form-control"
+               labelclass="form-label col-sm-2"
 		       size="1" label="COM_CMC_LIST" required="true" />
 
 		<field  name="status"
 		        type="list"
 		        label="COM_CMC_STATUS"
-		        class="inputbox"
+		        class="form-control"
+                labelclass="form-label col-sm-2"
 		        size="1"
 		        default="1">
 			<option	value="subscribed">COM_CMC_SUBSCRIBED</option>
@@ -32,7 +34,8 @@
 		<field  name="email_type"
 		        type="list"
 		        label="COM_CMC_EMAIL_TYPE"
-		        class="inputbox"
+                class="form-control"
+                labelclass="form-label col-sm-2"
 		        size="1"
 		        default="1">
 			<option	value="html">COM_CMC_HTML</option>

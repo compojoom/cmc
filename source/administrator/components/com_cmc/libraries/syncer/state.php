@@ -53,7 +53,7 @@ class CmcSyncerState
 			$data->startTime = JFactory::getDate()->toSQL();
 
 			// Set the remaining default values.
-			$data->batchSize = 1000;
+			$data->batchSize = 250;
 		}
 
 		// Set the state.

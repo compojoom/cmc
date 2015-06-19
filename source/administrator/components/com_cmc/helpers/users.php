@@ -33,14 +33,75 @@ class CmcHelperUsers
 		$user    = JFactory::getUser();
 		$members = array();
 
+		$bindings = array(
+			'mc_id'            => array(
+				'column' => 'id'
+			),
+			'list_id'          => array(),
+			'email'            => array(),
+			'email_type'       => array(),
+			'ip_signup'        => array(),
+			'timestamp_signup' => array(),
+			'timestamp_signup' => array(),
+			'ip_opt'           => array(),
+			'timestamp_opt'    => array(),
+			'member_rating'    => array(),
+			'info_changed'     => array(),
+			'web_id'           => array(),
+			'language'         => array(),
+			'is_gmonkey'       => array(),
+			'geo'              => array(
+				'handle' => 'json_encode'
+			),
+			'clients'          => array(
+				'handle' => 'json_encode'
+			),
+			'merges'           => array(
+				'handle' => 'json_encode'
+			),
+			'timestamp'        => array(),
+			'status'           => array(),
+			'static_segments' => array(
+				'handle' => 'json_encode'
+			)
+		);
+
+		// Get all e-mails from the array
+		$emails = array_map(
+			function ($ar) {
+				return $ar['email'];
+			}, $users
+		);
+
+		// Find out if the users on the list are already members of the site
+		$jUsers = self::getJoomlaUsers($emails);
+
 		foreach ($users as $member)
 		{
-			$item                     = array();
-			$item['mc_id']            = $db->quote(null);
-			$item['list_id']          = $db->quote($mcListId);
-			$item['email']            = $db->quote($member['email']);
-			$item['timestamp']        = $db->quote($member['timestamp']);
-			$item['status']           = $db->quote('subscribed');
+			$item = array();
+
+			foreach ($bindings as $bkey => $bvalue)
+			{
+				if (!empty($bvalue))
+				{
+					if (isset($bvalue['column']) && isset($member[$bvalue['column']]))
+					{
+						$item[$bkey] = $db->quote(isset($bvalue['handle']) ? $member[$bvalue['handle']]($member[$bvalue['column']]) : $member[$bvalue['column']]);
+					}
+					else
+					{
+						$item[$bkey] = $db->quote(isset($bvalue['handle']) ? $bvalue['handle']($member[$bkey]) : $member[$bkey]);
+					}
+				}
+				else
+				{
+					$item[$bkey] = $db->quote($member[$bkey]);
+				}
+			}
+
+			$item['user_id'] = isset($jUsers[$member['email']]) ? $jUsers[$member['email']]->id : 0;
+			$item['firstname'] = $db->quote($member['merges']['FNAME']);
+			$item['lastname'] = $db->quote($member['merges']['LNAME']);
 			$item['created_user_id']  = $db->quote($user->id);
 			$item['created_time']     = $db->quote(JFactory::getDate()->toSql());
 			$item['modified_user_id'] = $db->quote($user->id);
@@ -51,7 +112,7 @@ class CmcHelperUsers
 		}
 
 		$query->insert('#__cmc_users')
-			->columns('mc_id,list_id,email,timestamp,status,created_user_id,created_time,modified_user_id,modified_time, query_data')
+			->columns(implode(',', array_keys($bindings)) . ',user_id,firstname, lastname,created_user_id,created_time,modified_user_id,modified_time,query_data ')
 			->values($members);
 
 		$db->setQuery($query);
@@ -99,5 +160,31 @@ class CmcHelperUsers
 		$subscription = $db->loadObject();
 
 		return $subscription ? $subscription : false;
+	}
+
+	/**
+	 * Get the ids of any Joomla users we already have on our list
+	 *
+	 * @param   array  $emails  - emails to search for
+	 *
+	 * @return array|mixed
+	 */
+	public static function getJoomlaUsers($emails)
+	{
+		$users = array();
+
+		if (count($emails))
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+
+			$query->select('id, email')->from('#__users')->where(CompojoomQueryHelper::in('email', $emails, $db));
+
+			$db->setQuery($query);
+
+			return $db->loadObjectList('email');
+		}
+
+		return $users;
 	}
 }

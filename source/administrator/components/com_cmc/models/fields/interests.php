@@ -24,6 +24,8 @@
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 
+JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
+
 /**
  * Class JFormFieldInterests
  *
@@ -39,30 +41,9 @@ class JFormFieldInterests extends CmcField
 	public function getInput()
 	{
 		$listid = $this->form->getValue('listid', 'params');
-		$api = new cmcHelperChimp;
-		$interests = $api->listInterestGroupings($listid);
+		$options = CmcHelperList::getInterestsFields($listid);
 		$key = 'id';
 		$val = 'name';
-		$options = false;
-
-		if ($interests)
-		{
-			foreach ($interests as $interest)
-			{
-				if ($interest['form_field'] != 'hidden')
-				{
-					$groups = '';
-
-					foreach ($interest['groups'] as $ig)
-					{
-						$groups .= $ig['name'] . '##' . $ig['name'] . '####';
-					}
-
-					$groups = substr($groups, 0, -4);
-					$options[] = array($key => $interest[$key] . ';' . $interest['form_field'] . ';' . $interest['name'] . ';' . $groups, $val => $interest[$val]);
-				}
-			}
-		}
 
 		$attribs = 'multiple="multiple" size="8" class="chzn-none chzn-done"';
 

@@ -37,12 +37,12 @@ class CmcControllerSubscription extends JControllerLegacy
 		$form   = $input->get('jform', '', 'array');
 		$isAjax = $input->get('ajax');
 
-		$mergeVars = $this->mergeVars($form);
+		$mergeVars = CmcHelperList::mergeVars($form);
 
 		$listId = $form['cmc']['listid'];
 		$email  = $mergeVars['EMAIL'];
 
-		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, false, false);
+		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, true, false);
 
 		if ($chimp->errorCode)
 		{
@@ -103,45 +103,6 @@ class CmcControllerSubscription extends JControllerLegacy
 	}
 
 	/**
-	 * Merge the post data
-	 *
-	 * @param   array  $form  - the newsletter form
-	 *
-	 * @return mixed
-	 */
-	private function mergeVars($form)
-	{
-		if (isset($form['cmc_groups']))
-		{
-			foreach ($form['cmc_groups'] as $key => $group)
-			{
-				$mergeVars[$key] = $group;
-			}
-		}
-
-		if (isset($form['cmc_interests']))
-		{
-			foreach ($form['cmc_interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				if (is_array($interest))
-				{
-					array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-				}
-				else
-				{
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => $interest);
-				}
-			}
-		}
-
-		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
-
-		return $mergeVars;
-	}
-
-	/**
 	 * Checks if the current user exists in the mailchimp database
 	 *
 	 * @throws Exception
@@ -157,7 +118,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		$input = JFactory::getApplication()->input;
 		$form  = $input->get('jform', '', 'array');
 
-		$mergeVars = $this->mergeVars($form);
+		$mergeVars = CmcHelperList::mergeVars($form);
 
 		$email  = $mergeVars['EMAIL'];
 		$listId = $form['cmc']['listid'];

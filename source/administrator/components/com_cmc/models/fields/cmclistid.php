@@ -28,12 +28,18 @@ class JFormFieldCmclistid extends JFormFieldList
 	protected function getOptions()
 	{
 		$lists = CmcHelperBasic::getLists();
+		$input = JFActory::getApplication()->input;
 
 		$list_options = array();
 
 		foreach ($lists as $list)
 		{
 			$list_options[] = JHTML::_('select.option', $list->mc_id, $list->list_name);
+		}
+
+		if ($input->get('filter_list'))
+		{
+			$this->value = $input->get('filter_list');
 		}
 
 		return $list_options;
