@@ -38,23 +38,33 @@ jQuery(document).ready(function () {
 		}
 	}
 
-	fieldsets.each(function (el) {
-		el.css('display', 'none');
-		el.find('input').prop('disabled', 'disabled');
-	});
+	if (fieldsets.length) {
+		fieldsets.each(function (el) {
+			el.css('display', 'none');
+			el.find('input').prop('disabled', 'disabled');
+		});
 
-	$('#jform_cmc_newsletter').on('click', function () {
-		if ($(this).prop('checked')) {
+		var $newsletter = $('#jform_cmc_newsletter');
+		$newsletter.on('click', function () {
+			if ($(this).prop('checked')) {
+				fieldsets.each(function (el) {
+					el.css('display', display);
+					el.find('input').removeProp('disabled');
+				});
+			}
+			else {
+				fieldsets.each(function (el) {
+					el.css('display', 'none');
+					el.find('input').prop('disabled', 'disabled');
+				});
+			}
+		});
+
+		if ($newsletter.prop('checked')) {
 			fieldsets.each(function (el) {
 				el.css('display', display);
 				el.find('input').removeProp('disabled');
 			});
 		}
-		else {
-			fieldsets.each(function (el) {
-				el.css('display', 'none');
-				el.find('input').prop('disabled', 'disabled');
-			});
-		}
-	});
+	}
 });

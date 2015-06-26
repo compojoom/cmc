@@ -17,6 +17,39 @@ defined('_JEXEC') or die('Restricted access');
  */
 class CmcHelperUsers
 {
+	protected static $bindings = array(
+		'mc_id'            => array(
+			'column' => 'id'
+		),
+		'list_id'          => array(),
+		'email'            => array(),
+		'email_type'       => array(),
+		'ip_signup'        => array(),
+		'timestamp_signup' => array(),
+		'timestamp_signup' => array(),
+		'ip_opt'           => array(),
+		'timestamp_opt'    => array(),
+		'member_rating'    => array(),
+		'info_changed'     => array(),
+		'web_id'           => array(),
+		'language'         => array(),
+		'is_gmonkey'       => array(),
+		'geo'              => array(
+			'handle' => 'json_encode'
+		),
+		'clients'          => array(
+			'handle' => 'json_encode'
+		),
+		'merges'           => array(
+			'handle' => 'json_encode'
+		),
+		'timestamp'        => array(),
+		'status'           => array(),
+		'static_segments' => array(
+			'handle' => 'json_encode'
+		)
+	);
+
 	/**
 	 * Saves a batch of users to the db
 	 *
@@ -30,41 +63,8 @@ class CmcHelperUsers
 	{
 		$db      = JFactory::getDbo();
 		$query   = $db->getQuery(true);
-		$user    = JFactory::getUser();
-		$members = array();
 
-		$bindings = array(
-			'mc_id'            => array(
-				'column' => 'id'
-			),
-			'list_id'          => array(),
-			'email'            => array(),
-			'email_type'       => array(),
-			'ip_signup'        => array(),
-			'timestamp_signup' => array(),
-			'timestamp_signup' => array(),
-			'ip_opt'           => array(),
-			'timestamp_opt'    => array(),
-			'member_rating'    => array(),
-			'info_changed'     => array(),
-			'web_id'           => array(),
-			'language'         => array(),
-			'is_gmonkey'       => array(),
-			'geo'              => array(
-				'handle' => 'json_encode'
-			),
-			'clients'          => array(
-				'handle' => 'json_encode'
-			),
-			'merges'           => array(
-				'handle' => 'json_encode'
-			),
-			'timestamp'        => array(),
-			'status'           => array(),
-			'static_segments' => array(
-				'handle' => 'json_encode'
-			)
-		);
+		$members = array();
 
 		// Get all e-mails from the array
 		$emails = array_map(
@@ -78,46 +78,70 @@ class CmcHelperUsers
 
 		foreach ($users as $member)
 		{
-			$item = array();
-
-			foreach ($bindings as $bkey => $bvalue)
-			{
-				if (!empty($bvalue))
-				{
-					if (isset($bvalue['column']) && isset($member[$bvalue['column']]))
-					{
-						$item[$bkey] = $db->quote(isset($bvalue['handle']) ? $member[$bvalue['handle']]($member[$bvalue['column']]) : $member[$bvalue['column']]);
-					}
-					else
-					{
-						$item[$bkey] = $db->quote(isset($bvalue['handle']) ? $bvalue['handle']($member[$bkey]) : $member[$bkey]);
-					}
+			$item = self::bind($member, $jUsers);
+			array_walk(
+				$item,
+				function(&$value) use ($db) {
+					// Escape the value
+					$value = $db->quote($value);
 				}
-				else
-				{
-					$item[$bkey] = $db->quote($member[$bkey]);
-				}
-			}
-
-			$item['user_id'] = isset($jUsers[$member['email']]) ? $jUsers[$member['email']]->id : 0;
-			$item['firstname'] = $db->quote($member['merges']['FNAME']);
-			$item['lastname'] = $db->quote($member['merges']['LNAME']);
-			$item['created_user_id']  = $db->quote($user->id);
-			$item['created_time']     = $db->quote(JFactory::getDate()->toSql());
-			$item['modified_user_id'] = $db->quote($user->id);
-			$item['modified_time']    = $db->quote(JFactory::getDate()->toSql());
-			$item['query_data']       = $db->quote(json_encode($member));
+			);
 
 			$members[] = implode(',', $item);
 		}
 
 		$query->insert('#__cmc_users')
-			->columns(implode(',', array_keys($bindings)) . ',user_id,firstname, lastname,created_user_id,created_time,modified_user_id,modified_time,query_data ')
+			->columns(implode(',', array_keys(self::$bindings)) . ',user_id,firstname, lastname,created_user_id,created_time,modified_user_id,modified_time,query_data ')
 			->values($members);
 
 		$db->setQuery($query);
 
 		return $db->execute();
+	}
+
+	/**
+	 * Binds the information from the listMemberInfo function to the local user table structure
+	 *
+	 * @param   array  $member  - the member data
+	 * @param   array  $jUsers  - joomla users array with email as key
+	 *
+	 * @return array
+	 */
+	public static function bind($member, $jUsers)
+	{
+		$user    = JFactory::getUser();
+
+		$item = array();
+
+		foreach (self::$bindings as $bkey => $bvalue)
+		{
+			if (!empty($bvalue))
+			{
+				if (isset($bvalue['column']) && isset($member[$bvalue['column']]))
+				{
+					$item[$bkey] = isset($bvalue['handle']) ? $member[$bvalue['handle']]($member[$bvalue['column']]) : $member[$bvalue['column']];
+				}
+				else
+				{
+					$item[$bkey] = isset($bvalue['handle']) ? $bvalue['handle']($member[$bkey]) : $member[$bkey];
+				}
+			}
+			else
+			{
+				$item[$bkey] = $member[$bkey];
+			}
+		}
+
+		$item['user_id'] = isset($jUsers[$member['email']]) ? $jUsers[$member['email']]->id : 0;
+		$item['firstname'] = $member['merges']['FNAME'];
+		$item['lastname'] = $member['merges']['LNAME'];
+		$item['created_user_id']  = $user->id;
+		$item['created_time']     = JFactory::getDate()->toSql();
+		$item['modified_user_id'] = $user->id;
+		$item['modified_time']    = JFactory::getDate()->toSql();
+		$item['query_data']       = json_encode($member);
+
+		return $item;
 	}
 
 	/**

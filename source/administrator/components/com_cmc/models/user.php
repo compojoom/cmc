@@ -11,6 +11,8 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.modeladmin');
 
+JLoader::discover('cmcTable', JPATH_ADMINISTRATOR . '/components/com_cmc/tables/');
+
 /**
  * Class CmcModelUser
  *
@@ -128,7 +130,6 @@ class CmcModelUser extends JModelAdmin
 
 		return $data;
 	}
-
 
 	/**
 	 * Since we now have a dynamic form we have to go around the validation somehow

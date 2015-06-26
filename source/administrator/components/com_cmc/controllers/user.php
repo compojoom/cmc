@@ -30,19 +30,15 @@ class CmcControllerUser extends JControllerForm
 	public function postSaveHook($model, $validData)
 	{
 		$params = JComponentHelper::getParams('com_cmc');
-		$api_key = $params->get("api_key", '');
-		$user = JFactory::getUser();
 
 		// Updating it to mailchimp
 		if ($model->getState('user.new'))
 		{
-			CmcHelperBasic::subscribeList(
-				$api_key,
+			CmcHelperList::subscribe(
 				$validData['list_id'],
 				$validData['email'],
 				$validData['firstname'],
 				$validData['lastname'],
-				$user,
 				CmcHelperList::mergeVars($validData),
 				$validData['email_type'],
 				false
@@ -51,13 +47,11 @@ class CmcControllerUser extends JControllerForm
 		else
 		{
 			// Updating to MC
-			CmcHelperBasic::subscribeList(
-				$api_key,
+			CmcHelperList::subscribe(
 				$validData['list_id'],
 				$validData['email'],
 				$validData['firstname'],
 				$validData['lastname'],
-				$user,
 				CmcHelperList::mergeVars($validData),
 				$validData['email_type'],
 				true

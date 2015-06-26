@@ -11,10 +11,12 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
+use Joomla\Utilities\ArrayHelper;
 
 // Load Compojoom library
 require_once JPATH_LIBRARIES . '/compojoom/include.php';
+
+JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 /**
  * Class PlgUserCmc
@@ -41,15 +43,73 @@ class PlgUserCmc extends JPlugin
 			return false;
 		}
 
-		$needToValidate = true;
-
 		// Check we are manipulating a valid form.
 		$name = $form->getName();
+
+		if (in_array($name, array('com_users.user', 'com_users.profile')))
+		{
+			$this->edit($form, $data);
+
+			return true;
+		}
 
 		if (!in_array($name, array('com_users.registration')))
 		{
 			return true;
 		}
+
+		$this->subscribe($form, $data);
+
+		return true;
+	}
+
+	/**
+	 * This function displays the newsletter form on the user profile
+	 *
+	 * @param   JForm  $form  - the user form
+	 * @param   array  $data  - the user data
+	 *
+	 * @return bool
+	 */
+	public function edit($form, $data)
+	{
+		$appl = JFactory::getApplication();
+		$subscriptionData = CmcHelperUsers::getSubscription($data->email, $this->params->get('listid'));
+
+		$renderer = CmcHelperXmlbuilder::getInstance($this->params);
+
+		// Render Content
+		$html = $renderer->build();
+
+		if ($appl->isSite())
+		{
+			CompojoomHtmlBehavior::jquery();
+			JHtml::script('media/plg_user_cmc/js/cmc.js');
+		}
+
+		// Inject fields into the form
+		$form->load($html, false);
+
+		if ($subscriptionData)
+		{
+			$form->setFieldAttribute('newsletter', 'checked', 'checked', 'cmc');
+			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+		}
+	}
+
+	/**
+	 * Subscribe a user to our list
+	 *
+	 * @param   JForm  $form  - the user form
+	 * @param   array  $data  - the user data
+	 *
+	 * @return bool
+	 *
+	 * @throws Exception
+	 */
+	public function subscribe($form, $data)
+	{
+		$needToValidate = true;
 
 		$input = JFactory::getApplication()->input;
 		$task = $input->get('task');
@@ -93,60 +153,102 @@ class PlgUserCmc extends JPlugin
 
 	public function onUserAfterSave($data, $isNew, $result, $error)
 	{
-		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
+		$userId = ArrayHelper::getValue($data, 'id', 0, 'int');
 
-		if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))
+		$input = JFactory::getApplication()->input;
+		$task = $input->get('task');
+
+		if (in_array($task, array('register','activate')))
 		{
-			if ($data["cmc"]["newsletter"] != "1" && $isNew != false)
+			if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))
 			{
-				// Abort if Newsletter is not checked
-				return true;
-			}
-
-			$mappedData = $this->getMapping($this->params->get('mapfields'), $data);
-
-			if (count($mappedData))
-			{
-				$mergedGroups = array_merge($mappedData, $data['cmc_groups']);
-				$data = array_merge($data, array('cmc_groups' => $mergedGroups));
-			}
-
-			$user = JFactory::getUser($data["id"]);
-
-			if ($data["block"] == 1)
-			{
-				// Temporary save user
-				CmcHelperRegistration::saveTempUser($user, $data, _CPLG_JOOMLA);
-			}
-			else
-			{
-				if (!$isNew)
+				if ($data["cmc"]["newsletter"] != "1" && $isNew != false)
 				{
-					// Activate User to Mailchimp
-					CmcHelperRegistration::activateTempUser($user);
+					// Abort if Newsletter is not checked
+					return true;
+				}
+
+				$mappedData = $this->getMapping($this->params->get('mapfields'), $data);
+
+				if (count($mappedData))
+				{
+					$mergedGroups = array_merge($mappedData, $data['cmc_groups']);
+					$data = array_merge($data, array('cmc_groups' => $mergedGroups));
+				}
+
+				$user = JFactory::getUser($data["id"]);
+
+				if ($data["block"] == 1)
+				{
+					// Temporary save user
+					CmcHelperRegistration::saveTempUser($user, $data, _CPLG_JOOMLA);
 				}
 				else
 				{
-					// Directly activate user
-					$activated = CmcHelperRegistration::activateDirectUser(
-						$user, $data["cmc"], _CPLG_JOOMLA
-					);
-
-					if ($activated)
+					if (!$isNew)
 					{
-						JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_VE_BEEN_SUBSCRIBED_BUT_CONFIRMATION_IS_NEEDED'));
+						// Activate User to Mailchimp
+						CmcHelperRegistration::activateTempUser($user);
+					}
+					else
+					{
+						// Directly activate user
+						$activated = CmcHelperRegistration::activateDirectUser(
+							$user, $data["cmc"], _CPLG_JOOMLA
+						);
+
+						if ($activated)
+						{
+							JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_VE_BEEN_SUBSCRIBED_BUT_CONFIRMATION_IS_NEEDED'));
+						}
 					}
 				}
 			}
-		}
-		else
-		{
-			// We only do something if the user is unblocked
-			if ($data["block"] == 0)
+			else
 			{
-				// Checking if user exists etc. is taken place in activate function
-				CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+				// We only do something if the user is unblocked
+				if ($data["block"] == 0)
+				{
+					// Checking if user exists etc. is taken place in activate function
+					CmcHelperRegistration::activateTempUser(JFactory::getUser($data["id"]));
+				}
 			}
+		}
+
+		if (in_array($task, array('apply', 'save')))
+		{
+			if ($userId && $result && isset($data['cmc']) && (count($data['cmc'])))
+			{
+				if ($data["cmc"]["newsletter"] != "1")
+				{
+					// Abort if Newsletter is not checked
+					return true;
+				}
+
+				$mappedData = $this->getMapping($this->params->get('mapfields'), $data);
+
+				if (count($mappedData))
+				{
+					$mergedGroups = array_merge($mappedData, $data['cmc_groups']);
+					$data         = array_merge($data, array('cmc_groups' => $mergedGroups));
+				}
+			}
+
+			$subscription = CmcHelperUsers::getSubscription($data['email'], $data['cmc']['listid']);
+
+			// Updating it to mailchimp
+			$update = $subscription ? true : false;
+
+			CmcHelperList::subscribe(
+				$data['cmc']['listid'],
+				$data['email'],
+				$data['cmc_groups']['FNAME'],
+				$data['cmc_groups']['LNAME'],
+				CmcHelperList::mergeVars($data),
+				'html',
+				$update,
+				true
+			);
 		}
 
 		return true;

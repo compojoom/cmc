@@ -35,6 +35,13 @@ class CmcHelperList
 		return $db->execute();
 	}
 
+	/**
+	 * Create an array with mailchimps merge fields
+	 *
+	 * @param   string  $listId  - the list id
+	 *
+	 * @return array|bool
+	 */
 	public static function getMergeFields($listId)
 	{
 		$api = new cmcHelperChimp;
@@ -78,6 +85,13 @@ class CmcHelperList
 		return $options;
 	}
 
+	/**
+	 * Create an array with mailchimps interest fields
+	 *
+	 * @param   string  $listId  - the list id
+	 *
+	 * @return array|bool
+	 */
 	public static function getInterestsFields($listId)
 	{
 		$api = new cmcHelperChimp;
@@ -145,5 +159,70 @@ class CmcHelperList
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
 		return $mergeVars;
+	}
+
+	/**
+	 * Subscribe a user to mailchimp and if set create an entry for this user in our database
+	 *
+	 * @param   string  $listId       - the list id
+	 * @param   string  $email        - the email of the user
+	 * @param   string  $firstname    - the first name of the user
+	 * @param   string  $lastname     - the last name of the user
+	 * @param   array   $groupings    - any groupings (merge fields + interest fields)
+	 * @param   string  $email_type   - the type of email the user wants to receive
+	 * @param   bool    $update       - are we updating an existing user
+	 * @param   bool    $updateLocal  - shall we create an entry for this user in our DB?
+	 *
+	 * @return bool
+	 *
+	 * @throws Exception
+	 */
+	public static function subscribe($listId, $email, $firstname, $lastname, $groupings = array(), $email_type = "html", $update = false, $updateLocal = false)
+	{
+		$api = new CmcHelperChimp;
+
+		$merge_vars = array_merge(array('FNAME' => $firstname, 'LNAME' => $lastname), $groupings);
+
+
+		// By default this sends a confirmation email - you will not see new members
+		// until the link contained in it is clicked!
+		$api->listSubscribe($listId, $email, $merge_vars, $email_type, false, $update);
+
+		if ($api->errorCode)
+		{
+			JFactory::getApplication()->enqueueMessage(
+				JTEXT::_("COM_CMC_SUBSCRIBE_FAILED") . " " .
+				$api->errorCode . " / " . $api->errorMessage, 'error'
+			);
+
+			return false;
+		}
+
+		if ($updateLocal)
+		{
+			JLoader::discover('cmcModel', JPATH_ADMINISTRATOR . '/components/com_cmc/models/');
+			$subscription = CmcHelperUsers::getSubscription($email, $listId);
+			$memberInfo = $api->listMemberInfo($listId, $email);
+
+			if ($memberInfo['success'])
+			{
+				$memberInfo = $memberInfo['data'][0];
+			}
+
+			$model = JModelLegacy::getInstance('User', 'CmcModel');
+			$user = CmcHelperUsers::getJoomlaUsers(array($email));
+
+			$saveData = CmcHelperUsers::bind($memberInfo, $user);
+
+			if ($subscription)
+			{
+				$saveData['id'] = $subscription->id;
+			}
+
+			// Update in the local db
+			$model->save($saveData);
+		}
+
+		return true;
 	}
 }

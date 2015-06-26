@@ -61,46 +61,13 @@ class CmcHelperBasic
 		return $db->loadObjectList();
 	}
 
-
-	/**
-	 * @static
-	 *
-	 * @param       $api_key
-	 * @param       $list_id
-	 * @param       $email
-	 * @param       $firstname
-	 * @param       $lastname
-	 * @param null  $user
-	 * @param array $groupings
-	 */
-	public static function subscribeList($api_key, $list_id, $email, $firstname, $lastname, $user = null, $groupings = array(null), $email_type = "html", $update = false)
-	{
-		$api = new MCAPI($api_key);
-
-		$merge_vars = array_merge(array('FNAME' => $firstname, 'LNAME' => $lastname), $groupings);
-
-		// By default this sends a confirmation email - you will not see new members
-		// until the link contained in it is clicked!
-		$retval = $api->listSubscribe($list_id, $email, $merge_vars, $email_type, false, $update);
-
-		if ($api->errorCode)
-		{
-			JFactory::getApplication()->enqueueMessage(JTEXT::_("COM_CMC_SUBSCRIBE_FAILED") . " " . $api->errorCode . " / " . $api->errorMessage, 'error');
-
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
 	/**
 	 * Unsubscribes a user from the mailchimp list
 	 *
-	 * @param $user
+	 * @param   object  $user  - the user object
 	 *
 	 * @throws Exception
+	 *
 	 * @return bool|string
 	 */
 	public static function unsubscribeList($user)
@@ -115,73 +82,6 @@ class CmcHelperBasic
 		}
 
 		return true;
-	}
-
-	/**
-	 * @static
-	 *
-	 * @param        $api_key
-	 * @param        $list_id
-	 * @param        $email
-	 * @param null   $firstname
-	 * @param null   $lastname
-	 * @param string $email_type
-	 * @param null   $user
-	 *
-	 * @return bool|string
-	 */
-	public static function updateUser($api_key, $list_id, $email, $firstname = null, $lastname = null, $email_type = "html", $user = null)
-	{
-		$api = new MCAPI($api_key);
-
-		$merge_vars = array("FNAME" => $firstname, "LNAME" => $lastname);
-
-		$retval = $api->listUpdateMember($list_id, $email, $merge_vars, $email_type, false);
-
-		if ($api->errorCode)
-		{
-			JFactory::getApplication()->enqueueMessage(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED"). " " . $api->errorCode . " / " . $api->errorMessage, 'error');
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	/**
-	 * @static
-	 *
-	 * @param $glue
-	 * @param $separator
-	 * @param $array
-	 *
-	 * @return string
-	 */
-	public static function array_implode($glue, $separator, $array)
-	{
-		if (!is_array($array))
-		{
-			return $array;
-		}
-		$string = array();
-		foreach ($array as $key => $val)
-		{
-			$newval = "";
-			if (is_array($val))
-			{
-				foreach ($val as $v)
-				{
-					$newval .= implode(',', array_values($v));
-				}
-			}
-			else
-			{
-				$newval = $val;
-			}
-			$string[] = "{$key}{$glue}{$newval}";
-		}
-		return implode($separator, $string);
 	}
 
 
@@ -222,6 +122,7 @@ class CmcHelperBasic
 		$footer .= 'CMC - <a href="https://mailchimp.com/?pid=compojoom&source=website" target="_blank">Mailchimp</a>® integration for <a href="http://joomla.org" target="_blank">Joomla!™</a>';
 		$footer .= ' by <a href="https://compojoom.com">compojoom.com</a>';
 		$footer .= '</p>';
+
 		return $footer;
 	}
 

@@ -10,6 +10,8 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\Utilities\ArrayHelper;
+
 JHTML::_('behavior.tooltip');
 
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
@@ -137,7 +139,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 							<?php echo JText::_('COM_CMC_CLIENTS'); ?>:
 						</div>
 						<div class="col-sm-10">
-							<?php echo CmcHelperBasic::array_implode(" = ", ", ", json_decode($this->user->clients, true)); ?>
+							<?php echo ArrayHelper::toString(json_decode($this->user->clients, true), " = ", ", "); ?>
 						</div>
 					</div>
 

@@ -173,14 +173,15 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', 'COM_CM
 						<th class="title">
 							<?php echo JHtml::_('grid.sort', 'COM_CMC_USER_ID', 'u.user_id', $listDirn, $listOrder); ?>
 						</th>
-						<th width="10%">
-							<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'u.id', $listDirn, $listOrder); ?>
-						</th>
+
 						<th width="10%"><?php echo JText::_('COM_CMC_LIST'); ?></th>
 						<th width="20%">
 							<?php echo JHtml::_('grid.sort', 'COM_CMC_TIMESTAMP', 'u.timestamp', $listDirn, $listOrder); ?>
 						</th>
 						<th width="15%"><?php echo JText::_('COM_CMC_STATUS'); ?></th>
+						<th width="10%">
+							<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'u.id', $listDirn, $listOrder); ?>
+						</th>
 					</tr>
 					</thead>
 					<tfoot>
@@ -220,9 +221,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', 'COM_CM
 									<?php echo $item->user_id; ?>
 								<?php endif; ?>
 							</td>
-							<td>
-								<?php echo $item->id; ?>
-							</td>
+
 							<td>
 								<?php echo $this->listNames[$item->list_id]; ?>
 							</td>
@@ -231,6 +230,9 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', 'COM_CM
 							</td>
 							<td>
 								<?php echo $item->status; ?>
+							</td>
+							<td>
+								<?php echo $item->id; ?>
 							</td>
 						</tr>
 					<?php endforeach; ?>
