@@ -29,8 +29,6 @@ class CmcControllerUser extends JControllerForm
 	 */
 	public function postSaveHook($model, $validData)
 	{
-		$params = JComponentHelper::getParams('com_cmc');
-
 		// Updating it to mailchimp
 		if ($model->getState('user.new'))
 		{
