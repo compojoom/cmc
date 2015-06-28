@@ -3,7 +3,7 @@
  */
 jQuery(document).ready(function(){
 	var $ = jQuery;
-	var fields = $('li.cmc-newsletter').filter(function(index, item) {
+	var fields = $('.cmc-newsletter').filter(function(index, item) {
 		if(!$(item).find('input#cmc_newsletter').length) {
 			return $(item);
 		}
@@ -14,7 +14,7 @@ jQuery(document).ready(function(){
 	$('#cmc_newsletter').on('click', function() {
 		if($(this).prop('checked'))
 		{
-			fields.css('display', 'block');
+			fields.css('display', 'table');
 			$('.cmc_req').addClass('required').prop('required', 'required');
 		}
 		else

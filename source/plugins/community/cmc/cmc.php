@@ -55,8 +55,6 @@ class PlgCommunityCmc extends JPlugin
 		JHtml::stylesheet('media/plg_community_cmc/css/style.css');
 		JHtml::script('media/plg_community_cmc/js/cmc.js');
 
-		$html = array();
-
 		// Create the xml for JForm
 		$builder = CmcHelperXmlbuilder::getInstance($this->params);
 		$xml = $builder->build();
@@ -65,23 +63,14 @@ class PlgCommunityCmc extends JPlugin
 		$form->addFieldPath(JPATH_ADMINISTRATOR . '/components/com_cmc/models/fields');
 		$form->load($xml);
 
-		$fieldsets = $form->getFieldsets();
+		$displayData = new stdClass;
+		$displayData->form = $form;
 
-		foreach ($fieldsets as $key => $value)
-		{
-			$fields = $form->getFieldset($key);
+		$layout = new CompojoomLayoutFile('newsletter.form', JPATH_BASE . '/plugins/community/cmc/layouts');
+		$html = $layout->render($displayData);
 
-			foreach ($fields as $field)
-			{
-				$html[] = '<li class="cmc-newsletter">';
-				$html[] = $field->label;
-				$html[] = '<div class="form-field">' . $field->input . '</div>';
-				$html[] = '</li>';
-			}
-		}
-
-		$pos = strpos($data, '<li class="form-action has-seperator">');
-		$data = substr($data, 0, $pos) . implode('', $html) . substr($data, $pos);
+		$pos = strrpos($data, '<div class="joms-form__group">');
+		$data = substr($data, 0, $pos) . $html . substr($data, $pos);
 	}
 
 	/**

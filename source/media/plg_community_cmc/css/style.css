@@ -22,3 +22,10 @@ input.phone.cmc-us-format-area {
 .cmc-birthday {
 	margin-right: 5px!important;
 }
+
+.cmc-newsletter label {
+    display: inline-block;
+}
+.cmc-newsletter label .star {
+    display: none;
+}
