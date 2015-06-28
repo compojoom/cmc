@@ -22,6 +22,9 @@ use CB\Database\Table\PluginTable;
 use CB\Database\Table\TabTable;
 use CB\Database\Table\UserTable;
 
+
+
+
 // Check if CMC is installed
 if (!@include_once JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/xmlbuilder.php")
 {
@@ -31,15 +34,13 @@ if (!@include_once JPATH_ADMINISTRATOR . "/components/com_cmc/helpers/xmlbuilder
 // Load Compojoom library
 require_once JPATH_LIBRARIES . '/compojoom/include.php';
 
-JLoader::register('CmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
-JLoader::register('CmcHelperRegistration', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registration.php');
-JLoader::register('CmcHelperCountries', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/countries.php');
-JLoader::register('CmcHelperRegistrationrender', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/registrationrender.php');
+JLoader::discover('cmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
 
 global $_PLUGINS;
 $_PLUGINS->registerFunction('onUserActive', 'userActivated', 'getCmcTab');
 $_PLUGINS->registerFunction('onAfterDeleteUser', 'userDelete', 'getCmcTab');
 $_PLUGINS->registerFunction('onBeforeUserBlocking', 'onBeforeUserBlocking', 'getCmcTab');
+$_PLUGINS->registerFunction('onAfterUserProfileEditDisplay', 'onAfterUserProfileEditDisplay', 'getCmcTab');
 
 $language = JFactory::getLanguage();
 
@@ -210,9 +211,85 @@ class GetCmcTab extends cbTabHandler
 	public function getDisplayTab($tab, $user, $ui)
 	{
 		global $_CB_framework, $_CB_database, $ueConfig;
+		$loggedUser = JFactory::getUser();
+		$params = $this->getParams();
 
-		// Show the CMC Subscription options
-		// return $this->getEditTab($tab, $user, $ui);
+		if ($loggedUser->get('id') === $user->get('id'))
+		{
+			$module = clone JModuleHelper::getModule('mod_cmc');
+
+			$module->id     = 'cb' . $module->id;
+			$module->params = $params;
+
+			return JModuleHelper::renderModule($module);
+		}
+
+		return '';
+
+//
+//			$renderer = CmcHelperXmlbuilder::getInstance($params);
+//			$user = JFactory::getUser();
+//
+//			// Generate the xml for the form
+//			$xml = $renderer->build();
+//
+//
+//			$mapping = self::getMapping($params->get('mapfields'), (array) $user);
+//
+//			try
+//			{
+//				JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_cmc/models/fields');
+//				$form = JForm::getInstance('com_comprofiler_' . $user->get('id'), $xml, array('control' => 'jform'));
+//				$form->bind($mapping);
+//
+//				// If we are not dealing with a guest, try to load the already existing profile merges and add them to the form
+//				if (!$user->guest)
+//				{
+//					$subscriptionData = CmcHelperUsers::getSubscription($user->email, $params->get('listid'));
+//
+//					if ($subscriptionData)
+//					{
+//						$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+//					}
+//				}
+//			}
+//			catch (Exception $e)
+//			{
+//				return false;
+//			}
+//
+//			$displayData = new stdClass;
+//			$displayData->form = $form;
+//			$displayData->params = $this->params;
+//			$share = new CompojoomLayoutFile('newsletter.form', JPATH_SITE . '/components/com_cmc/layouts');
+//
+//			return $share->render($displayData);
+//
+//		}
+//
+//		return '';
+	}
+
+	public function &getParams()
+	{
+		$params = $this->params;
+
+		// We have to set the fields / interests manually for cb because they are no array! See explode
+		$fields = $params->get('fields', '');
+
+		if (!empty($fields))
+		{
+			$params->set('fields', explode("|*|", $fields));
+		}
+
+		$interests = $params->get('interests', '');
+
+		if (!empty( $interests))
+		{
+			$params->set('interests', explode("|*|", $interests));
+		}
+
+		return $params;
 	}
 
 	/**
@@ -622,5 +699,12 @@ class GetCmcTab extends cbTabHandler
 		}
 
 		return $groups;
+	}
+
+	public function onBeforeUserProfileEditDisplay($user, $tabContent)
+	{
+		$tabContent = 'balbla';//		die();
+
+		die('labladasfd');
 	}
 }

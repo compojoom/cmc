@@ -27,14 +27,32 @@ if ($params->get('bootstrap_form', 1))
 
 $document = JFactory::getDocument();
 $script = 'jQuery(document).ready(function() {
-    new cmc("#cmc-signup-form-' . $moduleId . '");
+    new cmc("#cmc-signup-' . $moduleId . '");
 });';
 
 $document->addScriptDeclaration($script);
+
+
 ?>
 
 <div id="cmc-signup-<?php echo $moduleId; ?>"
      class="cmc-signup <?php echo $params->get('moduleclass_sfx', ''); ?>">
+
+	<?php if($status->status == 'subscribed') : ?>
+		<div class="alert alert-info">
+			<?php echo JText::_('MOD_CMC_ALREADY_ON_THE_LIST'); ?>
+		</div>
+		<div>
+	<span class="btn btn-link cmc-toggle-sub">
+		<?php echo JText::_('MOD_CMC_IF_YOU_WISH_TO_CHANGE_YOUR_SUB'); ?>
+	</span>
+		</div>
+
+		<div>
+			<?php echo JText::sprintf('MOD_CMC_IF_YOU_WISH_TO_UNSUBSCRIBE', JRoute::_('index.php?option=com_cmc&task=subscription.delete&listid='.$params->get('listid').'&'.JFactory::getSession()->getFormToken().'=1')); ?>
+		</div>
+	<?php endif; ?>
+
 	<div class="cmc-error alert alert-error" style="display:none"></div>
 	<div class="cmc-saved" style="display:none">
 		<?php echo JText::_($params->get('thankyou')); ?>
@@ -42,6 +60,9 @@ $document->addScriptDeclaration($script);
 	<div class="cmc-updated" style="display:none">
 		Your subscription was updated.
 	</div>
+	<?php if($status->status == 'subscribed') : ?>
+		<div class="cmc-existing hide">
+	<?php endif; ?>
 	<form action="<?php echo JRoute::_('index.php?option=com_cmc&format=raw&task=subscription.save'); ?>" method="post"
 	      id="cmc-signup-form-<?php echo $moduleId; ?>"
 	      class="form-validate"
@@ -140,4 +161,8 @@ $document->addScriptDeclaration($script);
 			</div>
 		<?php endif; ?>
 	</form>
+
+	<?php if($status->status == 'subscribed') : ?>
+				</div>
+	<?php endif; ?>
 </div>

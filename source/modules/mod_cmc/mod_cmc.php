@@ -29,11 +29,6 @@ if (!$user->guest)
 		{
 			$layout = 'applied';
 		}
-
-		if ($status->status == 'subscribed')
-		{
-			$layout = 'signed';
-		}
 	}
 }
 
