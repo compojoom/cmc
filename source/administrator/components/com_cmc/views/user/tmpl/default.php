@@ -139,7 +139,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 							<?php echo JText::_('COM_CMC_CLIENTS'); ?>:
 						</div>
 						<div class="col-sm-10">
-							<?php echo ArrayHelper::toString(json_decode($this->user->clients, true), " = ", ", "); ?>
+							<?php echo ArrayHelper::toString($this->user->clients ? json_decode($this->user->clients, true) : array() , " = ", ", "); ?>
 						</div>
 					</div>
 

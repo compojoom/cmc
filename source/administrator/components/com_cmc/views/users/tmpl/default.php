@@ -114,36 +114,14 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', 'COM_CM
 					<?php endif; ?>
 				</div>
 				<div class="filter-select fltrt pull-right">
-					<select name="filter_status" class="inputbox chzn-single" onchange="this.form.submit()">
-						<option value=""><?php echo JText::_('COM_CMC_STATUS'); ?></option>
-						<?php
-						$subs = $subu = $subup = $subc = "";
-
-						if ($filterStatus == "subscribed")
-						{
-							$subs = ' selected="selected" ';
-						}
-						else if ($filterStatus == "unsubscribed")
-						{
-							$subu = ' selected="selected "';
-						}
-						else if ($filterStatus == "updated")
-						{
-							$subup = ' selected="selected "';
-						}
-						else if ($filterStatus == "cleaned")
-						{
-							$subc = ' selected="selected" ';
-						}
-						?>
-						<option
-							value="subscribed" <?php echo $subs; ?>><?php echo JText::_('COM_CMC_SUBSCRIBED'); ?></option>
-						<option
-							value="unsubscribed" <?php echo $subu; ?>><?php echo JText::_('COM_CMC_UNSUBSCRIBED'); ?></option>
-						<option
-							value="updated" <?php echo $subup; ?>><?php echo JText::_('COM_CMC_CLEANED'); ?></option>
-						<option value="cleaned" <?php echo $subc; ?>><?php echo JText::_('COM_CMC_UPDATED'); ?></option>
-					</select>
+					<?php echo JHtml::_('select.genericlist', array(
+							'' => JText::_('COM_CMC_STATUS'),
+							'subscribed' => JText::_('COM_CMC_SUBSCRIBED'),
+							'unsubscribed' => JText::_('COM_CMC_UNSUBSCRIBED'),
+							'pending' => JText::_('COM_CMC_PENDING'),
+							'cleaned' => JText::_('COM_CMC_CLEANED')
+						), 'filter_status', 'onchange="this.form.submit()"', 'value', 'text', $filterStatus
+					); ?>
 
 					<?php echo $this->lists; ?>
 				</div>

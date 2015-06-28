@@ -31,8 +31,6 @@ $script = 'jQuery(document).ready(function() {
 });';
 
 $document->addScriptDeclaration($script);
-
-
 ?>
 
 <div id="cmc-signup-<?php echo $moduleId; ?>"
@@ -54,7 +52,7 @@ $document->addScriptDeclaration($script);
 	<?php endif; ?>
 
 	<div class="cmc-error alert alert-error" style="display:none"></div>
-	<div class="cmc-saved" style="display:none">
+	<div class="cmc-saved alert alert-success" style="display:none">
 		<?php echo JText::_($params->get('thankyou')); ?>
 	</div>
 	<div class="cmc-updated" style="display:none">

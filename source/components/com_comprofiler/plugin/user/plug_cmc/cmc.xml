@@ -42,6 +42,7 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>
 		</param>
+		<param name="newsletterCheckbox" type="hidden" value="0" default="0"/>
 	</params>
 
 	<tabs>

@@ -25,11 +25,17 @@ if (!$user->guest)
 
 	if ($status)
 	{
-		if ($status->status == 'applied')
+		if ($status->status == 'applied' || $status->status == 'pending')
 		{
 			$layout = 'applied';
 		}
 	}
+}
+
+if (!isset($status))
+{
+	$status = new stdClass;
+	$status->status = '';
 }
 
 if (!$form)
