@@ -40,15 +40,13 @@ $document->addScriptDeclaration($script);
 		<div class="alert alert-info">
 			<?php echo JText::_('MOD_CMC_ALREADY_ON_THE_LIST'); ?>
 		</div>
-		<div>
-	<span class="btn btn-link cmc-toggle-sub">
-		<?php echo JText::_('MOD_CMC_IF_YOU_WISH_TO_CHANGE_YOUR_SUB'); ?>
-	</span>
+
+		<div class="cmc-margin-bottom text-center">
+		<button class="btn cmc-toggle-sub">
+			<?php echo JText::_('MOD_CMC_CHANGE_SUB'); ?>
+		</button>
 		</div>
 
-		<div>
-			<?php echo JText::sprintf('MOD_CMC_IF_YOU_WISH_TO_UNSUBSCRIBE', JRoute::_('index.php?option=com_cmc&task=subscription.delete&listid='.$params->get('listid').'&'.JFactory::getSession()->getFormToken().'=1')); ?>
-		</div>
 	<?php endif; ?>
 
 	<div class="cmc-error alert alert-error" style="display:none"></div>
@@ -56,7 +54,7 @@ $document->addScriptDeclaration($script);
 		<?php echo JText::_($params->get('thankyou')); ?>
 	</div>
 	<div class="cmc-updated" style="display:none">
-		Your subscription was updated.
+		<?php echo JText::_('MOD_CMC_SUBSCRIPTION_UPDATED'); ?>
 	</div>
 	<?php if($status->status == 'subscribed') : ?>
 		<div class="cmc-existing hide">
@@ -148,7 +146,11 @@ $document->addScriptDeclaration($script);
 		<?php endif; ?>
 
 		<button class="btn btn-primary validate" type="submit">
-			<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
+			<?php if($status->status == 'subscribed') : ?>
+				<?php echo JText::_('MOD_CMC_UPDATE_SUB'); ?>
+			<?php else : ?>
+				<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
+			<?php endif; ?>
 			<img width="16" height="16" class="cmc-spinner" style="display: none;"
 			     src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg">
 		</button>
@@ -161,6 +163,13 @@ $document->addScriptDeclaration($script);
 	</form>
 
 	<?php if($status->status == 'subscribed') : ?>
-				</div>
-	<?php endif; ?>
+
+		</div>
+	<div class="cmc-margin-bottom text-center">
+		<a class="btn" href="<?php echo JRoute::_('index.php?option=com_cmc&task=subscription.delete&listid=' . $params->get('listid') . '&' . JFactory::getSession()->getFormToken() . '=1'); ?>">
+			<?php echo JText::_('MOD_CMC_UNSUBSCRIBE'); ?>
+		</a>
+		</div>
+
+<?php endif; ?>
 </div>
