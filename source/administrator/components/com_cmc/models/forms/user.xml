@@ -15,14 +15,14 @@
 		       size="40" label="COM_CMC_EMAIL" required="true" />
 
 		<field name="list_id" type="cmclistid"  class="form-control"
-               labelclass="form-label col-sm-2"
+               labelclass="col-sm-2 compojoom-control-label"
 		       size="1" label="COM_CMC_LIST" required="true" />
 
 		<field  name="status"
 		        type="list"
 		        label="COM_CMC_STATUS"
 		        class="form-control"
-                labelclass="form-label col-sm-2"
+                labelclass="col-sm-2 compojoom-control-label"
 		        size="1"
 		        default="1">
 			<option	value="subscribed">COM_CMC_SUBSCRIBED</option>
@@ -35,7 +35,7 @@
 		        type="list"
 		        label="COM_CMC_EMAIL_TYPE"
                 class="form-control"
-                labelclass="form-label col-sm-2"
+                labelclass="col-sm-2 compojoom-control-label"
 		        size="1"
 		        default="1">
 			<option	value="html">COM_CMC_HTML</option>

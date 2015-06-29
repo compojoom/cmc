@@ -21,19 +21,16 @@ $form = $this->form;
 <?php
 echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '');
 ?>
-	<div class="box-info full">
-		<h2><?php echo JText::_('COM_CMC_EDIT_USER'); ?></h2>
+	<div class="box-info">
+		<h2>
+				<img src="http://www.gravatar.com/avatar/<?php echo md5($this->user->email); ?>?s=40"
+				     alt="<?php echo $this->user->firstname . " " . $this->user->lastname; ?>"/>
+			<?php echo JText::_('COM_CMC_EDIT_USER'); ?></h2>
 
 		<div id="cmc" class="cmc">
 			<form
 				action="<?php echo JRoute::_('index.php?option=com_cmc&view=user&layout=edit&id=' . (int) $this->user->id); ?>"
-				method="post" name="adminForm" id="adminForm" class="form" enctype="multipart/form-data">
-				<fieldset class="adminform">
-					<div id="cmc_gravatar">
-						<img src="http://www.gravatar.com/avatar/<?php echo md5($this->user->email); ?>?s=140"
-						     alt="<?php echo $this->user->firstname . " " . $this->user->lastname; ?>"/>
-					</div>
-
+				method="post" name="adminForm" id="adminForm" class="form-horizontal" role="form" enctype="multipart/form-data">
 
 					<?php $fieldsets = $form->getFieldsets('cmc_groups'); ?>
 
@@ -47,11 +44,11 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 								$field->class .= ' form-control';
 							}
 
-							$field->labelclass .= ' col-sm-2 control-label'
+							$field->labelclass .= ' col-sm-2 compojoom-control-label'
 							?>
 							<?php if (strtolower($field->type) != 'spacer') : ?>
 								<div class="form-group">
-									<?php echo $field->label; ?>
+										<?php echo $field->label; ?>
 									<div class="col-sm-10">
 										<?php echo $field->input; ?>
 									</div>
@@ -75,12 +72,12 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 								$field->class .= ' form-control';
 							}
 
-							$field->labelclass .= ' col-sm-2 control-label'
+							$field->labelclass .= ' col-sm-2 compojoom-control-label'
 							?>
 
 							<?php if (strtolower($field->type) != 'spacer') : ?>
 								<div class="form-group">
-									<?php echo $field->label; ?>
+										<?php echo $field->label; ?>
 									<div class="col-sm-10">
 										<?php echo $field->input; ?>
 									</div>
@@ -91,8 +88,6 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 						<?php endforeach; ?>
 
 					<?php endforeach; ?>
-
-<div class="clearfix"></div>
 
 
 					<div class="form-group">
@@ -117,56 +112,63 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 					</div>
 
 					<div class="form-group">
-						<div class="col-sm-2">
-							<?php echo JText::_('COM_CMC_MAILCHIMP_ID'); ?>:
-						</div>
+						<label class="col-sm-2 compojoom-control-label">
+							<?php echo JText::_('COM_CMC_MAILCHIMP_ID'); ?>
+						</label>
 						<div class="col-sm-10">
-							<?php echo $this->user->mc_id; ?>
+							<p class="form-control-static"><?php echo $this->user->mc_id; ?></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 compojoom-control-label">
+							<?php echo JText::_('COM_CMC_WEB_ID'); ?>
+						</label>
+						<div class="col-sm-10">
+							<p class="form-control-static"><?php echo $this->user->web_id; ?></p>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<div class="col-sm-2">
-							<?php echo JText::_('COM_CMC_WEB_ID'); ?>:
-						</div>
+						<label class="col-sm-2 compojoom-control-label">
+							<?php echo JText::_('COM_CMC_CLIENTS'); ?>
+						</label>
 						<div class="col-sm-10">
-							<?php echo $this->user->web_id; ?>
+							<p class="form-control-static">
+								<?php echo ArrayHelper::toString($this->user->clients ? json_decode($this->user->clients, true) : array() , " = ", ", "); ?>
+							</p>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<div class="col-sm-2">
-							<?php echo JText::_('COM_CMC_CLIENTS'); ?>:
-						</div>
+						<label class="col-sm-2 compojoom-control-label">
+							<?php echo JText::_('COM_CMC_LANGUAGE'); ?>
+						</label>
 						<div class="col-sm-10">
-							<?php echo ArrayHelper::toString($this->user->clients ? json_decode($this->user->clients, true) : array() , " = ", ", "); ?>
+							<p class="form-control-static">
+								<?php echo $this->user->language ? $this->user->language : 'en'; ?>
+							</p>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<div class="col-sm-2">
-							<?php echo JText::_('COM_CMC_LANGUAGE'); ?>:
-						</div>
+						<label class="col-sm-2 compojoom-control-label">
+							<?php echo JText::_('COM_CMC_MEMBER_SINCE'); ?>
+						</label>
 						<div class="col-sm-10">
-							<?php echo $this->user->language ? $this->user->language : 'en'; ?>
+							<p class="form-control-static">
+								<?php echo $this->user->timestamp; ?>
+							</p>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<div class="col-sm-2">
-							<?php echo JText::_('COM_CMC_MEMBER_SINCE'); ?>:
-						</div>
+						<label class="col-sm-2 compojoom-control-label">
+							<?php echo JText::_('COM_CMC_LAST_CHANGE'); ?>
+						</label>
 						<div class="col-sm-10">
-							<?php echo $this->user->timestamp; ?>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-sm-2">
-							<?php echo JText::_('COM_CMC_LAST_CHANGE'); ?>:
-						</div>
-						<div class="col-sm-10">
-							<?php echo $this->user->info_changed; ?>
+							<p class="form-control-static">
+								<?php echo $this->user->info_changed; ?>
+							</p>
 						</div>
 					</div>
 
