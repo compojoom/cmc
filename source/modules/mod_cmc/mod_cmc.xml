@@ -21,6 +21,16 @@
 	<config>
 		<fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
 			<fieldset name="basic">
+				<field name="layout" type="radio" class="radio btn-group btn-group-yesno" default="default"
+				       label="MOD_CMC_TEMPLATE"
+				       description="MOD_CMC_TEMPLATE_DESC">
+					<option value="default">JDEFAULT</option>
+					<option value="popup">MOD_CMC_POPUP</option>
+					<option value="floating">MOD_CMC_FLOATING</option>
+				</field>
+
+
+
 				<field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
 				       description="MOD_CMC_INTRO_TEXT_DESC" filter="raw"/>
 				<field name="outro-text-1" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_OUTRO_TEXT_1"
@@ -67,6 +77,17 @@
 				</field>
 				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
 				       description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+
+				<field name="popup_start" type="text" default="0" label="MOD_CMC_POPUP_START_POSITION"
+				       description="MOD_CMC_POPUP_START_POSITION"/>
+
+				<field name="signup_position" type="radio" class="radio btn-group btn-group-yesno" default="left"
+				       label="MOD_CMC_FLOATING_SIGNUP_POSITION"
+				       description="MOD_CMC_FLOATING_SIGNUP_POSITION_DESC">
+					<option value="left">MOD_CMC_LEFT</option>
+					<option value="right">MOD_CMC_RIGHT</option>
+					<option value="bottom">MOD_CMC_BOTTOM</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

@@ -17,7 +17,7 @@ require_once JPATH_SITE . '/modules/mod_cmc/helper.php';
 $user = JFactory::getUser();
 $form = modCMCHelper::getForm($module->id, $params);
 
-$layout = 'default';
+$layout = $params->get("layout", "default");
 
 if (!$user->guest)
 {
@@ -25,7 +25,7 @@ if (!$user->guest)
 
 	if ($status)
 	{
-		if ($status->status == 'applied' || $status->status == 'pending')
+		if ($layout == 'default' && ($status->status == 'applied' || $status->status == 'pending'))
 		{
 			$layout = 'applied';
 		}

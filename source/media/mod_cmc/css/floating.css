@@ -1,0 +1,23 @@
+/* CMC by compojoom.com CSS file */
+
+.cmc-floating {
+	background: #fff;
+	overflow: scroll;
+
+	z-index: 100;
+}
+
+.cmc-floating-container {
+	padding: 20px 15px;
+}
+
+.cmc-floating-close {
+	position: absolute;
+	right: 0;
+	background: #ccc;
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	text-align: center;
+}
+
