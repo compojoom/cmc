@@ -4,76 +4,67 @@
  * Copyright (c) 2013 - 2015 Yves Hoppe - compojoom.com;
  */
 (function ($) {
-	var version = "20150630";
+	var version = "20150705";
 
 	$.fn.cmcfloating = function (options) {
 
 		var settings = $.extend({
+			mode: 'left'
 		}, options);
 
 		var holder = $.extend({
 			module: null,
-			btn_close: null,
+			btn_float: null,
 			opened: false
 		});
 
 		var API = $.extend({
 			init: function () {
-				var as = API.readCookie("cmcfloating");
+				holder.btn_float = $(".cmc-floating-btn-" + settings.mode);
 
-				if (as) {
-					// Don't show it
-					holder.module.hide();
-					return;
-				}
-
-				holder.btn_close = $(".cmc-floating-close", holder.module);
-
-				API.initClose();
+				API.initToggle();
 
 				return true;
 			},
 
-			initClose: function() {
-				holder.btn_close.click(function(){
-					API.hidePopup();
+			initToggle: function() {
+				holder.btn_float.click(function(){
+					if (holder.opened) {
+						API.hidePopup();
+					} else {
+						API.showPopup();
+					}
 				});
 			},
 
 			hidePopup: function() {
-				holder.module.hide(100);
+				if (settings.mode == 'left') {
+					holder.module.animate({left: "-250px"});
+					holder.btn_float.animate({left: "0"});
+				} else if (settings.mode == 'right') {
+					holder.module.animate({right: "-250px"});
+					holder.btn_float.animate({right: "0"});
+				} else {
+					holder.module.animate({bottom: "-150px"});
+					holder.btn_float.animate({bottom: "10px"});
+				}
 
-				// Set Cookie
-				API.createCookie("cmcfloating", true, 7);
+				holder.opened = false;
 			},
 
 			showPopup: function() {
-				holder.module.show(200);
-			},
-
-			createCookie: function(name, value, days) {
-				var expires;
-
-				if (days) {
-					var date = new Date();
-					date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-					expires = "; expires=" + date.toGMTString();
+				if (settings.mode == 'left') {
+					holder.module.animate({left: 0});
+					holder.btn_float.animate({left: "250px"});
+				}  else if (settings.mode == 'right') {
+					holder.module.animate({right: "0px"});
+					holder.btn_float.animate({right: "250px"});
 				} else {
-					expires = "";
+					holder.module.animate({bottom: "0px"});
+					holder.btn_float.animate({bottom: "160px"});
 				}
 
-				document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
-			},
-
-			readCookie: function(name) {
-				var nameEQ = encodeURIComponent(name) + "=";
-				var ca = document.cookie.split(';');
-				for (var i = 0; i < ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-					if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-				}
-				return null;
+				holder.opened = true;
 			}
 		});
 

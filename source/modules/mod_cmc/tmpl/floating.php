@@ -37,35 +37,37 @@ if ($params->get('bootstrap_form', 1))
 }
 
 $document = JFactory::getDocument();
+
+// Get CSS depending on signup_position param
+$pos = $params->get('signup_position', 'right');
+
 $script = 'jQuery(document).ready(function() {
     new cmc("#cmc-signup-' . $moduleId . '");
     jQuery("#cmc-signup-' . $moduleId . '").cmcfloating({
+        mode: "' . $pos . '"
     });
 });';
 
 $document->addScriptDeclaration($script);
 
-// Get CSS depending on signup_position param
-$pos = $params->get('signup_position', 'right');
-
 $top = 'top: 0;';
 $width = 'width: 250px;';
 $height = 'height: 100%;';
-$left = 'left: 0;';
-$add = 'border-right: 10px solid forestgreen;';
+$left = 'left: -250px;';
+$add = 'border-right: 1px solid #ccc;';
 
 if ($pos == 'bottom')
 {
-	$top = 'bottom: 0;';
+	$top = 'bottom: -150px;';
 	$left = 'left: 0;';
 	$width = 'width: 100%;';
 	$height = 'height: 150px;';
-	$add = 'border-top: 10px solid forestgreen;';
+	$add = 'border-top: 1px solid #ccc;';
 }
 elseif ($pos == "right")
 {
-	$left = 'right: 0;';
-	$add = 'border-left: 10px solid forestgreen;';
+	$left = 'right: -250px;';
+	$add = 'border-left: 1px solid #ccc;';
 }
 
 $document->addStyleDeclaration('
@@ -79,13 +81,12 @@ $document->addStyleDeclaration('
 	}
 ')
 ?>
-
+<div class="cmc-floating-btn cmc-floating-btn-<?php echo $pos; ?>">
+	<span><?php echo JText::_("COM_CMC_NEWSLETTER"); ?></span>
+</div>
 <div id="cmc-signup-<?php echo $moduleId; ?>"
      class="cmc-floating <?php echo $params->get('moduleclass_sfx', ''); ?>">
 	<div class="cmc-floating-container">
-		<div class="cmc-floating-close">
-			<a href="#">X</a>
-		</div>
 		<div class="cmc-popup-content">
 			<div class="cmc-error alert alert-error" style="display:none"></div>
 			<div class="cmc-saved alert alert-success" style="display:none">

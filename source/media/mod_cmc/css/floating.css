@@ -11,13 +11,71 @@
 	padding: 20px 15px;
 }
 
-.cmc-floating-close {
-	position: absolute;
-	right: 0;
-	background: #ccc;
+.cmc-floating-btn {
 	width: 20px;
-	height: 20px;
-	border-radius: 10px;
-	text-align: center;
+	cursor: pointer;
 }
 
+.cmc-floating-btn-left {
+	position: fixed;
+	left: 0;
+	width: 20px;
+	height: 200px;
+	text-align: center;
+	writing-mode:tb-rl;
+	-webkit-transform:rotate(90deg);
+	-moz-transform:rotate(90deg);
+	-o-transform: rotate(90deg);
+	-ms-transform:rotate(90deg);
+	transform: rotate(90deg);
+	white-space:nowrap;
+	display:block;
+	top: 200px;
+	margin-left: -84px;
+}
+
+.cmc-floating-btn-left span {
+	background: #ccc;
+	padding: 10px 20px 20px 20px;
+	height: 200px;
+	border-radius: 10px;
+}
+
+.cmc-floating-btn-right {
+	position: fixed;
+	right: 0;
+	width: 20px;
+	height: 200px;
+	margin-right: -82px;
+	text-align: center;
+	writing-mode:tb-rl;
+	-webkit-transform:rotate(-90deg);
+	-moz-transform:rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-ms-transform:rotate(-90deg);
+	transform: rotate(-90deg);
+	white-space:nowrap;
+	display:block;
+	top: 200px;
+}
+
+.cmc-floating-btn-right span {
+	background: #ccc;
+	padding: 10px 20px 20px 20px;
+	height: 200px;
+	border-radius: 10px;
+}
+
+.cmc-floating-btn-bottom {
+	position: fixed;
+	left: 200px;
+	bottom: 10px;
+	text-align: center;
+	display:block;
+}
+
+.cmc-floating-btn-bottom span {
+	background: #ccc;
+	padding: 10px 20px 20px 20px;
+	border-radius: 10px;
+}
