@@ -2,19 +2,19 @@
 <extension method="upgrade" type="component" version="2.5.0">
     <name>COM_CMC</name>
     <author>Compojoom.com</author>
-    <creationDate>@@DATE@@</creationDate>
-    <copyright>(C) 2014 - compojoom.com</copyright>
+    <creationDate>##DATE##</creationDate>
+    <copyright>(C) 2014 - ##YEAR## compojoom.com</copyright>
     <authorEmail>contact-us@compojoom.com</authorEmail>
     <authorUrl>www.compojoom.com</authorUrl>
-    <version>@@VERSION@@</version>
+    <version>##VERSION##</version>
     <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
     <description><![CDATA[Mailchimp list management for Joomla!]]></description>
     <scriptfile>script.php</scriptfile>
     <files folder="components/com_cmc">
-        ##FRONTENDCOMPONENTPACKAGEFILES##
+        ##FRONTEND_COMPONENT_FILES##
     </files>
     <languages folder="language">
-        ##FRONTENDLANGUAGEFILES##
+        ##FRONTEND_LANGUAGE_FILES##
     </languages>
     <administration>
         <menu img="../media/com_cmc/backend/images/cmc-16px.png" view="cpanel">COM_CMC</menu>
@@ -23,14 +23,14 @@
             <menu img="../media/com_cmc/backend/images/users-16px.png" view="users">COM_CMC_USERS</menu>
         </submenu>
         <files folder="administrator/components/com_cmc">
-            ##ADMINCOMPONENTPACKAGEFILES##
+            ##BACKEND_COMPONENT_FILES##
         </files>
         <languages folder="administrator/language">
-            ##ADMINLANGUAGEFILES##
+            ##BACKEND_LANGUAGE_FILES##
         </languages>
     </administration>
     <media destination="com_@@COMPONENTNAME@@" folder="media/com_cmc">
-        ##MEDIAPACKAGEFILES##
+        ##MEDIA_FILES##
     </media>
 
     <updateservers>

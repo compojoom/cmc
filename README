@@ -1,6 +1,6 @@
 CMC - Mailchimp® for Joomla!™
 
-CMC is an extension for Joomla 2.5 that integrates with the Mailchimp API. It currently supports:
+CMC is an extension for Joomla 2.5 and 3.x that integrates with the Mailchimp API. It currently supports:
 
 * double way synchronisation of lists & users
 * adding users to Mailchimp through the joomla backend

@@ -1,10 +1,30 @@
 {
-	"name": "compojoom/com_cmc",
-	"description": "Cmc is a Joomla extension that works with the Mailchimp API",
-	"keywords": ["joomla","framework","compojoom","mailchimp"],
-	"homepage": "https://compojoom.com",
-	"license": "GPL-2.0+",
-	"require": {
-		"php": ">=5.3.10"
+  "name": "compojoom/cmc",
+  "description": "Cmc is a Joomla extension that works with the Mailchimp API",
+  "license": "GPL-2.0+",
+  "authors": [
+	{
+	  "name": "Daniel Dimitrov",
+	  "email": "daniel@compojoom.com"
+	},
+	{
+	  "name": "Yves Hoppe",
+	  "email": "yves@compojoom.com"
 	}
+  ],
+  "require"    : {
+	"compojoom/lib_compojoom": "dev-master",
+	"php": ">=5.3.10"
+  },
+  "require-dev": {
+	"php": ">=5.4.0",
+	"codeception/codeception": "~2.1",
+	"joomla-projects/joomla-browser": "dev-develop",
+	"codegyre/robo": "0.5.*",
+	"joomla-projects/robo": "dev-master",
+	"joomla-projects/selenium-server-standalone": "v2.47.1",
+	"fzaninotto/faker": "^1.5",
+	"yvesh/jbuild": "dev-master",
+	"compojoom/lib_compojoom": "dev-master"
+  }
 }

@@ -1,9 +1,63 @@
+# OSX
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
 
-/.idea
-/packages
-/builds/build.properties
-/tx.exe
+# Windows
+Thumbs.db
+Desktop.ini
 
+# PHPStorm
+.idea/
+
+# Sublime Text
+*.sublime*
+
+# Eclipse
+.buildpath
+.project
+.settings
+
+# Temp files
+*.tmp
+*.bak
+*.swp
+*~.nib
+*~
+
+# composer
+composer.lock
+composer.phar
+vendor/*
+
+# Robo
+robo.phar
+
+# Phing
+packages/
+builds/build.properties
+
+# Test related files
+tests/acceptance.suite.yml
+tests/*/*Tester.php
+tests/joomla-cms3*
+tests/_output*
+selenium-server-standalone.jar
+codecept.phar
+selenium.log
+tests/_output/*
+
+# JBuild related files
+dist/
+jbuild.ini
+
+# Library related files
+source/libraries
+source/media/com_cmc/cache/*
+source/media/lib_compojoom
+
+# CMC related files
 /docs/cmc.xml~
 /source/libraries/compojoom
 /source/language/en-GB/en-GB.lib_compojoom.sys.ini

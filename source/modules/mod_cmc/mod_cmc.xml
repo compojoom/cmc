@@ -2,21 +2,21 @@
 <extension type="module" version="2.5" method="upgrade" client="site">
 	<name>mod_cmc</name>
 	<author>compojoom.com</author>
-	<creationDate>@@DATE@@</creationDate>
-	<copyright>Copyright (C) 2012 Daniel Dimitrov - compojoom.com. All rights reserved.</copyright>
+	<creationDate>##DATE##</creationDate>
+	<copyright>Copyright (C) 2012 - ##YEAR## Daniel Dimitrov - compojoom.com. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>daniel@compojoom.com</authorEmail>
 	<authorUrl>compojoom.com</authorUrl>
-	<version>@@VERSION@@</version>
+	<version>##VERSION##</version>
 	<description>MOD_CMC_XML_DESCRIPTION</description>
 	<files>
-		##PACKAGEFILESMODULE##
+		##MODULE_FILES##
 	</files>
 	<languages folder="language">
-		##FRONTENDLANGUAGEFILES##
+		##LANGUAGE_FILES##
 	</languages>
-	<media destination="@@MODULENAME@@" folder="media/@@MODULENAME@@">
-		##MEDIAPACKAGEFILES##
+	<media destination="mod_cmc" folder="media/mod_cmc">
+		##MEDIA_FILES##
 	</media>
 	<config>
 		<fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">
@@ -28,8 +28,6 @@
 					<option value="popup">MOD_CMC_POPUP</option>
 					<option value="floating">MOD_CMC_FLOATING</option>
 				</field>
-
-
 
 				<field name="intro-text" type="textarea" default="" cols="25" rows="2" label="MOD_CMC_INTRO_TEXT"
 				       description="MOD_CMC_INTRO_TEXT_DESC" filter="raw"/>

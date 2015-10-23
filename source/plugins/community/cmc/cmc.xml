@@ -2,20 +2,20 @@
 <extension version="2.5" type="plugin" group="community" method="upgrade">
 	<name>Community - CMC Registration plugin</name>
 	<author>compojoom.com</author>
-	<creationDate>@@DATE@@</creationDate>
-	<copyright>Copyright (C) 2013-2015 compojoom.com. All rights reserved.</copyright>
+	<creationDate>##DATE##</creationDate>
+	<copyright>Copyright (C) 2013 - ##YEAR## compojoom.com. All rights reserved.</copyright>
 	<license>GNU/GPL http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorUrl>https://compojoom.com</authorUrl>
-	<version>@@VERSION@@</version>
+	<version>##VERSION##</version>
 	<description>PLG_COMMUNITY_USER_REGISTRATION_DESCRIPTION</description>
 	<files>
-		##PACKAGEFILESPLUGIN##
+		##FILES##
 	</files>
 	<media destination="plg_community_cmc" folder="media/plg_community_cmc">
-		##MEDIAPACKAGEFILES##
+		##MEDIA_FILES##
 	</media>
 	<languages folder="administrator/language">
-		##ADMINLANGUAGEFILES##
+		##LANGUAGE_FILES##
 	</languages>
 	<config>
 		<fields name="params" addfieldpath="administrator/components/com_cmc/models/fields">

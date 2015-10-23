@@ -2,12 +2,12 @@
 <cbinstall version="1.0" type="plugin" group="user" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../../../../../validation/ahawow.xsd">
 	<name>CMC - Newsletter registration</name>
 	<author>Compojoom - Yves Hoppe</author>
-	<creationDate>@@DATE@@</creationDate>
-	<copyright>(C) 2013 compojoom.com</copyright>
+	<creationDate>##DATE##</creationDate>
+	<copyright>(C) 2013 - ##YEAR## compojoom.com</copyright>
 	<license>GNU/GPL version 2</license>
-	<authorEmail>contact-us@compjoom.com</authorEmail>
-	<authorUrl>www.compojoom.com</authorUrl>
-	<version>2.0.0</version>
+	<authorEmail>yves@compjoom.com</authorEmail>
+	<authorUrl>https://compojoom.com</authorUrl>
+	<version>##VERSION##</version>
 	<description>
 		A Community Builder plugin for CMC.
 	</description>
