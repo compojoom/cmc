@@ -65,3 +65,5 @@ source/media/lib_compojoom
 /source/media/lib_compojoom
 /source/administrator/components/com_cmc/version.php
 /source/administrator/components/com_cmc/CHANGELOG.php
+
+tests/_output/*

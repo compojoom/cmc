@@ -28,7 +28,7 @@ modules:
             database host: 'localhost'             # place where the Application is Hosted #server Address
             database user: 'root'                  # MySQL Server user ID, usually root
             database password: ''                  # MySQL Server password, usually empty or root
-            database name: 'testcmc'               # DB Name, at the Server
+            database name: 'testmatukio'          # DB Name, at the Server
             database type: 'mysqli'                # type in lowercase one of the options: MySQL\MySQLi\PDO
             database prefix: 'jos_'                # DB Prefix for tables
             install sample data: 'no'              # Do you want to Download the Sample Data Along with Joomla Installation, then keep it Yes
@@ -36,6 +36,5 @@ modules:
             admin email: 'admin@mydomain.com'      # email Id of the Admin
             language: 'English (United Kingdom)'   # Language in which you want the Application to be Installed
         AcceptanceHelper:
-            repo_folder: '/tests/cmc' # Path to the Extension repository. To be used by tests to install via Install from folder
-            api_key: '' # The Api Key for the MailChimp lists
+            repo_folder: '/tests/matukio' # Path to the Extension repository. To be used by tests to install via Install from folder
 error_level: "E_ALL"

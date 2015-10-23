@@ -193,7 +193,7 @@ class RoboFile extends \Robo\Tasks
 
 		$this->say('Joomla CMS site created at tests/joomla-cms3');
 
-		$this->_exec('chown -R joomla:joomla /tests');
+		// $this->_exec('chown -R joomla:joomla /tests');
 	}
 
 	/**

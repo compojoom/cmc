@@ -24,7 +24,7 @@ class InstallCmcCest
 	public function installCmc(\AcceptanceTester $I)
 	{
 		$I->doAdministratorLogin();
-		$I->comment('get Cmc package from acceptance.suite.yml (see _support/AcceptanceHelper.php)');
+		$I->comment('get cmc package from acceptance.suite.yml (see _support/AcceptanceHelper.php)');
 		$path = $I->getConfiguration('repo_folder');
 		$I->installExtensionFromFolder($path);
 		$I->doAdministratorLogout();
