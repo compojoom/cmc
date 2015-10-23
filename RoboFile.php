@@ -193,7 +193,8 @@ class RoboFile extends \Robo\Tasks
 
 		$this->say('Joomla CMS site created at tests/joomla-cms3');
 
-		// $this->_exec('chown -R joomla:joomla /tests');
+		// Fix permissions (for FTP not showing up)
+		$this->_exec('chown -R joomla:joomla /tests');
 	}
 
 	/**
