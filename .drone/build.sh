@@ -31,6 +31,8 @@ cp -r dist/current/libraries "$BUILD/source/libraries"
 # Move back to the top
 cd "$BUILD"
 
+cp jbuild.dist.ini jbuild.ini
+
 # Build package
 vendor/bin/robo build --dev
 
