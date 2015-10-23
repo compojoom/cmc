@@ -36,5 +36,6 @@ modules:
             admin email: 'admin@mydomain.com'      # email Id of the Admin
             language: 'English (United Kingdom)'   # Language in which you want the Application to be Installed
         AcceptanceHelper:
-            repo_folder: '/tests/matukio' # Path to the Extension repository. To be used by tests to install via Install from folder
+            repo_folder: '/tests/cmc' # Path to the Extension repository. To be used by tests to install via Install from folder
+            api_key: '' # The Api Key for the MailChimp lists
 error_level: "E_ALL"
