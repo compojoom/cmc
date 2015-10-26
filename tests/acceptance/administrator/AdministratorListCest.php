@@ -26,7 +26,7 @@ class AdministratorListCest
 		$I->wantToTest('Synchronize CMC Lists in /administrator/');
 		$I->doAdministratorLogin();
 		$I->amGoingTo('Navigate to CMC List page in /administrator/');
-		$I->amOnPage('administrator/index.php?option=com_matukio&view=lists');
+		$I->amOnPage('administrator/index.php?option=com_cmc&view=lists');
 		$I->waitForText('Lists', '30', ['css' => 'h1']);
 		$I->expectTo('see CMC List page');
 		$I->checkForPhpNoticesOrWarnings();

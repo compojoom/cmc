@@ -74,12 +74,13 @@ class RoboFile extends \Robo\Tasks
 	/**
 	 * Executes all the Selenium System Tests in a suite on your machine
 	 *
+	 * @param   string  $user          Optional user to run the tests as
 	 * @param   string  $seleniumPath  Optional path to selenium-standalone-server-x.jar
 	 * @param   string  $suite         Optional, the name of the tests suite
 	 *
 	 * @return mixed
 	 */
-	public function runTests($seleniumPath = null, $suite = 'acceptance')
+	public function runTests($user = 'joomla', $seleniumPath = null, $suite = 'acceptance')
 	{
 		$this->setExecExtension();
 
@@ -90,7 +91,7 @@ class RoboFile extends \Robo\Tasks
 			return false;
 		}
 
-		$this->createTestingSite();
+		$this->createTestingSite($user);
 		$this->getComposer();
 		$this->taskComposerInstall()->run();
 		$this->runSelenium();
@@ -181,7 +182,7 @@ class RoboFile extends \Robo\Tasks
 	 * Creates a testing Joomla site for running the tests (use it before run:test)
 	 */
 
-	public function createTestingSite()
+	public function createTestingSite($user)
 	{
 		// Get Joomla Clean Testing sites
 		if (is_dir('/tests/www/joomla-cms3'))
@@ -193,8 +194,10 @@ class RoboFile extends \Robo\Tasks
 
 		$this->say('Joomla CMS site created at tests/joomla-cms3');
 
-		// Fix permissions (for FTP not showing up)
-		$this->_exec('chown -R joomla:joomla /tests');
+		if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')
+		{
+			$this->_exec('chown -R ' . $user . ' /tests');
+		}
 	}
 
 	/**
