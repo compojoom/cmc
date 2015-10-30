@@ -12,3 +12,6 @@ build:
         - yves@compojoom.com
         - daniel@copojoom.com
         - robert@rdeutz.de
+      on_success: author
+          on_failure: author
+          
