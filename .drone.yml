@@ -1,14 +1,11 @@
 build:
   image: yveshoppe/joomla-systemtests
-  cache:
-    mount:
-      - vendor
-      - .git
-  git:
-    depth: 1
   commands:
     - chmod a+x .drone/build.sh
     - ./.drone/build.sh
+  clone:
+    depth: 1
+    path: repo
   notify:
     email:
       recipients:
