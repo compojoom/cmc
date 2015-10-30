@@ -1,23 +1,17 @@
-image: yveshoppe/joomla-systemtests
-cache:
-  mount:
-    - vendor
-    - .git
-git:
-  depth: 1
-script:
-  - chmod a+x .drone/build.sh
-  - ./.drone/build.sh
-notify:
-  email:
-    recipients:
-      - yves@compojoom.com
-      - daniel@copojoom.com
-  irc:
-    nick: compodronebot
-    server: chat.freenode.net
-    channel: '#compojoom'
-    started: true
-    success: true
-    failure: true
-    ssl: false
+build:
+  image: yveshoppe/joomla-systemtests
+  cache:
+    mount:
+      - vendor
+      - .git
+  git:
+    depth: 1
+  script:
+    - chmod a+x .drone/build.sh
+    - ./.drone/build.sh
+  notify:
+    email:
+      recipients:
+        - yves@compojoom.com
+        - daniel@copojoom.com
+        - robert@rdeutz.de
