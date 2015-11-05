@@ -80,13 +80,13 @@ class RoboFile extends \Robo\Tasks
 	 *
 	 * @return mixed
 	 */
-	public function runTests($user = 'joomla', $seleniumPath = null, $suite = 'acceptance')
+	public function runTests($user = 'www-data', $seleniumPath = null, $suite = 'acceptance')
 	{
 		$this->setExecExtension();
 
 		if (!file_exists(JPATH_BASE . "/dist/current"))
 		{
-			$this->say('Please create a Matukio package for testing first - run robo build!');
+			$this->say('Please create a CMC package for testing first - run robo build!');
 
 			return false;
 		}

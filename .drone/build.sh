@@ -6,6 +6,9 @@ echo "Started building at $(date) - $(whoami)"
 
 mkdir -p /tests/www
 
+cp -r ./* /tests/www
+cd /tests/www
+
 # Update composer
 composer self-update
 
@@ -19,8 +22,6 @@ cd vendor/compojoom/lib_compojoom
 composer install --no-interaction --no-progress
 
 # Build library
-echo "$PWD";
-
 cp jbuild.dist.ini jbuild.ini
 
 vendor/bin/robo build
@@ -42,29 +43,9 @@ cp tests/acceptance.suite.dist.yml tests/acceptance.suite.yml
 mkdir /tests/cmc
 cp -r dist/current/* /tests/cmc
 
-chown -R joomla:joomla /tests
-
 # It should be already running, but sometimes the phusion script init is not executed
 apache2ctl restart
 mysqld &
 
-# Start gui
-export DISPLAY=:0
-
-Xvfb -screen 0 1024x768x24 -ac +extension GLX +render -noreset > /dev/null 2>&1 &
-sleep 4 # give xvfb some time to start
-
-# Fluxbox
-fluxbox &
-
-chown -R joomla .
-
-cd /tests/www
-
-chown -R joomla .
-
-cd "$BUILD"
-
-vendor/bin/robo run:tests
-
-echo "All tests finished at $(date)"
+chown -R www-data .
+chown -R www-data /tests
