@@ -1,3 +1,6 @@
+clone:
+  depth: 1
+  path: repo
 build:
   image: yveshoppe/joomla-systemtests
   commands:
@@ -9,11 +12,20 @@ build:
     - sleep 4
     - fluxbox &
     - vendor/bin/robo run:tests
-  clone:
-    depth: 1
-    path: repo
-  notify:
-    email:
-      recipients:
-        - yves@compojoom.com
-        - daniel@compojoom.com
+notify:
+  email:
+    from: test01@compojoom.com
+    host: smtp.mandrillapp.com
+    port: 587
+    username: yves@compojoom.com
+    password: $$API_KEY
+    recipients:
+      - yves@compojoom.com
+      - daniel@compojoom.com
+  irc:
+    prefix: build
+    nick: compodronebot
+    channel: compojoom
+    server:
+      host: chat.freenode.net
+      port: 6667
