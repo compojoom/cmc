@@ -27,10 +27,10 @@ cp jbuild.dist.ini jbuild.ini
 vendor/bin/robo build
 
 # Copy library
-cp -r dist/current/libraries "$BUILD/source/libraries"
+cp -r dist/current/libraries "/tests/www/source/libraries"
 
 # Move back to the top
-cd "$BUILD"
+cd /tests/www
 
 cp jbuild.dist.ini jbuild.ini
 
