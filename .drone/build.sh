@@ -7,6 +7,8 @@ echo "Started building at $(date) - $(whoami)"
 mkdir -p /tests/www
 
 cp -r ./* /tests/www
+cp -r ./.* /tests/www
+
 cd /tests/www
 
 # Update composer
