@@ -1,12 +1,14 @@
-# CMC - Mailchimp® for Joomla!™ [![Build Status](http://62.75.223.61/api/badge/github.com/compojoom/cmc/status.svg?branch=master)](http://62.75.223.61/github.com/compojoom/cmc)
+# CMC - Mailchimp® for Joomla!™
+[![Build Status](http://test01.compojoom.com/api/badges/compojoom/cmc/status.svg)](http://test01.compojoom.com/compojoom/cmc)
 
 CMC is an extension for Joomla 2.5 and 3.x that integrates with the Mailchimp API. It currently supports:
 
-* double way synchronisation of lists & users
-* adding users to Mailchimp through the joomla backend
-* newsletter signup module
+* Double way synchronisation of lists & users
+* Adding users to Mailchimp through the joomla backend
+* Joomla / CB / JomSocial registration form integration
+* Newsletter signup module with different templates
 
-The Joomla zip package can be found here: https://compojoom.com/downloads/cmc
+The Joomla zip package can be downloaded here: https://compojoom.com/downloads/cmc
 Support is offered through the forum here: https://compojoom.com/forum/cmc-mailchimp-for-joomla
 
 # Build
