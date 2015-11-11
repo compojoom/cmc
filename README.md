@@ -9,12 +9,21 @@ CMC is an extension for Joomla 2.5 and 3.x that integrates with the Mailchimp AP
 The Joomla zip package can be found here: https://compojoom.com/downloads/cmc
 Support is offered through the forum here: https://compojoom.com/forum/cmc-mailchimp-for-joomla
 
+# Build
+To build an installable CMC package just run the following commands (create jbuild.ini before):
+
+```bash
+$ composer install
+$ vendor/bin/robo build
+```
+
+After that you find an installable zip file in the dist folder.
+
 # Tests
 To prepare the system tests (Selenium) to be run in your local machine rename the file `tests/acceptance.suite.dist.yml` to `tests/acceptance.suite.yml`. Afterwards, please edit the file according to your system needs.
 
 ```bash
 $ composer install
-$ vendor/bin/robo
 $ vendor/bin/robo run:tests
 ```
 
