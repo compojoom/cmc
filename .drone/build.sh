@@ -24,7 +24,7 @@ cd vendor/compojoom/lib_compojoom
 composer install --no-interaction --no-progress
 
 # Build library
-cp jbuild.dist.ini jbuild.ini
+cp jorobo.dist.ini jorobo.ini
 
 vendor/bin/robo build
 
@@ -34,7 +34,7 @@ cp -r dist/current/libraries "/tests/www/source/libraries"
 # Move back to the top
 cd /tests/www
 
-cp jbuild.dist.ini jbuild.ini
+cp jorobo.dist.ini jorobo.ini
 
 # Build package
 vendor/bin/robo build --dev

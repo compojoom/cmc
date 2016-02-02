@@ -27,7 +27,6 @@ Desktop.ini
 *~
 
 # composer
-composer.lock
 composer.phar
 vendor/*
 
@@ -50,7 +49,7 @@ tests/_output/*
 
 # JBuild related files
 dist/
-jbuild.ini
+jorobo.ini
 
 # Library related files
 source/libraries

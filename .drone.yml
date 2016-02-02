@@ -11,6 +11,7 @@ build:
     - Xvfb -screen 0 1024x768x24 -ac +extension GLX +render -noreset > /dev/null 2>&1 &
     - sleep 4
     - fluxbox &
+    - cp jorobo.dist.ini jorobo.ini
     - vendor/bin/robo run:tests
 notify:
   email:
@@ -22,6 +23,10 @@ notify:
     recipients:
       - yves@compojoom.com
       - daniel@compojoom.com
+    when:
+      success: true
+      failure: true
+      change: true
   irc:
     prefix: build
     nick: compodronebot
@@ -29,3 +34,7 @@ notify:
     server:
       host: chat.freenode.net
       port: 6667
+    when:
+      success: true
+      failure: true
+      change: true
