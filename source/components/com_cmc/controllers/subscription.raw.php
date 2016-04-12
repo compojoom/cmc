@@ -28,7 +28,7 @@ class CmcControllerSubscription extends JControllerLegacy
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		$appl  = JFactory::getApplication();
-		$db    = JFactory::getDBO();
+		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$chimp = new cmcHelperChimp;
@@ -44,9 +44,9 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, true, false);
 
-		if ($chimp->errorCode)
+		if ($chimp->getLastError())
 		{
-			$response['html']  = $chimp->errorMessage;
+			$response['html']  = $chimp->getLastError();
 			$response['error'] = true;
 		}
 		else

@@ -97,7 +97,7 @@ class CmcModelUsers extends JModelList
 			}
 			else
 			{
-				$search = $db->Quote('%' . $db->escape($search, true) . '%');
+				$search = $db->q('%' . $db->escape($search, true) . '%');
 				$query->where('(u.email LIKE ' . $search . ')');
 			}
 		}
@@ -106,7 +106,7 @@ class CmcModelUsers extends JModelList
 
 		if (!empty($status))
 		{
-			$query->where('u.status = ' . $db->Quote($status));
+			$query->where('u.status = ' . $db->q($status));
 		}
 
 		$list = $this->getState('filter.list');

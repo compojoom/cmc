@@ -44,8 +44,9 @@ class CmcHelperList
 	 */
 	public static function getMergeFields($listId)
 	{
-		$api = new cmcHelperChimp;
+		$api = new CmcHelperChimp;
 		$fields = $api->listMergeVars($listId);
+
 		$key = 'tag';
 		$val = 'name';
 
@@ -53,6 +54,7 @@ class CmcHelperList
 
 		if ($fields)
 		{
+
 			foreach ($fields as $field)
 			{
 				$choices = '';
@@ -67,17 +69,17 @@ class CmcHelperList
 					$choices = substr($choices, 0, -2);
 				}
 
-				$req = ($field['req']) ? 1 : 0;
+				$req = ($field['required']) ? 1 : 0;
 
 				if ($req)
 				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
+					$options[] = array($key => $field[$key] . ';' . $field['type'] . ';' . $field['name']
 						. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
 					);
 				}
 				else
 				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+					$options[] = array($key => $field[$key] . ';' . $field['type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
 				}
 			}
 		}
@@ -100,6 +102,8 @@ class CmcHelperList
 		$val = 'name';
 		$options = false;
 
+		return $options;
+		
 		if ($interests)
 		{
 			foreach ($interests as $interest)

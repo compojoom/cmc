@@ -19,7 +19,7 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmc'))
 	return false;
 }
 
-require_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
+// require_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
 
 // Load Compojoom library
 require_once JPATH_LIBRARIES . '/compojoom/include.php';
@@ -34,15 +34,20 @@ JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
 
 require_once JPATH_COMPONENT . '/controller.php';
 
-JLoader::register('MCAPI', JPATH_COMPONENT_ADMINISTRATOR . '/libraries/mailchimp/MCAPI.class.php');
-JLoader::discover('cmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
+// TODO move to autoloader
+require_once  JPATH_COMPONENT_ADMINISTRATOR . "/libraries/drewm/mailchimp-api/MailChimp.php";
+require_once  JPATH_COMPONENT_ADMINISTRATOR . "/libraries/drewm/mailchimp-api/Batch.php";
+
+JLoader::discover('CmcHelper', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/');
+JLoader::register('CmcView', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/CmcView.php');
+JLoader::register('CmcViewBackend', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/CmcViewBackend.php');
 
 /*
- * this part is a little crazy because of the redirects...
+ * This part is a little crazy because of the redirects...
  * Show a warning only if we are in the cpanel view
  * Redirect only if we are not in the cpanel view
  */
-if (!cmcHelperBasic::checkRequiredSettings() && $input->getCmd('task', '') !== 'update.updateinfo')
+if (!CmcHelperBasic::checkRequiredSettings() && $input->getCmd('task', '') !== 'update.updateinfo')
 {
 	if ($input->getCmd('view', '') == 'cpanel')
 	{

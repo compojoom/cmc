@@ -9,8 +9,6 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
-
-defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controller');
 
 JLoader::discover('CmcSyncer', JPATH_COMPONENT_ADMINISTRATOR . '/libraries/syncer');
@@ -43,10 +41,10 @@ class CmcControllerSync extends CmcController
 		$lists = $input->getString('lists');
 
 		$chimp     = new CmcHelperChimp;
-		$listStats = $chimp->lists(array('list_id' => $lists));
+		$listStats = $chimp->lists($lists);
 		$names     = array();
 
-		foreach ($listStats['data'] as $key => $list)
+		foreach ($listStats as $key => $list)
 		{
 			$state->lists[$key]           = array();
 			$state->lists[$key]['mc_id']  = $list['id'];
@@ -135,34 +133,10 @@ class CmcControllerSync extends CmcController
 		$chimp = new CmcHelperChimp;
 
 		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', null, $state->offset, $state->batchSize);
-
-		// Split the array of emails to 50 items - the max number possible for the listMemberInfo function
-		$emails = array_chunk(
-			array_map(
-				function ($ar)
-				{
-					return $ar['email'];
-				},
-				$members['data']
-			),
-			50
-		);
-
-		$info = array();
-
-		// Let's fetch all the info about our members
-		foreach ($emails as $chunks)
-		{
-			$memberInfo = $chimp->listMemberInfo($state->lists[0]['mc_id'], $chunks);
-
-			if (!$memberInfo['errors'])
-			{
-				$info = array_merge($info, $memberInfo['data']);
-			}
-		}
+		$members = $members['members'];
 
 		// Save the users in our database
-		CmcHelperUsers::save($info, $state->lists[0]['id'], $state->lists[0]['mc_id']);
+		CmcHelperUsers::save($members, $state->lists[0]['id'], $state->lists[0]['mc_id']);
 
 		$pages = $state->lists[0]['toSync'] / $state->batchSize;
 

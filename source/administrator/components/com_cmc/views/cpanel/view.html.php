@@ -16,7 +16,7 @@ jimport('joomla.application.component.view');
  *
  * @since  1.3
  */
-class CmcViewCpanel extends JViewLegacy
+class CmcViewCpanel extends CmcViewBackend
 {
 	/**
 	 * Displays the view
@@ -47,6 +47,8 @@ class CmcViewCpanel extends JViewLegacy
 	 */
 	public function addToolbar()
 	{
+		$this->setCTitle(JText::_('COM_CMC_CPANEL'), JText::_(''), 'cpanel');
+
 		JToolBarHelper::title(JText::_('COM_CMC_CPANEL'), 'cpanel');
 		JToolBarHelper::preferences('com_cmc');
 	}
@@ -60,12 +62,13 @@ class CmcViewCpanel extends JViewLegacy
 	{
 		$cache = JFactory::getCache('mod_ccc_cmc_mailchimp', 'output');
 		$cache->setCaching(true);
-		$details = $cache->get('details');
+		$details = null; // $cache->get('details');
 
 		if (!$details)
 		{
-			$chimp = new cmcHelperChimp;
-			$data = $chimp->getAccountDetails();
+			$chimp = new CmcHelperChimp;
+			$data = $chimp->get('/');
+
 			$details = serialize($data);
 			$cache->store(($details), 'details');
 		};

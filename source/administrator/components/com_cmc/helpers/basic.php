@@ -72,13 +72,13 @@ class CmcHelperBasic
 	 */
 	public static function unsubscribeList($user)
 	{
-		$api = new cmcHelperChimp;
+		$api = new CmcHelperChimp;
 
 		$api->listUnsubscribe($user->list_id, $user->email, true);
 
-		if ($api->errorCode)
+		if ($api->getLastError())
 		{
-			throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->errorMessage, $api->errorCode);
+			throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->getLastError(), 500);
 		}
 
 		return true;
@@ -109,8 +109,6 @@ class CmcHelperBasic
 		}
 
 		return $result;
-
-
 	}
 
 	/**

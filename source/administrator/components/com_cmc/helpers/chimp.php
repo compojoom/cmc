@@ -8,7 +8,6 @@
  */
 
 defined('_JEXEC') or die('Restricted access');
-JLoader::register('MCAPI', JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/mailchimp/MCAPI.class.php');
 
 /**
  * Class cmcHelperChimp
@@ -18,8 +17,15 @@ JLoader::register('MCAPI', JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/
  *
  * @since  1.0
  */
-class CmcHelperChimp extends MCAPI
+class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 {
+	/**
+	 * The MailChimp API Key
+	 *
+	 * @var    null|string
+	 */
+	public $api_key = null;
+
 	/**
 	 * The constructor
 	 *
@@ -39,6 +45,183 @@ class CmcHelperChimp extends MCAPI
 			$secure = $config->get('force_ssl', 0);
 		}
 
-		parent::MCAPI($key, $secure);
+		$this->api_key = $key;
+
+		parent::__construct($key);
+	}
+
+	/**
+	 * Get the account details (/) of the mailchimp account
+	 *
+	 * @return  array|false
+	 */
+	public function getAccountDetails()
+	{
+		return $this->get("/");
+	}
+
+	/**
+	 * Get the lists information
+	 *
+	 * @param   string|null  $ids  The listid or null for all
+	 *
+	 * @return  array|false  The list information
+	 */
+	public function lists($ids = null)
+	{
+		if (!$ids)
+		{
+			$lists = $this->get('/lists');
+		}
+		else
+		{
+			$lists = array();
+
+			if (is_array($ids))
+			{
+				foreach ($ids as $id)
+				{
+					$lists[] = $this->get('/lists/' . $id);
+				}
+			}
+			else
+			{
+				$lists[] = $this->get('/lists/' . $ids);
+			}
+		}
+
+		return $lists;
+	}
+
+	/**
+	 * Get member details
+	 *
+	 * @param   string  $listid  The list  id
+	 * @param   string  $status  The subscription status
+	 * @param   string  $magic
+	 * @param   int     $offset
+	 * @param   int     $limit
+	 *
+	 * @return  array|false  The member details
+	 */
+	public function listMembers($listid, $status, $magic, $offset, $limit)
+	{
+		$args = array();
+
+		if ($status)
+		{
+			$args["status"] = $status;
+		}
+
+		return $this->get('/lists/' . $listid . '/members', $args);
+	}
+
+	/**
+	 * Get the member info for the given email address and list
+	 *
+	 * @param   string  $listid  The list id
+	 * @param   string  $email   The email
+	 *
+	 * @return  array|false
+	 */
+	public function listMemberInfo($listid, $email)
+	{
+		$subscriber_hash = $this->subscriberHash($email);
+
+		return $this->get('/lists/' . $listid . '/members/' . $subscriber_hash);
+	}
+
+	/**
+	 * Get the merge vars for the listid
+	 *
+	 * @param   string  $listid  The list id
+	 *
+	 * @return  mixed
+	 */
+	public function listMergeVars($listid)
+	{
+		$fields = $this->get('/lists/' . $listid . '/merge-fields');
+		return $fields['merge_fields'];
+	}
+
+	/**
+	 * Get the interest groups
+	 *
+	 * @param   string  $listid  The list id
+	 *
+	 * @return  array|false
+	 */
+	public function listInterestGroupings($listid)
+	{
+		return $this->get('/lists/' . $listid . '/interest-categories');
+	}
+
+	/**
+	 * Unsubscribe from list
+	 *
+	 * @param   string  $listid  The list id
+	 * @param   string  $email   The email
+	 *
+	 * @return  array|false
+	 */
+	public function listUnsubscribe($listid, $email)
+	{
+		$subscriber_hash = $this->subscriberHash($email);
+
+		return $this->delete('/lists/' . $listid . '/members/' . $subscriber_hash);
+	}
+
+	/**
+	 * Add ecommerce order
+	 *
+	 * @param  object  $order  The order details
+	 *
+	 * @throws  Exception
+
+	 */
+	public function ecommOrderAdd($order)
+	{
+		throw new Exception("Unimplemented", 500);
+	}
+
+	/**
+	 * Unimplemented in v3 API!
+	 * @param   string  $email   The email
+	 *
+	 * @deprecated  Not implemented in v3
+	 *
+	 * @throws Exception
+	 */
+	public function listsForEmail($email)
+	{
+		throw new Exception("Unimplemented not available in v3", 500);
+	}
+
+	/**
+	 * @param   string  $id              The list id
+	 * @param   string  $email_address   The email
+	 * @param   array   $merge_vars      Merge vars
+	 * @param   array   $interests       Merge vars
+	 * @param string $email_type
+	 * @param bool   $double_optin
+	 * @param bool   $update_existing
+	 * @param bool   $replace_interests
+	 * @param bool   $send_welcome
+	 *
+	 * @return array|false
+	 */
+	public function listSubscribe($id, $email_address, $merge_vars = null, $interests = null, $email_type = 'html',
+	                              $double_optin = true, $update_existing = false, $replace_interests = true,
+	                              $send_welcome = false)
+	{
+		$result = $this->post("lists/$id/members", [
+			'email_address' => $email_address,
+			'status'        => 'subscribed',
+			'merge_fields'  => $merge_vars,
+			'interests'     => $interests,
+			'email_type'    => $email_type
+		]);
+
+		return $result;
 	}
 }

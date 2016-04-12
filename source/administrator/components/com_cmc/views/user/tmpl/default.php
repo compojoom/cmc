@@ -134,7 +134,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 						</label>
 						<div class="col-sm-10">
 							<p class="form-control-static">
-								<?php echo ArrayHelper::toString($this->user->clients ? json_decode($this->user->clients, true) : array() , " = ", ", "); ?>
+								<?php echo $this->user->clients; ?>
 							</p>
 						</div>
 					</div>

@@ -22,7 +22,9 @@ class CmcHelperUsers
 			'column' => 'id'
 		),
 		'list_id'          => array(),
-		'email'            => array(),
+		'email'            => array(
+			'column' => 'email_address'
+		),
 		'email_type'       => array(),
 		'ip_signup'        => array(),
 		'timestamp_signup' => array(),
@@ -30,25 +32,35 @@ class CmcHelperUsers
 		'ip_opt'           => array(),
 		'timestamp_opt'    => array(),
 		'member_rating'    => array(),
-		'info_changed'     => array(),
-		'web_id'           => array(),
+		'info_changed'     => array(
+			'column' => 'last_changed'
+		),
+		'web_id'           => array(
+			'column' => 'unique_email_id'
+		),
 		'language'         => array(),
-		'is_gmonkey'       => array(),
+		// 'is_gmonkey'       => array(),
 		'geo'              => array(
+			'column' => 'location',
 			'handle' => 'json_encode'
 		),
 		'clients'          => array(
-			'handle' => 'json_encode'
+			'column' => 'email_client'
 		),
 		'merges'           => array(
+			'column' => 'merge_fields',
 			'handle' => 'json_encode'
 		),
-		'timestamp'        => array(),
+		'timestamp'        => array(
+			'column' => 'timestamp_opt'
+		),
 		'status'           => array(),
 		'static_segments' => array(
+			'column' => 'interests',
 			'handle' => 'json_encode'
 		)
 	);
+
 
 	/**
 	 * Saves a batch of users to the db
@@ -69,7 +81,7 @@ class CmcHelperUsers
 		// Get all e-mails from the array
 		$emails = array_map(
 			function ($ar) {
-				return $ar['email'];
+				return $ar['email_address'];
 			}, $users
 		);
 
@@ -78,7 +90,9 @@ class CmcHelperUsers
 
 		foreach ($users as $member)
 		{
+
 			$item = self::bind($member, $jUsers);
+
 			array_walk(
 				$item,
 				function(&$value) use ($db) {
@@ -91,7 +105,7 @@ class CmcHelperUsers
 		}
 
 		$query->insert('#__cmc_users')
-			->columns(implode(',', array_keys(self::$bindings)) . ',user_id,firstname, lastname,created_user_id,created_time,modified_user_id,modified_time,query_data ')
+			->columns(implode(',', array_keys(self::$bindings)) . ', user_id, firstname, lastname,created_user_id,created_time,modified_user_id,modified_time,query_data ')
 			->values($members);
 
 		$db->setQuery($query);
@@ -109,21 +123,24 @@ class CmcHelperUsers
 	 */
 	public static function bind($member, $jUsers)
 	{
-		$user    = JFactory::getUser();
+		$user = JFactory::getUser();
 
 		$item = array();
 
+		// Nuts, just nuts! KISS!
 		foreach (self::$bindings as $bkey => $bvalue)
 		{
 			if (!empty($bvalue))
 			{
+				$handle = isset($bvalue['handle']) ? $bvalue['handle'] : "";
+
 				if (isset($bvalue['column']) && isset($member[$bvalue['column']]))
 				{
-					$item[$bkey] = isset($bvalue['handle']) ? $member[$bvalue['handle']]($member[$bvalue['column']]) : $member[$bvalue['column']];
+					$item[$bkey] = $handle ? $handle($member[$bvalue['column']]) : $member[$bvalue['column']];
 				}
 				else
 				{
-					$item[$bkey] = isset($bvalue['handle']) ? $bvalue['handle']($member[$bkey]) : $member[$bkey];
+					$item[$bkey] = $handle ? $handle($member[$bkey]) : $member[$bkey];
 				}
 			}
 			else
@@ -132,9 +149,9 @@ class CmcHelperUsers
 			}
 		}
 
-		$item['user_id'] = isset($jUsers[$member['email']]) ? $jUsers[$member['email']]->id : 0;
-		$item['firstname'] = $member['merges']['FNAME'];
-		$item['lastname'] = $member['merges']['LNAME'];
+		$item['user_id'] = isset($jUsers[$member['email_address']]) ? $jUsers[$member['email_address']]->id : 0;
+		$item['firstname'] = $member['merge_fields']['FNAME'];
+		$item['lastname'] = $member['merge_fields']['LNAME'];
 		$item['created_user_id']  = $user->id;
 		$item['created_time']     = JFactory::getDate()->toSql();
 		$item['modified_user_id'] = $user->id;

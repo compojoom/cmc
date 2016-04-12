@@ -60,6 +60,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 			$input->get('type', ''),
 			$input->get('data', '', 'array')
 		);
+
 		JLog::add(json_encode($message));
 
 		switch ($type)
@@ -195,7 +196,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 		 * "data[reason]": "hard"
 		 */
 
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$email = $data['email'];
 
@@ -288,7 +289,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 		 * "data[ip_opt]": "10.20.10.30"
 		 */
 
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$mc_id = $data['id'];

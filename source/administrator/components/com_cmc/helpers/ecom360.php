@@ -75,7 +75,7 @@ class CmcHelperEcom360
         $order["campaign_id"] = $mc_cid; // Optional
         $order["items"] = $products;
 
-        $api = new cmcHelperChimp();
+        $api = new CmcHelperChimp();
         $api->ecommOrderAdd($order);
 
         if ($api->errorCode) {

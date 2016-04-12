@@ -63,7 +63,7 @@ class CmcModelLists extends JModelList
 			}
 			else
 			{
-				$search = $db->Quote('%' . $db->escape($search, true) . '%');
+				$search = $db->q('%' . $db->escape($search, true) . '%');
 				$query->where('(cc.list_name LIKE ' . $search . ')');
 			}
 		}
