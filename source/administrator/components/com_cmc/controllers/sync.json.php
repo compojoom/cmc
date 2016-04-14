@@ -132,7 +132,7 @@ class CmcControllerSync extends CmcController
 
 		$chimp = new CmcHelperChimp;
 
-		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', null, $state->offset, $state->batchSize);
+		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', $state->offset, $state->batchSize);
 		$members = $members['members'];
 
 		// Save the users in our database

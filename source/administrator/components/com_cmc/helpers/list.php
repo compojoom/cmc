@@ -54,14 +54,13 @@ class CmcHelperList
 
 		if ($fields)
 		{
-
 			foreach ($fields as $field)
 			{
 				$choices = '';
 
-				if (isset($field['choices']))
+				if (isset($field['options']['choices']))
 				{
-					foreach ($field['choices'] as $c)
+					foreach ($field['options']['choices'] as $c)
 					{
 						$choices .= $c . '##';
 					}
@@ -99,26 +98,28 @@ class CmcHelperList
 		$api = new cmcHelperChimp;
 		$interests = $api->listInterestGroupings($listId);
 		$key = 'id';
-		$val = 'name';
+		$val = 'title';
 		$options = false;
 
-		return $options;
-		
 		if ($interests)
 		{
 			foreach ($interests as $interest)
 			{
-				if ($interest['form_field'] != 'hidden')
+				if ($interest['type'] != 'hidden')
 				{
+					$details = $api->listIntegerestGroupingsField($listId, $interest['id']);
+
 					$groups = '';
 
-					foreach ($interest['groups'] as $ig)
+					foreach ($details as $ig)
 					{
 						$groups .= $ig['name'] . '##' . $ig['name'] . '####';
 					}
 
 					$groups = substr($groups, 0, -4);
-					$options[] = array($key => $interest[$key] . ';' . $interest['form_field'] . ';' . $interest['name'] . ';' . $groups, $val => $interest[$val]);
+
+					$options[] = array($key => $interest[$key] . ';' . $interest['type'] . ';'
+						. $interest['title'] . ';' . $groups, $val => $interest[$val]);
 				}
 			}
 		}

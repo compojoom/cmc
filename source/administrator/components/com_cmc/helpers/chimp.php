@@ -98,13 +98,12 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 *
 	 * @param   string  $listid  The list  id
 	 * @param   string  $status  The subscription status
-	 * @param   string  $magic
 	 * @param   int     $offset
 	 * @param   int     $limit
 	 *
 	 * @return  array|false  The member details
 	 */
-	public function listMembers($listid, $status, $magic, $offset, $limit)
+	public function listMembers($listid, $status, $offset = 0, $limit = 50)
 	{
 		$args = array();
 
@@ -112,6 +111,9 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		{
 			$args["status"] = $status;
 		}
+
+		$args["offset"] = $offset;
+		$args["count"] = $limit;
 
 		return $this->get('/lists/' . $listid . '/members', $args);
 	}
@@ -140,7 +142,11 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public function listMergeVars($listid)
 	{
-		$fields = $this->get('/lists/' . $listid . '/merge-fields');
+		// Normally this should be enough..
+		$params = array('count' => 1000);
+
+		$fields = $this->get('/lists/' . $listid . '/merge-fields', $params);
+
 		return $fields['merge_fields'];
 	}
 
@@ -153,7 +159,20 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public function listInterestGroupings($listid)
 	{
-		return $this->get('/lists/' . $listid . '/interest-categories');
+		$params = array('count' => 1000);
+
+		$interests = $this->get('/lists/' . $listid . '/interest-categories', $params);
+
+		return isset($interests['categories']) ? $interests['categories'] : null;
+	}
+
+	public function listIntegerestGroupingsField($listId, $fieldId)
+	{
+		$params = array('count' => 1000);
+
+		$fields = $this->get('/lists/' . $listId . '/interest-categories/' . $fieldId . "/interests", $params);
+
+		return isset($fields['interests']) ? $fields['interests'] : null;
 	}
 
 	/**

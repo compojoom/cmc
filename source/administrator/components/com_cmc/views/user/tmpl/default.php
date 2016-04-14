@@ -12,13 +12,15 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\Utilities\ArrayHelper;
 
-JHTML::_('behavior.tooltip');
+JHtml::_('behavior.tooltip');
 
-JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
+JHtml::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 
 $form = $this->form;
-?>
-<?php
+
+var_dump($form);
+die;
+
 echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '');
 ?>
 	<div class="box-info">
@@ -59,9 +61,9 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 						<?php endforeach; ?>
 					<?php endforeach; ?>
 
+					<!-- Interests / category groups -->
 					<?php $fieldsets = $form->getFieldsets('cmc_interests'); ?>
 					<?php foreach ($fieldsets as $key => $value) : ?>
-
 
 						<?php $fields = $form->getFieldset($key); ?>
 
@@ -88,7 +90,6 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 						<?php endforeach; ?>
 
 					<?php endforeach; ?>
-
 
 					<div class="form-group">
 						<?php echo $this->form->getLabel('list_id'); ?>
@@ -175,7 +176,7 @@ echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '')
 				</fieldset>
 
 				<input type="hidden" name="task" value=""/>
-				<?php echo JHTML::_('form.token'); ?>
+				<?php echo JHtml::_('form.token'); ?>
 			</form>
 		</div>
 
