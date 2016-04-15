@@ -75,9 +75,9 @@ var cmcSync = function(){
 				}
 			} catch (ignore) {
 				if (error == '') {
-					error = Joomla.JText._('COM_cmc_NO_ERROR_RETURNED');
+					error = Joomla.JText._('COM_CMC_NO_ERROR_RETURNED');
 				}
-				$('#cmc-progress-header').html(Joomla.JText._('COM_cmc_AN_ERROR_HAS_OCCURRED')).addClass('cmc-error');
+				$('#cmc-progress-header').html(Joomla.JText._('COM_CMC_AN_ERROR_HAS_OCCURRED')).addClass('cmc-error');
 				$('#cmc-progress-message').html(error).addClass('cmc-error');
 			}
 		}
@@ -86,12 +86,15 @@ var cmcSync = function(){
 
 	var handleFailure = function (xhr) {
 		json = (typeof xhr == 'object' && xhr.responseText) ? xhr.responseText : null;
+
+		console.log(json);
+
 		json = json ? JSON.decode(json, true) : null;
 		if (json) {
 			json = json.responseText != null ? Json.evaluate(json.responseText, true) : json;
 		}
 		var header = json ? json.header : Joomla.JText._('COM_CMC_AN_ERROR_HAS_OCCURRED');
-		var message = json ? json.message : Joomla.JText._('COM_cmc_MESSAGE_RETURNED') + ' <br />' + json;
+		var message = json ? json.message : Joomla.JText._('COM_CMC_MESSAGE_RETURNED') + ' <br />' + json;
 		$('cmc-progress-header').html(header).addClass('cmc-error');
 		$('cmc-progress-message').html(message).addClass('cmc-error');
 	};

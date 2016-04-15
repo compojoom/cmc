@@ -1,9 +1,10 @@
 <?php
 /**
- * @author     Daniel Dimitrov <daniel@compojoom.com>
- * @date       28.08.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -166,6 +167,14 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		return isset($interests['categories']) ? $interests['categories'] : null;
 	}
 
+	/**
+	 * Get field details (options etc.)
+	 *
+	 * @param   string  $listId   The list id
+	 * @param   string  $fieldId  The field id
+	 *
+	 * @return  array|null
+	 */
 	public function listIntegerestGroupingsField($listId, $fieldId)
 	{
 		$params = array('count' => 1000);
@@ -233,7 +242,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	                              $double_optin = true, $update_existing = false, $replace_interests = true,
 	                              $send_welcome = false)
 	{
-		$result = $this->post("lists/$id/members", [
+		$result = $this->post("lists/" . $id . "/members", [
 			'email_address' => $email_address,
 			'status'        => 'subscribed',
 			'merge_fields'  => $merge_vars,

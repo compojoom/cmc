@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -16,7 +16,7 @@ jimport('joomla.application.component.view');
  *
  * @since  1.0
  */
-class CmcViewUsers extends JViewLegacy
+class CmcViewUsers extends CmcViewBackend
 {
 	/**
 	 * Displays the view
@@ -59,6 +59,8 @@ class CmcViewUsers extends JViewLegacy
 	 */
 	public function addToolbar()
 	{
+		$this->setCTitle(JText::_('COM_CMC_USERS'), JText::_(''), 'users');
+
 		// Set toolbar items for the page
 		JToolBarHelper::addNew('user.add');
 		JToolBarHelper::editList('user.edit');

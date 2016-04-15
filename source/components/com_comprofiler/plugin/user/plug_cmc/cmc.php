@@ -1,13 +1,12 @@
 <?php
 /**
- * Compojoom Community-Builder Plugin
- * @Copyright (C) 2013 - Yves Hoppe <yves@compojoom.com>
- * @Copyright (C) 2013 - Daniel Dimitrov <daniel@compojoom.com>
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 $
- **/
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
+ *
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
 if (!(defined('_VALID_CB') || defined('_JEXEC') || defined('_VALID_MOS')))
 {

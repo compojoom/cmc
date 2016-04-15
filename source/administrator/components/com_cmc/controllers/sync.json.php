@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       28.08.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -132,7 +132,8 @@ class CmcControllerSync extends CmcController
 
 		$chimp = new CmcHelperChimp;
 
-		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', $state->offset, $state->batchSize);
+		$members = $chimp->listMembers($state->lists[0]['mc_id'], 'subscribed', $state->offset * $state->batchSize, $state->batchSize);
+
 		$members = $members['members'];
 
 		// Save the users in our database
@@ -164,7 +165,6 @@ class CmcControllerSync extends CmcController
 			{
 				$state->header  = JText::_('COM_CMC_SYNC_COMPLETE');
 				$state->message = '<div class="alert alert-info">' . JText::_('COM_CMC_SYNC_COMPLETE_DESC') . '</div>';
-
 			}
 		}
 
