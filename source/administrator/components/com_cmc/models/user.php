@@ -79,12 +79,17 @@ class CmcModelUser extends JModelAdmin
 				CmcHelperList::getMergeFields($listId)
 			);
 
-			$interests = array_map(
-				function($value) {
-					return $value['id'];
-				},
-				CmcHelperList::getInterestsFields($listId)
-			);
+			$interests = CmcHelperList::getInterestsFields($listId);
+
+			if ($interests)
+			{
+				$interests = array_map(
+					function($value) {
+						return $value['id'];
+					},
+					$interests
+				);
+			}
 
 			$params->set('fields', $fields);
 			$params->set('interests', $interests);

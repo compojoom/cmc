@@ -31,19 +31,12 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * The constructor
 	 *
 	 * @param   string  $key     - the mailchimp api key
-	 * @param   string  $secure  - use secure connection
 	 */
-	public function __construct($key = '', $secure = '')
+	public function __construct($key = '')
 	{
 		if (!$key)
 		{
 			$key = JComponentHelper::getParams('com_cmc')->get('api_key', '');
-		}
-
-		if (!$secure)
-		{
-			$config = JFactory::getConfig();
-			$secure = $config->get('force_ssl', 0);
 		}
 
 		$this->api_key = $key;
@@ -99,8 +92,8 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 *
 	 * @param   string  $listid  The list  id
 	 * @param   string  $status  The subscription status
-	 * @param   int     $offset
-	 * @param   int     $limit
+	 * @param   int     $offset  The offset where to begin with
+	 * @param   int     $limit   The limit
 	 *
 	 * @return  array|false  The member details
 	 */
@@ -116,7 +109,22 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		$args["offset"] = $offset;
 		$args["count"] = $limit;
 
-		return $this->get('/lists/' . $listid . '/members', $args);
+		$members = $this->get('/lists/' . $listid . '/members', $args);
+		$members = $members['members'];
+
+		// Add email address to merge vars
+		for ($i = 0; $i < count($members); $i++)
+		{
+			$members[$i]['merge_fields'] = array_merge(array("EMAIL" => $members[$i]['email_address']), $members[$i]['merge_fields']);
+
+			// Always get interests
+			if (!isset($members[$i]['interests']))
+			{
+				$members[$i]['interests'] = array();
+			}
+		}
+
+		return $members;
 	}
 
 	/**
@@ -146,9 +154,23 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		// Normally this should be enough..
 		$params = array('count' => 1000);
 
+		// We need to merge the email field here
+		$email = array(
+			'merge_id' => 1,
+			'tag' => 'EMAIL',
+			'name' => JText::_('COM_CMC_EMAIL'),
+			'type' => 'text',
+			'required' => true,
+			'public' => true,
+			'display_order' => 1,
+			'list_id' => $listid
+		);
+
 		$fields = $this->get('/lists/' . $listid . '/merge-fields', $params);
 
-		return $fields['merge_fields'];
+		$fields = array_merge(array($email), $fields['merge_fields']);
+
+		return $fields;
 	}
 
 	/**
@@ -214,6 +236,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 
 	/**
 	 * Unimplemented in v3 API!
+	 *
 	 * @param   string  $email   The email
 	 *
 	 * @deprecated  Not implemented in v3
@@ -230,11 +253,6 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * @param   string  $email_address   The email
 	 * @param   array   $merge_vars      Merge vars
 	 * @param   array   $interests       Merge vars
-	 * @param string $email_type
-	 * @param bool   $double_optin
-	 * @param bool   $update_existing
-	 * @param bool   $replace_interests
-	 * @param bool   $send_welcome
 	 *
 	 * @return array|false
 	 */

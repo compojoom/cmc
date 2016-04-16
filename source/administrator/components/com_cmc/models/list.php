@@ -66,11 +66,9 @@ class CmcModelList extends JModelAdmin
 		$item = array();
 		$item['id'] = null;
 		$item['mc_id'] = $list['id'];
-		// $item['web_id'] = $list['web_id'];
 		$item['list_name'] = $list['name'];
 		$item['date_created'] = $list['date_created'];
 		$item['email_type_option'] = $list['email_type_option'];
-		// $item['use_awesomebar'] = $list['use_awesomebar'];
 		$item['default_from_name'] = $list['campaign_defaults']['from_name'];
 		$item['default_from_email'] = $list['campaign_defaults']['from_email'];
 		$item['default_subject'] = $list['campaign_defaults']['subject'];
