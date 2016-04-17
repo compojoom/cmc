@@ -104,7 +104,7 @@ class CmcHelperRegistration
 
 		if ($chimp->getLastError())
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_WERE_NOT_SUBSCRIBED_TO_NEWSLETTER') . ':' . $chimp->errorMessage);
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_WERE_NOT_SUBSCRIBED_TO_NEWSLETTER') . ':' . $chimp->getLastError());
 
 			return false;
 		}
@@ -166,6 +166,7 @@ class CmcHelperRegistration
 			}
 		}
 
+		// TODO remove
 		if (isset($params['interests']))
 		{
 			foreach ($params['interests'] as $key => $interest)
@@ -186,7 +187,7 @@ class CmcHelperRegistration
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
 		// Double OPTIN false
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, $params['interests'], 'html', false, true, true, false);
 
 		if (!$chimp->getLastError())
 		{
@@ -264,12 +265,10 @@ class CmcHelperRegistration
 
 		$chimp = new cmcHelperChimp;
 
-		$userlists = $chimp->listsForEmail($user->email);
-
 		// Hidden field
 		$listId = $postdata['listid'];
 
-		if ($userlists && in_array($listId, $userlists))
+		if ($chimp->isSubscribed($listId, $user->email))
 		{
 			// Already in list, we don't update here, we update on form send
 			return null;
@@ -295,7 +294,7 @@ class CmcHelperRegistration
 			}
 		}
 
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+		$result = $chimp->listSubscribe($listId, $user->email, $mergeVars, $params['interests'], 'html', false, true, true, false);
 
 		if (!$chimp->getLastError())
 		{

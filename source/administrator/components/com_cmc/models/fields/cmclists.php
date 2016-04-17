@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::register('CmcField', JPATH_ADMINISTRATOR . '/components/com_cmc/models/fields/field.php');
 JLoader::register('cmcHelperChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/chimp.php');
 
+
 /**
  * Class JFormFieldCmclists
  *
@@ -34,10 +35,11 @@ class JFormFieldCmclists extends CmcField
 		$val = 'name';
 		$options[] = array($key => '', $val => '-- ' . JText::_('MOD_CMC_PLEASE_SELECT_A_LIST') . ' --');
 
-		foreach ($lists['data'] as $list)
+		foreach ($lists['lists'] as $list)
 		{
 			$options[] = array($key => $list[$key], $val => $list[$val]);
 		}
+
 
 		$option = JFactory::getApplication()->input->get('option');
 		$controller = in_array($option, array('com_modules', 'com_advancedmodules')) ? 'module' : 'plugin';
@@ -46,7 +48,8 @@ class JFormFieldCmclists extends CmcField
 
 		if ($options)
 		{
-			$content = JHtml::_('select.genericlist', $options, 'jform[params][listid]', $attribs, $key, $val, $this->value, $this->id);
+			$content = JHtml::_('select.genericlist', $options, 'jform[params][listid]',
+				$attribs, $key, $val, $this->value, $this->id);
 		}
 
 		return $content;

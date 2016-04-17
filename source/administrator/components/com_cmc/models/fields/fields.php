@@ -28,6 +28,12 @@ class JFormFieldFields extends CmcField
 	public function getInput()
 	{
 		$listid = $this->form->getValue('listid', 'params');
+
+		if (!$listid)
+		{
+			return "";
+		}
+
 		$options = CmcHelperList::getMergeFields($listid);
 		$key = 'tag';
 		$val = 'name';
@@ -36,7 +42,10 @@ class JFormFieldFields extends CmcField
 
 		if ($options)
 		{
-			$content = JHtml::_('select.genericlist', $options, 'jform[params][fields][]', $attribs, $key, $val, $this->value, $this->id);
+			$content = JHtml::_(
+				'select.genericlist', $options, 'jform[params][fields][]',
+				$attribs, $key, $val, $this->value, $this->id
+			);
 		}
 		else
 		{

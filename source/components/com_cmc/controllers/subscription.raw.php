@@ -42,7 +42,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		$listId = $form['cmc']['listid'];
 		$email  = $mergeVars['EMAIL'];
 
-		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, true, false);
+		$memberInfo = $chimp->listSubscribe($listId, $email, $mergeVars, $mergeVars['GROUPINGS'], 'html', true, true, true, false);
 
 		if ($chimp->getLastError())
 		{
@@ -52,7 +52,6 @@ class CmcControllerSubscription extends JControllerLegacy
 		else
 		{
 			// Get the member info from mailchimp
-			$memberInfo = $chimp->listMemberInfo($listId, $email);
 			$status     = 'applied';
 
 			// User was found on list

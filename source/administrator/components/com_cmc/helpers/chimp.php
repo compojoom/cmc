@@ -10,6 +10,10 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+// TODO move to autoloader
+require_once  JPATH_ADMINISTRATOR . "/components/com_cmc/libraries/drewm/mailchimp-api/MailChimp.php";
+require_once  JPATH_ADMINISTRATOR . "/components/com_cmc/libraries/drewm/mailchimp-api/Batch.php";
+
 /**
  * Class cmcHelperChimp
  *
@@ -248,25 +252,106 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		throw new Exception("Unimplemented not available in v3", 500);
 	}
 
+	public function isSubscribed($listId, $email)
+	{
+		$subscriber_hash = $this->subscriberHash($email);
+
+		$result = $this->get('lists/' . $listId . "/members/" . $subscriber_hash);
+
+		// Not existing member
+		if ($result['status'] == 404)
+		{
+			return false;
+		}
+
+		return $result['status'] == 'subscribed' ? true : false;
+	}
+
 	/**
-	 * @param   string  $id              The list id
+	 * Subscribe / Update some one to the list
+	 *
+	 * @param   string  $listId          The list id
 	 * @param   string  $email_address   The email
 	 * @param   array   $merge_vars      Merge vars
 	 * @param   array   $interests       Merge vars
 	 *
 	 * @return array|false
 	 */
-	public function listSubscribe($id, $email_address, $merge_vars = null, $interests = null, $email_type = 'html',
-	                              $double_optin = true, $update_existing = false, $replace_interests = true,
+	public function listSubscribe($listId,
+	                              $email_address,
+	                              $merge_vars = null,
+	                              $interests = null,
+	                              $email_type = 'html',
+	                              $double_optin = true,
+	                              $update_existing = false,
+	                              $replace_interests = true,
 	                              $send_welcome = false)
 	{
-		$result = $this->post("lists/" . $id . "/members", [
+		$subscriber_hash = $this->subscriberHash($email_address);
+		$status = 'subscribed';
+
+		if ($double_optin)
+		{
+			$status = 'pending';
+		}
+
+		// We need to unset that
+		if (isset($merge_vars['GROUPINGS']))
+		{
+			unset($merge_vars['GROUPINGS']);
+		}
+
+		$args = array(
 			'email_address' => $email_address,
-			'status'        => 'subscribed',
+			'status'        => $status,
+			'merge_fields'  => $merge_vars,
+			'interests'     => count($interests) ? $interests : new stdClass,
+			'email_type'    => $email_type
+		);
+
+		if ($update_existing && $this->isSubscribed($listId, $email_address))
+		{
+			// Update user ..
+			return $this->listUpdateSubscribe($listId, $email_address, $merge_vars, $interests, $email_type);
+		}
+
+		$result = $this->post("/lists/" . $listId . "/members", $args);
+
+		return $result;
+	}
+
+	/**
+	 * Update to subscribtion
+	 *
+	 * @param   string  $listId        The list id
+	 * @param   string  $email_address The email
+	 * @param   array   $merge_vars    Merge vars
+	 * @param   array   $interests     Merge vars
+	 * @param   string  $email_type    HTML or Text?
+	 * @param   string  $status        subscribed or pending??
+	 *
+	 * @return array|false
+	 */
+	public function listUpdateSubscribe($listId,
+										$email_address,
+										$merge_vars = null,
+										$interests = null,
+										$email_type = 'html',
+										$status = 'subscribed'
+										)
+	{
+		$subscriber_hash = $this->subscriberHash($email_address);
+
+		$args = array(
+			'email_address' => $email_address,
+			'status' => $status,
 			'merge_fields'  => $merge_vars,
 			'interests'     => $interests,
 			'email_type'    => $email_type
-		]);
+		);
+
+		// The updated object
+		$result = $this->put('/lists/' . $listId . "/members/" . $subscriber_hash, $args);
 
 		return $result;
 	}

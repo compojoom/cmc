@@ -160,6 +160,10 @@ class CmcHelperList
 				}
 			}
 		}
+		else
+		{
+			$mergeVars['GROUPINGS'] = array();
+		}
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
@@ -182,22 +186,23 @@ class CmcHelperList
 	 *
 	 * @throws Exception
 	 */
-	public static function subscribe($listId, $email, $firstname, $lastname, $groupings = array(), $email_type = "html", $update = false, $updateLocal = false)
+	public static function subscribe($listId, $email, $firstname, $lastname, 
+	                                 $groupings = array(), $email_type = "html",
+	                                 $update = false, $updateLocal = false)
 	{
 		$api = new CmcHelperChimp;
 
 		$merge_vars = array_merge(array('FNAME' => $firstname, 'LNAME' => $lastname), $groupings);
 
-
 		// By default this sends a confirmation email - you will not see new members
 		// until the link contained in it is clicked!
-		$api->listSubscribe($listId, $email, $merge_vars, $email_type, false, $update);
+		$api->listSubscribe($listId, $email, $merge_vars, $merge_vars['GROUPINGS'], $email_type, false, $update);
 
-		if ($api->errorCode)
+		if ($api->getLastError())
 		{
 			JFactory::getApplication()->enqueueMessage(
 				JTEXT::_("COM_CMC_SUBSCRIBE_FAILED") . " " .
-				$api->errorCode . " / " . $api->errorMessage, 'error'
+				$api->getLastError(), 'error'
 			);
 
 			return false;

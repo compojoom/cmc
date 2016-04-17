@@ -27,7 +27,7 @@ class CmcControllerUser extends JControllerForm
 	 *
 	 * @return void
 	 */
-	public function postSaveHook($model, $validData)
+	protected function postSaveHook(JModelLegacy $model, $validData = array())
 	{
 		// Updating it to mailchimp
 		if ($model->getState('user.new'))
