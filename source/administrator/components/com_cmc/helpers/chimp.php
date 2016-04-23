@@ -231,11 +231,12 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * @param  object  $order  The order details
 	 *
 	 * @throws  Exception
-
+	 * 
+	 * @return  array
 	 */
 	public function ecommOrderAdd($order)
 	{
-		throw new Exception("Unimplemented", 500);
+		return $this->post('/ecommerce/stores/' . $order['store_id'] . '/orders', $order);
 	}
 
 	/**
@@ -256,7 +257,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	{
 		$subscriber_hash = $this->subscriberHash($email);
 
-		$result = $this->get('lists/' . $listId . "/members/" . $subscriber_hash);
+		$result = $this->get('/lists/' . $listId . "/members/" . $subscriber_hash);
 
 		// Not existing member
 		if ($result['status'] == 404)

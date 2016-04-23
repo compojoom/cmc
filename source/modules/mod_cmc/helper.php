@@ -84,6 +84,11 @@ class ModCMCHelper
 
 		foreach ($lines as $line)
 		{
+			if (empty($line))
+			{
+				continue;
+			}
+
 			$map = explode('=', $line);
 
 			if (strstr($map[1], ':'))

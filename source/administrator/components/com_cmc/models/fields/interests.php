@@ -31,7 +31,7 @@ class JFormFieldInterests extends CmcField
 		$listid = $this->form->getValue('listid', 'params');
 		$options = CmcHelperList::getInterestsFields($listid);
 		$key = 'id';
-		$val = 'name';
+		$val = 'title';
 
 		$attribs = 'multiple="multiple" size="8" class="chzn-none chzn-done"';
 
