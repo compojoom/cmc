@@ -57,9 +57,7 @@ class plgSystemECom360Hika extends JPlugin
 			return;
 		}
 
-		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
-
 
 		foreach ($order->cart->products as $product)
 		{
@@ -72,18 +70,15 @@ class plgSystemECom360Hika extends JPlugin
 			);
 		}
 
-		$shipping = 0;
+		$chimp = new CmcHelperChimp;
 
-		if ($order->order_shipping_price != null)
-			$shipping = $order->order_shipping_price;
-
-		CmcHelperEcom360::sendOrderInformations(
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
 			$shop_id,
-			$shop_name,
 			$order->order_id,
+			'',
 			$order->cart->full_total->prices[0]->price_value_with_tax,
 			($order->cart->full_total->prices[0]->price_value_with_tax - $order->cart->full_total->prices[0]->price_value),
-			$shipping,
 			$products
 		);
 	}

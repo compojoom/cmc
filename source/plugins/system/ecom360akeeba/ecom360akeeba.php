@@ -97,13 +97,15 @@ class plgSystemECom360Akeeba extends JPlugin
 		)
 		);
 
-		CmcHelperEcom360::sendOrderInformations(
+		$chimp = new CmcHelperChimp;
+
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
 			$shop_id,
-			$shop_name,
 			$info['current']->akeebasubs_subscription_id,
+			'',
 			$info['current']->gross_amount,
 			$info['current']->tax_percent,
-			0.00, // No shipping
 			$products
 		);
 	}

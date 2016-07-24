@@ -17,10 +17,6 @@
     <config>
         <fields name="params">
             <fieldset name="basic">
-                <field type="input" name="store_name"
-                       label="PLG_SYSTEM_ECOM360_PAYPLANS_STORE" description="PLG_SYSTEM_ECOM360_PAYPLANS_STORE_DESC"
-                       default="Payplans store" required="true" />
-
                 <field type="input" name="store_id"
                        label="PLG_SYSTEM_ECOM360_PAYPLANS_STORE_ID" description="PLG_SYSTEM_ECOM360_PAYPLANS_STORE_ID_DESC"
                        default="42" required="true" />

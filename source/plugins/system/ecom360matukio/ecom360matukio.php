@@ -41,13 +41,13 @@ class plgSystemECom360Matukio extends JPlugin
 	private function notifyMC($row, $event)
 	{
 		$session = JFactory::getSession();
+
 		// Trigger plugin only if user comes from Mailchimp
 		if (!$session->get('mc', '0'))
 		{
 			return;
 		}
 
-		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id   = $this->params->get("store_id", 42);
 
 		// get the cat information
@@ -64,13 +64,15 @@ class plgSystemECom360Matukio extends JPlugin
 		)
 		);
 
-		CmcHelperEcom360::sendOrderInformations(
+		$chimp = new CmcHelperChimp;
+
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
 			$shop_id,
-			$shop_name,
 			$row->id,
+			$event->payment_code,
 			$row->payment_brutto,
 			$row->payment_tax,
-			0.00,  // No shipping
 			$products
 		);
 	}

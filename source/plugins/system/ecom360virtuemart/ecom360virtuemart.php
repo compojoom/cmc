@@ -44,11 +44,9 @@ class plgSystemECom360Virtuemart extends JPlugin
 			return;
 		}
 
-		$shop_name = $this->params->get("store_name", "Your shop");
 		$shop_id = $this->params->get("store_id", 42);
 
 		$products = array();
-
 
 		foreach ($order['items'] as $item)
 		{
@@ -59,9 +57,16 @@ class plgSystemECom360Virtuemart extends JPlugin
 			);
 		}
 
-		return CmcHelperEcom360::sendOrderInformations(
-			$shop_id, $shop_name, $order["details"]["BT"]->virtuemart_order_id, $order["details"]["BT"]->order_total,
-			$order["details"]["BT"]->order_tax, $order["details"]["BT"]->order_shipment, $products
+		$chimp = new CmcHelperChimp;
+
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
+			$shop_id,
+			$order["details"]["BT"]->virtuemart_order_id,
+			$order["details"]["BT"]->currency_code,
+			$order["details"]["BT"]->order_total,
+			$order["details"]["BT"]->order_tax,
+			$products
 		);
 	}
 }

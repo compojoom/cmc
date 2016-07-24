@@ -313,7 +313,13 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		if ($update_existing && $this->isSubscribed($listId, $email_address))
 		{
 			// Update user ..
-			return $this->listUpdateSubscribe($listId, $email_address, $merge_vars, $interests, $email_type);
+			return $this->listUpdateSubscribe(
+				$listId,
+				$email_address,
+				$merge_vars,
+				$interests,
+				$email_type
+			);
 		}
 
 		$result = $this->post("/lists/" . $listId . "/members", $args);
@@ -353,6 +359,48 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 
 		// The updated object
 		$result = $this->put('/lists/' . $listId . "/members/" . $subscriber_hash, $args);
+
+		return $result;
+	}
+
+	/**
+	 * Send Ecommerce request
+	 *
+	 * @param       $mcId
+	 * @param       $storeId
+	 * @param       $orderId
+	 * @param       $currencycode
+	 * @param       $total
+	 * @param       $tax
+	 * @param array $lines
+	 * @param array $customer
+	 *
+	 * @return array|false
+	 *
+	 * @since version
+	 */
+	public function addEcomOrder(
+		$mcId,
+		$storeId,
+		$orderId,
+		$currencycode,
+		$total,
+		$tax,
+		$lines = array(),
+		$customer = array())
+	{
+		$args = array(
+			'id' => $orderId,
+			'customer' => $customer,
+			'campaign_id' => $mcId,
+			'checkout_url' => '',
+			'currency_code' => $currencycode,
+			'order_total' => $total,
+			'tax_total' => $tax,
+			'lines' => $lines
+		);
+
+		$result = $this->post('/ecommerce/stores/' . $storeId . "/orders", $args);
 
 		return $result;
 	}

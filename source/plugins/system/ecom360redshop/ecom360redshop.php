@@ -76,10 +76,16 @@ class plgSystemECom360Redshop extends JPlugin
 			);
 		}
 
+		$chimp = new CmcHelperChimp;
 
-		return CmcHelperEcom360::sendOrderInformations(
-			$shop_id, $shop_name, $orderresult->order_id,
-			$cart['total'], $cart['tax'], $cart['shipping'], $products // No shipping
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
+			$shop_id,
+			$orderresult->order_id,
+			$cart['currency'],
+			$cart['total'],
+			$cart['tax'],
+			$products
 		);
 	}
 

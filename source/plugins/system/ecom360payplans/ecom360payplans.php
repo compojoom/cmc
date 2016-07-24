@@ -87,9 +87,16 @@ class plgSystemECom360Payplans extends JPlugin
 		)
 		);
 
-		CmcHelperEcom360::sendOrderInformations(
+		$chimp = new CmcHelperChimp;
+
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
 			$shop_id,
-			$shop_name, $data->getId(), $total, $tax, 0.00, $products // No shipping
+			$data->getId(),
+			'',
+			$total,
+			$tax,
+			$products
 		);
 	}
 }
