@@ -55,9 +55,9 @@ class CmcControllerSubscription extends JControllerLegacy
 			$status     = 'applied';
 
 			// User was found on list
-			if ($memberInfo['success'])
+			if (isset($memberInfo['status']))
 			{
-				$status = $memberInfo['data'][0]['status'];
+				$status = $memberInfo['status'];
 			}
 
 			// Check if the subscription is already present in the db

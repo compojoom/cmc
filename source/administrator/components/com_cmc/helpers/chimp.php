@@ -253,6 +253,16 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		throw new Exception("Unimplemented not available in v3", 500);
 	}
 
+	/**
+	 * Is the user subscribed
+	 *
+	 * @param   string  $listId  The list id
+	 * @param   string  $email   The mail address
+	 *
+	 * @return  bool true if yes
+	 *
+	 * @since   3.0.0
+	 */
 	public function isSubscribed($listId, $email)
 	{
 		$subscriber_hash = $this->subscriberHash($email);
