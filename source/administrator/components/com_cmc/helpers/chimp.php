@@ -31,6 +31,8 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public $api_key = null;
 
+	public $verify_ssl = false;
+
 	/**
 	 * The constructor
 	 *

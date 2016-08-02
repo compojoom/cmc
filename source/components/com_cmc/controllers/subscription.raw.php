@@ -111,7 +111,7 @@ class CmcControllerSubscription extends JControllerLegacy
 	public function exist()
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
+		$url = '';
 		$chimp = new cmcHelperChimp;
 
 		$input = JFactory::getApplication()->input;
@@ -125,7 +125,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		// Check if the user is in the list already
 		$isSubscribed = $chimp->isSubscribed($listId, $email);
 
-		$url   = '';
+		$url = '';
 
 		if ($isSubscribed)
 		{
@@ -133,6 +133,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		}
 
 		echo json_encode(array('exists' => $isSubscribed, 'url' => $url));
+
 		jexit();
 	}
 }
