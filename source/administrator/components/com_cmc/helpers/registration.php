@@ -146,12 +146,12 @@ class CmcHelperRegistration
 
 		$chimp = new cmcHelperChimp;
 
-		$userlists = null; // $chimp->listsForEmail($user->email);
-
 		// Hidden field
 		$listId = $params['listid'];
 
-		if ($userlists && in_array($listId, $userlists))
+		$isSubscribed = $chimp->isSubscribed($listId, $user->email);
+
+		if ($isSubscribed)
 		{
 			// Already in list, we don't update here, we update on form send
 			return null;

@@ -375,21 +375,18 @@ class GetCmcTab extends cbTabHandler
 
 		$chimp = new cmcHelperChimp;
 
-		$userlists = $chimp->listsForEmail($user->email);
+		$isSubscribed = $chimp->isSubscribed($listId, $user->email);
 
-		$html = '';
-
-		if ($userlists && in_array($listId, $userlists))
+		if ($isSubscribed)
 		{
 			// User is in list
-			$html .= "<table><tr><td>" . JText::_("COM_CMC_SUBSCRIBED") . "</td></tr></table>";
+			$html = "<table><tr><td>" . JText::_("COM_CMC_SUBSCRIBED") . "</td></tr></table>";
 		}
 		else
 		{
 			// User has no subscription
-			$html .= "<table><tr><td>" . JText::_("COM_CMC_NO_SUBSCRIPTION") . "</td></tr></table>";
+			$html = "<table><tr><td>" . JText::_("COM_CMC_NO_SUBSCRIPTION") . "</td></tr></table>";
 		}
-
 
 		return $html;
 	}

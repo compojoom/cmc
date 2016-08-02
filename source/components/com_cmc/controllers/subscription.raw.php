@@ -123,20 +123,16 @@ class CmcControllerSubscription extends JControllerLegacy
 		$listId = $form['cmc']['listid'];
 
 		// Check if the user is in the list already
-		$userlists = $chimp->listsForEmail($email);
+		$isSubscribed = $chimp->isSubscribed($listId, $email);
 
-		if ($userlists && in_array($listId, $userlists))
+		$url   = '';
+
+		if ($isSubscribed)
 		{
-			$exist = true;
 			$url   = JRoute::_('index.php?option=com_cmc&task=subscription.update&email=' . $email . '&listid=' . $listId);
 		}
-		else
-		{
-			$exist = false;
-			$url   = '';
-		}
 
-		echo json_encode(array('exists' => $exist, 'url' => $url));
+		echo json_encode(array('exists' => $isSubscribed, 'url' => $url));
 		jexit();
 	}
 }
