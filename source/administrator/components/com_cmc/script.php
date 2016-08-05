@@ -74,7 +74,7 @@ class Com_CmcInstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
-		$path = $parent->getParent()->getPath('source') . '/libraries/compojoom/libraries/compojoom/include.php';
+		$path = $parent->getParent()->getPath('source') . '/libraries/compojoom/include.php';
 
 		// Check if the file exists (on discover install it won't)
 		if (JFile::exists($path))
