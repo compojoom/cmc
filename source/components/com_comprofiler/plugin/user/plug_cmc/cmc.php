@@ -453,7 +453,7 @@ class GetCmcTab extends cbTabHandler
 		$val = 'name';
 		$options[] = array($key => '', $val => '-- ' . JText::_('Please select') . ' --');
 
-		foreach ($lists['data'] as $list)
+		foreach ($lists['lists'] as $list)
 		{
 			$options[] = array($key => $list[$key], $val => $list[$val]);
 		}
@@ -492,54 +492,9 @@ class GetCmcTab extends cbTabHandler
 			return $content;
 		}
 
-		$api = new cmcHelperChimp;
-		$fields = $api->listMergeVars($listid);
+		$options = CmcHelperList::getMergeFields($listid);
 		$key = 'tag';
 		$val = 'name';
-		$options = false;
-
-		if ($fields)
-		{
-			foreach ($fields as $field)
-			{
-				$choices = '';
-
-				if (isset($field['choices']))
-				{
-					foreach ($field['choices'] as $c)
-					{
-						$choices .= $c . '##';
-					}
-
-					$choices = substr($choices, 0, -2);
-				}
-
-				$req = ($field['req']) ? 1 : 0;
-
-				if ($field[$key] == 'EMAIL')
-				{
-					if (isset($this->value) && !is_array($this->value))
-					{
-						$oldValue = $this->value;
-						$this->value = array();
-						$this->value[] = $oldValue;
-					}
-
-					$this->value[] = $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices;
-				}
-
-				if ($req)
-				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
-						. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
-					);
-				}
-				else
-				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
-				}
-			}
-		}
 
 		$attribs = 'multiple="multiple" size="8"';
 
@@ -575,30 +530,9 @@ class GetCmcTab extends cbTabHandler
 			return $content;
 		}
 
-		$api = new cmcHelperChimp;
-		$interests = $api->listInterestGroupings($listid);
+		$options = CmcHelperList::getInterestsFields($listid);
 		$key = 'id';
-		$val = 'name';
-		$options = false;
-
-		if ($interests)
-		{
-			foreach ($interests as $interest)
-			{
-				if ($interest['form_field'] != 'hidden')
-				{
-					$groups = '';
-
-					foreach ($interest['groups'] as $ig)
-					{
-						$groups .= $ig['name'] . '##' . $ig['name'] . '####';
-					}
-
-					$groups = substr($groups, 0, -4);
-					$options[] = array($key => $interest[$key] . ';' . $interest['form_field'] . ';' . $interest['name'] . ';' . $groups, $val => $interest[$val]);
-				}
-			}
-		}
+		$val = 'title';
 
 		$attribs = 'multiple="multiple" size="8"';
 
@@ -652,12 +586,5 @@ class GetCmcTab extends cbTabHandler
 		}
 
 		return $groups;
-	}
-
-	public function onBeforeUserProfileEditDisplay($user, $tabContent)
-	{
-		$tabContent = 'balbla';//		die();
-
-		die('labladasfd');
 	}
 }
