@@ -39,7 +39,7 @@ jQuery(document).ready(function () {
 	}
 
 	if (fieldsets.length) {
-		fieldsets.each(function (el) {
+		$.each(fieldsets, function (i, el) {
 			el.css('display', 'none');
 			el.find('input').prop('disabled', 'disabled');
 		});
@@ -47,13 +47,13 @@ jQuery(document).ready(function () {
 		var $newsletter = $('#jform_cmc_newsletter');
 		$newsletter.on('click', function () {
 			if ($(this).prop('checked')) {
-				fieldsets.each(function (el) {
+				$.each(fieldsets,function (i, el) {
 					el.css('display', display);
 					el.find('input').removeProp('disabled');
 				});
 			}
 			else {
-				fieldsets.each(function (el) {
+				$.each(fieldsets,function (i, el) {
 					el.css('display', 'none');
 					el.find('input').prop('disabled', 'disabled');
 				});
@@ -61,7 +61,7 @@ jQuery(document).ready(function () {
 		});
 
 		if ($newsletter.prop('checked')) {
-			fieldsets.each(function (el) {
+			$.each(fieldsets,function (i, el) {
 				el.css('display', display);
 				el.find('input').removeProp('disabled');
 			});
