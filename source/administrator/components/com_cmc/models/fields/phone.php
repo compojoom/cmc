@@ -10,6 +10,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+JFormHelper::loadFieldClass('text');
 /**
  * Class JFormFieldPhone
  *
