@@ -113,7 +113,7 @@ class CmcHelperList
 
 					foreach ($details as $ig)
 					{
-						$groups .= $ig['name'] . '##' . $ig['name'] . '####';
+						$groups .= $ig['id'] . '##' . $ig['name'] . '####';
 					}
 
 					$groups = substr($groups, 0, -4);
@@ -146,19 +146,24 @@ class CmcHelperList
 
 		if (isset($form['cmc_interests']))
 		{
+			$interests = new stdClass;
 			foreach ($form['cmc_interests'] as $key => $interest)
 			{
-				// Take care of interests that contain a comma (,)
+				// Each interest represents an object property
 				if (is_array($interest))
 				{
-					array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
+					foreach($interest as $value)
+					{
+						$interests->$value = true;
+					}
 				}
 				else
 				{
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => $interest);
+					$interests->$interest =  true;
 				}
 			}
+
+			$mergeVars['GROUPINGS'] = $interests;
 		}
 		else
 		{
