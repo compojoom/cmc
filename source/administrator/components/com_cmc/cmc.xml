@@ -29,7 +29,7 @@
             ##BACKEND_LANGUAGE_FILES##
         </languages>
     </administration>
-    <media destination="com_@@COMPONENTNAME@@" folder="media/com_cmc">
+    <media destination="com_cmc" folder="media/com_cmc">
         ##MEDIA_FILES##
     </media>
 
