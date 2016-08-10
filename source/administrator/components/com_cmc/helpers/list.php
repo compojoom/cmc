@@ -146,24 +146,8 @@ class CmcHelperList
 
 		if (isset($form['cmc_interests']))
 		{
-			$interests = new stdClass;
-			foreach ($form['cmc_interests'] as $key => $interest)
-			{
-				// Each interest represents an object property
-				if (is_array($interest))
-				{
-					foreach($interest as $value)
-					{
-						$interests->$value = true;
-					}
-				}
-				else
-				{
-					$interests->$interest =  true;
-				}
-			}
 
-			$mergeVars['GROUPINGS'] = $interests;
+			$mergeVars['GROUPINGS'] = self::createInterestsObject($form['cmc_interests']);
 		}
 		else
 		{
@@ -173,6 +157,35 @@ class CmcHelperList
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
 		return $mergeVars;
+	}
+
+	/**
+	 * Create an interests Object that can be used with the mailchimp API
+	 *
+	 * @param   array  $subInterests - the $_POST array with the interests
+	 *
+	 * @return stdClass
+	 */
+	public static function createInterestsObject($subInterests)
+	{
+		$interests = new stdClass;
+		foreach ($subInterests as $key => $interest)
+		{
+			// Each interest represents an object property
+			if (is_array($interest))
+			{
+				foreach($interest as $value)
+				{
+					$interests->$value = true;
+				}
+			}
+			else
+			{
+				$interests->$interest =  true;
+			}
+		}
+
+		return $interests;
 	}
 
 	/**

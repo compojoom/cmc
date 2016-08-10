@@ -87,20 +87,16 @@ class CmcHelperRegistration
 			}
 		}
 
+		$mergeVars['GROUPINGS'] = array();
 		if (isset($params['interests']))
 		{
-			foreach ($params['interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-			}
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests']);
 		}
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
 		// Double OPTIN false
-		$result = $chimp->listSubscribe($listId, $user->email, $mergeVars, $params['interests'], 'html', true, true, true, false);
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);
 
 		if ($chimp->getLastError())
 		{
@@ -166,28 +162,16 @@ class CmcHelperRegistration
 			}
 		}
 
-		// TODO remove
+		$mergeVars['GROUPINGS'] = array();
 		if (isset($params['interests']))
 		{
-			foreach ($params['interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				if (is_array($interest))
-				{
-					array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-				}
-				else
-				{
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => $interest);
-				}
-			}
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests']);
 		}
 
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
 		// Double OPTIN false
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, $params['interests'], 'html', false, true, true, false);
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);
 
 		if (!$chimp->getLastError())
 		{
@@ -283,18 +267,14 @@ class CmcHelperRegistration
 			}
 		}
 
+		$mergeVars['GROUPINGS'] = array();
 		// Interests
 		if (isset($params['interests']))
 		{
-			foreach ($params['interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-			}
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests']);
 		}
 
-		$result = $chimp->listSubscribe($listId, $user->email, $mergeVars, $params['interests'], 'html', false, true, true, false);
+		$result = $chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);
 
 		if (!$chimp->getLastError())
 		{
