@@ -37,7 +37,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		$form   = $input->get('jform', '', 'array');
 		$isAjax = $input->get('ajax');
 
-		$mergeVars = CmcHelperList::mergeVars($form);
+		$mergeVars = CmcHelperList::mergeVars($form, $form['cmc']['listid']);
 
 		$listId = $form['cmc']['listid'];
 		$email  = $mergeVars['EMAIL'];
@@ -117,7 +117,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		$input = JFactory::getApplication()->input;
 		$form  = $input->get('jform', '', 'array');
 
-		$mergeVars = CmcHelperList::mergeVars($form);
+		$mergeVars = CmcHelperList::mergeVars($form, $form['cmc']['listid']);
 
 		$email  = $mergeVars['EMAIL'];
 		$listId = $form['cmc']['listid'];

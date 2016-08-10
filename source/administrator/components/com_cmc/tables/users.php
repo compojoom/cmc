@@ -49,7 +49,7 @@ class CmcTableUsers extends JTable
 		// If we have cmc_groups or cmc_intersts, than this would mean that we are coming from the form
 		if (isset($src['cmc_groups']) || isset($src['cmc_interests']))
 		{
-			$src['merges'] = CmcHelperList::mergeVars($src);
+			$src['merges'] = CmcHelperList::mergeVars($src, $src['list_id']);
 		}
 
 		return parent::bind($src, $ignore);

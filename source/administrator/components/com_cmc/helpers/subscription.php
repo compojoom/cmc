@@ -24,10 +24,12 @@ class CmcHelperSubscription
 	 *
 	 * @return mixed
 	 */
-	public static function convertMergesToFormData($merges)
+	public static function convertMergesToFormData($merges, $listId)
 	{
 		$merges = json_decode($merges);
 		$data = array();
+
+		$interests = CmcHelperList::getInterestsFields($listId);
 
 		foreach ($merges as $key => $value)
 		{
@@ -36,23 +38,28 @@ class CmcHelperSubscription
 			{
 				foreach ($value as $ikey => $ivalue)
 				{
-					/**
-					 * Alright! A total brain fuck!
-					 * If you have interests with a , then they are stored in the db with \, .
-					 * When we want to output this we cannot simply pass the string to the JFormField checkboxes
-					 * because it does an explode on , and then we end up with wrong checked checkboxes.
-					 * So first we replace \, with the html code for comma &#44;, then we explode
-					 * Then we go through each value and replace &#44; with comma
-					 */
-					$groups = array_map(
-						function($value) {
-							return str_replace('&#44;', ',', $value);
-						},
-						explode(',', str_replace('\,', '&#44;', $ivalue->groups))
-					);
+					// Go over the interests to get the interest-category-id
+					foreach($interests as $interest)
+					{
+						if(strstr($interest['id'], $ikey))
+						{
+							$id = explode(';', $interest['id'], 2);
+							$groups[$id[0]][] = $ikey;
+						}
+					}
 
 					// If the length of groups is 1, then we are dealing with a radio button and need to pass it as string
-					$data['cmc_interests'][$ivalue->id] = count($groups) === 1 ? $groups[0] : $groups;
+					foreach($groups as $gkey => $vgroup)
+					{
+						if(count($vgroup) === 1)
+						{
+							$data['cmc_interests'][$gkey] = $vgroup[0];
+						}
+						else
+						{
+							$data['cmc_interests'][$gkey] = $vgroup;
+						}
+					}
 				}
 			}
 			else

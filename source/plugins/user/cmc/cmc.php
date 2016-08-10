@@ -93,7 +93,7 @@ class PlgUserCmc extends JPlugin
 		if ($subscriptionData)
 		{
 			$form->setFieldAttribute('newsletter', 'checked', 'checked', 'cmc');
-			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges), $this->params->get('listid'));
 		}
 	}
 
@@ -244,7 +244,7 @@ class PlgUserCmc extends JPlugin
 				$data['email'],
 				$data['cmc_groups']['FNAME'],
 				$data['cmc_groups']['LNAME'],
-				CmcHelperList::mergeVars($data),
+				CmcHelperList::mergeVars($data, $data['cmc']['listid']),
 				'html',
 				$update,
 				true

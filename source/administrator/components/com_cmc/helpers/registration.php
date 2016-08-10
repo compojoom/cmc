@@ -90,7 +90,7 @@ class CmcHelperRegistration
 		$mergeVars['GROUPINGS'] = array();
 		if (isset($params['interests']))
 		{
-			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests']);
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests'], $listId);
 		}
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
@@ -165,7 +165,7 @@ class CmcHelperRegistration
 		$mergeVars['GROUPINGS'] = array();
 		if (isset($params['interests']))
 		{
-			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests']);
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests'], $listId);
 		}
 
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
@@ -271,7 +271,7 @@ class CmcHelperRegistration
 		// Interests
 		if (isset($params['interests']))
 		{
-			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests']);
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests'], $listId);
 		}
 
 		$result = $chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);

@@ -29,6 +29,7 @@ class CmcControllerUser extends JControllerForm
 	 */
 	protected function postSaveHook(JModelLegacy $model, $validData = array())
 	{
+
 		// Updating it to mailchimp
 		if ($model->getState('user.new'))
 		{
@@ -37,7 +38,7 @@ class CmcControllerUser extends JControllerForm
 				$validData['email'],
 				$validData['firstname'],
 				$validData['lastname'],
-				CmcHelperList::mergeVars($validData),
+				CmcHelperList::mergeVars($validData, $validData['list_id']),
 				$validData['email_type'],
 				false
 			);
@@ -50,7 +51,7 @@ class CmcControllerUser extends JControllerForm
 				$validData['email'],
 				$validData['firstname'],
 				$validData['lastname'],
-				CmcHelperList::mergeVars($validData),
+				CmcHelperList::mergeVars($validData, $validData['list_id']),
 				$validData['email_type'],
 				true
 			);

@@ -99,6 +99,7 @@ class CmcModelUser extends JModelAdmin
 			// Generate the xml for the form
 			$xml = $renderer->build();
 
+
 			$form->load($xml, true);
 
 			$subscriptionData = CmcHelperUsers::getSubscription($userData->get('email'), $userData->get('list_id'));
@@ -106,7 +107,7 @@ class CmcModelUser extends JModelAdmin
 			// Bind the data to the form
 			if ($subscriptionData)
 			{
-				$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+				$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges, $listId));
 			}
 		}
 

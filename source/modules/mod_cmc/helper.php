@@ -50,7 +50,7 @@ class ModCMCHelper
 
 				if ($subscriptionData)
 				{
-					$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+					$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges, $params->get('listid')));
 				}
 			}
 		}

@@ -95,11 +95,29 @@ class CmcHelperList
 	 */
 	public static function getInterestsFields($listId)
 	{
+		$data = self::getInterestsFieldsRaw($listId);
+		$options = array();
+
+		foreach($data as $key => $value)
+		{
+			$groups = array_map(function($mv) {
+				return $mv['id'] . '##' . $mv['name'];
+			}, $value['groups']);
+
+			$options[] = array(
+				'id' => $value['id'] . ';' . $value['type'] . ';' . $value['title'] . ';' . implode('####', $groups),
+				'title' => $value['title']
+			);
+		}
+
+		return $options;
+	}
+
+	public static function getInterestsFieldsRaw($listId)
+	{
 		$api = new cmcHelperChimp;
 		$interests = $api->listInterestGroupings($listId);
-		$key = 'id';
-		$val = 'title';
-		$options = false;
+		$fields = array();
 
 		if ($interests)
 		{
@@ -113,18 +131,20 @@ class CmcHelperList
 
 					foreach ($details as $ig)
 					{
-						$groups .= $ig['id'] . '##' . $ig['name'] . '####';
+						$groups[] =  array('id' => $ig['id'], 'name' => $ig['name']);
 					}
 
-					$groups = substr($groups, 0, -4);
-
-					$options[] = array($key => $interest[$key] . ';' . $interest['type'] . ';'
-						. $interest['title'] . ';' . $groups, $val => $interest[$val]);
+					$fields[$interest['id']] = array(
+						'id' => $interest['id'],
+						'title' => $interest['title'],
+						'type' => $interest['type'],
+						'groups' => $groups
+					);
 				}
 			}
 		}
 
-		return $options;
+		return $fields;
 	}
 
 	/**
@@ -134,7 +154,7 @@ class CmcHelperList
 	 *
 	 * @return mixed
 	 */
-	public static function mergeVars($form)
+	public static function mergeVars($form, $listId)
 	{
 		if (isset($form['cmc_groups']))
 		{
@@ -146,8 +166,7 @@ class CmcHelperList
 
 		if (isset($form['cmc_interests']))
 		{
-
-			$mergeVars['GROUPINGS'] = self::createInterestsObject($form['cmc_interests']);
+			$mergeVars['GROUPINGS'] = self::createInterestsObject($form['cmc_interests'], $listId);
 		}
 		else
 		{
@@ -166,9 +185,25 @@ class CmcHelperList
 	 *
 	 * @return stdClass
 	 */
-	public static function createInterestsObject($subInterests)
+	public static function createInterestsObject($subInterests, $listId)
 	{
+		$interestsConfig = self::getInterestsFieldsRaw($listId);
+
 		$interests = new stdClass;
+		foreach($interestsConfig as $key => $value)
+		{
+			foreach($value['groups'] as $group)
+			{
+				$id = $group['id'];
+				// TODO: fix this for radio. Now on mailchimp if a user decides to change a radio option, mailchimp will still keep the old version
+				// but if we don't do this - we can't show the selected option on our side
+				if($value['type'] != 'radio')
+				{
+					$interests->$id = false;
+				}
+			}
+		}
+
 		foreach ($subInterests as $key => $interest)
 		{
 			// Each interest represents an object property
