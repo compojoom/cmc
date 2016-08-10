@@ -76,9 +76,12 @@ class CmcHelperBasic
 
 		$api->listUnsubscribe($user->list_id, $user->email, true);
 
+
 		if ($api->getLastError())
 		{
-			throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->getLastError(), 500);
+			$response = $api->getLastResponse();
+
+			throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->getLastError(), $response['headers']['http_code'] );
 		}
 
 		return true;
