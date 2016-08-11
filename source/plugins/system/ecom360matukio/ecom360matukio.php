@@ -24,9 +24,13 @@ class plgSystemECom360Matukio extends JPlugin
 	 *
 	 * ('onAfterBooking', $neu, $event)
 	 */
-
-	public function onAfterBooking($neu, $event)
+	public function onAfterBookingSave($context, $neu, $event)
 	{
+		if($context != 'com_matukio.book')
+		{
+			return;
+		}
+
 		$app = JFactory::getApplication();
 
 		// This plugin is only intended for the frontend
@@ -38,6 +42,14 @@ class plgSystemECom360Matukio extends JPlugin
 		$this->notifyMC($neu, $event);
 	}
 
+	/**
+	 * Track the booking with Mailchimp
+	 *
+	 * @param   object  $row   - the booking object
+	 * @param   object  $event - the event object
+	 *
+	 * @return array|false|void
+	 */
 	private function notifyMC($row, $event)
 	{
 		$session = JFactory::getSession();
@@ -48,32 +60,57 @@ class plgSystemECom360Matukio extends JPlugin
 			return;
 		}
 
-		$shop_id   = $this->params->get("store_id", 42);
+		$chimp = new CmcHelperChimp;
+		$price = (float) $row->payment_brutto;
 
-		// get the cat information
-		$db  = JFactory::getDbo();
-		$sql = "SELECT * FROM #__categories WHERE id = " . $event->catid;
+		$customerNames = explode(' ', $row->name);
 
-		$db->setQuery($sql);
-		$cat = $db->loadObject();
-
-		$products = array(0 => array(
-			"product_id"  => $event->id, "sku" => $event->semnum, "product_name" => $event->title,
-			"category_id" => $event->catid, "category_name" => $cat->title, "qty" => $row->nrbooked,
-			"cost"        => $event->fee
-		)
+		// Array with producs
+		$products = array(
+			0 => array(
+				'id' => (string) $row->id,
+				'product_id'  => $event->id,
+				'title' => $event->title,
+				'product_variant_id' => (string)  $event->id,
+				'product_variant_title' => $event->title,
+				'quantity' => (int) $row->nrbooked,
+				'price'        => (float) $price,
+				'published_at_foreign' => $event->publishdate,
+				'description' => $event->description,
+				'type' => 'event'
+			)
 		);
 
-		$chimp = new CmcHelperChimp;
+		// The shop data
+		$shop = new stdClass;
+		$shop->id = $this->params->get("store_id", 42);;
+		$shop->name = $this->params->get('store_name', 'Matukio store');
+		$shop->list_id = $this->params->get('list_id');
+		$shop->currency_code = $this->params->get('currency_code', 'EUR');
 
+		// The customer data
+		$customer = new stdClass();
+		$customer->id = md5($row->email);
+		$customer->email_address = $row->email;
+		$customer->opt_in_status = false;
+		$customer->first_name = isset($customerNames[0]) ? $customerNames[0] : '';
+		$customer->last_name = isset($customerNames[1]) ? $customerNames[1] : '';
+
+		// The order data
+		$order = new stdClass;
+		$order->id = $row->id;
+		$order->currency_code = $event->payment_code;
+		$order->payment_tax = (double) $row->payment_tax;
+		$order->order_total = (double) $price;
+		$order->processed_at_foreign = $row->bookingdate;
+
+		// Now send all this to Mailchimp
 		return $chimp->addEcomOrder(
 			$session->get('mc_cid', '0'),
-			$shop_id,
-			$row->id,
-			$event->payment_code,
-			$row->payment_brutto,
-			$row->payment_tax,
-			$products
+			$shop,
+			$order,
+			$products,
+			$customer
 		);
 	}
 }

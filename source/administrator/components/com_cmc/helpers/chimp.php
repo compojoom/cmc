@@ -47,6 +47,15 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 
 		$this->api_key = $key;
 
+		// Add logging
+		JLog::addLogger(
+			array(
+				'text_file' => 'com_cmc.errors.php'
+			),
+			JLog::ERROR,
+			array('com_cmc')
+		);
+
 		parent::__construct($key);
 	}
 
@@ -379,11 +388,8 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * Send Ecommerce request
 	 *
 	 * @param       $mcId
-	 * @param       $storeId
-	 * @param       $orderId
-	 * @param       $currencycode
-	 * @param       $total
-	 * @param       $tax
+	 * @param object $store
+	 * @param       $order
 	 * @param array $lines
 	 * @param array $customer
 	 *
@@ -391,28 +397,126 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 *
 	 * @since version
 	 */
-	public function addEcomOrder(
-		$mcId,
-		$storeId,
-		$orderId,
-		$currencycode,
-		$total,
-		$tax,
-		$lines = array(),
-		$customer = array())
+	public function addEcomOrder($mcId, $store, $order, $lines = array(), $customer)
 	{
-		$args = array(
-			'id' => $orderId,
-			'customer' => $customer,
-			'campaign_id' => $mcId,
-			'checkout_url' => '',
-			'currency_code' => $currencycode,
-			'order_total' => $total,
-			'tax_total' => $tax,
-			'lines' => $lines
+		$order->id = (string) $order->id;
+		$order->order_total = (double) $order->order_total;
+		$order->payment_tax = (double) $order->payment_tax;
+
+		if(!$this->storeExists($store->id))
+		{
+			if(!$this->storeCreate($store))
+			{
+				JLog::add('Couldn\'t create store with ID ' . $store->id, Jlog::ERROR, 'com_cmc');
+
+				return false;
+			};
+		}
+
+		foreach($lines as $key => $product)
+		{
+			if(!$this->productExists($store->id, $product['product_id']))
+			{
+				// Try to create the product
+				if(!$this->createProduct($store->id, $product))
+				{
+					unset($lines[$key]);
+				}
+			}
+
+			if(count($lines) == 0)
+			{
+				// we couldn't create the products at this stage
+				return false;
+			}
+		}
+
+		$args = (array) $order;
+		$args['lines'] = $lines;
+		$args['campaign_id'] = $mcId;
+		$args['customer'] = $customer;
+
+		$result = $this->post('/ecommerce/stores/' . $store->id . "/orders", $args);
+
+		return $result;
+	}
+
+	/**
+	 * Check if the store exists
+	 *
+	 * @param  string  $storeId  - the store id
+	 *
+	 * @return bool
+	 */
+	public function storeExists($storeId)
+	{
+		$this->get('/ecommerce/stores/' . $storeId);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Create a store if doesn't exist
+	 *
+	 * @param   object  $store  - the store object as described here http://developer.mailchimp.com/documentation/mailchimp/reference/ecommerce/stores/
+	 *
+	 * @return array|false
+	 */
+	public function storeCreate($store)
+	{
+		$result = $this->post('/ecommerce/stores', $store);
+
+		return $result;
+	}
+
+	/**
+	 * Check if a product exist
+	 *
+	 * @param   string  $storeId    - the store id
+	 * @param   object  $productId  - the product id
+	 *
+	 * @return bool
+	 */
+	public function productExists($storeId, $productId)
+	{
+		$this->get('ecommerce/stores/' . $storeId . '/products/' . $productId);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Create a product
+	 *
+	 * @param   string  $storeId  - the store id
+	 * @param   object  $product  - the product object as described here http://developer.mailchimp.com/documentation/mailchimp/reference/ecommerce/stores/products/
+	 *
+	 * @return array|false
+	 */
+	public function createProduct($storeId, $product)
+	{
+		$variants = array (
+			'id' => $product['product_id'],
+			'title' => $product['title']
 		);
 
-		$result = $this->post('/ecommerce/stores/' . $storeId . "/orders", $args);
+		$product['id'] = $product['product_id'];
+		$product['variants'][] = $variants;
+
+		$result = $this->post('/ecommerce/stores/' . $storeId . '/products', $product);
 
 		return $result;
 	}
