@@ -44,29 +44,59 @@ class plgSystemECom360Virtuemart extends JPlugin
 			return;
 		}
 
-		$shop_id = $this->params->get("store_id", 42);
+		$customer = $this->getCustomer($cart->BT);
+
+		// The shop data
+		$shop = new stdClass;
+		$shop->id = $this->params->get("store_id", 42);;
+		$shop->name = $this->params->get('store_name', 'Virtuemart store');
+		$shop->list_id = $this->params->get('list_id');
+		$shop->currency_code = $this->params->get('currency_code', 'EUR');
 
 		$products = array();
 
 		foreach ($order['items'] as $item)
 		{
 			$products[] = array(
-				"product_id" => $item->virtuemart_product_id, "sku" => $item->order_item_sku, "product_name" => $item->order_item_name,
-				"category_id" => $item->virtuemart_category_id, "category_name" => "", "qty" => (double) $item->product_quantity,
-				"cost" => $item->product_final_price
+				'id' => (string) $item->virtuemart_order_item_id,
+				"product_id" => (string) $item->virtuemart_product_id,
+				'title' => $item->order_item_name,
+				'product_variant_id' => (string)  $item->virtuemart_product_id,
+				'product_variant_title' => $item->order_item_name,
+				"quantity" => (int) $item->quantity,
+				"price" => (double) $item->product_subtotal_with_tax
 			);
 		}
+
+		// The order data
+		$mOrder = new stdClass;
+		$mOrder->id = (string) $order["details"]["BT"]->virtuemart_order_id;
+		$mOrder->currency_code = $this->params->get('currency_code', 'EUR');
+		$mOrder->payment_tax = (double) $order["details"]["BT"]->order_tax;
+		$mOrder->order_total = (double) $order["details"]["BT"]->order_total;
+		$mOrder->processed_at_foreign = JFactory::getDate($order->order_created)->toSql();
+
 
 		$chimp = new CmcHelperChimp;
 
 		return $chimp->addEcomOrder(
 			$session->get('mc_cid', '0'),
-			$shop_id,
-			$order["details"]["BT"]->virtuemart_order_id,
-			$order["details"]["BT"]->currency_code,
-			$order["details"]["BT"]->order_total,
-			$order["details"]["BT"]->order_tax,
-			$products
+			$shop,
+			$mOrder,
+			$products,
+			$customer
 		);
+	}
+
+	public function getCustomer($cartUser)
+	{
+		$user = new stdClass;
+		$user->id = md5($cartUser['email']);
+		$user->email_address = $cartUser['email'];
+		$user->first_name = $cartUser['first_name'];
+		$user->last_name = $cartUser['last_name'];
+		$user->opt_in_status = false;
+
+		return $user;
 	}
 }
