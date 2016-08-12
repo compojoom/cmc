@@ -16,10 +16,14 @@
     </languages>
     <config>
         <fields name="params">
-            <fieldset name="basic">
+            <fieldset name="basic" addfieldpath="/administrator/components/com_cmc/models/fields/">
                 <field type="input" name="store_id"
                        label="PLG_SYSTEM_ECOM360_REDSHOP_STORE_ID" description="PLG_SYSTEM_ECOM360_REDSHOP_STORE_ID_DESC"
                        default="42" required="true" />
+                <field type="cmclistid" name="list_id" label="PLG_SYSTEM_ECOM360_REDSHOP_LIST_ID_LBL" description="PLG_SYSTEM_ECOM360_REDSHOP_LIST_ID_DESC" required="true" />
+                <field type="input" name="store_name" label="PLG_SYSTEM_ECOM360_REDSHOP_STORE_NAME_LBL" description="PLG_SYSTEM_ECOM360_REDSHOP_STORE_NAME_DESC" required="true" default="Redshop store" />
+                <field type="input" name="currency_code" label="PLG_SYSTEM_ECOM360_REDSHOP_CURRENCY_CODE_LBL" description="PLG_SYSTEM_ECOM360_REDSHOP_CURRENCY_CODE_DESC" default="EUR" required="true" />
+
             </fieldset>
         </fields>
     </config>
