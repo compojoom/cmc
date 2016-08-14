@@ -93,6 +93,7 @@ class plgSystemECom360Payplans extends JPlugin
 		$shop->id = $this->params->get('store_id', 42);
 		$shop->name = $this->params->get('store_name', 'PayPlans store');
 		$shop->list_id = $this->params->get('list_id');
+		$shop->currency_code = $data->currency;
 
 		// The customer data
 		$customer = new stdClass();
