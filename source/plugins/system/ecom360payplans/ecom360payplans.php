@@ -20,7 +20,6 @@ JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
  */
 class plgSystemECom360Payplans extends JPlugin
 {
-
 	/**
 	 * Notify Mailchimp only when the subscription has changed
 	 *
@@ -68,19 +67,20 @@ class plgSystemECom360Payplans extends JPlugin
 		// $chimp = new CmcHelperChimp;
 		$price = (float) $data->amount;
 
-		$user = JFactory::getUser($data->user_id);
-
+		$user = JFactory::getUser($data->getBuyer());
 		$customerNames = explode(' ', $user->name);
 
-		$plan = $this->get($data->app_id);
+		$planIds = $data->getPlans();
+
+		$plan = $this->getPayplan($planIds);
 
 		// Array with producs
 		$products = array(
 			0 => array(
-				'id' => (string) $data->payment_id,
-				'product_id'  => $data->app_id,
+				'id' => (string) $data->getId(),
+				'product_id'  => $planIds[0],
 				'title' => $plan->title,
-				'product_variant_id' => (string)  $data->app_id,
+				'product_variant_id' => (string) $planIds[0],
 				'product_variant_title' => $plan->title,
 				'quantity' => (int) 1,
 				'price'        => (float) $price,
@@ -96,7 +96,7 @@ class plgSystemECom360Payplans extends JPlugin
 		$shop->currency_code = $data->currency;
 
 		// The customer data
-		$customer = new stdClass();
+		$customer = new stdClass;
 		$customer->id = md5($user->email);
 		$customer->email_address = $user->email;
 		$customer->opt_in_status = false;
@@ -105,11 +105,11 @@ class plgSystemECom360Payplans extends JPlugin
 
 		// The order data
 		$order = new stdClass;
-		$order->id = $data->payment_id;
+		$order->id = $data->getId();
 		$order->currency_code = $data->currency;
 		$order->payment_tax = (double) 0;
 		$order->order_total = (double) $price;
-		$order->processed_at_foreign = JFactory::getDate($data->created_data->date)->toSql();
+		$order->processed_at_foreign = JFactory::getDate($data->get('created_date')->date)->toSql();
 
 		$chimp = new CmcHelperChimp;
 
@@ -139,8 +139,8 @@ class plgSystemECom360Payplans extends JPlugin
 
 		$query
 			->select('*')
-			->from('#__payplans_app')
-			->where('app_id = ' . $db->q('id'));
+			->from('#__payplans_plan')
+			->where('plan_id IN (' . implode(',', $id) . ')');
 
 		$db->setQuery($query);
 
