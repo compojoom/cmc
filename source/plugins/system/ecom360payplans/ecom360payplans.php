@@ -72,14 +72,16 @@ class plgSystemECom360Payplans extends JPlugin
 
 		$customerNames = explode(' ', $user->name);
 
+		$plan = $this->get($data->app_id);
+
 		// Array with producs
 		$products = array(
 			0 => array(
 				'id' => (string) $data->payment_id,
 				'product_id'  => $data->app_id,
-				'title' => '',
+				'title' => $plan->title,
 				'product_variant_id' => (string)  $data->app_id,
-				'product_variant_title' => 'PayPlans Subscription',
+				'product_variant_title' => $plan->title,
 				'quantity' => (int) 1,
 				'price'        => (float) $price,
 				'type' => 'subscription'
@@ -88,7 +90,7 @@ class plgSystemECom360Payplans extends JPlugin
 
 		// The shop data
 		$shop = new stdClass;
-		$shop->id = $this->params->get("store_id", 42);
+		$shop->id = $this->params->get('store_id', 42);
 		$shop->name = $this->params->get('store_name', 'PayPlans store');
 		$shop->list_id = $this->params->get('list_id');
 
@@ -118,5 +120,29 @@ class plgSystemECom360Payplans extends JPlugin
 			$products,
 			$customer
 		);
+	}
+
+	/**
+	 * Get the payplan
+	 *
+	 * @param   int  $id  The id
+	 *
+	 * @return  mixed
+	 *
+	 * @since   3.0.0
+	 */
+	protected function getPayplan($id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query
+			->select('*')
+			->from('#__payplans_app')
+			->where('app_id = ' . $db->q('id'));
+
+		$db->setQuery($query);
+
+		return $db->loadObject();
 	}
 }
