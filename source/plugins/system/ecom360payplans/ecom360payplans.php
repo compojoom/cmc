@@ -24,14 +24,15 @@ class plgSystemECom360Payplans extends JPlugin
 	/**
 	 * Notify Mailchimp only when the subscription has changed
 	 *
-	 * @param $prev
-	 * @param $new
+	 * @param   object   $prev  Previous object
+	 * @param   string   $new   The new object
 	 *
-	 * @return bool
+	 * @return  bool
+	 *
+	 * @since   1.3.0
 	 */
-	public function onPayplansSubscriptionAfterSave($prev, $new)
+	public function onPayplansPaymentAfterSave($prev, $new)
 	{
-
 		$app = JFactory::getApplication();
 
 		// This plugin is only intended for the frontend
@@ -40,18 +41,19 @@ class plgSystemECom360Payplans extends JPlugin
 			return true;
 		}
 
-		// no need to trigger if previous and current state is same
-		if ($prev != null && $prev->getStatus() == $new->getStatus())
-		{
-			$this->notifyMC($new);
-		}
+		$this->notifyMC($new);
 
 		return true;
 	}
 
 	/**
+	 * Notify MailChimp API
 	 *
-	 * @param $data
+	 * @param   object  $data  Te payment data
+	 *
+	 * @return  boolean  true on success
+	 *
+	 * @since   1.3.0
 	 */
 	public function notifyMC($data)
 	{
@@ -63,40 +65,58 @@ class plgSystemECom360Payplans extends JPlugin
 			return;
 		}
 
-		$shop_name = $this->params->get("store_name", "Your shop");
-		$shop_id = $this->params->get("store_id", 42);
+		// $chimp = new CmcHelperChimp;
+		$price = (float) $data->amount;
 
-		// with each order you can subscribe to only 1 subscription. But there is no getPlan function
-		$plans = $data->getPlans();
+		$user = JFactory::getUser($data->user_id);
 
-		$total = $data->getPrice();
-		$tax = 0;
+		$customerNames = explode(' ', $user->name);
 
-		// get the invoice information - otherwise we have no tax information for the purchase
-		$invoice = $data->getOrder(true)->getInvoice();
-		if ($invoice)
-		{
-			$total = $invoice->getTotal();
-			$tax = $invoice->getTaxAmount();
-		}
-
-		$products = array(0 => array(
-			"product_id" => $plans[0], "sku" => $plans[0], "product_name" => $data->getTitle(),
-			"qty" => 1,
-			"cost" => $data->getPrice()
-		)
+		// Array with producs
+		$products = array(
+			0 => array(
+				'id' => (string) $data->payment_id,
+				'product_id'  => $data->app_id,
+				'title' => '',
+				'product_variant_id' => (string)  $data->app_id,
+				'product_variant_title' => 'PayPlans Subscription',
+				'quantity' => (int) 1,
+				'price'        => (float) $price,
+				'type' => 'subscription'
+			)
 		);
+
+		// The shop data
+		$shop = new stdClass;
+		$shop->id = $this->params->get("store_id", 42);
+		$shop->name = $this->params->get('store_name', 'PayPlans store');
+		$shop->list_id = $this->params->get('list_id');
+
+		// The customer data
+		$customer = new stdClass();
+		$customer->id = md5($user->email);
+		$customer->email_address = $user->email;
+		$customer->opt_in_status = false;
+		$customer->first_name = isset($customerNames[0]) ? $customerNames[0] : '';
+		$customer->last_name = isset($customerNames[1]) ? $customerNames[1] : '';
+
+		// The order data
+		$order = new stdClass;
+		$order->id = $data->payment_id;
+		$order->currency_code = $data->currency;
+		$order->payment_tax = (double) 0;
+		$order->order_total = (double) $price;
+		$order->processed_at_foreign = JFactory::getDate($data->created_data->date)->toSql();
 
 		$chimp = new CmcHelperChimp;
 
+		// Now send all this to Mailchimp
 		return $chimp->addEcomOrder(
 			$session->get('mc_cid', '0'),
-			$shop_id,
-			$data->getId(),
-			'',
-			$total,
-			$tax,
-			$products
+			$shop,
+			$order,
+			$products,
+			$customer
 		);
 	}
 }
