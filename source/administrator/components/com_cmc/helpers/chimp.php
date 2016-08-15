@@ -520,4 +520,42 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 
 		return $result;
 	}
+
+	/**
+	 * Batch subscribe users to mailchimp
+	 *
+	 * @param   string  $list   - the list id
+	 * @param   array   $users  - the users to subscribe to the list (the merges)
+	 *
+	 * @since version
+	 */
+	public function listBatchSubscribe($list, $users)
+	{
+		$config = JComponentHelper::getParams('com_cmc');
+
+		$batch = new \DrewM\MailChimp\Batch($this);
+		$status = 'subscribed';
+
+		// If double opt-in is on, then add the user as pending and let mailchimp send him a confirmation mail
+		if($config->get('opt_in', true))
+		{
+			$status = 'pending';
+		}
+
+		foreach($users as $user)
+		{
+			$args = array(
+				'email_address' => $user['EMAIL'],
+				"status_if_new" => $status,
+				'merge_fields'  => $user,
+				'interests'     => new stdClass,
+				'email_type'    => 'html'
+			);
+
+			$batch->put('my-id',  'lists/' . $list . '/members/' . md5($user['EMAIL']), $args);
+		}
+
+		// Send the request
+		$batch->execute();
+	}
 }

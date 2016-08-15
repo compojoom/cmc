@@ -198,7 +198,6 @@ class CmcControllerUsers extends JControllerAdmin
 			$appl->enqueueMessage('COM_CMC_NO_NEW_USERS_IN_THE_GROUPS');
 		}
 
-
 		$appl->redirect('index.php?option=com_cmc&view=users');
 	}
 

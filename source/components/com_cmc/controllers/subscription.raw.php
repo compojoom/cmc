@@ -30,6 +30,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		$appl  = JFactory::getApplication();
 		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
+		$config = JComponentHelper::getParams('com_cmc');
 
 		$chimp = new cmcHelperChimp;
 
@@ -42,7 +43,10 @@ class CmcControllerSubscription extends JControllerLegacy
 		$listId = $form['cmc']['listid'];
 		$email  = $mergeVars['EMAIL'];
 
-		$memberInfo = $chimp->listSubscribe($listId, $email, $mergeVars, $mergeVars['GROUPINGS'], 'html', true, true, true, false);
+		$memberInfo = $chimp->listSubscribe(
+			$listId, $email, $mergeVars, $mergeVars['GROUPINGS'], 'html',
+			$config->get('opt_in', true), true, true, false
+		);
 
 		if ($chimp->getLastError())
 		{

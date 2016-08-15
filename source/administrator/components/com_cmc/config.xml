@@ -10,6 +10,13 @@
                 size="60"
                 required="true"
                 />
+        <field name="opt_in" label="COM_CMC_USE_DOUBLE_OPT_IN_LBL"
+               description="COM_CMC_USE_DOUBLE_OPT_IN_DESC"
+
+               class="btn-group" type="radio" default="1">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
         <field
                 name="webhooks_key"
                 type="webhook" default=""
