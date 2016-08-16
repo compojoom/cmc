@@ -28,6 +28,7 @@ class CmcHelperSubscription
 	{
 		$merges = json_decode($merges);
 		$data = array();
+		$groups = array();
 
 		$interests = CmcHelperList::getInterestsFields($listId);
 
@@ -39,19 +40,23 @@ class CmcHelperSubscription
 				foreach ($value as $ikey => $ivalue)
 				{
 					// Go over the interests to get the interest-category-id
-					foreach($interests as $interest)
+					foreach ($interests as $interest)
 					{
-						if(strstr($interest['id'], $ikey))
+						if (strstr($interest['id'], $ikey))
 						{
 							$id = explode(';', $interest['id'], 2);
-							$groups[$id[0]][] = $ikey;
+
+							if ($ivalue == true)
+							{
+								$groups[$id[0]][] = $ikey;
+							}
 						}
 					}
 
 					// If the length of groups is 1, then we are dealing with a radio button and need to pass it as string
-					foreach($groups as $gkey => $vgroup)
+					foreach ($groups as $gkey => $vgroup)
 					{
-						if(count($vgroup) === 1)
+						if (count($vgroup) === 1)
 						{
 							$data['cmc_interests'][$gkey] = $vgroup[0];
 						}

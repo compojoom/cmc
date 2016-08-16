@@ -98,11 +98,14 @@ class CmcHelperList
 		$data = self::getInterestsFieldsRaw($listId);
 		$options = array();
 
-		foreach($data as $key => $value)
+		foreach ($data as $key => $value)
 		{
-			$groups = array_map(function($mv) {
-				return $mv['id'] . '##' . $mv['name'];
-			}, $value['groups']);
+			$groups = array_map(
+				function($mv) {
+					return $mv['id'] . '##' . $mv['name'];
+				},
+				$value['groups']
+			);
 
 			$options[] = array(
 				'id' => $value['id'] . ';' . $value['type'] . ';' . $value['title'] . ';' . implode('####', $groups),
@@ -113,6 +116,15 @@ class CmcHelperList
 		return $options;
 	}
 
+	/**
+	 * Return interest fields data as raw data in php array
+	 *
+	 * @param   string  $listId  - the list id
+	 *
+	 * @return array
+	 *
+	 * @since 3.0
+	 */
 	public static function getInterestsFieldsRaw($listId)
 	{
 		$api = new cmcHelperChimp;
@@ -131,7 +143,7 @@ class CmcHelperList
 
 					foreach ($details as $ig)
 					{
-						$groups[] =  array('id' => $ig['id'], 'name' => $ig['name']);
+						$groups[] = array('id' => $ig['id'], 'name' => $ig['name']);
 					}
 
 					$fields[$interest['id']] = array(
@@ -190,33 +202,31 @@ class CmcHelperList
 		$interestsConfig = self::getInterestsFieldsRaw($listId);
 
 		$interests = new stdClass;
-		foreach($interestsConfig as $key => $value)
+
+		// Set default value to false for all interests
+		foreach ($interestsConfig as $key => $value)
 		{
-			foreach($value['groups'] as $group)
+			foreach ($value['groups'] as $group)
 			{
 				$id = $group['id'];
-				// TODO: fix this for radio. Now on mailchimp if a user decides to change a radio option, mailchimp will still keep the old version
-				// but if we don't do this - we can't show the selected option on our side
-				if($value['type'] != 'radio')
-				{
-					$interests->$id = false;
-				}
+				$interests->$id = false;
 			}
 		}
 
+		// Now set the correct value for each interest
 		foreach ($subInterests as $key => $interest)
 		{
 			// Each interest represents an object property
 			if (is_array($interest))
 			{
-				foreach($interest as $value)
+				foreach ($interest as $value)
 				{
 					$interests->$value = true;
 				}
 			}
 			else
 			{
-				$interests->$interest =  true;
+				$interests->$interest = true;
 			}
 		}
 
