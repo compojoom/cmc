@@ -1,6 +1,15 @@
 <?php defined('_JEXEC') or die(); ?>
 
 =====================================================================
+CMC 3.0.0 - Released 16-August-2015
+=====================================================================
+^ Major rewrite to Mailchimp API v3 (previous versions of CMC will stop to function on 31.12.2016 since Mailchimp has deprecated the user of API v1.3)
+~ all ecommerce 360 plugins use the new API
++ added option for disabling the double opt-in
+~ no notices on PHP7
+~ bug fixes
+
+=====================================================================
 CMC 2.0.0 - Released 07-July-2015
 =====================================================================
 + updated the CB plugin to work with CB 2.0
