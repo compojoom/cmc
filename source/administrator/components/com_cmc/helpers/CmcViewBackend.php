@@ -67,9 +67,23 @@ class CmcViewBackend extends CmcView
 	 */
 	public function display($tpl = null)
 	{
-		CompojoomHtml::addCSSToQueue('matukio', 'media/com_matukio/backend/css/matukio.css');
-
 		JHtml::_('formbehavior.chosen', 'select');
+
+		try
+		{
+			$result = $this->loadTemplate($tpl);
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage($e->getMessage());
+			$result = '<div>' . $e->getMessage() . '</div>';
+		}
+
+
+		if ($result instanceof Exception)
+		{
+			return $result;
+		}
 
 		echo CompojoomHtmlCtemplate::getHead(
 			CmcHelperBasic::getMenu(),
@@ -78,15 +92,8 @@ class CmcViewBackend extends CmcView
 			$this->_cslogan
 		);
 
-		$result = $this->loadTemplate($tpl);
-
-		if ($result instanceof Exception)
-		{
-			return $result;
-		}
-
 		echo '<!-- Start CMC by compojoom.com -->';
-		echo '<div id="matukio_holder">';
+		echo '<div id="cmc_holder">';
 
 		// Content from the template
 		echo $result;
