@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       15.07.14
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -55,7 +55,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		$account = $chimp->getAccountDetails();
 		$memberInfo = $chimp->listMemberInfo($listId, $email);
-		$listInfo = $chimp->lists(array('list_id' => $listId));
+		$listInfo = $chimp->lists($listId);
 
 		$url = 'http://' . $account['username'] . '.' . $dc . '.list-manage.com/profile?u='
 				. $account['user_id'] . '&id=' . $listId . '&e=' . $memberInfo['data'][0]['euid'];
@@ -91,7 +91,7 @@ class CmcControllerSubscription extends JControllerLegacy
 		$appl = JFactory::getApplication();
 		$input = $appl->input;
 		$listId = $input->getString('listid');
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		if ($user->guest)
@@ -108,7 +108,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		if ($subscription)
 		{
-			$chimp = new cmcHelperChimp;
+			$chimp = new CmcHelperChimp;
 
 			if ($chimp->listUnsubscribe($listId, $subscription->email))
 			{

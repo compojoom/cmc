@@ -1,24 +1,23 @@
 <?php
 /**
- * @author     Daniel Dimitrov <daniel@compojoom.com>
- * @date       28.08.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 defined('_JEXEC') or die('Restricted access');
 
-CompojoomHtmlBehavior::bootstrap31(true, true, true, false);
+CompojoomHtmlBehavior::bootstrap(true);
 jimport('joomla.filter.output');
 JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 JHTML::_('script', 'media/com_cmc/backend/js/sync.js');
 
-// Load bootstrap
-
-
 $chimp = new CmcHelperChimp;
 $lists = $chimp->lists();
+$lists = $lists['lists'];
 ?>
 
 <script type="text/javascript">
@@ -50,7 +49,7 @@ $lists = $chimp->lists();
 			<input id="cmc-indexer-token" type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 		</div>
 
-		<?php if ($lists['total'] > 0) : ?>
+		<?php if (count($lists) > 0) : ?>
 			<br/>
 			<table class="table table-hover table-striped">
 				<thead>
@@ -61,7 +60,7 @@ $lists = $chimp->lists();
 						<th><?php echo JText::_('COM_CMC_LIST_MEMBER_COUNT'); ?></th>
 					</tr>
 				</thead>
-				<?php foreach ($lists['data'] as $list) : ?>
+				<?php foreach ($lists as $list) : ?>
 					<tr>
 						<td><input type="checkbox" name="<?php echo $list['id']; ?>"/></td>
 						<td><?php echo $list['id']; ?></td>

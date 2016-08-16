@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     Yves Hoppe <yves@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -93,7 +93,7 @@ class PlgUserCmc extends JPlugin
 		if ($subscriptionData)
 		{
 			$form->setFieldAttribute('newsletter', 'checked', 'checked', 'cmc');
-			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges), $this->params->get('listid'));
 		}
 	}
 
@@ -244,7 +244,7 @@ class PlgUserCmc extends JPlugin
 				$data['email'],
 				$data['cmc_groups']['FNAME'],
 				$data['cmc_groups']['LNAME'],
-				CmcHelperList::mergeVars($data),
+				CmcHelperList::mergeVars($data, $data['cmc']['listid']),
 				'html',
 				$update,
 				true

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -66,15 +66,13 @@ class CmcModelList extends JModelAdmin
 		$item = array();
 		$item['id'] = null;
 		$item['mc_id'] = $list['id'];
-		$item['web_id'] = $list['web_id'];
 		$item['list_name'] = $list['name'];
 		$item['date_created'] = $list['date_created'];
 		$item['email_type_option'] = $list['email_type_option'];
-		$item['use_awesomebar'] = $list['use_awesomebar'];
-		$item['default_from_name'] = $list['default_from_name'];
-		$item['default_from_email'] = $list['default_from_email'];
-		$item['default_subject'] = $list['default_subject'];
-		$item['default_language'] = $list['default_language'];
+		$item['default_from_name'] = $list['campaign_defaults']['from_name'];
+		$item['default_from_email'] = $list['campaign_defaults']['from_email'];
+		$item['default_subject'] = $list['campaign_defaults']['subject'];
+		$item['default_language'] = $list['campaign_defaults']['language'];
 		$item['list_rating'] = $list['list_rating'];
 		$item['subscribe_url_short'] = $list['subscribe_url_short'];
 		$item['subscribe_url_long'] = $list['subscribe_url_long'];

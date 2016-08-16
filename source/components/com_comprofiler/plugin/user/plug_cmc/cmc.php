@@ -1,13 +1,12 @@
 <?php
 /**
- * Compojoom Community-Builder Plugin
- * @Copyright (C) 2013 - Yves Hoppe <yves@compojoom.com>
- * @Copyright (C) 2013 - Daniel Dimitrov <daniel@compojoom.com>
- * @All rights reserved
- * @Joomla! is Free Software
- * @Released under GNU/GPL License : http://www.gnu.org/copyleft/gpl.html
- * @version $Revision: 1.0.0 $
- **/
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
+ *
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 
 if (!(defined('_VALID_CB') || defined('_JEXEC') || defined('_VALID_MOS')))
 {
@@ -376,21 +375,18 @@ class GetCmcTab extends cbTabHandler
 
 		$chimp = new cmcHelperChimp;
 
-		$userlists = $chimp->listsForEmail($user->email);
+		$isSubscribed = $chimp->isSubscribed($listId, $user->email);
 
-		$html = '';
-
-		if ($userlists && in_array($listId, $userlists))
+		if ($isSubscribed)
 		{
 			// User is in list
-			$html .= "<table><tr><td>" . JText::_("COM_CMC_SUBSCRIBED") . "</td></tr></table>";
+			$html = "<table><tr><td>" . JText::_("COM_CMC_SUBSCRIBED") . "</td></tr></table>";
 		}
 		else
 		{
 			// User has no subscription
-			$html .= "<table><tr><td>" . JText::_("COM_CMC_NO_SUBSCRIPTION") . "</td></tr></table>";
+			$html = "<table><tr><td>" . JText::_("COM_CMC_NO_SUBSCRIPTION") . "</td></tr></table>";
 		}
-
 
 		return $html;
 	}
@@ -457,7 +453,7 @@ class GetCmcTab extends cbTabHandler
 		$val = 'name';
 		$options[] = array($key => '', $val => '-- ' . JText::_('Please select') . ' --');
 
-		foreach ($lists['data'] as $list)
+		foreach ($lists['lists'] as $list)
 		{
 			$options[] = array($key => $list[$key], $val => $list[$val]);
 		}
@@ -496,54 +492,9 @@ class GetCmcTab extends cbTabHandler
 			return $content;
 		}
 
-		$api = new cmcHelperChimp;
-		$fields = $api->listMergeVars($listid);
+		$options = CmcHelperList::getMergeFields($listid);
 		$key = 'tag';
 		$val = 'name';
-		$options = false;
-
-		if ($fields)
-		{
-			foreach ($fields as $field)
-			{
-				$choices = '';
-
-				if (isset($field['choices']))
-				{
-					foreach ($field['choices'] as $c)
-					{
-						$choices .= $c . '##';
-					}
-
-					$choices = substr($choices, 0, -2);
-				}
-
-				$req = ($field['req']) ? 1 : 0;
-
-				if ($field[$key] == 'EMAIL')
-				{
-					if (isset($this->value) && !is_array($this->value))
-					{
-						$oldValue = $this->value;
-						$this->value = array();
-						$this->value[] = $oldValue;
-					}
-
-					$this->value[] = $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices;
-				}
-
-				if ($req)
-				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
-						. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
-					);
-				}
-				else
-				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
-				}
-			}
-		}
 
 		$attribs = 'multiple="multiple" size="8"';
 
@@ -579,30 +530,9 @@ class GetCmcTab extends cbTabHandler
 			return $content;
 		}
 
-		$api = new cmcHelperChimp;
-		$interests = $api->listInterestGroupings($listid);
+		$options = CmcHelperList::getInterestsFields($listid);
 		$key = 'id';
-		$val = 'name';
-		$options = false;
-
-		if ($interests)
-		{
-			foreach ($interests as $interest)
-			{
-				if ($interest['form_field'] != 'hidden')
-				{
-					$groups = '';
-
-					foreach ($interest['groups'] as $ig)
-					{
-						$groups .= $ig['name'] . '##' . $ig['name'] . '####';
-					}
-
-					$groups = substr($groups, 0, -4);
-					$options[] = array($key => $interest[$key] . ';' . $interest['form_field'] . ';' . $interest['name'] . ';' . $groups, $val => $interest[$val]);
-				}
-			}
-		}
+		$val = 'title';
 
 		$attribs = 'multiple="multiple" size="8"';
 
@@ -656,12 +586,5 @@ class GetCmcTab extends cbTabHandler
 		}
 
 		return $groups;
-	}
-
-	public function onBeforeUserProfileEditDisplay($user, $tabContent)
-	{
-		$tabContent = 'balbla';//		die();
-
-		die('labladasfd');
 	}
 }

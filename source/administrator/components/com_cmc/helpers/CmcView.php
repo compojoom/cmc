@@ -7,10 +7,15 @@
  * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
+defined('_JEXEC') or die ('Restricted access');
 
-defined('_JEXEC') or die('Restricted access');
-?>
+jimport('joomla.application.component.view');
 
-<div class="alert alert-error">
-	<?php echo JText::_('MOD_CMC_ERROR_WITH_THE_FORM'); ?>
-</div>
+/**
+ * Class CmcView
+ *
+ * @since  3.0.0
+ */
+class CmcView extends JViewLegacy
+{
+}

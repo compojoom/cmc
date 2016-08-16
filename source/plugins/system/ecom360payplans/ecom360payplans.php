@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,18 +20,18 @@ JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
  */
 class plgSystemECom360Payplans extends JPlugin
 {
-
 	/**
 	 * Notify Mailchimp only when the subscription has changed
 	 *
-	 * @param $prev
-	 * @param $new
+	 * @param   object   $prev  Previous object
+	 * @param   string   $new   The new object
 	 *
-	 * @return bool
+	 * @return  bool
+	 *
+	 * @since   1.3.0
 	 */
-	public function onPayplansSubscriptionAfterSave($prev, $new)
+	public function onPayplansPaymentAfterSave($prev, $new)
 	{
-
 		$app = JFactory::getApplication();
 
 		// This plugin is only intended for the frontend
@@ -40,18 +40,19 @@ class plgSystemECom360Payplans extends JPlugin
 			return true;
 		}
 
-		// no need to trigger if previous and current state is same
-		if ($prev != null && $prev->getStatus() == $new->getStatus())
-		{
-			$this->notifyMC($new);
-		}
+		$this->notifyMC($new);
 
 		return true;
 	}
 
 	/**
+	 * Notify MailChimp API
 	 *
-	 * @param $data
+	 * @param   object  $data  Te payment data
+	 *
+	 * @return  boolean  true on success
+	 *
+	 * @since   1.3.0
 	 */
 	public function notifyMC($data)
 	{
@@ -63,33 +64,86 @@ class plgSystemECom360Payplans extends JPlugin
 			return;
 		}
 
-		$shop_name = $this->params->get("store_name", "Your shop");
-		$shop_id = $this->params->get("store_id", 42);
+		// $chimp = new CmcHelperChimp;
+		$price = (float) $data->amount;
 
-		// with each order you can subscribe to only 1 subscription. But there is no getPlan function
-		$plans = $data->getPlans();
+		$user = JFactory::getUser($data->getBuyer());
+		$customerNames = explode(' ', $user->name);
 
-		$total = $data->getPrice();
-		$tax = 0;
+		$planIds = $data->getPlans();
 
-		// get the invoice information - otherwise we have no tax information for the purchase
-		$invoice = $data->getOrder(true)->getInvoice();
-		if ($invoice)
-		{
-			$total = $invoice->getTotal();
-			$tax = $invoice->getTaxAmount();
-		}
+		$plan = $this->getPayplan($planIds);
 
-		$products = array(0 => array(
-			"product_id" => $plans[0], "sku" => $plans[0], "product_name" => $data->getTitle(),
-			"qty" => 1,
-			"cost" => $data->getPrice()
-		)
+		// Array with producs
+		$products = array(
+			0 => array(
+				'id' => (string) $data->getId(),
+				'product_id'  => $planIds[0],
+				'title' => $plan->title,
+				'product_variant_id' => (string) $planIds[0],
+				'product_variant_title' => $plan->title,
+				'quantity' => (int) 1,
+				'price'        => (float) $price,
+				'type' => 'subscription'
+			)
 		);
 
-		CmcHelperEcom360::sendOrderInformations(
-			$shop_id,
-			$shop_name, $data->getId(), $total, $tax, 0.00, $products // No shipping
+		// The shop data
+		$shop = new stdClass;
+		$shop->id = $this->params->get('store_id', 42);
+		$shop->name = $this->params->get('store_name', 'PayPlans store');
+		$shop->list_id = $this->params->get('list_id');
+		$shop->currency_code = $data->currency;
+
+		// The customer data
+		$customer = new stdClass;
+		$customer->id = md5($user->email);
+		$customer->email_address = $user->email;
+		$customer->opt_in_status = false;
+		$customer->first_name = isset($customerNames[0]) ? $customerNames[0] : '';
+		$customer->last_name = isset($customerNames[1]) ? $customerNames[1] : '';
+
+		// The order data
+		$order = new stdClass;
+		$order->id = $data->getId();
+		$order->currency_code = $data->currency;
+		$order->payment_tax = (double) 0;
+		$order->order_total = (double) $price;
+		$order->processed_at_foreign = JFactory::getDate($data->get('created_date')->date)->toSql();
+
+		$chimp = new CmcHelperChimp;
+
+		// Now send all this to Mailchimp
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
+			$shop,
+			$order,
+			$products,
+			$customer
 		);
+	}
+
+	/**
+	 * Get the payplan
+	 *
+	 * @param   int  $id  The id
+	 *
+	 * @return  mixed
+	 *
+	 * @since   3.0.0
+	 */
+	protected function getPayplan($id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query
+			->select('*')
+			->from('#__payplans_plan')
+			->where('plan_id IN (' . implode(',', $id) . ')');
+
+		$db->setQuery($query);
+
+		return $db->loadObject();
 	}
 }

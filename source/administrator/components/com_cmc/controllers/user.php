@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -27,7 +27,7 @@ class CmcControllerUser extends JControllerForm
 	 *
 	 * @return void
 	 */
-	public function postSaveHook($model, $validData)
+	protected function postSaveHook(JModelLegacy $model, $validData = array())
 	{
 		// Updating it to mailchimp
 		if ($model->getState('user.new'))
@@ -37,7 +37,7 @@ class CmcControllerUser extends JControllerForm
 				$validData['email'],
 				$validData['firstname'],
 				$validData['lastname'],
-				CmcHelperList::mergeVars($validData),
+				CmcHelperList::mergeVars($validData, $validData['list_id']),
 				$validData['email_type'],
 				false
 			);
@@ -50,7 +50,7 @@ class CmcControllerUser extends JControllerForm
 				$validData['email'],
 				$validData['firstname'],
 				$validData['lastname'],
-				CmcHelperList::mergeVars($validData),
+				CmcHelperList::mergeVars($validData, $validData['list_id']),
 				$validData['email_type'],
 				true
 			);

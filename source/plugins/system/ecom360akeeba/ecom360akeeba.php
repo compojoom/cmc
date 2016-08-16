@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -39,7 +39,9 @@ class plgSystemECom360Akeeba extends JPlugin
 		}
 
 		if ($row->state == 'N' || $row->state == 'X')
+		{
 			return;
+		}
 
 		if (array_key_exists('state', (array) $info['modified']) && in_array($row->state, array('P', 'C')))
 		{
@@ -83,28 +85,64 @@ class plgSystemECom360Akeeba extends JPlugin
 			return;
 		}
 
-		$shop_name = $this->params->get("store_name", "Your shop");
-		$shop_id = $this->params->get("store_id", 42);
+		// The shop data
+		$shop = new stdClass;
+		$shop->id = $this->params->get("store_id", 42);;
+		$shop->name = $this->params->get('store_name', 'Akeeba store');
+		$shop->list_id = $this->params->get('list_id');
+		$shop->currency_code = $this->params->get('currency_code', 'EUR');
 
 		$akeebasubsLevel = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
 
-		$akeeba_subscription_name = $akeebasubsLevel->title;
+		$customer = $this->getCustomer($row->user_id);
 
-		$products = array(0 => array(
-			"product_id" => $info['current']->akeebasubs_level_id, "sku" => "", "product_name" => $akeeba_subscription_name,
-			"category_id" => 0, "category_name" => "", "qty" => 1.00, // No category id, qty always 1
-			"cost" => $info['current']->gross_amount
-		)
+		$products = array(
+			0 => array(
+				'id' => (string) $row->getId(),
+				"product_id" => (string) $row->akeebasubs_level_id,
+				'title' => $akeebasubsLevel->title,
+				'product_variant_id' => (string)  $row->akeebasubs_level_id,
+				'product_variant_title' => $akeebasubsLevel->title,
+				'quantity' => 1,
+				'price' => $row->gross_amount,
+				'published_at_foreign' => $row->publish_up,
+				'description' => $akeebasubsLevel->description,
+				'type' => 'subscription'
+			)
 		);
 
-		CmcHelperEcom360::sendOrderInformations(
-			$shop_id,
-			$shop_name,
-			$info['current']->akeebasubs_subscription_id,
-			$info['current']->gross_amount,
-			$info['current']->tax_percent,
-			0.00, // No shipping
-			$products
+		// The order data
+		$order = new stdClass;
+		$order->id = $row->getId();
+		$order->currency_code = JComponentHelper::getParams('com_akeebasubs')->get('currency', 'EUR');
+		$order->payment_tax = (double) $row->tax_amount;
+		$order->order_total = (double) $row->gross_amount;
+		$order->processed_at_foreign = $row->created_on;
+
+		$chimp = new CmcHelperChimp;
+
+		return $chimp->addEcomOrder(
+			$session->get('mc_cid', '0'),
+			$shop,
+			$order,
+			$products,
+			$customer
 		);
+	}
+
+	private function getCustomer($id)
+	{
+		$joomlaUser = JFactory::getUser($id);
+
+		$user = new stdClass;
+		$user->email_address = $joomlaUser->email;
+		$name = explode(' ', $joomlaUser->name);
+		$user->first_name = isset($name[0]) ? $name[0] : '';
+		$user->last_name = isset($name[1]) ? $name[1] : '';
+
+		$user->id = md5($joomlaUser->email);
+		$user->opt_in_status = false;
+
+		return $user;
 	}
 }

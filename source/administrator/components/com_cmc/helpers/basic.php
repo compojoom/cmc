@@ -1,10 +1,10 @@
 <?php
 /**
- * @author     Yves Hoppe <yves@compojoom.com>
- * @author     Daniel Dimitrov <daniel@compojoom.com>
- * @date       09.07.12
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -72,13 +72,16 @@ class CmcHelperBasic
 	 */
 	public static function unsubscribeList($user)
 	{
-		$api = new cmcHelperChimp;
+		$api = new CmcHelperChimp;
 
 		$api->listUnsubscribe($user->list_id, $user->email, true);
 
-		if ($api->errorCode)
+
+		if ($api->getLastError())
 		{
-			throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->errorMessage, $api->errorCode);
+			$response = $api->getLastResponse();
+
+			throw new Exception(JTEXT::_("COM_CMC_UNSUBSCRIBE_FAILED") . ": " . $api->getLastError(), $response['headers']['http_code'] );
 		}
 
 		return true;
@@ -109,8 +112,6 @@ class CmcHelperBasic
 		}
 
 		return $result;
-
-
 	}
 
 	/**

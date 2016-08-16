@@ -1,9 +1,10 @@
 <?php
 /**
- * @author     Daniel Dimitrov <daniel@compojoom.com>
- * @date       22.07.12
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2012 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -27,6 +28,12 @@ class JFormFieldFields extends CmcField
 	public function getInput()
 	{
 		$listid = $this->form->getValue('listid', 'params');
+
+		if (!$listid)
+		{
+			return "";
+		}
+
 		$options = CmcHelperList::getMergeFields($listid);
 		$key = 'tag';
 		$val = 'name';
@@ -35,7 +42,10 @@ class JFormFieldFields extends CmcField
 
 		if ($options)
 		{
-			$content = JHtml::_('select.genericlist', $options, 'jform[params][fields][]', $attribs, $key, $val, $this->value, $this->id);
+			$content = JHtml::_(
+				'select.genericlist', $options, 'jform[params][fields][]',
+				$attribs, $key, $val, $this->value, $this->id
+			);
 		}
 		else
 		{

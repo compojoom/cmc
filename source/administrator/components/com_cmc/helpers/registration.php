@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     Yves Hoppe <yves@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -36,7 +36,7 @@ class CmcHelperRegistration
 	 */
 	public static function saveTempUser($user, $postdata, $plg = _CPLG_JOOMLA)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$toSave['listid'] = $postdata['cmc']['listid'];
@@ -75,16 +75,8 @@ class CmcHelperRegistration
 	{
 		$chimp = new cmcHelperChimp;
 
-		$userlists = $chimp->listsForEmail($user->email);
-
 		// Hidden field
 		$listId = $params['listid'];
-
-		if ($userlists && in_array($listId, $userlists))
-		{
-			// Already in list, TODO update subscription here
-			return null;
-		}
 
 		// Activate E-Mail in mailchimp
 		if (isset($params['groups']))
@@ -95,24 +87,20 @@ class CmcHelperRegistration
 			}
 		}
 
+		$mergeVars['GROUPINGS'] = array();
 		if (isset($params['interests']))
 		{
-			foreach ($params['interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-			}
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests'], $listId);
 		}
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
 		// Double OPTIN false
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', true, true, true, false);
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);
 
-		if ($chimp->errorCode)
+		if ($chimp->getLastError())
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_WERE_NOT_SUBSCRIBED_TO_NEWSLETTER') . ':' . $chimp->errorMessage);
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_CMC_YOU_WERE_NOT_SUBSCRIBED_TO_NEWSLETTER') . ':' . $chimp->getLastError());
 
 			return false;
 		}
@@ -131,7 +119,7 @@ class CmcHelperRegistration
 	public static function activateTempUser($user)
 	{
 		// Check if user wants newsletter and is in our temp table
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$query->select("*")->from("#__cmc_register")->where(
@@ -154,12 +142,12 @@ class CmcHelperRegistration
 
 		$chimp = new cmcHelperChimp;
 
-		$userlists = $chimp->listsForEmail($user->email);
-
 		// Hidden field
 		$listId = $params['listid'];
 
-		if ($userlists && in_array($listId, $userlists))
+		$isSubscribed = $chimp->isSubscribed($listId, $user->email);
+
+		if ($isSubscribed)
 		{
 			// Already in list, we don't update here, we update on form send
 			return null;
@@ -174,29 +162,18 @@ class CmcHelperRegistration
 			}
 		}
 
+		$mergeVars['GROUPINGS'] = array();
 		if (isset($params['interests']))
 		{
-			foreach ($params['interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				if (is_array($interest))
-				{
-					array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-				}
-				else
-				{
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => $interest);
-				}
-			}
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests'], $listId);
 		}
 
 		$mergeVars['OPTINIP'] = $params['OPTINIP'];
 
 		// Double OPTIN false
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+		$chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);
 
-		if (!$chimp->errorCode)
+		if (!$chimp->getLastError())
 		{
 			$query->update('#__cmc_users')->set('merges = ' . $db->quote(json_encode($mergeVars)))
 				->where('email = ' . $db->quote($user->email) . ' AND list_id = ' . $db->quote($listId));
@@ -223,7 +200,7 @@ class CmcHelperRegistration
 
 	public static function deleteUser($user)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		// Check for email, more valid then id
@@ -241,12 +218,8 @@ class CmcHelperRegistration
 		}
 
 		$chimp = new cmcHelperChimp;
-		$userlists = $chimp->listsForEmail($user->email);
 
-		if ($userlists && in_array($res->list_id, $userlists))
-		{
-			$chimp->listUnsubscribe($res->list_id, $user->email, false, false, true);
-		}
+		$chimp->listUnsubscribe($res->list_id, $user->email);
 
 		return true;
 	}
@@ -276,12 +249,10 @@ class CmcHelperRegistration
 
 		$chimp = new cmcHelperChimp;
 
-		$userlists = $chimp->listsForEmail($user->email);
-
 		// Hidden field
 		$listId = $postdata['listid'];
 
-		if ($userlists && in_array($listId, $userlists))
+		if ($chimp->isSubscribed($listId, $user->email))
 		{
 			// Already in list, we don't update here, we update on form send
 			return null;
@@ -296,26 +267,22 @@ class CmcHelperRegistration
 			}
 		}
 
+		$mergeVars['GROUPINGS'] = array();
 		// Interests
 		if (isset($params['interests']))
 		{
-			foreach ($params['interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-				$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-			}
+			$mergeVars['GROUPINGS'] = CmcHelperList::createInterestsObject($params['interests'], $listId);
 		}
 
-		$chimp->listSubscribe($listId, $user->email, $mergeVars, 'html', false, true, true, false);
+		$result = $chimp->listSubscribe($listId, $user->email, $mergeVars, $mergeVars['GROUPINGS'], 'html', false, true, true, false);
 
-		if (!$chimp->errorCode)
+		if (!$chimp->getLastError())
 		{
 			return true;
 		}
 		else
 		{
-			echo "Error: " . $chimp->errorMessage;
+			echo "Error: " . $chimp->getLastError();
 
 			return false;
 		}
@@ -332,18 +299,6 @@ class CmcHelperRegistration
 
 	public static function isSubscribed($listId, $email)
 	{
-		// Check if user email already registered
-		$chimp = new cmcHelperChimp;
-
-		$userlists = $chimp->listsForEmail($email);
-
-		if ($userlists && in_array($listId, $userlists))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 }

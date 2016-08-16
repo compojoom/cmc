@@ -1,11 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     Yves Hoppe <yves@compojoom.com>
- * @author     Daniel Dimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -26,25 +25,25 @@ class CmcHelperXmlbuilder
 	/**
 	 * The constructor
 	 *
-	 * @param   JRegistry  $options  - config object with everything we need
+	 * @param   JRegistry $options - config object with everything we need
 	 */
 	public function __construct($options)
 	{
 		$this->newsletterCheckbox = $options->get('newsletterCheckbox', 1);
-		$this->phoneFormat = $options->get("phoneFormat", "inter");
-		$this->dateFormat = $options->get("dateFormat", "%Y-%m-%d");
-		$this->address2 = $options->get("address2", 0);
-		$this->listId = $options->get('listid', "");
-		$this->interests = $options->get('interests', '');
-		$this->fields = $options->get('fields', '');
-		$this->introText = $options->get("intro-text");
-		$this->outroText = $options->get("outro-text");
+		$this->phoneFormat        = $options->get("phoneFormat", "inter");
+		$this->dateFormat         = $options->get("dateFormat", "%Y-%m-%d");
+		$this->address2           = $options->get("address2", 0);
+		$this->listId             = $options->get('listid', "");
+		$this->interests          = $options->get('interests', '');
+		$this->fields             = $options->get('fields', '');
+		$this->introText          = $options->get("intro-text");
+		$this->outroText          = $options->get("outro-text");
 	}
 
 	/**
 	 * Gets a instance (SINGLETON) of this class
 	 *
-	 * @param   JRegistry  $config  - configration object
+	 * @param   JRegistry $config - configration object
 	 *
 	 * @return CmcHelperXmlbuilder
 	 */
@@ -55,7 +54,7 @@ class CmcHelperXmlbuilder
 		if (!isset(self::$instance[$md5]))
 		{
 			self::$instance[$md5] = new CmcHelperXmlbuilder($config);
-			$lang = JFactory::getLanguage();
+			$lang                 = JFactory::getLanguage();
 			$lang->load('com_cmc', JPATH_ADMINISTRATOR);
 		}
 
@@ -122,7 +121,7 @@ class CmcHelperXmlbuilder
 			}
 		}
 
-		if (is_array($this->interests) )
+		if (is_array($this->interests))
 		{
 			$html .= '</fieldset>';
 			$html .= '</fields>';
@@ -132,7 +131,7 @@ class CmcHelperXmlbuilder
 			foreach ($this->interests as $i)
 			{
 				$interest = explode(';', $i);
-				$groups = explode('####', $interest[3]);
+				$groups   = explode('####', $interest[3]);
 
 				switch ($interest[1])
 				{
@@ -194,7 +193,7 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns an xml formatted form field
 	 *
-	 * @param   array  $field  - the field array
+	 * @param   array $field - the field array
 	 *
 	 * @return  string
 	 */
@@ -242,7 +241,7 @@ class CmcHelperXmlbuilder
 	/**
 	 * Function that double encodes the entities in a text - removing any html tags from text
 	 *
-	 * @param   string  $text  - the text
+	 * @param   string $text - the text
 	 *
 	 * @return string
 	 */
@@ -254,8 +253,8 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns an xml formatted form field
 	 *
-	 * @param   array  $field   - the field array
-	 * @param   array  $config  - the field type
+	 * @param   array $field  - the field array
+	 * @param   array $config - the field type
 	 *
 	 * @return string
 	 */
@@ -263,14 +262,14 @@ class CmcHelperXmlbuilder
 	{
 		// Structure: EMAIL;email;Email Address;1;
 		$validate = array(
-			'email' => 'validate-email',
+			'email'  => 'validate-email',
 			'number' => 'validate-digits',
-			'url' => 'validate-url',
-			'phone' => 'validate-digits'
+			'url'    => 'validate-url',
+			'phone'  => 'validate-digits'
 		);
 
 		$class = array();
-		$type = isset($config['type']) ? $config['type'] : 'text';
+		$type  = isset($config['type']) ? $config['type'] : 'text';
 
 		if (isset($config['class']))
 		{
@@ -316,11 +315,13 @@ class CmcHelperXmlbuilder
 	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
 	 * @return string
+	 *
+	 * @since  3.0
 	 */
 	public function dropdown($params)
 	{
 		$choices = explode('##', $params[4]);
-		$req = ($params[3]) ? ' cmc_req' : '';
+		$req     = ($params[3]) ? ' cmc_req' : '';
 
 		// Double escape as we don't allow html in the label
 		$title = $this->noEntities(JText::_($params[2]));
@@ -335,11 +336,6 @@ class CmcHelperXmlbuilder
 			'default="0"
 			class="inputbox input-medium' . $req . '">';
 
-		if (!$params[3])
-		{
-			$select .= '<option value=""></option>';
-		}
-
 		foreach ($choices as $ch)
 		{
 			$select .= '<option value="' . $ch . '">' . $ch . '</option>';
@@ -353,15 +349,15 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns a radio input box element
 	 *
-	 * @param   array  $params  - Example FNAME;text;First Name;0;""
+	 * @param   array $params - Example FNAME;text;First Name;0;""
 	 *
 	 * @return  string
 	 */
 	public function radio($params)
 	{
 		$choices = explode('##', $params[4]);
-		$req = ($params[3]) ? 'cmcreq' : '';
-		$title = $this->noEntities(JText::_($params[2]));
+		$req     = ($params[3]) ? 'cmcreq' : '';
+		$title   = $this->noEntities(JText::_($params[2]));
 
 		$radio = '<field
 			name="' . $params[0] . '"
@@ -385,14 +381,14 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   array  $params  - Example FNAME;text;First Name;0;""
+	 * @param   array $params - Example FNAME;text;First Name;0;""
 	 *
 	 * @return  string
 	 */
 	public function date($params)
 	{
 		$title = $this->noEntities(JText::_($params[2]));
-		$req = ($params[3]) ? ' cmc_req' : '';
+		$req   = ($params[3]) ? ' cmc_req' : '';
 
 		return '<field
 			name="' . $params[0] . '"
@@ -400,8 +396,8 @@ class CmcHelperXmlbuilder
 			class="inputbox input-small' . $req . '"
 			labelclass="form-label cmc-label"
 			label="' . $title . '" '
-			. ($params[3] ? ' required="required" ' : ' ') .
-			'format="' . $this->dateFormat . '"
+		. ($params[3] ? ' required="required" ' : ' ') .
+		'format="' . $this->dateFormat . '"
 			maxlength="10"
 		/>';
 	}
@@ -409,13 +405,13 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns a birthday input box element
 	 *
-	 * @param   array  $params  - Example FNAME;text;First Name;0;""
+	 * @param   array $params - Example FNAME;text;First Name;0;""
 	 *
 	 * @return  string
 	 */
 	public function birthday($params)
 	{
-		$req = ($params[3]) ? ' cmc_req' : '';
+		$req   = ($params[3]) ? ' cmc_req' : '';
 		$title = $this->noEntities(JText::_($params[2]));
 
 		$address = '<field type="birthday"
@@ -423,8 +419,8 @@ class CmcHelperXmlbuilder
 					name="birthday"
 					class="inputbox input-small cmc-birthday' . $req . '"
 					labelclass="form-label cmc-label"'
-					. ($params[3] ? ' required="required" ' : ' ') .
-					'label="' . $title . '" />';
+			. ($params[3] ? ' required="required" ' : ' ') .
+			'label="' . $title . '" />';
 
 		return $address;
 	}
@@ -432,13 +428,13 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns phone input box element
 	 *
-	 * @param   array  $params  - Example FNAME;text;First Name;0;""
+	 * @param   array $params - Example FNAME;text;First Name;0;""
 	 *
 	 * @return  string
 	 */
 	public function phone($params)
 	{
-		$req = ($params[3]) ? ' cmc_req' : '';
+		$req   = ($params[3]) ? ' cmc_req' : '';
 		$title = $this->noEntities(JText::_($params[2]));
 		$inter = '';
 
@@ -453,10 +449,10 @@ class CmcHelperXmlbuilder
 		id="cmc-phone-' . $params[0] . '"
 		class="phone input-medium validate-digits ' . $inter . $req . '"
 		labelclass="form-label cmc-label"'
-		. ($params[3] ? ' required="required" ' : ' ') .
-		'size="40" ' .
-		'hint="' . $title . ' ' . ($req ? '*' : '') . '" ' .
-		'label="' . $title . '"
+			. ($params[3] ? ' required="required" ' : ' ') .
+			'size="40" ' .
+			'hint="' . $title . ' ' . ($req ? '*' : '') . '" ' .
+			'label="' . $title . '"
 		/>';
 
 		return $phone;
@@ -465,13 +461,13 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns address input box element
 	 *
-	 * @param   array  $params  - Example FNAME;text;First Name;0;""
+	 * @param   array $params - Example FNAME;text;First Name;0;""
 	 *
 	 * @return  string
 	 */
 	public function address($params)
 	{
-		$req = ($params[3]) ? ' cmc_req' : '';
+		$req   = ($params[3]) ? ' cmc_req' : '';
 		$title = $this->noEntities(JText::_($params[2]));
 
 		$address = '<field type="spacer" name="addr" label="' . $title . '" />';
@@ -529,17 +525,17 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns date input box element
 	 *
-	 * @param   string   $name   - Name of the select
-	 * @param   int      $id     - The date format for this field
-	 * @param   string   $title  - The field name prefix
-	 * @param   boolean  $req    - Is the field required?
+	 * @param   string  $name  - Name of the select
+	 * @param   int     $id    - The date format for this field
+	 * @param   string  $title - The field name prefix
+	 * @param   boolean $req   - Is the field required?
 	 *
 	 * @return string
 	 */
 	private function getCountryDropdown($name, $id, $title, $req)
 	{
 		$options = CmcHelperCountries::getCountries();
-		$select = '<field
+		$select  = '<field
 			id="' . $id . '"
 			name="' . $name . '][country"
 			type="list"

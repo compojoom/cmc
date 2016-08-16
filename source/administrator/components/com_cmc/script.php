@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -74,7 +74,7 @@ class Com_CmcInstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
-		$path = $parent->getParent()->getPath('source') . '/libraries/compojoom/libraries/compojoom/include.php';
+		$path = $parent->getParent()->getPath('source') . '/libraries/compojoom/include.php';
 
 		// Check if the file exists (on discover install it won't)
 		if (JFile::exists($path))
@@ -158,44 +158,9 @@ class Com_CmcInstallerScript
 
 		$this->status->cb = false;
 
-		if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/library/cb/cb.installer.php'))
+		foreach ($this->installationQueue['cbplugins'] as $plugin)
 		{
-			global $_CB_framework;
-			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php';
-			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.class.php';
-			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/comprofiler.class.php';
-
-			require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/library/cb/cb.installer.php';
-
-			foreach ($this->installationQueue['cbplugins'] as $plugin)
-			{
-				$cbInstaller = new cbInstallerPlugin;
-
-				if ($cbInstaller->install($path . '/components/com_comprofiler/plugin/user/' . $plugin . '/'))
-				{
-					$langPath = $parent->getParent()->getPath('source') . '/components/com_comprofiler/plugin/user/' . $plugin . '/administrator/language';
-
-					$cbNames = explode('_', $plugin);
-
-					if (JFolder::exists($langPath))
-					{
-						$languages = JFolder::folders($langPath);
-
-						foreach ($languages as $language)
-						{
-							if (JFolder::exists(JPATH_ROOT . '/administrator/language/' . $language))
-							{
-								JFile::copy(
-									$langPath . '/' . $language . '/' . $language . '.plg_' . $cbNames[1] . '.ini',
-									JPATH_ROOT . '/administrator/language/' . $language . '/' . $language . '.plg_' . $cbNames[1] . '.ini'
-								);
-							}
-						}
-					}
-
-					$this->status->cb = true;
-				}
-			}
+			$this->status->cb = CompojoomInstallerCb::install($parent, $plugin);
 		}
 
 		echo $this->displayInfoInstallation();

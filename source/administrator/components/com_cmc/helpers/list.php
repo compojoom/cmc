@@ -1,10 +1,10 @@
 <?php
 /**
  * @package    CMC
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -44,8 +44,9 @@ class CmcHelperList
 	 */
 	public static function getMergeFields($listId)
 	{
-		$api = new cmcHelperChimp;
+		$api = new CmcHelperChimp;
 		$fields = $api->listMergeVars($listId);
+
 		$key = 'tag';
 		$val = 'name';
 
@@ -57,9 +58,9 @@ class CmcHelperList
 			{
 				$choices = '';
 
-				if (isset($field['choices']))
+				if (isset($field['options']['choices']))
 				{
-					foreach ($field['choices'] as $c)
+					foreach ($field['options']['choices'] as $c)
 					{
 						$choices .= $c . '##';
 					}
@@ -67,17 +68,17 @@ class CmcHelperList
 					$choices = substr($choices, 0, -2);
 				}
 
-				$req = ($field['req']) ? 1 : 0;
+				$req = ($field['required']) ? 1 : 0;
 
 				if ($req)
 				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name']
+					$options[] = array($key => $field[$key] . ';' . $field['type'] . ';' . $field['name']
 						. ';' . $req . ';' . $choices, $val => $field[$val] . "*"
 					);
 				}
 				else
 				{
-					$options[] = array($key => $field[$key] . ';' . $field['field_type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
+					$options[] = array($key => $field[$key] . ';' . $field['type'] . ';' . $field['name'] . ';' . $req . ';' . $choices, $val => $field[$val]);
 				}
 			}
 		}
@@ -94,32 +95,68 @@ class CmcHelperList
 	 */
 	public static function getInterestsFields($listId)
 	{
+		$data = self::getInterestsFieldsRaw($listId);
+		$options = array();
+
+		foreach ($data as $key => $value)
+		{
+			$groups = array_map(
+				function($mv) {
+					return $mv['id'] . '##' . $mv['name'];
+				},
+				$value['groups']
+			);
+
+			$options[] = array(
+				'id' => $value['id'] . ';' . $value['type'] . ';' . $value['title'] . ';' . implode('####', $groups),
+				'title' => $value['title']
+			);
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Return interest fields data as raw data in php array
+	 *
+	 * @param   string  $listId  - the list id
+	 *
+	 * @return array
+	 *
+	 * @since 3.0
+	 */
+	public static function getInterestsFieldsRaw($listId)
+	{
 		$api = new cmcHelperChimp;
 		$interests = $api->listInterestGroupings($listId);
-		$key = 'id';
-		$val = 'name';
-		$options = false;
+		$fields = array();
 
 		if ($interests)
 		{
 			foreach ($interests as $interest)
 			{
-				if ($interest['form_field'] != 'hidden')
+				if ($interest['type'] != 'hidden')
 				{
+					$details = $api->listIntegerestGroupingsField($listId, $interest['id']);
+
 					$groups = '';
 
-					foreach ($interest['groups'] as $ig)
+					foreach ($details as $ig)
 					{
-						$groups .= $ig['name'] . '##' . $ig['name'] . '####';
+						$groups[] = array('id' => $ig['id'], 'name' => $ig['name']);
 					}
 
-					$groups = substr($groups, 0, -4);
-					$options[] = array($key => $interest[$key] . ';' . $interest['form_field'] . ';' . $interest['name'] . ';' . $groups, $val => $interest[$val]);
+					$fields[$interest['id']] = array(
+						'id' => $interest['id'],
+						'title' => $interest['title'],
+						'type' => $interest['type'],
+						'groups' => $groups
+					);
 				}
 			}
 		}
 
-		return $options;
+		return $fields;
 	}
 
 	/**
@@ -129,7 +166,7 @@ class CmcHelperList
 	 *
 	 * @return mixed
 	 */
-	public static function mergeVars($form)
+	public static function mergeVars($form, $listId)
 	{
 		if (isset($form['cmc_groups']))
 		{
@@ -141,24 +178,59 @@ class CmcHelperList
 
 		if (isset($form['cmc_interests']))
 		{
-			foreach ($form['cmc_interests'] as $key => $interest)
-			{
-				// Take care of interests that contain a comma (,)
-				if (is_array($interest))
-				{
-					array_walk($interest, create_function('&$val', '$val = str_replace(",","\,",$val);'));
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => implode(',', $interest));
-				}
-				else
-				{
-					$mergeVars['GROUPINGS'][] = array('id' => $key, 'groups' => $interest);
-				}
-			}
+			$mergeVars['GROUPINGS'] = self::createInterestsObject($form['cmc_interests'], $listId);
+		}
+		else
+		{
+			$mergeVars['GROUPINGS'] = array();
 		}
 
 		$mergeVars['OPTINIP'] = $_SERVER['REMOTE_ADDR'];
 
 		return $mergeVars;
+	}
+
+	/**
+	 * Create an interests Object that can be used with the mailchimp API
+	 *
+	 * @param   array  $subInterests - the $_POST array with the interests
+	 *
+	 * @return stdClass
+	 */
+	public static function createInterestsObject($subInterests, $listId)
+	{
+		$interestsConfig = self::getInterestsFieldsRaw($listId);
+
+		$interests = new stdClass;
+
+		// Set default value to false for all interests
+		foreach ($interestsConfig as $key => $value)
+		{
+			foreach ($value['groups'] as $group)
+			{
+				$id = $group['id'];
+				$interests->$id = false;
+			}
+		}
+
+		// Now set the correct value for each interest
+		foreach ($subInterests as $key => $interest)
+		{
+			// Each interest represents an object property
+			if (is_array($interest))
+			{
+				foreach ($interest as $value)
+				{
+					$interests->$value = true;
+				}
+			}
+			else
+			{
+				$interests->$interest = true;
+			}
+		}
+
+		return $interests;
 	}
 
 	/**
@@ -177,22 +249,23 @@ class CmcHelperList
 	 *
 	 * @throws Exception
 	 */
-	public static function subscribe($listId, $email, $firstname, $lastname, $groupings = array(), $email_type = "html", $update = false, $updateLocal = false)
+	public static function subscribe($listId, $email, $firstname, $lastname, 
+	                                 $groupings = array(), $email_type = "html",
+	                                 $update = false, $updateLocal = false)
 	{
 		$api = new CmcHelperChimp;
 
 		$merge_vars = array_merge(array('FNAME' => $firstname, 'LNAME' => $lastname), $groupings);
 
-
 		// By default this sends a confirmation email - you will not see new members
 		// until the link contained in it is clicked!
-		$api->listSubscribe($listId, $email, $merge_vars, $email_type, false, $update);
+		$api->listSubscribe($listId, $email, $merge_vars, $merge_vars['GROUPINGS'], $email_type, false, $update);
 
-		if ($api->errorCode)
+		if ($api->getLastError())
 		{
 			JFactory::getApplication()->enqueueMessage(
 				JTEXT::_("COM_CMC_SUBSCRIBE_FAILED") . " " .
-				$api->errorCode . " / " . $api->errorMessage, 'error'
+				$api->getLastError(), 'error'
 			);
 
 			return false;

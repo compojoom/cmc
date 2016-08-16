@@ -395,4 +395,14 @@ class RoboFile extends \Robo\Tasks
 		$this->say('Trying to kill the selenium server.');
 		$this->_exec("curl http://$host:$port/selenium-server/driver/?cmd=shutDownSeleniumServer");
 	}
+
+	/**
+	 * Update copyright headers for this project. (Set the text up in the jorobo.ini)
+	 *
+	 * @return  void
+	 */
+	public function headers()
+	{
+		(new \Joomla\Jorobo\Tasks\CopyrightHeader())->run();
+	}
 }

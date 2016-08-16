@@ -1,9 +1,11 @@
 <?php
 /**
- * @package    Cmc
- * @author     Daniel Dimitrov <daniel@compojoom.com>
- * @copyright  Copyright (C) 2008 - 2014 Compojoom.com . All rights reserved.
- * @license    GNU GPL version 3 or later <http://www.gnu.org/licenses/gpl.html>
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
+ *
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 // Protect from unauthorized access

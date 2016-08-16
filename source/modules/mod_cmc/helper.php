@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    com_cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       15.07.2014
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -50,7 +50,7 @@ class ModCMCHelper
 
 				if ($subscriptionData)
 				{
-					$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+					$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges, $params->get('listid')));
 				}
 			}
 		}
@@ -84,6 +84,11 @@ class ModCMCHelper
 
 		foreach ($lines as $line)
 		{
+			if (empty($line))
+			{
+				continue;
+			}
+
 			$map = explode('=', $line);
 
 			if (strstr($map[1], ':'))

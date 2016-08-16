@@ -12,9 +12,10 @@
 	  "email": "yves@compojoom.com"
 	}
   ],
-  "require"    : {
+  "require": {
 	"compojoom/lib_compojoom": "dev-master",
-	"php": ">=5.3.10"
+	"php": ">=5.3.10",
+	"drewm/mailchimp-api": "^2.1"
   },
   "require-dev": {
 	"php": ">=5.4.0",
@@ -22,9 +23,9 @@
 	"joomla-projects/joomla-browser": "dev-develop",
 	"codegyre/robo": "0.6.*",
 	"joomla-projects/robo": "dev-master",
-	"joomla-projects/selenium-server-standalone": "v2.47.1",
+	"joomla-projects/selenium-server-standalone": "v2.52.0",
 	"fzaninotto/faker": "^1.5",
-	"joomla-projects/jorobo": "0.2",
+	"joomla-projects/jorobo": "dev-develop",
 	"compojoom/lib_compojoom": "dev-master"
   }
 }

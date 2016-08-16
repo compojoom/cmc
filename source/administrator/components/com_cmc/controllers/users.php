@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -49,6 +49,7 @@ class CmcControllerUsers extends JControllerAdmin
 		$api_key = $params->get("api_key", '');
 		$db = JFactory::getDBO();
 
+
 		if (count($cid))
 		{
 			for ($i = 0; $i < count($cid); $i++)
@@ -63,13 +64,16 @@ class CmcControllerUsers extends JControllerAdmin
 				}
 				catch (Exception $e)
 				{
-					// Catching the case where the user is already unsubscribed from mailchimp
-					if ($e->getCode() != 232)
+					// If we have 404 here, then the user was deleted in mailchimp and we don't need him here
+					if($e->getCode() == 404)
 					{
-						throw $e;
+						JFactory::getApplication()->enqueueMessage('User seems to be already deleted in the mailchimp list');
+					}
+					else
+					{
+						JFactory::getApplication()->enqueueMessage($e->getMessage());
 					}
 				}
-
 			}
 
 			$cids = implode(',', $cid);
@@ -193,7 +197,6 @@ class CmcControllerUsers extends JControllerAdmin
 		{
 			$appl->enqueueMessage('COM_CMC_NO_NEW_USERS_IN_THE_GROUPS');
 		}
-
 
 		$appl->redirect('index.php?option=com_cmc&view=users');
 	}

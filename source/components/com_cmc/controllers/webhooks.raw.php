@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -60,6 +60,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 			$input->get('type', ''),
 			$input->get('data', '', 'array')
 		);
+
 		JLog::add(json_encode($message));
 
 		switch ($type)
@@ -195,7 +196,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 		 * "data[reason]": "hard"
 		 */
 
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$email = $data['email'];
 
@@ -288,7 +289,7 @@ class CmcControllerWebhooks extends JControllerLegacy
 		 * "data[ip_opt]": "10.20.10.30"
 		 */
 
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$mc_id = $data['id'];

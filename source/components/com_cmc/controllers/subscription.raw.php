@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -28,8 +28,9 @@ class CmcControllerSubscription extends JControllerLegacy
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		$appl  = JFactory::getApplication();
-		$db    = JFactory::getDBO();
+		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
+		$config = JComponentHelper::getParams('com_cmc');
 
 		$chimp = new cmcHelperChimp;
 
@@ -37,28 +38,30 @@ class CmcControllerSubscription extends JControllerLegacy
 		$form   = $input->get('jform', '', 'array');
 		$isAjax = $input->get('ajax');
 
-		$mergeVars = CmcHelperList::mergeVars($form);
+		$mergeVars = CmcHelperList::mergeVars($form, $form['cmc']['listid']);
 
 		$listId = $form['cmc']['listid'];
 		$email  = $mergeVars['EMAIL'];
 
-		$chimp->listSubscribe($listId, $email, $mergeVars, 'html', true, true, true, false);
+		$memberInfo = $chimp->listSubscribe(
+			$listId, $email, $mergeVars, $mergeVars['GROUPINGS'], 'html',
+			$config->get('opt_in', true), true, true, false
+		);
 
-		if ($chimp->errorCode)
+		if ($chimp->getLastError())
 		{
-			$response['html']  = $chimp->errorMessage;
+			$response['html']  = $chimp->getLastError();
 			$response['error'] = true;
 		}
 		else
 		{
 			// Get the member info from mailchimp
-			$memberInfo = $chimp->listMemberInfo($listId, $email);
 			$status     = 'applied';
 
 			// User was found on list
-			if ($memberInfo['success'])
+			if (isset($memberInfo['status']))
 			{
-				$status = $memberInfo['data'][0]['status'];
+				$status = $memberInfo['status'];
 			}
 
 			// Check if the subscription is already present in the db
@@ -112,32 +115,29 @@ class CmcControllerSubscription extends JControllerLegacy
 	public function exist()
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
+		$url = '';
 		$chimp = new cmcHelperChimp;
 
 		$input = JFactory::getApplication()->input;
 		$form  = $input->get('jform', '', 'array');
 
-		$mergeVars = CmcHelperList::mergeVars($form);
+		$mergeVars = CmcHelperList::mergeVars($form, $form['cmc']['listid']);
 
 		$email  = $mergeVars['EMAIL'];
 		$listId = $form['cmc']['listid'];
 
 		// Check if the user is in the list already
-		$userlists = $chimp->listsForEmail($email);
+		$isSubscribed = $chimp->isSubscribed($listId, $email);
 
-		if ($userlists && in_array($listId, $userlists))
+		$url = '';
+
+		if ($isSubscribed)
 		{
-			$exist = true;
 			$url   = JRoute::_('index.php?option=com_cmc&task=subscription.update&email=' . $email . '&listid=' . $listId);
 		}
-		else
-		{
-			$exist = false;
-			$url   = '';
-		}
 
-		echo json_encode(array('exists' => $exist, 'url' => $url));
+		echo json_encode(array('exists' => $isSubscribed, 'url' => $url));
+
 		jexit();
 	}
 }

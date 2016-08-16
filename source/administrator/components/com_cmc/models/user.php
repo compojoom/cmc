@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       06.09.13
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -79,12 +79,17 @@ class CmcModelUser extends JModelAdmin
 				CmcHelperList::getMergeFields($listId)
 			);
 
-			$interests = array_map(
-				function($value) {
-					return $value['id'];
-				},
-				CmcHelperList::getInterestsFields($listId)
-			);
+			$interests = CmcHelperList::getInterestsFields($listId);
+
+			if ($interests)
+			{
+				$interests = array_map(
+					function($value) {
+						return $value['id'];
+					},
+					$interests
+				);
+			}
 
 			$params->set('fields', $fields);
 			$params->set('interests', $interests);
@@ -94,6 +99,7 @@ class CmcModelUser extends JModelAdmin
 			// Generate the xml for the form
 			$xml = $renderer->build();
 
+
 			$form->load($xml, true);
 
 			$subscriptionData = CmcHelperUsers::getSubscription($userData->get('email'), $userData->get('list_id'));
@@ -101,7 +107,7 @@ class CmcModelUser extends JModelAdmin
 			// Bind the data to the form
 			if ($subscriptionData)
 			{
-				$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges));
+				$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges, $listId));
 			}
 		}
 

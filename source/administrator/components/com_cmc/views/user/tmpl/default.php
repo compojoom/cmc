@@ -1,10 +1,10 @@
 <?php
 /**
- * @package    Cmc
- * @author     DanielDimitrov <daniel@compojoom.com>
- * @date       19.06.15
+ * @package    CMC
+ * @author     Compojoom <contact-us@compojoom.com>
+ * @date       2016-04-15
  *
- * @copyright  Copyright (C) 2008 - 2013 compojoom.com . All rights reserved.
+ * @copyright  Copyright (C) 2008 - 2016 compojoom.com - Daniel Dimitrov, Yves Hoppe. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -12,174 +12,168 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\Utilities\ArrayHelper;
 
-JHTML::_('behavior.tooltip');
+JHtml::_('behavior.tooltip');
 
-JHTML::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
+JHtml::_('stylesheet', 'media/com_cmc/backend/css/cmc.css');
 
 $form = $this->form;
 ?>
-<?php
-echo CompojoomHtmlCtemplate::getHead(CmcHelperBasic::getMenu(), 'users', '', '');
-?>
-	<div class="box-info">
-		<h2>
-				<img src="http://www.gravatar.com/avatar/<?php echo md5($this->user->email); ?>?s=40"
-				     alt="<?php echo $this->user->firstname . " " . $this->user->lastname; ?>"/>
-			<?php echo JText::_('COM_CMC_EDIT_USER'); ?></h2>
+<div class="box-info">
+	<h2>
+		<img src="http://www.gravatar.com/avatar/<?php echo md5($this->user->email); ?>?s=40"
+		     alt="<?php echo $this->user->firstname . " " . $this->user->lastname; ?>"/>
+		<?php echo JText::_('COM_CMC_EDIT_USER'); ?></h2>
 
-		<div id="cmc" class="cmc">
-			<form
-				action="<?php echo JRoute::_('index.php?option=com_cmc&view=user&layout=edit&id=' . (int) $this->user->id); ?>"
-				method="post" name="adminForm" id="adminForm" class="form-horizontal" role="form" enctype="multipart/form-data">
+	<div id="cmc" class="cmc">
+		<form
+			action="<?php echo JRoute::_('index.php?option=com_cmc&view=user&layout=edit&id=' . (int) $this->user->id); ?>"
+			method="post" name="adminForm" id="adminForm" class="form-horizontal" role="form"
+			enctype="multipart/form-data">
 
-					<?php $fieldsets = $form->getFieldsets('cmc_groups'); ?>
+			<?php $fieldsets = $form->getFieldsets('cmc_groups'); ?>
 
-					<?php foreach ($fieldsets as $key => $value) : ?>
-						<?php $fields = $form->getFieldset($key); ?>
+			<?php foreach ($fieldsets as $key => $value) : ?>
+				<?php $fields = $form->getFieldset($key); ?>
 
-						<?php foreach ($fields as $field) : ?>
-							<?php
-							if (strtolower($field->type) != 'radio')
-							{
-								$field->class .= ' form-control';
-							}
+				<?php foreach ($fields as $field) : ?>
+					<?php
+					if (strtolower($field->type) != 'radio')
+					{
+						$field->class .= ' form-control';
+					}
 
-							$field->labelclass .= ' col-sm-2 compojoom-control-label'
-							?>
-							<?php if (strtolower($field->type) != 'spacer') : ?>
-								<div class="form-group">
-										<?php echo $field->label; ?>
-									<div class="col-sm-10">
-										<?php echo $field->input; ?>
-									</div>
-								</div>
-							<?php else : ?>
-								<hr/>
-							<?php endif; ?>
-						<?php endforeach; ?>
-					<?php endforeach; ?>
-
-					<?php $fieldsets = $form->getFieldsets('cmc_interests'); ?>
-					<?php foreach ($fieldsets as $key => $value) : ?>
-
-
-						<?php $fields = $form->getFieldset($key); ?>
-
-						<?php foreach ($fields as $field) : ?>
-							<?php
-							if (strtolower($field->type) != 'radio' && strtolower($field->type) != 'checkboxes')
-							{
-								$field->class .= ' form-control';
-							}
-
-							$field->labelclass .= ' col-sm-2 compojoom-control-label'
-							?>
-
-							<?php if (strtolower($field->type) != 'spacer') : ?>
-								<div class="form-group">
-										<?php echo $field->label; ?>
-									<div class="col-sm-10">
-										<?php echo $field->input; ?>
-									</div>
-								</div>
-							<?php else : ?>
-
-							<?php endif; ?>
-						<?php endforeach; ?>
-
-					<?php endforeach; ?>
-
-
-					<div class="form-group">
-						<?php echo $this->form->getLabel('list_id'); ?>
-						<div class="col-sm-10">
-							<?php echo $this->form->getInput('list_id'); ?>
+					$field->labelclass .= ' col-sm-2 compojoom-control-label'
+					?>
+					<?php if (strtolower($field->type) != 'spacer') : ?>
+						<div class="form-group">
+							<?php echo $field->label; ?>
+							<div class="col-sm-10">
+								<?php echo $field->input; ?>
+							</div>
 						</div>
-					</div>
+					<?php else : ?>
+						<hr/>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			<?php endforeach; ?>
 
-					<div class="form-group">
-						<?php echo $this->form->getLabel('status'); ?>
-						<div class="col-sm-10">
-							<?php echo $this->form->getInput('status'); ?>
+			<!-- Interests / category groups -->
+			<?php $fieldsets = $form->getFieldsets('cmc_interests'); ?>
+			<?php foreach ($fieldsets as $key => $value) : ?>
+
+				<?php $fields = $form->getFieldset($key); ?>
+
+				<?php foreach ($fields as $field) : ?>
+					<?php
+					if (strtolower($field->type) != 'radio' && strtolower($field->type) != 'checkboxes')
+					{
+						$field->class .= ' form-control';
+					}
+
+					$field->labelclass .= ' col-sm-2 compojoom-control-label'
+					?>
+
+					<?php if (strtolower($field->type) != 'spacer') : ?>
+						<div class="form-group">
+							<?php echo $field->label; ?>
+							<div class="col-sm-10">
+								<?php echo $field->input; ?>
+							</div>
 						</div>
-					</div>
+					<?php else : ?>
 
-					<div class="form-group">
-						<?php echo $this->form->getLabel('email_type'); ?>
-						<div class="col-sm-10">
-							<?php echo $this->form->getInput('email_type'); ?>
-						</div>
-					</div>
+					<?php endif; ?>
+				<?php endforeach; ?>
 
-					<div class="form-group">
-						<label class="col-sm-2 compojoom-control-label">
-							<?php echo JText::_('COM_CMC_MAILCHIMP_ID'); ?>
-						</label>
-						<div class="col-sm-10">
-							<p class="form-control-static"><?php echo $this->user->mc_id; ?></p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 compojoom-control-label">
-							<?php echo JText::_('COM_CMC_WEB_ID'); ?>
-						</label>
-						<div class="col-sm-10">
-							<p class="form-control-static"><?php echo $this->user->web_id; ?></p>
-						</div>
-					</div>
+			<?php endforeach; ?>
 
-					<div class="form-group">
-						<label class="col-sm-2 compojoom-control-label">
-							<?php echo JText::_('COM_CMC_CLIENTS'); ?>
-						</label>
-						<div class="col-sm-10">
-							<p class="form-control-static">
-								<?php echo ArrayHelper::toString($this->user->clients ? json_decode($this->user->clients, true) : array() , " = ", ", "); ?>
-							</p>
-						</div>
-					</div>
+			<div class="form-group">
+				<?php echo $this->form->getLabel('list_id'); ?>
+				<div class="col-sm-10">
+					<?php echo $this->form->getInput('list_id'); ?>
+				</div>
+			</div>
 
-					<div class="form-group">
-						<label class="col-sm-2 compojoom-control-label">
-							<?php echo JText::_('COM_CMC_LANGUAGE'); ?>
-						</label>
-						<div class="col-sm-10">
-							<p class="form-control-static">
-								<?php echo $this->user->language ? $this->user->language : 'en'; ?>
-							</p>
-						</div>
-					</div>
+			<div class="form-group">
+				<?php echo $this->form->getLabel('status'); ?>
+				<div class="col-sm-10">
+					<?php echo $this->form->getInput('status'); ?>
+				</div>
+			</div>
 
-					<div class="form-group">
-						<label class="col-sm-2 compojoom-control-label">
-							<?php echo JText::_('COM_CMC_MEMBER_SINCE'); ?>
-						</label>
-						<div class="col-sm-10">
-							<p class="form-control-static">
-								<?php echo $this->user->timestamp; ?>
-							</p>
-						</div>
-					</div>
+			<div class="form-group">
+				<?php echo $this->form->getLabel('email_type'); ?>
+				<div class="col-sm-10">
+					<?php echo $this->form->getInput('email_type'); ?>
+				</div>
+			</div>
 
-					<div class="form-group">
-						<label class="col-sm-2 compojoom-control-label">
-							<?php echo JText::_('COM_CMC_LAST_CHANGE'); ?>
-						</label>
-						<div class="col-sm-10">
-							<p class="form-control-static">
-								<?php echo $this->user->info_changed; ?>
-							</p>
-						</div>
-					</div>
+			<div class="form-group">
+				<label class="col-sm-2 compojoom-control-label">
+					<?php echo JText::_('COM_CMC_MAILCHIMP_ID'); ?>
+				</label>
+				<div class="col-sm-10">
+					<p class="form-control-static"><?php echo $this->user->mc_id; ?></p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 compojoom-control-label">
+					<?php echo JText::_('COM_CMC_WEB_ID'); ?>
+				</label>
+				<div class="col-sm-10">
+					<p class="form-control-static"><?php echo $this->user->web_id; ?></p>
+				</div>
+			</div>
 
-				</fieldset>
+			<div class="form-group">
+				<label class="col-sm-2 compojoom-control-label">
+					<?php echo JText::_('COM_CMC_CLIENTS'); ?>
+				</label>
+				<div class="col-sm-10">
+					<p class="form-control-static">
+						<?php echo $this->user->clients; ?>
+					</p>
+				</div>
+			</div>
 
-				<input type="hidden" name="task" value=""/>
-				<?php echo JHTML::_('form.token'); ?>
-			</form>
-		</div>
+			<div class="form-group">
+				<label class="col-sm-2 compojoom-control-label">
+					<?php echo JText::_('COM_CMC_LANGUAGE'); ?>
+				</label>
+				<div class="col-sm-10">
+					<p class="form-control-static">
+						<?php echo $this->user->language ? $this->user->language : 'en'; ?>
+					</p>
+				</div>
+			</div>
 
+			<div class="form-group">
+				<label class="col-sm-2 compojoom-control-label">
+					<?php echo JText::_('COM_CMC_MEMBER_SINCE'); ?>
+				</label>
+				<div class="col-sm-10">
+					<p class="form-control-static">
+						<?php echo $this->user->timestamp; ?>
+					</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 compojoom-control-label">
+					<?php echo JText::_('COM_CMC_LAST_CHANGE'); ?>
+				</label>
+				<div class="col-sm-10">
+					<p class="form-control-static">
+						<?php echo $this->user->info_changed; ?>
+					</p>
+				</div>
+			</div>
+
+			</fieldset>
+
+			<input type="hidden" name="task" value=""/>
+			<?php echo JHtml::_('form.token'); ?>
+		</form>
 	</div>
-<?php
-// Show Footer
-echo CompojoomHtmlCTemplate::getFooter(CmcHelperBasic::footer());
+
+</div>
