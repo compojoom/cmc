@@ -312,9 +312,11 @@ class CmcHelperXmlbuilder
 	/**
 	 * Returns a drop-down input box element
 	 *
-	 * @param   array $params - Example FNAME;text;First Name;0;""
+	 * @param   array  $params  - Example FNAME;text;First Name;0;""
 	 *
 	 * @return string
+	 *
+	 * @since  3.0
 	 */
 	public function dropdown($params)
 	{
@@ -333,11 +335,6 @@ class CmcHelperXmlbuilder
 			. ($params[3] ? ' required="required" ' : ' ') .
 			'default="0"
 			class="inputbox input-medium' . $req . '">';
-
-		if (!$params[3])
-		{
-			$select .= '<option value=""></option>';
-		}
 
 		foreach ($choices as $ch)
 		{

@@ -21,8 +21,11 @@ class CmcHelperSubscription
 	 * Saves a batch of users to the db
 	 *
 	 * @param   string  $merges  - json represantation of the merges
+	 * @param   string  $listId  - the list id
 	 *
 	 * @return mixed
+	 *
+	 * @since  3.0
 	 */
 	public static function convertMergesToFormData($merges, $listId)
 	{
