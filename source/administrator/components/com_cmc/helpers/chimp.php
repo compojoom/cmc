@@ -80,7 +80,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	{
 		if (!$ids)
 		{
-			$lists = $this->get('/lists');
+			$lists = $this->get('/lists', array('count' => 1000));
 		}
 		else
 		{
@@ -90,12 +90,12 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 			{
 				foreach ($ids as $id)
 				{
-					$lists[] = $this->get('/lists/' . $id);
+					$lists[] = $this->get('/lists/' . $id, array('count' => 1000));
 				}
 			}
 			else
 			{
-				$lists[] = $this->get('/lists/' . $ids);
+				$lists[] = $this->get('/lists/' . $ids, array('count' => 1000));
 			}
 		}
 
