@@ -1,6 +1,13 @@
 <?php defined('_JEXEC') or die(); ?>
 
 =====================================================================
+CMC 3.0.1 - Released 02-September-2016
+=====================================================================
+# couldn't show more than 10 mailchimp lists for syncing
+# 400: is already a list member. Use PUT to insert or update list members.
+# php warnings in the user - cmc plugin
+
+=====================================================================
 CMC 3.0.0 - Released 16-August-2015
 =====================================================================
 ^ Major rewrite to Mailchimp API v3 (previous versions of CMC will stop to function on 31.12.2016 since Mailchimp has deprecated the user of API v1.3)
