@@ -32,6 +32,8 @@ class PlgUserCmc extends JPlugin
 	 * @param   object  $data  - the data object
 	 *
 	 * @return bool
+	 *
+	 * @since  3.0.1
 	 */
 
 	public function onContentPrepareForm($form, $data)
@@ -70,6 +72,8 @@ class PlgUserCmc extends JPlugin
 	 * @param   array  $data  - the user data
 	 *
 	 * @return bool
+	 *
+	 * @since  3.0.1
 	 */
 	public function edit($form, $data)
 	{
@@ -93,7 +97,7 @@ class PlgUserCmc extends JPlugin
 		if ($subscriptionData)
 		{
 			$form->setFieldAttribute('newsletter', 'checked', 'checked', 'cmc');
-			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges), $this->params->get('listid'));
+			$form->bind(CmcHelperSubscription::convertMergesToFormData($subscriptionData->merges, $this->params->get('listid')), $this->params->get('listid'));
 		}
 	}
 
@@ -106,6 +110,8 @@ class PlgUserCmc extends JPlugin
 	 * @return bool
 	 *
 	 * @throws Exception
+	 *
+	 * @since  3.0.1
 	 */
 	public function subscribe($form, $data)
 	{
@@ -149,6 +155,8 @@ class PlgUserCmc extends JPlugin
 	 * @param   string   $error   - the error message
 	 *
 	 * @return   boolean
+	 *
+	 * @since  3.0.1
 	 */
 
 	public function onUserAfterSave($data, $isNew, $result, $error)
@@ -261,6 +269,8 @@ class PlgUserCmc extends JPlugin
 	 * @param   array   $user  - array with the user data
 	 *
 	 * @return array
+	 *
+	 * @since  3.0.1
 	 */
 	public static function getMapping($raw, $user)
 	{
