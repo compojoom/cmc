@@ -286,7 +286,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 			return false;
 		}
 
-		return $result['status'] == 'subscribed' ? true : false;
+		return in_array($result['status'], array('subscribed', 'pending', 'unsubscribed', 'transactional')) ? true : false;
 	}
 
 	/**
@@ -309,7 +309,6 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	                              $replace_interests = true,
 	                              $send_welcome = false)
 	{
-		$subscriber_hash = $this->subscriberHash($email_address);
 		$status = 'subscribed';
 
 		if ($double_optin)
