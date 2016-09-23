@@ -54,7 +54,7 @@ class CmcControllerSubscription extends JControllerLegacy
 
 			if (isset($memberInfo['errors']))
 			{
-				foreach($memberInfo['errors'] as $mailchimpErrors )
+				foreach ($memberInfo['errors'] as $mailchimpErrors )
 				{
 					$errors[] = $mailchimpErrors['message'];
 				}
