@@ -50,7 +50,25 @@ class CmcControllerSubscription extends JControllerLegacy
 
 		if ($chimp->getLastError())
 		{
-			$response['html']  = $chimp->getLastError();
+			$errors[] = $chimp->getLastError();
+
+			if (isset($memberInfo['errors']))
+			{
+				foreach($memberInfo['errors'] as $mailchimpErrors )
+				{
+					$errors[] = $mailchimpErrors['message'];
+				}
+			}
+
+			$response['html']  = implode(
+				'',
+				array_map(
+					function($v) {
+						return '<p>' . $v . '</p>';
+					},
+					$errors
+				)
+			);
 			$response['error'] = true;
 		}
 		else

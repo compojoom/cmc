@@ -1,5 +1,7 @@
 <?php defined('_JEXEC') or die(); ?>
 
+# output better errors when the form contains errors returned from mailchimp
+
 =====================================================================
 CMC 3.0.1 - Released 02-September-2016
 =====================================================================
