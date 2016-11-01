@@ -127,6 +127,16 @@ class CmcHelperBasic
 		return $footer;
 	}
 
+	/**
+	 * TODO: with the next update figure out why are we doing that instead of using
+	 * JComponentHelper::getComponent ????
+	 *
+	 * @param   string  $option  - the component name
+	 *
+	 * @return mixed
+	 *
+	 * @since 1.0
+	 */
 	private static function _load($option)
 	{
 		$db = JFactory::getDbo();
@@ -153,7 +163,7 @@ class CmcHelperBasic
 			self::$components[$option]->manifest_cache = $temp;
 		}
 
-		return $db->loadObject();
+		return self::$components[$option];
 	}
 
 	/**

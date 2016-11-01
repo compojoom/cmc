@@ -1,5 +1,6 @@
 <?php defined('_JEXEC') or die(); ?>
 
+# the dashboard was showing SQL: 00000 when the component was run on joomla with mysql PDO driver
 # output better errors when the form contains errors returned from mailchimp
 
 =====================================================================
