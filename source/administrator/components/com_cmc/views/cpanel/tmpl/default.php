@@ -83,7 +83,7 @@ JHtml::_('behavior.tooltip');
 								echo JText::_('COM_CMC_MAILCHIMP_SUBSCRIBERS') . ': ' . $details['total_subscribers'];
 								?>
 							</p>
-							<a href="https://us1.admin.mailchimp.com/account/plans" target="_blank"
+							<a href="https://us1.admin.mailchimp.com/account/billing-plan/?pid=compojoom&source=website" target="_blank"
 							   class="btn btn-primary button-link">
 								<?php echo JText::_('COM_CMC_MAILCHIMP_BUY_CREDITS'); ?>
 							</a>
