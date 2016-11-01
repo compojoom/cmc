@@ -57,8 +57,9 @@ class CmcControllerSubscription extends JControllerLegacy
 		$memberInfo = $chimp->listMemberInfo($listId, $email);
 		$listInfo = $chimp->lists($listId);
 
-		$url = 'http://' . $account['username'] . '.' . $dc . '.list-manage.com/profile?u='
-				. $account['user_id'] . '&id=' . $listId . '&e=' . $memberInfo['data'][0]['euid'];
+		$url = 'https://' . $account['username'] . '.' . $dc . '.list-manage.com/profile?u='
+			. $account['account_id'] . '&id=' . $listId . '&e=' . $memberInfo['unique_email_id'];
+
 
 		$subject = JText::sprintf('COM_CMC_CHANGE_YOUR_SUBSCRIPTION_PREFERENCES_EMAIL_TITLE', $listInfo['data'][0]['name']);
 		$text = JText::sprintf('COM_CMC_CHANGE_YOUR_SUBSCRIPTION_PREFERENCES_EMAIL_CONTENT', $listInfo['data'][0]['name'], $url);
