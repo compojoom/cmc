@@ -21,7 +21,6 @@ define('JPATH_BASE', __DIR__);
 class RoboFile extends \Robo\Tasks
 {
 	use \Joomla\Jorobo\Tasks\loadTasks;
-	use \joomla_projects\robo\loadTasks;
 
 	/**
 	 * File extension for executables
@@ -60,7 +59,7 @@ class RoboFile extends \Robo\Tasks
 	/**
 	 * Get the executable extension according to Operating System
 	 *
-	 * @return  void
+	 * @return  string
 	 */
 	private function getExecutableExtension()
 	{
@@ -68,6 +67,7 @@ class RoboFile extends \Robo\Tasks
 		{
 			return '.exe';
 		}
+
 		return '';
 	}
 
@@ -76,11 +76,10 @@ class RoboFile extends \Robo\Tasks
 	 * Map into Joomla installation.
 	 *
 	 * @param   String   $target    The target joomla instance
-	 * @param   boolean  $override  Override existing mappings?
 	 *
 	 * @return  void
 	 */
-	public function map($target, $override = true)
+	public function map($target)
 	{
 		$this->taskMap($target)->run();
 	}
@@ -95,6 +94,18 @@ class RoboFile extends \Robo\Tasks
 	public function build($params = ['dev' => false])
 	{
 		$this->taskBuild($params)->run();
+	}
+
+	/**
+	 * Bump Version placeholder __DEPLOY_VERSION__ in this project. (Set the version up in the jorobo.ini)
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.0
+	 */
+	public function bump()
+	{
+		(new \Joomla\Jorobo\Tasks\BumpVersion())->run();
 	}
 
 	/**
@@ -113,13 +124,9 @@ class RoboFile extends \Robo\Tasks
 	/**
 	 * Executes all the Selenium System Tests in a suite on your machine
 	 *
-	 * @param   string  $user          Optional user to run the tests as
-	 * @param   string  $seleniumPath  Optional path to selenium-standalone-server-x.jar
-	 * @param   string  $suite         Optional, the name of the tests suite
-	 *
 	 * @return mixed
 	 */
-	public function runTests($user = 'www-data', $seleniumPath = null, $suite = 'acceptance')
+	public function runTests()
 	{
 		if (!file_exists(JPATH_BASE . "/dist/current"))
 		{
@@ -128,11 +135,11 @@ class RoboFile extends \Robo\Tasks
 
 		$this->setExecExtension();
 
-		$this->createTestingSite($user);
+		$this->createTestingSite();
 		$this->getComposer();
 		$this->taskComposerInstall()->run();
 		$this->runSelenium();
-		$this->_exec('php' . $this->extension . ' vendor/bin/codecept build');
+		$this->_exec('php vendor/bin/codecept build');
 		$this->taskCodecept()
 			->arg('--steps')
 			->arg('--debug')
@@ -159,14 +166,14 @@ class RoboFile extends \Robo\Tasks
 	/**
 	 * Executes a specific Selenium System Tests in your machine
 	 *
-	 * @param string $seleniumPath   Optional path to selenium-standalone-server-x.jar
 	 * @param string $pathToTestFile Optional name of the test to be run
-	 * @param string $suite          Optional name of the suite containing the tests, Acceptance by default.
 	 *
 	 * @return mixed
 	 */
-	public function runTest($pathToTestFile = null, $suite = 'acceptance')
+	public function runTest($pathToTestFile = null)
 	{
+		$suite = 'acceptance';
+
 		$this->runSelenium();
 
 		// Make sure to Run the Build Command to Generate AcceptanceTester
@@ -211,8 +218,6 @@ class RoboFile extends \Robo\Tasks
 			->arg('--debug')
 			->run()
 			->stopOnFail();
-		// Kill selenium server
-		// $this->_exec('curl http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer');
 	}
 
 	/**
@@ -312,6 +317,7 @@ class RoboFile extends \Robo\Tasks
 		$branch = empty($this->configuration->branch) ? 'staging' : $this->configuration->branch;
 		return "git" . $this->executableExtension . " clone -b $branch --single-branch --depth 1 https://github.com/joomla/joomla-cms.git tests/cache";
 	}
+
 	/**
 	 * Check if local OS is Windows
 	 *
@@ -343,6 +349,7 @@ class RoboFile extends \Robo\Tasks
 
 		return $this->configuration->cmsPath;
 	}
+
 	/**
 	 * Runs Selenium Standalone Server.
 	 *
@@ -370,6 +377,7 @@ class RoboFile extends \Robo\Tasks
 				->stopOnFail();
 		}
 	}
+
 	/**
 	 * Downloads Composer
 	 *
@@ -384,6 +392,7 @@ class RoboFile extends \Robo\Tasks
 			$this->_exec('curl ' . $insecure . ' --retry 3 --retry-delay 5 -sS https://getcomposer.org/installer | php');
 		}
 	}
+
 	/**
 	 * Kills the selenium server running
 	 *
