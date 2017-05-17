@@ -299,7 +299,6 @@ class CmcShopVirtuemart extends CmcShop
 		/** @var VirtueMartModelUser $model */
 		$userModel = VmModel::getModel('user');
 
-
 		$currency = null;
 		$currencyCode = '';
 

@@ -38,6 +38,11 @@ JHtml::_('behavior.tooltip');
 			</div>
 			<div class=" box-info full">
 				<ul class="nav nav-tabs nav-justified">
+					<li>
+						<a data-toggle="tab" href="#oauth2">
+							<?php echo JText::_('COM_CMC_MAILCHIMP_OAUTH2_LOGIN'); ?>
+						</a>
+					</li>
 					<li class="active">
 						<a data-toggle="tab" href="#mailchimp">
 							<?php echo JText::_('COM_CMC_MAILCHIMP_ACCOUNT_DETAILS'); ?>
@@ -55,6 +60,19 @@ JHtml::_('behavior.tooltip');
 					</li>
 				</ul>
 				<div class="tab-content">
+					<div id="oauth2" class="tab-pane">
+						You can now use OAuth2 to use CMC. If you already have an API-token there is no reason to
+						update.
+
+						<?php
+						require_once JPATH_COMPONENT_ADMINISTRATOR . '/libraries/oauth/MC_OAuth2Client.php';
+
+						$client = new MC_OAuth2Client();
+						$url = $client->getLoginUri();
+						?>
+
+						<a href="<?php echo $url ?>" class="btn btn-primary" id="btnModalOauth2">Begin Auth</a>
+					</div>
 					<div id="mailchimp" class="tab-pane active">
 						<?php
 						$apiKey = CmcHelperBasic::getComponent('com_cmc')->params->get('api_key');
@@ -83,7 +101,8 @@ JHtml::_('behavior.tooltip');
 								echo JText::_('COM_CMC_MAILCHIMP_SUBSCRIBERS') . ': ' . $details['total_subscribers'];
 								?>
 							</p>
-							<a href="https://us1.admin.mailchimp.com/account/billing-plan/?pid=compojoom&source=website" target="_blank"
+							<a href="https://us1.admin.mailchimp.com/account/billing-plan/?pid=compojoom&source=website"
+							   target="_blank"
 							   class="btn btn-primary button-link">
 								<?php echo JText::_('COM_CMC_MAILCHIMP_BUY_CREDITS'); ?>
 							</a>
@@ -107,7 +126,8 @@ JHtml::_('behavior.tooltip');
 
 				<div class="text-center">
 					<!--/* Ads for our products */-->
-					<script type="text/javascript" src="https://partners.compojoom.com/scripts/banner.php?a_aid=compojoom&a_bid=30f713ae"></script>
+					<script type="text/javascript"
+					        src="https://partners.compojoom.com/scripts/banner.php?a_aid=compojoom&a_bid=30f713ae"></script>
 				</div>
 			</div>
 		</div>
@@ -149,7 +169,8 @@ JHtml::_('behavior.tooltip');
 
 				<p>
 					You don't speak english? <a
-						href="https://compojoom.com/downloads/languages-cool-geil?view=project&id=5" target="_blank">Go
+							href="https://compojoom.com/downloads/languages-cool-geil?view=project&id=5"
+							target="_blank">Go
 						here
 						and
 						download a translation</a>.
@@ -159,45 +180,45 @@ JHtml::_('behavior.tooltip');
 	</div>
 
 	<script type="text/javascript">
-		(function ($) {
-			$(document).ready(function () {
-				$.ajax('index.php?option=com_cmc&task=update.updateinfo&tmpl=component', {
-					success: function (msg, textStatus, jqXHR) {
-						// Get rid of junk before and after data
-						var match = msg.match(/###([\s\S]*?)###/);
-						data = match[1];
+        (function ($) {
+            $(document).ready(function () {
+                $.ajax('index.php?option=com_cmc&task=update.updateinfo&tmpl=component', {
+                    success: function (msg, textStatus, jqXHR) {
+                        // Get rid of junk before and after data
+                        var match = msg.match(/###([\s\S]*?)###/);
+                        data = match[1];
 
-						if (data.length) {
-							$('#updateNotice').html(data);
-						}
-					}
-				});
-				$.ajax('index.php?option=com_cmc&task=jed.reviewed&tmpl=component&<?php echo JSession::getFormToken(); ?>=1', {
-					success: function (msg, textStatus, jqXHR) {
-						// Get rid of junk before and after data
-						var match = msg.match(/###([\s\S]*?)###/);
-						data = match[1];
+                        if (data.length) {
+                            $('#updateNotice').html(data);
+                        }
+                    }
+                });
+                $.ajax('index.php?option=com_cmc&task=jed.reviewed&tmpl=component&<?php echo JSession::getFormToken(); ?>=1', {
+                    success: function (msg, textStatus, jqXHR) {
+                        // Get rid of junk before and after data
+                        var match = msg.match(/###([\s\S]*?)###/);
+                        data = match[1];
 
-						if (data.length) {
-							$('#jedNotice').html(data);
-						}
-					}
-				});
-			});
-		})(jQuery);
+                        if (data.length) {
+                            $('#jedNotice').html(data);
+                        }
+                    }
+                });
+            });
+        })(jQuery);
 	</script>
 
 <?php if ($this->updateStats): ?>
 	<script type="text/javascript">
-		(function ($) {
-			$(document).ready(function () {
-				$.ajax('index.php?option=com_cmc&task=stats.send&tmpl=component&<?php echo JSession::getFormToken(); ?>=1', {
-					dataType: 'json',
-					success: function (msg) {
-					}
-				});
-			});
-		})(jQuery);
+        (function ($) {
+            $(document).ready(function () {
+                $.ajax('index.php?option=com_cmc&task=stats.send&tmpl=component&<?php echo JSession::getFormToken(); ?>=1', {
+                    dataType: 'json',
+                    success: function (msg) {
+                    }
+                });
+            });
+        })(jQuery);
 	</script>
 	<?php
 endif;
