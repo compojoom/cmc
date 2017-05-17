@@ -12,7 +12,7 @@
     <!-- SQL commands to run on installation and update -->
     <sql>
         <action table="#__cmc_lists" canfail="0">
-            <condition type="missing" value="" />
+            <condition type="missing" value=""/>
             <query><![CDATA[
 CREATE TABLE IF NOT EXISTS `#__cmc_lists` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `#__cmc_lists` (
         </action>
 
         <action table="#__cmc_users" canfail="0">
-            <condition type="missing" value="" />
+            <condition type="missing" value=""/>
             <query><![CDATA[
 CREATE TABLE IF NOT EXISTS `#__cmc_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `#__cmc_users` (
         </action>
 
         <action table="#__cmc_register" canfail="0">
-            <condition type="missing" value="" />
+            <condition type="missing" value=""/>
             <query><![CDATA[
 CREATE TABLE IF NOT EXISTS `#__cmc_register` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -96,12 +96,30 @@ CREATE TABLE IF NOT EXISTS `#__cmc_register` (
             ]]></query>
         </action>
 
-			<action table="#__cmc_register" canfail="0">
-				<condition type="type" value="user_id" coltype="int(11)"/>
-				<query><![CDATA[
+        <action table="#__cmc_register" canfail="0">
+            <condition type="type" value="user_id" coltype="int(11)"/>
+            <query><![CDATA[
 ALTER TABLE `#__cmc_register` CHANGE `user_id` `user_id` VARCHAR( 255 ) NOT NULL;
             ]]></query>
-			</action>
+        </action>
+
+        <action table="#__cmc_shops" canfail="0">
+            condition type="missing" value="" />
+            <query><![CDATA[
+CREATE TABLE IF NOT EXISTS `#__cmc_shops` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shop_id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `list_id` varchar(255) NOT NULL,
+  `type` TINYINT(4) NOT NULL DEFAULT 1,
+  `params` text NOT NULL,
+  `synced` tinyint(1) NOT NULL DEFAULT 0,
+  `last_sync` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+);
+            ]]></query>
+        </action>
 
 
     </sql>

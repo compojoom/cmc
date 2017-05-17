@@ -71,7 +71,6 @@ class RoboFile extends \Robo\Tasks
 		return '';
 	}
 
-
 	/**
 	 * Map into Joomla installation.
 	 *

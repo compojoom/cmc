@@ -200,7 +200,16 @@ class CmcHelperBasic
 				'children' => array(),
 				'label' => '',
 				'keywords' => 'users'
-			)
+			),
+			'ecommerce' => array(
+				'link' => 'index.php?option=com_cmc&view=ecommerce',
+				'title' => 'COM_CMC_ECOMMERCE',
+				'icon' => 'fa-money',
+				'anchor' => '',
+				'children' => array(),
+				'label' => '',
+				'keywords' => 'ecommerce shop ecom'
+			),
 		);
 
 		return $menu;
