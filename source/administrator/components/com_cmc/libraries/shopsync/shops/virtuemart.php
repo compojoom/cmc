@@ -75,7 +75,6 @@ class CmcShopVirtuemart extends CmcShop
 		return $this->getTableCount('#__virtuemart_carts');
 	}
 
-
 	/**
 	 *
 	 *

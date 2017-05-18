@@ -546,7 +546,9 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * @param   string  $list   - the list id
 	 * @param   array   $users  - the users to subscribe to the list (the merges)
 	 *
-	 * @since version
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function listBatchSubscribe($list, $users)
 	{
@@ -576,5 +578,73 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 
 		// Send the request
 		$batch->execute();
+	}
+
+	/**
+	 * Add a new product to the shop
+	 *
+	 * @param   int                  $shopId   Store id (e.g. vm_1)
+	 * @param   CmcMailChimpProduct  $product  Product
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addProduct($shopId, CmcMailChimpProduct $product)
+	{
+		$result = $this->post('/ecommerce/stores/' . $shopId . '/products', $product);
+
+		return $result;
+	}
+
+	/**
+	 * Add a new customer to the shop
+	 *
+	 * @param   int                   $store_id  Store id (e.g. vm_1)
+	 * @param   CmcMailChimpCustomer  $customer  CustomerObject
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addCustomer($store_id, CmcMailChimpCustomer $customer)
+	{
+		$result = $this->post('/ecommerce/stores/' . $store_id . '/customers', $customer);
+
+		return $result;
+	}
+
+	/**
+	 * Add a new order to the shop
+	 *
+	 * @param   int                $shopId   Store id (e.g. vm_1)
+	 * @param   CmcMailChimpOrder  $order    Order
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addOrder($shopId, CmcMailChimpOrder $order)
+	{
+		$result = $this->post('/ecommerce/stores/' . $shopId . '/orders', $order);
+
+		return $result;
+	}
+
+	/**
+	 * Add a new cart to the shop
+	 *
+	 * @param   int               $shopId   Store id (e.g. vm_1)
+	 * @param   CmcMailChimpCart  $cart     Cart item
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addCart($shopId, CmcMailChimpCart $cart)
+	{
+		$result = $this->post('/ecommerce/stores/' . $shopId . '/carts', $cart);
+
+		return $result;
 	}
 }
