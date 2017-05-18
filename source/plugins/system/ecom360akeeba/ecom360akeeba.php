@@ -87,7 +87,7 @@ class plgSystemECom360Akeeba extends JPlugin
 
 		// The shop data
 		$shop = new stdClass;
-		$shop->id = $this->params->get("store_id", 42);;
+		$shop->id = $this->params->get("store_id", 42);
 		$shop->name = $this->params->get('store_name', 'Akeeba store');
 		$shop->list_id = $this->params->get('list_id');
 		$shop->currency_code = $this->params->get('currency_code', 'EUR');

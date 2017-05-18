@@ -440,6 +440,26 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		return $result;
 	}
 
+
+	/**
+	 * Create a new shop
+	 *
+	 * @param   object  $shop  Shop
+	 *
+	 * @return  bool|string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function createShop($shop)
+	{
+		if ($this->storeExists($shop->id))
+		{
+			return true;
+		}
+
+		return $this->storeCreate($shop);
+	}
+
 	/**
 	 * Check if the store exists
 	 *

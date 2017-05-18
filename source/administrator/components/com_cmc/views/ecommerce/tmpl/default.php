@@ -24,13 +24,25 @@ $doc->addStyleDeclaration('
 	</p>
 	<div class="control-group">
 		<div class="form-group">
-			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></label>
+			<label for="shop_name"><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></label>
 
 			<input type="text" name="shop_name" id="shop_name" class="form-control" />
 		</div>
 
 		<div class="form-group">
-			<label for="shop"><?php echo JText::_('COM_CMC_SHOP'); ?></label>
+			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_EMAIL'); ?></label>
+
+			<input type="text" name="shop_email" id="shop_email" class="form-control" />
+		</div>
+
+		<div class="form-group">
+			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_CURRENCY_CODE'); ?></label>
+
+			<input type="text" name="shop_currency" id="shop_currency" class="form-control" value="USD" />
+		</div>
+
+		<div class="form-group">
+			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_SOFTWARE'); ?></label>
 
 			<select name="shop" id="shop" class="form-control">
 				<option value="1">VirtueMart</option>
@@ -128,6 +140,7 @@ $doc->addStyleDeclaration('
 			var juri = '<?php echo JUri::root(); ?>';
 			var itemCount = null;
 			var globalLimit = 5;
+			var shopId = 'vm_8';
 
 			var bars = {
 				$productsProgress: $('#productProgress'),
@@ -163,7 +176,7 @@ $doc->addStyleDeclaration('
 
 				$.ajax(juri + 'administrator/index.php?option=com_cmc&task=ecommerce.sync', {
 					method: 'POST',
-					data: {action: action, type: type, list: list, offset: offset, limit: limit},
+					data: {shopId: shopId, action: action, type: type, list: list, offset: offset, limit: limit},
 					dataType: 'json'
 				}).done(function(json) {
 					console.log('Sync for ' + action + ' done');
@@ -179,11 +192,31 @@ $doc->addStyleDeclaration('
 				return true;
 			}
 
-			$('#btnAddShop').click(function (e) {
-				e.preventDefault();
-
+			function createShop() {
 				var type = $('#shop').val();
 				var list = $('#list_id').val();
+				var shopName = $('#shop_name').val();
+				var shopCurrency = $('#shop_currency').val();
+				var shopEmail = $('#shop_email').val();
+
+				$.ajax(juri + 'administrator/index.php?option=com_cmc&task=ecommerce.createShop', {
+					method: 'POST',
+					data: {list: list, type: type, title: shopName, currency: shopCurrency, email: shopEmail},
+					dataType: 'json'
+				}).done(function(json) {
+					console.log('Shop creation done ' + json.shopId);
+
+					shopId = json.shopId;
+					console.log(json);
+
+					return syncItems(type, list);
+				}).fail(function(){
+					console.log('Error syncing shop');
+				});
+			}
+
+			$('#btnAddShop').click(function (e) {
+				e.preventDefault();
 
 				var $productTotal = $('#productTotal');
 				var $customerTotal = $('#customerTotal');
@@ -202,7 +235,7 @@ $doc->addStyleDeclaration('
 					$categoryTotal.text(json.categoriesCount);
 					$checkoutTotal.text(json.checkoutsCount);
 
-					syncItems(type, list);
+					createShop();
 				}).fail(function () {
 					console.log('error');
 				});

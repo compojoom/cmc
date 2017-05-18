@@ -14,7 +14,7 @@ jimport('joomla.application.component.controller');
 /**
  * Class CmcControllerEcommerce
  *
- * @since  __DEPLOY_VERSION
+ * @since  __DEPLOY_VERSION__
  */
 class CmcControllerEcommerce extends CmcController
 {
@@ -23,6 +23,7 @@ class CmcControllerEcommerce extends CmcController
 	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&offset=0&limit=100
 	 *
 	 * @return  boolean
+	 * 
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function sync()
@@ -50,7 +51,8 @@ class CmcControllerEcommerce extends CmcController
 	/**
 	 * Sync task to be called by JavaScript
 	 *
-	 * @return  boolean
+	 * @return  void
+	 * 
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getSyncTotalCount()
@@ -75,11 +77,76 @@ class CmcControllerEcommerce extends CmcController
 		echo json_encode($result);
 		jexit();
 	}
-	
+
+	/**
+	 * Create a new shop
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function createShop()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$this->loadShop();
+
+		$shopType = $input->getInt('type');
+		$list     = $input->getCmd('list');
+		$title    = $input->getString('title', '');
+		$currency = $input->getString('currency', '');
+		$email    = $input->getString('email', '');
+
+		// The shop data
+		$shop = new stdClass;
+
+		$shop->name    = $title;
+		$shop->list_id = $list;
+		$shop->type    = $shopType;
+		$shop->synced  = 0;
+		$shop->created = JFactory::getDate()->toSql();
+
+		$table = JTable::getInstance('Shops', 'CmcTable');
+
+		$table->save($shop);
+
+		$table->checkIn();
+
+		// TODO type
+		$shop->shop_id = 'vm_' . $table->id;
+
+		$table->save($shop);
+
+		// Create a shop in Mailchimp
+		$chimp = new CmcHelperChimp;
+
+		$mcShop = new stdClass;
+
+		$mcShop->id       = $shop->shop_id;
+		$mcShop->list_id  = $shop->list_id;
+		$mcShop->name     = $shop->name;
+
+		// TODO
+		$mcShop->platform = 'VirtueMart';
+
+		$mcShop->is_syncing    = true;
+		$mcShop->email_address = $email;
+		$mcShop->currency_code = $currency;
+
+		$mcShop->domain = JUri::root();
+
+		// $result = $chimp->createShop($mcShop);
+		$result = 'tmp';
+
+		echo json_encode(array('shopId' => $shop->shop_id, 'result' => $result));
+		jexit();
+	}
+
 	/**
 	 * Load shop dependencies
 	 *
 	 * @return  void
+	 * 
 	 * @since   __DEPLOY_VERSION__
 	 */
 	private function loadShop()
