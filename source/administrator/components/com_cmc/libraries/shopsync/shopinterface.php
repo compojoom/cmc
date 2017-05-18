@@ -10,6 +10,51 @@ defined('_JEXEC') or die('Restricted access');
 interface CmcShopInterface
 {
 	/**
+	 * Get the total count of products
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalProducts();
+
+	/**
+	 * Get the total orders of a product
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalOrders();
+
+	/**
+	 * Get the total count of customers
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalCustomers();
+
+	/**
+	 * Get the total count of product categories
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalProductCategories();
+
+	/**
+	 * Get the total count of checkouts
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalCheckouts();
+
+	/**
 	 * Get the products
 	 *
 	 * @param   int  $offset  Offset where to start

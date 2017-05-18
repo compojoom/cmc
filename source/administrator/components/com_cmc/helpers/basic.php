@@ -214,4 +214,29 @@ class CmcHelperBasic
 
 		return $menu;
 	}
+
+	/**
+	 * Get the available lists as select
+	 *
+	 * @return  JHtmlSelect
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function getListSelect()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('mc_id as value, list_name as text')
+			->from('#__cmc_lists');
+		$db->setQuery($query);
+
+		$lists = $db->loadObjectList();
+
+		if (empty($lists))
+		{
+			return null;
+		}
+
+		return JHtml::_('select.genericlist', $lists, 'list_id', 'class="form-control"');
+	}
 }

@@ -20,6 +20,7 @@ class CmcControllerEcommerce extends CmcController
 {
 	/**
 	 * Sync task to be called by JavaScript
+	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&offset=0&limit=100
 	 *
 	 * @return  boolean
 	 * @since   __DEPLOY_VERSION__
@@ -42,11 +43,39 @@ class CmcControllerEcommerce extends CmcController
 
 		$result = $syncer->$method($offset, $limit);
 
-		var_dump($result);
-
-		die('wtf');
+		echo json_encode($result);
+		jexit();
 	}
 
+	/**
+	 * Sync task to be called by JavaScript
+	 *
+	 * @return  boolean
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getSyncTotalCount()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$this->loadShop();
+
+		$shopType = $input->getInt('type');
+
+		// TODO switch by type or plugin
+		$syncer = new CmcShopVirtuemart();
+
+		$result = new stdClass;
+
+		$result->productsCount  = $syncer->getTotalProducts();
+		$result->ordersCount    = $syncer->getTotalOrders();
+		$result->customersCount = $syncer->getTotalCustomers();
+		$result->categoriesCount = $syncer->getTotalProductCategories();
+		$result->checkoutsCount = $syncer->getTotalCheckouts();
+
+		echo json_encode($result);
+		jexit();
+	}
+	
 	/**
 	 * Load shop dependencies
 	 *

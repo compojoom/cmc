@@ -12,6 +12,97 @@ require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.p
  */
 class CmcShopVirtuemart extends CmcShop
 {
+	const ROOT_ITEM = 9;
+
+	/**
+	 * Get the total count of products
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalProducts()
+	{
+		return $this->getTableCount('#__virtuemart_products', array('product_parent_id = ' . CmcShopVirtuemart::ROOT_ITEM));
+	}
+
+	/**
+	 * Get the total orders of a product
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalOrders()
+	{
+		return $this->getTableCount('#__virtuemart_orders');
+	}
+
+	/**
+	 * Get the total count of customers
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalCustomers()
+	{
+		return $this->getTableCount('#__virtuemart_vmusers');
+	}
+
+	/**
+	 * Get the total count of product categories
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalProductCategories()
+	{
+		// TODO: Implement getTotalProductCategories() method.
+		return 0;
+	}
+
+	/**
+	 * Get the total count of checkouts
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTotalCheckouts()
+	{
+		return $this->getTableCount('#__virtuemart_carts');
+	}
+
+
+	/**
+	 *
+	 *
+	 * @param   string  $table  Table to query
+	 * @param   array   $where  Optional where query
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function getTableCount($table, $where = array())
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('count(*)')->from($db->quoteName($table));
+
+		if (!empty($where))
+		{
+			$query->where(implode('AND ', $where));
+		}
+
+		$db->setQuery($query);
+
+		return $db->loadResult();
+	}
+
 	/**
 	 * Get the products
 	 *
@@ -22,7 +113,7 @@ class CmcShopVirtuemart extends CmcShop
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getProducts($offset = 20, $limit = 100)
+	public function getProducts($offset = 0, $limit = 100)
 	{
 		$app = JFactory::getApplication();
 
@@ -34,17 +125,26 @@ class CmcShopVirtuemart extends CmcShop
 		/** @var VirtueMartModelProduct $model */
 		$model = VmModel::getModel('product');
 
-		$vmProducts = $model->getProductListing(false,false,false,true,true);
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+
+		// We have to get the root items only, as we use the children otherwise
+		$query->select('virtuemart_product_id')
+			->from('#__virtuemart_products')
+			->where('product_parent_id = ' . CmcShopVirtuemart::ROOT_ITEM)
+			->where('published = 1')
+			->order('virtuemart_product_id ASC');
+
+		$db->setQuery($query, $offset, $limit);
+
+		$vmProducts = $db->loadObjectList();
 
 		$products = array();
 
-		foreach ($vmProducts as $i => $vmProduct)
+		foreach ($vmProducts as $i => $row)
 		{
-			if (!empty($vmProduct->product_parent_id) && $vmProduct->product_parent_id != 9)
-			{
-				// Skip child products
-				continue;
-			}
+			$vmProduct = $model->getProduct($row->virtuemart_product_id);
 
 			$product = new CmcMailChimpProduct();
 
