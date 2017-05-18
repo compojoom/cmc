@@ -223,26 +223,26 @@ class CmcShopVirtuemart extends CmcShop
 			$completeOrder = $model->getOrder($vmOrder->virtuemart_order_id);
 
 			$order     = new CmcMailChimpOrder();
-			$customer  = new CmcMailChimpCustomer();
 
-			$customerId = 'customer_vm_' . $completeOrder['details']['BT']->customer_number;
+			$customerId = $completeOrder['details']['BT']->customer_number;
 
 			// Non-Guest booking, we actually have a user
 			if (!empty($vmOrder->virtuemart_user_id))
 			{
-				$customerId ='customer_vm_' . $vmOrder->virtuemart_user_id;
+				$customerId = $vmOrder->virtuemart_user_id;
 			}
 
-			$customer->id = $customerId;
-			$customer->company = $completeOrder['details']['BT']->company;
-			$customer->email_address = $completeOrder['details']['BT']->email;
-			$customer->first_name = $completeOrder['details']['BT']->first_name;
-			$customer->last_name = $completeOrder['details']['BT']->last_name;
-			$customer->opt_in_status = true;
+			$customer = $this->getCustomerObject(
+				$completeOrder['details']['BT']->email,
+				$customerId,
+				$completeOrder['details']['BT']->company,
+				$completeOrder['details']['BT']->first_name,
+				$completeOrder['details']['BT']->last_name
+			);
 
 			// Order
-			$order->id = 'order_vm_' . $completeOrder['details']['BT']->virtuemart_order_id;
-			$order->customer = $customer;
+			$order->id          = 'order_vm_' . $completeOrder['details']['BT']->virtuemart_order_id;
+			$order->customer    = $customer;
 			$order->order_total = $completeOrder['details']['BT']->order_total;
 
 			// Currency load
@@ -314,30 +314,16 @@ class CmcShopVirtuemart extends CmcShop
 		{
 			$addressList = $model->getUserAddressList($vmUser->id, 'BT');
 
-			$customer = new CmcMailChimpCustomer();
+			// Fallback: Take it from user with split on space
+			list ($firstname, $lastname) = explode(' ', $vmUser->name);
 
-			$customer->id = 'customer_vm_' . $vmUser->id;
-
-			$customer->email_address = $vmUser->email;
-
-			// TODO how to handle?
-			$customer->opt_in_status = true;
-
-			if (!empty($addressList))
-			{
-				// We take the first one
-				$customer->company    = $addressList[0]->company;
-				$customer->last_name  = $addressList[0]->last_name;
-				$customer->first_name = $addressList[0]->first_name;
-			}
-			else
-			{
-				// Take it from user with split on space
-				list ($firstname, $lastname) = explode(' ', $vmUser->name);
-
-				$customer->first_name = $firstname ?: '';
-				$customer->last_name  = $lastname ?: '';
-			}
+			$customer = $this->getCustomerObject(
+				$vmUser->email,
+				$vmUser->id,
+				((empty($addressList[0]->company)) ? '' : $addressList[0]->company),
+				((empty($addressList[0]->first_name)) ? $firstname : $addressList[0]->first_name),
+				((empty($addressList[0]->last_name)) ? $lastname : $addressList[0]->last_name)
+			);
 
 			$customers[] = $customer;
 		}
@@ -405,34 +391,27 @@ class CmcShopVirtuemart extends CmcShop
 		foreach ($result as $vmCart)
 		{
 			$cart     = new CmcMailChimpCart();
-			$customer = new CmcMailChimpCustomer();
+
+			if (empty($vmCart->virtuemart_user_id))
+			{
+				// We don't have an email address
+				continue;
+			}
 
 			$cart->id = 'cart_vm_' . $vmCart->virtuemart_cart_id;
 
 			// Customer
-			$customerId = 'customer_vm_' . uniqid();
+			$userAddress = $userModel->getUserAddressList($vmCart->virtuemart_user_id, 'BT');
+			$userModel->setId($vmCart->virtuemart_user_id);
+			$user = $userModel->getUser($userAddress[0]->virtuemart_userinfo_id);
 
-			$customer->id = $customerId;
-
-			// Non-Guest booking, we actually have a user
-			if (!empty($vmCart->virtuemart_user_id))
-			{
-				$customer->id ='customer_vm_' . $vmCart->virtuemart_user_id;
-
-				// Load Customer
-				$userAddress = $userModel->getUserAddressList($vmCart->virtuemart_user_id, 'BT');
-
-				$userModel->setId($vmCart->virtuemart_user_id);
-
-				$user = $userModel->getUser($userAddress[0]->virtuemart_userinfo_id);
-
-				$customer->email_address = $user->JUser->email;
-
-				$customer->company       = $userAddress[0]->company;
-				$customer->first_name    = $userAddress[0]->first_name;
-				$customer->last_name     = $userAddress[0]->last_name;
-				$customer->opt_in_status = true;
-			}
+			$customer = $this->getCustomerObject(
+				$user->JUser->email,
+				$vmCart->virtuemart_user_id,
+				$userAddress[0]->company,
+				$userAddress[0]->first_name,
+				$userAddress[0]->last_name
+			);
 
 			// Cart information
 			$cart->customer = $customer;
@@ -484,5 +463,34 @@ class CmcShopVirtuemart extends CmcShop
 		}
 
 		return $carts;
+	}
+
+	/**
+	 * Create a customer
+	 *
+	 * @param   string  $emailAddress  Email address
+	 * @param   string  $id            Id (without customer_vm)
+	 * @param   string  $company       Company
+	 * @param   string  $firstName     First name
+	 * @param   string  $lastName      Last name
+	 *
+	 * @return  CmcMailChimpCustomer
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getCustomerObject($emailAddress, $id = '', $company = '', $firstName = '', $lastName = '')
+	{
+		$customer = new CmcMailChimpCustomer;
+
+		$customer->id = 'customer_vm_' . ((empty($id)) ? preg_replace("/[^a-zA-Z0-9]+/", '', $emailAddress) : $id);
+		$customer->email_address = $emailAddress;
+
+		$customer->company       = $company ?: '';
+		$customer->first_name    = $firstName ?: '';
+		$customer->last_name     = $lastName ?: '';
+
+		$customer->opt_in_status = false;
+
+		return $customer;
 	}
 }
