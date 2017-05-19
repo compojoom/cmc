@@ -56,4 +56,20 @@ class CmcMailChimpLine
 	 * @since  __DEPLOY_VERSION__
 	 */
 	public $discount = '';
+
+	/**
+	 * Optional title
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public $title = '';
+
+	/**
+	 * Optional product variant title
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public $product_variant_title = '';
 }

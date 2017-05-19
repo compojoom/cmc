@@ -139,7 +139,7 @@ $doc->addStyleDeclaration('
 		jQuery(document).ready(function ($) {
 			var juri = '<?php echo JUri::root(); ?>';
 			var itemCount = null;
-			var globalLimit = 5;
+			var globalLimit = 20;
 			var shopId = 'vm_8';
 
 			var bars = {
@@ -157,6 +157,7 @@ $doc->addStyleDeclaration('
 
 				var actions = ['products', 'customers', 'orders', 'categories', 'checkouts'];
 
+				// Start 5 in parallel
 				for (var i = 0; i < actions.length; i++)	{
 					syncItem(type, list, actions[i], 0, globalLimit);
 				}
@@ -256,5 +257,8 @@ $doc->addStyleDeclaration('
 			<th><?php echo JText::_('COM_CMC_SHOP_ID'); ?></th>
 		</tr>
 		</thead>
+		<tbody>
+
+		</tbody>
 	</table>
 </div>

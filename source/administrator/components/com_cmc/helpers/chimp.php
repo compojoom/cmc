@@ -440,7 +440,6 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 		return $result;
 	}
 
-
 	/**
 	 * Create a new shop
 	 *
@@ -598,6 +597,40 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	}
 
 	/**
+	 * DELETE /ecommerce/stores/{store_id}/products/{product_id}
+	 *
+	 * @param   int  $shopId     Store id (e.g. vm_1)
+	 * @param   int  $productId  Product id (e.g. vm_product_)
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function deleteProduct($shopId, $productId)
+	{
+		$result = $this->delete('/ecommerce/stores/' . $shopId . '/products/' . $productId);
+
+		return $result;
+	}
+
+	/**
+	 * DELETE /ecommerce/stores/{store_id}/products/{product_id}
+	 *
+	 * @param   int                  $shopId     Store id (e.g. vm_1)
+	 * @param   CmcMailChimpProduct  $product    Product
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function updateProduct($shopId, $product)
+	{
+		$result = $this->patch('/ecommerce/stores/' . $shopId . '/products/' . $product->id, $product);
+
+		return $result;
+	}
+
+	/**
 	 * Add a new customer to the shop
 	 *
 	 * @param   int                   $store_id  Store id (e.g. vm_1)
@@ -609,9 +642,53 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public function addCustomer($store_id, CmcMailChimpCustomer $customer)
 	{
-		$result = $this->post('/ecommerce/stores/' . $store_id . '/customers', $customer);
+		$exists = $this->customerExists($store_id, $customer);
 
-		return $result;
+		if ($exists)
+		{
+			return $this->updateCustomer($store_id, $customer);
+		}
+
+		return $this->post('/ecommerce/stores/' . $store_id . '/customers', $customer);
+	}
+
+	/**
+	 * Update a customer
+	 *
+	 * @param   int                   $store_id  Store id (e.g. vm_1)
+	 * @param   CmcMailChimpCustomer  $customer  CustomerObject
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function updateCustomer($store_id, $customer)
+	{
+		return $this->patch('/ecommerce/stores/' . $store_id . '/customers/' . $customer->id, $customer);
+	}
+
+	/**
+	 * Checks if a customer (with id) is existing
+	 *
+	 * @param   int                   $store_id  StoreId
+	 * @param   CmcMailChimpCustomer  $customer  Customer
+	 *
+	 * @return  bool
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function customerExists($store_id, CmcMailChimpCustomer $customer)
+	{
+		$result = $this->get('/ecommerce/stores/' . $store_id . '/customers/' . $customer->id);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

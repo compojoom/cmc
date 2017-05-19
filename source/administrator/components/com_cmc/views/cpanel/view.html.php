@@ -27,7 +27,10 @@ class CmcViewCpanel extends CmcViewBackend
 	 */
 	public function display($tpl = null)
 	{
+		/** @var CmcModelUpdates $updateModel */
 		$updateModel = JModelLegacy::getInstance('Updates', 'CmcModel');
+
+		/** @var CmcModelStats $statsModel */
         $statsModel = JModelLegacy::getInstance('Stats', 'CmcModel');
 
 		// Run the automatic database check

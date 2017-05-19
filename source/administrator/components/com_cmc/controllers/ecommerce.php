@@ -64,7 +64,7 @@ class CmcControllerEcommerce extends CmcController
 		$shopType = $input->getInt('type');
 
 		// TODO switch by type or plugin
-		$syncer = new CmcShopVirtuemart();
+		$syncer = new CmcShopVirtuemart;
 
 		$result = new stdClass;
 

@@ -147,7 +147,7 @@ class CmcShopVirtuemart extends CmcShop
 
 			$product = new CmcMailChimpProduct();
 
-			$id = 'product_vm_' . $vmProduct->virtuemart_product_id;
+			$id = CmcHelperShop::PREFIX_PRODUCT . $vmProduct->virtuemart_product_id;
 
 			$product->id = $id;
 			$product->title = $vmProduct->product_name;
@@ -170,7 +170,7 @@ class CmcShopVirtuemart extends CmcShop
 				$vmChild = $model->getProduct($child);
 
 				$variants[] = array(
-					'id' => 'product_vm_' . $vmChild->virtuemart_product_id,
+					'id'    => CmcHelperShop::PREFIX_PRODUCT . $vmChild->virtuemart_product_id,
 					'title' => $vmChild->product_name,
 					'price' => number_format($vmChild->allPrices[0]['product_price'], 2)
 				);
@@ -214,7 +214,7 @@ class CmcShopVirtuemart extends CmcShop
 
 		$orders = array();
 
-		$currency = null;
+		$currency     = null;
 		$currencyCode = '';
 
 		foreach ($vmOrders as $i => $vmOrder)
@@ -231,7 +231,7 @@ class CmcShopVirtuemart extends CmcShop
 				$customerId = $vmOrder->virtuemart_user_id;
 			}
 
-			$customer = $this->getCustomerObject(
+			$customer = CmcHelperShop::getCustomerObject(
 				$completeOrder['details']['BT']->email,
 				$customerId,
 				$completeOrder['details']['BT']->company,
@@ -240,7 +240,7 @@ class CmcShopVirtuemart extends CmcShop
 			);
 
 			// Order
-			$order->id          = 'order_vm_' . $completeOrder['details']['BT']->virtuemart_order_id;
+			$order->id          = CmcHelperShop::PREFIX_ORDER . $completeOrder['details']['BT']->virtuemart_order_id;
 			$order->customer    = $customer;
 			$order->order_total = $completeOrder['details']['BT']->order_total;
 
@@ -248,7 +248,7 @@ class CmcShopVirtuemart extends CmcShop
 			if (!$currency)
 			{
 				$currency = $curModel->getCurrency($completeOrder['details']['BT']->order_currency);
-				$currencyCode = !empty($currency->currency_code_2) ?: $currency->currency_code_3;
+				$currencyCode = !empty($currency->currency_code_2) ? $currency->currency_code_2 : $currency->currency_code_3;
 			}
 
 			$order->currency_code = $currencyCode;
@@ -258,13 +258,14 @@ class CmcShopVirtuemart extends CmcShop
 
 			foreach ($completeOrder['items'] as $i => $item)
 			{
-				$line = new CmcMailChimpLine();
+				$line = new CmcMailChimpLine;
 
-				$line->id = 'order_vm_line_' . $item->virtuemart_order_item_id;
-				$line->product_id = 'product_vm_' . $item->virtuemart_product_id;
-				$line->product_variant_id = 'product_vm_' . $item->virtuemart_product_id;
-				$line->quantity = $item->product_quantity;
-				$line->price = $item->product_final_price;
+				$line->id                 = CmcHelperShop::PREFIX_ORDER_LINE . $item->virtuemart_order_item_id;
+				$line->title              = $item->order_item_name;
+				$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+				$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+				$line->quantity           = (int) $item->product_quantity;
+				$line->price              = (double) $item->product_final_price;
 
 				$lines[] = $line;
 			}
@@ -276,7 +277,6 @@ class CmcShopVirtuemart extends CmcShop
 			$order->shipping_total = $completeOrder['details']['BT']->order_shipment;
 
 			// TODO add more like shipping and billing address
-
 			$orders[] = $order;
 		}
 
@@ -316,7 +316,7 @@ class CmcShopVirtuemart extends CmcShop
 			// Fallback: Take it from user with split on space
 			list ($firstname, $lastname) = explode(' ', $vmUser->name);
 
-			$customer = $this->getCustomerObject(
+			$customer = CmcHelperShop::getCustomerObject(
 				$vmUser->email,
 				$vmUser->id,
 				((empty($addressList[0]->company)) ? '' : $addressList[0]->company),
@@ -397,14 +397,14 @@ class CmcShopVirtuemart extends CmcShop
 				continue;
 			}
 
-			$cart->id = 'cart_vm_' . $vmCart->virtuemart_cart_id;
+			$cart->id = CmcHelperShop::PREFIX_CART . $vmCart->virtuemart_cart_id;
 
 			// Customer
 			$userAddress = $userModel->getUserAddressList($vmCart->virtuemart_user_id, 'BT');
 			$userModel->setId($vmCart->virtuemart_user_id);
 			$user = $userModel->getUser($userAddress[0]->virtuemart_userinfo_id);
 
-			$customer = $this->getCustomerObject(
+			$customer = CmcHelperShop::getCustomerObject(
 				$user->JUser->email,
 				$vmCart->virtuemart_user_id,
 				$userAddress[0]->company,
@@ -436,11 +436,11 @@ class CmcShopVirtuemart extends CmcShop
 
 				$line = new CmcMailChimpLine();
 
-				$line->id = 'order_vm_line_' . $vmCart->virtuemart_cart_id . '_' . $i;
+				$line->id = CmcHelperShop::PREFIX_ORDER_LINE . $vmCart->virtuemart_cart_id . '_' . $i;
 
-				$line->product_id = 'product_vm_' . $item->virtuemart_product_id;
-				$line->product_variant_id = 'product_vm_' . $item->virtuemart_product_id;
-				$line->quantity = $item->quantity;
+				$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+				$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+				$line->quantity           = $item->quantity;
 
 				$price = $product->allPrices[0]['salesPrice'] * $item->quantity;
 				$tax   = $product->allPrices[0]['taxAmount'] * $item->quantity;
@@ -462,34 +462,5 @@ class CmcShopVirtuemart extends CmcShop
 		}
 
 		return $carts;
-	}
-
-	/**
-	 * Create a customer
-	 *
-	 * @param   string  $emailAddress  Email address
-	 * @param   string  $id            Id (without customer_vm)
-	 * @param   string  $company       Company
-	 * @param   string  $firstName     First name
-	 * @param   string  $lastName      Last name
-	 *
-	 * @return  CmcMailChimpCustomer
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	protected function getCustomerObject($emailAddress, $id = '', $company = '', $firstName = '', $lastName = '')
-	{
-		$customer = new CmcMailChimpCustomer;
-
-		$customer->id = 'customer_vm_' . ((empty($id)) ? preg_replace("/[^a-zA-Z0-9]+/", '', $emailAddress) : $id);
-		$customer->email_address = $emailAddress;
-
-		$customer->company       = $company ?: '';
-		$customer->first_name    = $firstName ?: '';
-		$customer->last_name     = $lastName ?: '';
-
-		$customer->opt_in_status = false;
-
-		return $customer;
 	}
 }
