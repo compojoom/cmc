@@ -17,19 +17,19 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the total count of products
 	 *
-	 * @return  int
+	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getTotalProducts()
 	{
-		return $this->getTableCount('#__virtuemart_products', array('product_parent_id = ' . CmcShopVirtuemart::ROOT_ITEM));
+		return $this->getTableCount('#__virtuemart_products', array('product_parent_id = ' . self::ROOT_ITEM));
 	}
 
 	/**
 	 * Get the total orders of a product
 	 *
-	 * @return  int
+	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -41,7 +41,7 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the total count of customers
 	 *
-	 * @return  int
+	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -53,7 +53,7 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the total count of product categories
 	 *
-	 * @return  int
+	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -66,7 +66,7 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the total count of checkouts
 	 *
-	 * @return  int
+	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -105,8 +105,8 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the products
 	 *
-	 * @param   int $offset Offset where to start
-	 * @param   int $limit Limit
+	 * @param   integer $offset Offset where to start
+	 * @param   integer $limit Limit
 	 *
 	 * @return  array
 	 *
@@ -131,7 +131,7 @@ class CmcShopVirtuemart extends CmcShop
 		// We have to get the root items only, as we use the children otherwise
 		$query->select('virtuemart_product_id')
 			->from('#__virtuemart_products')
-			->where('product_parent_id = ' . CmcShopVirtuemart::ROOT_ITEM)
+			->where('product_parent_id = ' . self::ROOT_ITEM)
 			->where('published = 1')
 			->order('virtuemart_product_id ASC');
 
@@ -187,8 +187,8 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the orders
 	 *
-	 * @param   int  $offset  Offset where to start
-	 * @param   int  $limit   Limit
+	 * @param   integer  $offset  Offset where to start
+	 * @param   integer  $limit   Limit
 	 *
 	 * @return  array
 	 *
@@ -286,8 +286,8 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the customers
 	 *
-	 * @param   int  $offset  Offset where to start
-	 * @param   int  $limit   Limit
+	 * @param   integer  $offset  Offset where to start
+	 * @param   integer  $limit   Limit
 	 *
 	 * @return  array
 	 *
@@ -333,8 +333,8 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the product categories (Optional)
 	 *
-	 * @param   int  $offset  Offset where to start
-	 * @param   int  $limit   Limit
+	 * @param   integer  $offset  Offset where to start
+	 * @param   integer  $limit   Limit
 	 *
 	 * @return  array
 	 *
@@ -348,8 +348,8 @@ class CmcShopVirtuemart extends CmcShop
 	/**
 	 * Get the checkouts
 	 *
-	 * @param   int  $offset  Offset where to start
-	 * @param   int  $limit   Limit
+	 * @param   integer  $offset  Offset where to start
+	 * @param   integer  $limit   Limit
 	 *
 	 * @return  array
 	 *
@@ -363,7 +363,6 @@ class CmcShopVirtuemart extends CmcShop
 		$query = $db->getQuery(true);
 
 		$query->select('*')->from('#__virtuemart_carts');
-
 		$db->setQuery($query, $offset, $limit);
 
 		$result = $db->loadObjectList();
@@ -384,12 +383,12 @@ class CmcShopVirtuemart extends CmcShop
 		/** @var VirtueMartModelUser $model */
 		$userModel = VmModel::getModel('user');
 
-		$currency = null;
+		$currency     = null;
 		$currencyCode = '';
 
 		foreach ($result as $vmCart)
 		{
-			$cart     = new CmcMailChimpCart();
+			$cart = new CmcMailChimpCart;
 
 			if (empty($vmCart->virtuemart_user_id))
 			{
@@ -420,21 +419,21 @@ class CmcShopVirtuemart extends CmcShop
 			// Currency load
 			if (!$currency)
 			{
-				$currency = $curModel->getCurrency($cartData->pricesCurrency);
+				$currency     = $curModel->getCurrency($cartData->pricesCurrency);
 				$currencyCode = !empty($currency->currency_code_2) ?: $currency->currency_code_3;
 			}
 
 			$cart->currency_code = $currencyCode;
 
-			$lines = array();
-			$total = 0;
+			$lines      = array();
+			$total      = 0;
 			$totalTax   = 0;
 
 			foreach ($cartData->cartProductsData as $i => $item)
 			{
 				$product = $prodModel->getProduct($item->virtuemart_product_id);
 
-				$line = new CmcMailChimpLine();
+				$line = new CmcMailChimpLine;
 
 				$line->id = CmcHelperShop::PREFIX_ORDER_LINE . $vmCart->virtuemart_cart_id . '_' . $i;
 

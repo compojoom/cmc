@@ -54,10 +54,9 @@ $doc->addStyleDeclaration('
 			<?php
 			$listSelect = CmcHelperBasic::getListSelect();
 
-			if (empty($listSelect)):
-				?>
+			if (empty($listSelect)): ?>
 				<h3><?php echo JText::_('COM_CMC_PLEASE_SYNCHRONIZE_A_LIST_FROM_MAIL_CHIMP_FIRST'); ?></h3>
-			<?php else: ?>
+			<?php else : ?>
 				<?php echo $listSelect; ?>
 			<?php endif; ?>
 		</div>
@@ -83,7 +82,7 @@ $doc->addStyleDeclaration('
 							<label for="productProgress">Products (<span id="productTotal"></span>)</label>
 							<div class="progress">
 								<div id="productProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
-								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
+									aria-valuemin="0" aria-valuemax="100" style="width: 0">
 									0
 								</div>
 							</div>

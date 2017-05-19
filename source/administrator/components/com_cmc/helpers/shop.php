@@ -84,12 +84,11 @@ class CmcHelperShop
 		$customer = new CmcMailChimpCustomer;
 
 		$customer->id = self::PREFIX_CUSTOMER . ((empty($id)) ? preg_replace("/[^a-zA-Z0-9]+/", '', $emailAddress) : $id);
-		$customer->email_address = $emailAddress;
 
+		$customer->email_address = $emailAddress;
 		$customer->company       = $company ?: '';
 		$customer->first_name    = $firstName ?: '';
 		$customer->last_name     = $lastName ?: '';
-
 		$customer->opt_in_status = false;
 
 		return $customer;

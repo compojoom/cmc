@@ -105,10 +105,10 @@ class plgSystemECom360Virtuemart extends JPlugin
 		{
 			$line = new CmcMailChimpLine;
 
-			$line->id                    = 'order_vm_line_' . $item->virtuemart_order_item_id;
+			$line->id                    = CmcHelperShop::PREFIX_ORDER . $item->virtuemart_order_item_id;
 			$line->title                 = $item->order_item_name;
-			$line->product_id            = 'product_vm_' . $item->virtuemart_product_id;
-			$line->product_variant_id    = 'product_vm_' . $item->virtuemart_product_id;
+			$line->product_id            = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+			$line->product_variant_id    = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
 			$line->product_variant_title = $item->order_item_name;
 			$line->quantity              = (int) $item->product_quantity;
 			$line->price                 = (double) $item->product_final_price;
@@ -186,7 +186,7 @@ class plgSystemECom360Virtuemart extends JPlugin
 	}
 
 	/**
-	 * Store user
+	 * Save or Update a user
 	 *
 	 * @param   object  $user  User
 	 *
@@ -206,11 +206,6 @@ class plgSystemECom360Virtuemart extends JPlugin
 			$user['last_name']
 		);
 
-		$result = $this->chimp->addCustomer($this->shop->shop_id, $customer);
-
-		var_dump($result);
-		die('wtf');
-
-		return $result;
+		return $this->chimp->addCustomer($this->shop->shop_id, $customer);;
 	}
 }

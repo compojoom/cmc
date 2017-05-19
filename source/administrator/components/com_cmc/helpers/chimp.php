@@ -28,9 +28,18 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * The MailChimp API Key
 	 *
 	 * @var    null|string
+	 *
+	 * @since  1.0.0
 	 */
 	public $api_key = null;
 
+	/**
+	 * Verify SSL Certificate of MailChimp
+	 *
+	 * @var    bool
+	 *
+	 * @since  1.0.0
+	 */
 	public $verify_ssl = false;
 
 	/**
@@ -107,8 +116,8 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 *
 	 * @param   string  $listid  The list  id
 	 * @param   string  $status  The subscription status
-	 * @param   int     $offset  The offset where to begin with
-	 * @param   int     $limit   The limit
+	 * @param   integer     $offset  The offset where to begin with
+	 * @param   integer     $limit   The limit
 	 *
 	 * @return  array|false  The member details
 	 */
@@ -582,7 +591,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Add a new product to the shop
 	 *
-	 * @param   int                  $shopId   Store id (e.g. vm_1)
+	 * @param   integer              $shopId   Store id (e.g. vm_1)
 	 * @param   CmcMailChimpProduct  $product  Product
 	 *
 	 * @return  array|false
@@ -599,8 +608,8 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * DELETE /ecommerce/stores/{store_id}/products/{product_id}
 	 *
-	 * @param   int  $shopId     Store id (e.g. vm_1)
-	 * @param   int  $productId  Product id (e.g. vm_product_)
+	 * @param   integer  $shopId     Store id (e.g. vm_1)
+	 * @param   integer  $productId  Product id (e.g. vm_product_)
 	 *
 	 * @return  array|false
 	 *
@@ -616,7 +625,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * DELETE /ecommerce/stores/{store_id}/products/{product_id}
 	 *
-	 * @param   int                  $shopId     Store id (e.g. vm_1)
+	 * @param   integer              $shopId     Store id (e.g. vm_1)
 	 * @param   CmcMailChimpProduct  $product    Product
 	 *
 	 * @return  array|false
@@ -633,7 +642,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Add a new customer to the shop
 	 *
-	 * @param   int                   $store_id  Store id (e.g. vm_1)
+	 * @param   integer               $store_id  Store id (e.g. vm_1)
 	 * @param   CmcMailChimpCustomer  $customer  CustomerObject
 	 *
 	 * @return  array|false
@@ -655,7 +664,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Update a customer
 	 *
-	 * @param   int                   $store_id  Store id (e.g. vm_1)
+	 * @param   integer               $store_id  Store id (e.g. vm_1)
 	 * @param   CmcMailChimpCustomer  $customer  CustomerObject
 	 *
 	 * @return  array|false
@@ -670,7 +679,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Checks if a customer (with id) is existing
 	 *
-	 * @param   int                   $store_id  StoreId
+	 * @param   integer               $store_id  StoreId
 	 * @param   CmcMailChimpCustomer  $customer  Customer
 	 *
 	 * @return  bool
@@ -694,7 +703,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Add a new order to the shop
 	 *
-	 * @param   int                $shopId   Store id (e.g. vm_1)
+	 * @param   integer            $shopId   Store id (e.g. vm_1)
 	 * @param   CmcMailChimpOrder  $order    Order
 	 *
 	 * @return  array|false
@@ -711,7 +720,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Add a new cart to the shop
 	 *
-	 * @param   int               $shopId   Store id (e.g. vm_1)
+	 * @param   integer           $shopId   Store id (e.g. vm_1)
 	 * @param   CmcMailChimpCart  $cart     Cart item
 	 *
 	 * @return  array|false
