@@ -19,10 +19,31 @@ jimport('joomla.application.component.controller');
 class CmcControllerEcommerce extends CmcController
 {
 	/**
+	 * CmcControllerEcommerce constructor.
+	 *
+	 * @param   array  $config  Optional config params
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+
+		// Add logging
+		JLog::addLogger(
+			array(
+				'text_file' => 'com_cmc.errors.php'
+			),
+			JLog::ERROR,
+			array('com_cmc')
+		);
+	}
+
+	/**
 	 * Sync task to be called by JavaScript
 	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&offset=0&limit=100
 	 *
-	 * @return  boolean
+	 * @return  void
 	 * 
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -33,28 +54,62 @@ class CmcControllerEcommerce extends CmcController
 		$this->loadShop();
 
 		$shopType = $input->getInt('type');
+		$shopId   = $input->getInt('shopId');
 		$action   = $input->getCmd('action');
 		$offset   = $input->getInt('offset', 0);
-		$limit    = $input->getInt('limit', 100);
+		$limit    = $input->getInt('limit', 10);
 
 		// TODO switch by type
 		$syncer = new CmcShopVirtuemart();
 
 		$method = 'get' . ucfirst($action);
 
-		$result = $syncer->$method($offset, $limit);
+		$results = $syncer->$method($offset, $limit);
 
-		if (empty($result))
+		if (empty($results))
 		{
-			return json_encode(array('success' => true, 'result' => $result));
+			echo json_encode(array('success' => true, 'result' => $results));
+
+			jexit();
 		}
 
 		// Sync it to mailChimp
 		$chimp = new CmcHelperChimp;
-		$shop  = CmcHelperShop::getShop();
+		$shop  = CmcHelperShop::getShop($shopId);
 
+		$errors = array();
 
-		echo json_encode($result);
+		$map = array(
+			'products'   => 'product',
+			'customers'  => 'customer',
+			'orders'     => 'order',
+			'categories' => 'category',
+			'checkouts'  => 'cart'
+		);
+
+		// Add them
+		foreach ($results as $result)
+		{
+			$method = 'add' . ucfirst($map[$action]);
+
+			$ret = $chimp->$method($shop->shop_id, $result);
+
+			if (!empty($ret['status']) && substr($ret['status'], 0,1) === '4')
+			{
+				JLog::add('Couldn\'t sync for ' . $shop->shop_id, Jlog::ERROR, 'com_cmc');
+
+				$errors[] = array('item' => $result, 'result' => $ret);
+			}
+		}
+
+		if (!empty($errors))
+		{
+			echo json_encode(array('success' => false, 'errors' => $errors));
+
+			jexit();
+		}
+
+		echo json_encode(array('success' => true, 'results' => $results));
 		jexit();
 	}
 

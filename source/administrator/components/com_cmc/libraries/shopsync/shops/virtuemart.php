@@ -256,16 +256,19 @@ class CmcShopVirtuemart extends CmcShop
 			// Lines
 			$lines = array();
 
-			foreach ($completeOrder['items'] as $i => $item)
+			foreach ($completeOrder['items'] as $j => $item)
 			{
 				$line = new CmcMailChimpLine;
 
 				$line->id                 = CmcHelperShop::PREFIX_ORDER_LINE . $item->virtuemart_order_item_id;
 				$line->title              = $item->order_item_name;
-				$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+
+				$parentProductId = CmcHelperShop::getVmParentProductId($item->virtuemart_product_id);
+
+				$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $parentProductId;
 				$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
 				$line->quantity           = (int) $item->product_quantity;
-				$line->price              = (double) $item->product_final_price;
+				$line->price              = (float) $item->product_final_price;
 
 				$lines[] = $line;
 			}
@@ -273,8 +276,11 @@ class CmcShopVirtuemart extends CmcShop
 			$order->lines = $lines;
 
 			// Optional infos
-			$order->tax_total = $completeOrder['details']['BT']->order_tax;
-			$order->shipping_total = $completeOrder['details']['BT']->order_shipment;
+			$order->tax_total      = (float) $completeOrder['details']['BT']->order_tax;
+			$order->shipping_total =  (float) $completeOrder['details']['BT']->order_shipment;
+
+			// We don't have an campaign id here
+			unset($order->campaign_id);
 
 			// TODO add more like shipping and billing address
 			$orders[] = $order;
@@ -437,7 +443,9 @@ class CmcShopVirtuemart extends CmcShop
 
 				$line->id = CmcHelperShop::PREFIX_ORDER_LINE . $vmCart->virtuemart_cart_id . '_' . $i;
 
-				$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+				$parentProductId = CmcHelperShop::getVmParentProductId($item->virtuemart_product_id);
+
+				$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $parentProductId;
 				$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
 				$line->quantity           = $item->quantity;
 
@@ -456,6 +464,9 @@ class CmcShopVirtuemart extends CmcShop
 
 			$cart->order_total = $total;
 			$cart->tax_total   = $totalTax;
+
+			// We don't have an campaign id here
+			unset($cart->campaign_id);
 
 			$carts[] = $cart;
 		}

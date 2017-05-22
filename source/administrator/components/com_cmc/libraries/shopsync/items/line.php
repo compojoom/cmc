@@ -52,10 +52,10 @@ class CmcMailChimpLine
 	/**
 	 * Optional discount
 	 *
-	 * @var    string
+	 * @var    float
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public $discount = '';
+	public $discount = 0.00;
 
 	/**
 	 * Optional title

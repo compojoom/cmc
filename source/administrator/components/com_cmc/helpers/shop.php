@@ -93,4 +93,33 @@ class CmcHelperShop
 
 		return $customer;
 	}
+
+	/**
+	 * Get the product parent Id
+	 *
+	 * @param   int  $virtuemartProductId  Product id
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function getVmParentProductId($virtuemartProductId)
+	{
+		// Make sure VM is loaded
+		require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
+
+		/** @var VirtueMartModelProduct $model */
+		$model = VmModel::getModel('product');
+
+		$product = $model->getProduct($virtuemartProductId);
+
+		// It's a root item
+		if ($product->product_parent_id == CmcShopVirtuemart::ROOT_ITEM || $product->product_parent_id == 0)
+		{
+			return $virtuemartProductId;
+		}
+
+		return $product->product_parent_id;
+	}
 }

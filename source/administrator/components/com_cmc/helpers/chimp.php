@@ -569,7 +569,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Add a new product to the shop
 	 *
-	 * @param   integer              $shopId   Store id (e.g. vm_1)
+	 * @param   string               $shopId   Store id (e.g. 1)
 	 * @param   CmcMailChimpProduct  $product  Product
 	 *
 	 * @return  array|false
@@ -589,10 +589,34 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	}
 
 	/**
+	 * Checks if a product (with id) is existing
+	 *
+	 * @param   string               $shopId    StoreId
+	 * @param   CmcMailChimpProduct  $product   Product
+	 *
+	 * @return  bool
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function productExists($shopId, CmcMailChimpProduct $product)
+	{
+		$result = $this->get('/ecommerce/stores/' . $shopId . '/products/' . $product->id);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * DELETE /ecommerce/stores/{store_id}/products/{product_id}
 	 *
-	 * @param   integer  $shopId     Store id (e.g. vm_1)
-	 * @param   integer  $productId  Product id (e.g. vm_product_)
+	 * @param   string  $shopId     Store id (e.g. 1)
+	 * @param   string  $productId  Product id (e.g. vm_product_)
 	 *
 	 * @return  array|false
 	 *
@@ -608,14 +632,14 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * DELETE /ecommerce/stores/{store_id}/products/{product_id}
 	 *
-	 * @param   integer              $shopId     Store id (e.g. vm_1)
+	 * @param   string               $shopId     Store id (e.g. 1)
 	 * @param   CmcMailChimpProduct  $product    Product
 	 *
 	 * @return  array|false
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function updateProduct($shopId, $product)
+	public function updateProduct($shopId, CmcMailChimpProduct $product)
 	{
 		$result = $this->patch('/ecommerce/stores/' . $shopId . '/products/' . $product->id, $product);
 
@@ -625,53 +649,53 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	/**
 	 * Add a new customer to the shop
 	 *
-	 * @param   integer               $store_id  Store id (e.g. vm_1)
+	 * @param   string                $shopId    Store id (e.g. 1)
 	 * @param   CmcMailChimpCustomer  $customer  CustomerObject
 	 *
 	 * @return  array|false
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addCustomer($store_id, CmcMailChimpCustomer $customer)
+	public function addCustomer($shopId, CmcMailChimpCustomer $customer)
 	{
-		$exists = $this->customerExists($store_id, $customer);
+		$exists = $this->customerExists($shopId, $customer);
 
 		if ($exists)
 		{
-			return $this->updateCustomer($store_id, $customer);
+			return $this->updateCustomer($shopId, $customer);
 		}
 
-		return $this->post('/ecommerce/stores/' . $store_id . '/customers', $customer);
+		return $this->post('/ecommerce/stores/' . $shopId . '/customers', $customer);
 	}
 
 	/**
 	 * Update a customer
 	 *
-	 * @param   integer               $store_id  Store id (e.g. vm_1)
+	 * @param   string                $shopId    Store id (e.g. 1)
 	 * @param   CmcMailChimpCustomer  $customer  CustomerObject
 	 *
 	 * @return  array|false
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function updateCustomer($store_id, $customer)
+	public function updateCustomer($shopId, CmcMailChimpCustomer $customer)
 	{
-		return $this->patch('/ecommerce/stores/' . $store_id . '/customers/' . $customer->id, $customer);
+		return $this->patch('/ecommerce/stores/' . $shopId . '/customers/' . $customer->id, $customer);
 	}
 
 	/**
 	 * Checks if a customer (with id) is existing
 	 *
-	 * @param   integer               $store_id  StoreId
+	 * @param   string                $shopId    StoreId
 	 * @param   CmcMailChimpCustomer  $customer  Customer
 	 *
 	 * @return  bool
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function customerExists($store_id, CmcMailChimpCustomer $customer)
+	public function customerExists($shopId, CmcMailChimpCustomer $customer)
 	{
-		$result = $this->get('/ecommerce/stores/' . $store_id . '/customers/' . $customer->id);
+		$result = $this->get('/ecommerce/stores/' . $shopId . '/customers/' . $customer->id);
 
 		$lastResponse = $this->getLastResponse();
 
@@ -684,33 +708,24 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	}
 
 	/**
-	 * Checks if a product (with id) is existing
+	 * DELETE /ecommerce/stores/{store_id}/customers/{product_id}
 	 *
-	 * @param   integer              $store_id  StoreId
-	 * @param   CmcMailChimpProduct  $product   Product
+	 * @param   string  $shopId     Store id (e.g. 1)
+	 * @param   string  $productId  Product id (e.g. vm_customer_42)
 	 *
-	 * @return  bool
+	 * @return  array|false
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function productExists($store_id, CmcMailChimpProduct $product)
+	public function deleteCustomer($shopId, $id)
 	{
-		$result = $this->get('/ecommerce/stores/' . $store_id . '/products/' . $product->id);
-
-		$lastResponse = $this->getLastResponse();
-
-		if ($lastResponse['headers']['http_code'] == 404)
-		{
-			return false;
-		}
-
-		return true;
+		return $this->delete('/ecommerce/stores/' . $shopId . '/customers/' . $id);
 	}
 
 	/**
 	 * Add a new order to the shop
 	 *
-	 * @param   integer            $shopId   Store id (e.g. vm_1)
+	 * @param   string             $shopId   Store id (e.g. vm_1)
 	 * @param   CmcMailChimpOrder  $order    Order
 	 *
 	 * @return  array|false
@@ -719,15 +734,74 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public function addOrder($shopId, CmcMailChimpOrder $order)
 	{
-		$result = $this->post('/ecommerce/stores/' . $shopId . '/orders', $order);
+		$exists = $this->orderExists($shopId, $order);
 
-		return $result;
+		if ($exists)
+		{
+			return $this->updateOrder($shopId, $order);
+		}
+
+		return $this->post('/ecommerce/stores/' . $shopId . '/orders', $order);
+	}
+
+	/**
+	 * Update an order
+	 *
+	 * @param   string             $shopId  Store id (e.g. vm_1)
+	 * @param   CmcMailChimpOrder  $order   Order
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function updateOrder($shopId, CmcMailChimpOrder $order)
+	{
+		return $this->patch('/ecommerce/stores/' . $shopId . '/orders/' . $order->id, $order);
+	}
+
+	/**
+	 * Checks if a order (with id) is existing
+	 *
+	 * @param   string             $shopId  StoreId
+	 * @param   CmcMailChimpOrder  $order   Order
+	 *
+	 * @return  bool
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function orderExists($shopId, CmcMailChimpOrder $order)
+	{
+		$result = $this->get('/ecommerce/stores/' . $shopId . '/orders/' . $order->id);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * DELETE /ecommerce/stores/{store_id}/orders/{product_id}
+	 *
+	 * @param   string  $shopId  Store id (e.g. 1)
+	 * @param   string  $id      Order id (e.g. vm_order_42)
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function deleteOrder($shopId, $id)
+	{
+		return $this->delete('/ecommerce/stores/' . $shopId . '/orders/' . $id);
 	}
 
 	/**
 	 * Add a new cart to the shop
 	 *
-	 * @param   integer           $shopId   Store id (e.g. vm_1)
+	 * @param   string            $shopId   Store id (e.g. vm_1)
 	 * @param   CmcMailChimpCart  $cart     Cart item
 	 *
 	 * @return  array|false
@@ -736,8 +810,67 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public function addCart($shopId, CmcMailChimpCart $cart)
 	{
-		$result = $this->post('/ecommerce/stores/' . $shopId . '/carts', $cart);
+		$exists = $this->cartExists($shopId, $cart);
 
-		return $result;
+		if ($exists)
+		{
+			return $this->updateCart($shopId, $cart);
+		}
+
+		return $this->post('/ecommerce/stores/' . $shopId . '/carts', $cart);
+	}
+
+	/**
+	 * Update an cart
+	 *
+	 * @param   string            $shopId  Store id (e.g. vm_1)
+	 * @param   CmcMailChimpCart  $cart    Cart
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function updateCart($shopId, CmcMailChimpCart $cart)
+	{
+		return $this->patch('/ecommerce/stores/' . $shopId . '/carts/' . $cart->id, $cart);
+	}
+
+	/**
+	 * Checks if a cart (with id) is existing
+	 *
+	 * @param   string            $shopId  Store id (e.g. vm_1)
+	 * @param   CmcMailChimpCart  $cart    Cart
+	 *
+	 * @return  bool
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function cartExists($shopId, CmcMailChimpCart $cart)
+	{
+		$result = $this->get('/ecommerce/stores/' . $shopId . '/carts/' . $cart->id);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * DELETE /ecommerce/stores/{store_id}/carts/{product_id}
+	 *
+	 * @param   string  $shopId  Store id (e.g. 1)
+	 * @param   string  $id      Cart id (e.g. vm_cart_42)
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function deleteCart($shopId, $id)
+	{
+		return $this->delete('/ecommerce/stores/' . $shopId . '/carts/' . $id);
 	}
 }

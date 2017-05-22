@@ -31,7 +31,7 @@ class CmcMailChimpOrder
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public $campaign_id = '';
+	public $campaign_id;
 
 	/**
 	 * Currency code
@@ -44,7 +44,7 @@ class CmcMailChimpOrder
 	/**
 	 * Total value
 	 *
-	 * @var    double
+	 * @var    float
 	 * @since  __DEPLOY_VERSION__
 	 */
 	public $order_total;
@@ -63,12 +63,12 @@ class CmcMailChimpOrder
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public $tracking_code = '';
+	// public $tracking_code = null;
 
 	/**
 	 * Tax value (optional)
 	 *
-	 * @var    double
+	 * @var    float
 	 * @since  __DEPLOY_VERSION__
 	 */
 	public $tax_total = 0.00;
@@ -76,7 +76,7 @@ class CmcMailChimpOrder
 	/**
 	 * Shipping value (optional)
 	 *
-	 * @var    double
+	 * @var    float
 	 * @since  __DEPLOY_VERSION__
 	 */
 	public $shipping_total = 0.00;
@@ -87,7 +87,7 @@ class CmcMailChimpOrder
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public $shipping_address = '';
+	// public $shipping_address = '';
 
 	/**
 	 * Billing address (optional)
@@ -95,5 +95,5 @@ class CmcMailChimpOrder
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public $billing_address = '';
+	// public $billing_address = '';
 }

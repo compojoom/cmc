@@ -108,7 +108,10 @@ class plgSystemECom360Virtuemart extends JPlugin
 
 			$line->id                    = CmcHelperShop::PREFIX_ORDER . $item->virtuemart_order_item_id;
 			$line->title                 = $item->order_item_name;
-			$line->product_id            = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
+
+			$parentProductId = CmcHelperShop::getVmParentProductId($item->virtuemart_product_id);
+
+			$line->product_id            = CmcHelperShop::PREFIX_PRODUCT . $parentProductId;
 			$line->product_variant_id    = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
 			$line->product_variant_title = $item->order_item_name;
 			$line->quantity              = (int) $item->product_quantity;
