@@ -504,6 +504,20 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	}
 
 	/**
+	 * Update a shop
+	 *
+	 * @param   object  $shop  - the store object as described here http://developer.mailchimp.com/documentation/mailchimp/reference/ecommerce/stores/
+	 *
+	 * @return  array|false
+	 *
+ 	 * @since   __DEPLOY_VERSION__
+	 */
+	public function updateShop($shop)
+	{
+		return $this->patch('/ecommerce/stores/' . $shop->id, $shop);
+	}
+
+	/**
 	 * Create a product
 	 *
 	 * @param   string  $storeId  - the store id

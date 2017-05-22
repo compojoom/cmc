@@ -19,51 +19,53 @@ $doc->addStyleDeclaration('
 ?>
 
 <div id="shops-to-sync" class="box-info full">
-	<p class="intro">
-		<?php echo JText::_('COM_CMC_INITIAL_SHOP_SYNC'); ?>
-	</p>
-	<div class="control-group">
-		<div class="form-group">
-			<label for="shop_name"><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></label>
+	<div id="shop-edit">
+		<p class="intro">
+			<?php echo JText::_('COM_CMC_INITIAL_SHOP_SYNC'); ?>
+		</p>
+		<div class="control-group">
+			<div class="form-group">
+				<label for="shop_name"><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></label>
 
-			<input type="text" name="shop_name" id="shop_name" class="form-control" />
+				<input type="text" name="shop_name" id="shop_name" class="form-control"/>
+			</div>
+
+			<div class="form-group">
+				<label for="shop"><?php echo JText::_('COM_CMC_SHOP_EMAIL'); ?></label>
+
+				<input type="text" name="shop_email" id="shop_email" class="form-control"/>
+			</div>
+
+			<div class="form-group">
+				<label for="shop"><?php echo JText::_('COM_CMC_SHOP_CURRENCY_CODE'); ?></label>
+
+				<input type="text" name="shop_currency" id="shop_currency" class="form-control" value="USD"/>
+			</div>
+
+			<div class="form-group">
+				<label for="shop"><?php echo JText::_('COM_CMC_SHOP_SOFTWARE'); ?></label>
+
+				<select name="shop" id="shop" class="form-control">
+					<option value="1">VirtueMart</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="list_id"><?php echo JText::_('COM_CMC_LIST'); ?></label>
+				<?php
+				$listSelect = CmcHelperBasic::getListSelect();
+
+				if (empty($listSelect)): ?>
+					<h3><?php echo JText::_('COM_CMC_PLEASE_SYNCHRONIZE_A_LIST_FROM_MAIL_CHIMP_FIRST'); ?></h3>
+				<?php else : ?>
+					<?php echo $listSelect; ?>
+				<?php endif; ?>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_EMAIL'); ?></label>
-
-			<input type="text" name="shop_email" id="shop_email" class="form-control" />
-		</div>
-
-		<div class="form-group">
-			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_CURRENCY_CODE'); ?></label>
-
-			<input type="text" name="shop_currency" id="shop_currency" class="form-control" value="USD" />
-		</div>
-
-		<div class="form-group">
-			<label for="shop"><?php echo JText::_('COM_CMC_SHOP_SOFTWARE'); ?></label>
-
-			<select name="shop" id="shop" class="form-control">
-				<option value="1">VirtueMart</option>
-			</select>
-		</div>
-
-		<div class="form-group">
-			<label for="list_id"><?php echo JText::_('COM_CMC_LIST'); ?></label>
-			<?php
-			$listSelect = CmcHelperBasic::getListSelect();
-
-			if (empty($listSelect)): ?>
-				<h3><?php echo JText::_('COM_CMC_PLEASE_SYNCHRONIZE_A_LIST_FROM_MAIL_CHIMP_FIRST'); ?></h3>
-			<?php else : ?>
-				<?php echo $listSelect; ?>
-			<?php endif; ?>
-		</div>
+		<button id="btnAddShop" class="btn btn-primary" data-toggle="modal"
+		        href="#modal_sync"><?php echo JText::_('COM_CMC_START_INITIAL_SYNC'); ?></button>
 	</div>
-
-	<button id="btnAddShop" class="btn btn-primary" data-toggle="modal"
-	        href="#modal_sync"><?php echo JText::_('COM_CMC_START_INITIAL_SYNC'); ?></button>
 
 	<div id="modal_sync" class="modal fade" role="dialog" style="display: none">
 		<div class="modal-dialog">
@@ -73,16 +75,21 @@ $doc->addStyleDeclaration('
 					<h4 class="modal-title"><?php echo JText::_('COM_CMC_SHOP_SYNC_IN_PROGRESS'); ?></h4>
 				</div>
 				<div class="modal-body">
-					<p>
+					<p id="shop-sync-intro">
 						<?php echo JText::_('COM_CMC_DONT_CLOSE_THE_WINDOW'); ?>
 					</p>
+					<div id="shop-sync-done" style="display: none">
+						<div class="alert alert-info">
+							<?php echo JText::_('COM_CMC_INITIAL_SHOP_SYNC_DONE'); ?>
+						</div>
+					</div>
 
 					<div id="sync-progress">
 						<div class="sync-item">
 							<label for="productProgress">Products (<span id="productTotal"></span>)</label>
 							<div class="progress">
 								<div id="productProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
-									aria-valuemin="0" aria-valuemax="100" style="width: 0">
+								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
 									0
 								</div>
 							</div>
@@ -126,11 +133,10 @@ $doc->addStyleDeclaration('
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"
-					        disabled="disabled"><?php echo JText::_('COM_CMC_CLOSE'); ?></button>
+					<button type="button" class="btn btn-default"
+					        data-dismiss="modal"><?php echo JText::_('COM_CMC_CLOSE'); ?></button>
 				</div>
 			</div>
-
 		</div>
 	</div>
 
@@ -138,8 +144,9 @@ $doc->addStyleDeclaration('
 		jQuery(document).ready(function ($) {
 			var juri = '<?php echo JUri::root(); ?>';
 			var itemCount = null;
-			var globalLimit = 20;
-			var shopId = 'vm_8';
+			var globalLimit = 10;
+			var shopId = '';
+			var errors = [];
 
 			var bars = {
 				$productsProgress: $('#productProgress'),
@@ -150,25 +157,35 @@ $doc->addStyleDeclaration('
 			};
 
 			function syncItems(type, list) {
-				console.log('---Starting syncing---');
+				console.log('---Starting syncing for shop: ' + shopId + '---');
 				console.log('Type: ' + type);
 				console.log('List: ' + list);
 
 				var actions = ['products', 'customers', 'orders', 'categories', 'checkouts'];
 
-				// Start 5 in parallel
-				for (var i = 0; i < actions.length; i++)	{
-					syncItem(type, list, actions[i], 0, globalLimit);
-				}
+				// Start 5 in parallel BAD IDEA
+				syncItem(type, list, actions.shift(), actions, 0, globalLimit);
 			}
 
-			function syncItem(type, list, action, offset, limit) {
+			function syncItem(type, list, action, actions, offset, limit) {
 				var count = itemCount[action + 'Count'];
 
 				// We are done
 				if (count === 0 || offset > count) {
 					bars['$' + action + 'Progress'].css({width: '100%'});
 					bars['$' + action + 'Progress'].text(count);
+
+					if (actions.length > 0) {
+						action = actions.shift();
+
+						console.log('Switching action to ' + action);
+
+						return syncItem(type, list, action, actions, 0, globalLimit);
+					}
+
+					// We are done syncing (set shop syncing to done)
+					finalizeSync();
+
 					return true;
 				}
 
@@ -178,14 +195,28 @@ $doc->addStyleDeclaration('
 					method: 'POST',
 					data: {shopId: shopId, action: action, type: type, list: list, offset: offset, limit: limit},
 					dataType: 'json'
-				}).done(function(json) {
-					console.log('Sync for ' + action + ' done');
+				}).done(function (json) {
+					console.log('Sync for ' + action + ' for ' + shopId + ' done');
 					console.log(json);
 
+					if (json.success === false) {
+						var message = {
+							'error': ['Error syncing ' + action]
+						};
+
+						Joomla.renderMessages(message);
+					}
+
 					// Continue syncing
-					return syncItem(type, list, action, offset + limit, limit);
-				}).fail(function(){
+					return syncItem(type, list, action, actions, offset + limit, limit);
+				}).fail(function () {
 					console.log('Error syncing ' + action);
+
+					var message = {
+						'error': ['Error syncing ' + action]
+					};
+
+					Joomla.renderMessages(message);
 				});
 
 				// Done with syncing task
@@ -203,20 +234,36 @@ $doc->addStyleDeclaration('
 					method: 'POST',
 					data: {list: list, type: type, title: shopName, currency: shopCurrency, email: shopEmail},
 					dataType: 'json'
-				}).done(function(json) {
+				}).done(function (json) {
 					console.log('Shop creation done ' + json.shopId);
 
 					shopId = json.shopId;
 					console.log(json);
 
 					return syncItems(type, list);
-				}).fail(function(){
+				}).fail(function () {
 					console.log('Error syncing shop');
+				});
+			}
+
+			function finalizeSync() {
+				$.ajax(juri + 'administrator/index.php?option=com_cmc&task=ecommerce.finalizeShop', {
+					method: 'POST',
+					data: {id: shopId},
+					dataType: 'json'
+				}).done(function (json) {
+					console.log('Shop finalization done');
+					$('#shop-sync-intro').hide();
+					$('#shop-sync-done').show(200);
+				}).fail(function () {
+					console.log('Error finalizing shop');
 				});
 			}
 
 			$('#btnAddShop').click(function (e) {
 				e.preventDefault();
+
+				$('#shop-edit').hide();
 
 				var $productTotal = $('#productTotal');
 				var $customerTotal = $('#customerTotal');
@@ -246,18 +293,39 @@ $doc->addStyleDeclaration('
 
 <h3><?php echo JText::_('COM_CMC_SHOPS'); ?></h3>
 
-<div class="table-responsive">
-	<table class="table table-hover table-striped">
-		<thead>
-		<tr>
-			<th></th>
-			<th><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></th>
-			<th><?php echo JText::_('COM_CMC_SHOP_TYPE'); ?></th>
-			<th><?php echo JText::_('COM_CMC_SHOP_ID'); ?></th>
-		</tr>
-		</thead>
-		<tbody>
+<div class="box-info full">
 
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-hover table-striped">
+			<thead>
+			<tr>
+				<th width="5">#</th>
+				<th width="5"><input type="checkbox" name="checkall-toggle" value=""
+				           title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>"
+				           onclick="Joomla.checkAll(this)"/></th>
+				<th><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></th>
+				<th><?php echo JText::_('COM_CMC_SHOP_TYPE'); ?></th>
+				<th><?php echo JText::_('COM_CMC_SHOP_ID'); ?></th>
+				<th><?php echo JText::_('COM_CMC_ID'); ?></th>
+			</tr>
+			</thead>
+			<tfoot>
+			<tr>
+				<td colspan="5"><?php echo $this->pagination->getListFooter(); ?></td>
+			</tr>
+			</tfoot>
+			<tbody>
+			<?php foreach ($this->items as $i => $item) : ?>
+				<tr>
+					<td><?php echo $this->pagination->getRowOffset($i); ?></td>
+					<td><?php echo JHTML::_('grid.id', $i, $item->shop_id); ?>	</td>
+					<td><?php echo $item->name; ?></td>
+					<td><?php echo $item->type == 1 ? 'Virtuemart' : 'Other'; ?></td>
+					<td><?php echo $item->shop_id; ?></td>
+					<td><?php echo $item->id; ?></td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
 </div>

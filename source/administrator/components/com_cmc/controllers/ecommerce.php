@@ -200,8 +200,52 @@ class CmcControllerEcommerce extends CmcController
 
 		$mcShop->domain = JUri::root();
 
-		// $result = $chimp->createShop($mcShop);
-		$result = 'tmp';
+		$result = $chimp->createShop($mcShop);
+
+		echo json_encode(array('shopId' => $shop->shop_id, 'result' => $result));
+		jexit();
+	}
+
+	/**
+	 * Set the shop sync to done
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function finalizeShop()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$this->loadShop();
+
+		$shopId = $input->getInt('id');
+
+		$shop = CmcHelperShop::getShop($shopId);
+
+		if (empty($shop))
+		{
+			echo json_encode(array('shopId' => $shop->shop_id, 'success' => false));
+			jexit();
+		}
+
+		// Create a shop in Mailchimp
+		$chimp = new CmcHelperChimp;
+
+		$mcShop = new stdClass;
+
+		$mcShop->id       = $shop->shop_id;
+		$mcShop->list_id  = $shop->list_id;
+		$mcShop->name     = $shop->name;
+
+		// TODO
+		$mcShop->platform = 'VirtueMart';
+
+		$mcShop->is_syncing    = false;
+
+		$mcShop->domain = JUri::root();
+
+		$result = $chimp->updateShop($mcShop);
 
 		echo json_encode(array('shopId' => $shop->shop_id, 'result' => $result));
 		jexit();

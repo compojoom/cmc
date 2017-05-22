@@ -27,6 +27,10 @@ class CmcViewEcommerce extends CmcViewBackend
 	 */
 	public function display($tpl = null)
 	{
+		$this->state = $this->get('State');
+		$this->items = $this->get('Items');
+		$this->pagination = $this->get('Pagination');
+
 		$this->addToolbar();
 		parent::display($tpl);
 	}
