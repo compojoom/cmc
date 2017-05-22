@@ -145,14 +145,14 @@ class CmcShopVirtuemart extends CmcShop
 		{
 			$vmProduct = $model->getProduct($row->virtuemart_product_id);
 
-			$product = new CmcMailChimpProduct();
+			$product = new CmcMailChimpProduct;
 
 			$id = CmcHelperShop::PREFIX_PRODUCT . $vmProduct->virtuemart_product_id;
 
-			$product->id = $id;
-			$product->title = $vmProduct->product_name;
+			$product->id          = $id;
+			$product->title       = $vmProduct->product_name;
 			$product->description = $vmProduct->product_s_desc;
-			$product->image_url = '';
+			$product->image_url   = '';
 
 			$variants = array();
 
@@ -160,9 +160,9 @@ class CmcShopVirtuemart extends CmcShop
 			$uncatChildren = $model->getUncategorizedChildren(false);
 
 			$variants[] = array(
-				'id' => $id,
+				'id'    => $id,
 				'title' => $vmProduct->product_name,
-				'price' => number_format($vmProduct->allPrices[0]['product_price'],2)
+				'price' => number_format((float) $vmProduct->allPrices[0]['product_price'],2)
 			);
 
 			foreach ($uncatChildren as $child)
@@ -172,7 +172,7 @@ class CmcShopVirtuemart extends CmcShop
 				$variants[] = array(
 					'id'    => CmcHelperShop::PREFIX_PRODUCT . $vmChild->virtuemart_product_id,
 					'title' => $vmChild->product_name,
-					'price' => number_format($vmChild->allPrices[0]['product_price'], 2)
+					'price' => number_format((float) $vmChild->allPrices[0]['product_price'], 2)
 				);
 			}
 
@@ -221,7 +221,7 @@ class CmcShopVirtuemart extends CmcShop
 		{
 			$completeOrder = $model->getOrder($vmOrder->virtuemart_order_id);
 
-			$order     = new CmcMailChimpOrder();
+			$order     = new CmcMailChimpOrder;
 
 			$customerId = $completeOrder['details']['BT']->customer_number;
 

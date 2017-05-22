@@ -504,28 +504,6 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	}
 
 	/**
-	 * Check if a product exist
-	 *
-	 * @param   string  $storeId    - the store id
-	 * @param   object  $productId  - the product id
-	 *
-	 * @return bool
-	 */
-	public function productExists($storeId, $productId)
-	{
-		$this->get('ecommerce/stores/' . $storeId . '/products/' . $productId);
-
-		$lastResponse = $this->getLastResponse();
-
-		if ($lastResponse['headers']['http_code'] == 404)
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Create a product
 	 *
 	 * @param   string  $storeId  - the store id
@@ -600,9 +578,14 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 */
 	public function addProduct($shopId, CmcMailChimpProduct $product)
 	{
-		$result = $this->post('/ecommerce/stores/' . $shopId . '/products', $product);
+		$exists = $this->productExists($shopId, $product);
 
-		return $result;
+		if ($exists)
+		{
+			return $this->updateProduct($shopId, $product);
+		}
+
+		return $this->post('/ecommerce/stores/' . $shopId . '/products', $product);
 	}
 
 	/**
@@ -689,6 +672,30 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	public function customerExists($store_id, CmcMailChimpCustomer $customer)
 	{
 		$result = $this->get('/ecommerce/stores/' . $store_id . '/customers/' . $customer->id);
+
+		$lastResponse = $this->getLastResponse();
+
+		if ($lastResponse['headers']['http_code'] == 404)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks if a product (with id) is existing
+	 *
+	 * @param   integer              $store_id  StoreId
+	 * @param   CmcMailChimpProduct  $product   Product
+	 *
+	 * @return  bool
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function productExists($store_id, CmcMailChimpProduct $product)
+	{
+		$result = $this->get('/ecommerce/stores/' . $store_id . '/products/' . $product->id);
 
 		$lastResponse = $this->getLastResponse();
 

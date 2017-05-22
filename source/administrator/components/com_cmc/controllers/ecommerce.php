@@ -44,6 +44,16 @@ class CmcControllerEcommerce extends CmcController
 
 		$result = $syncer->$method($offset, $limit);
 
+		if (empty($result))
+		{
+			return json_encode(array('success' => true, 'result' => $result));
+		}
+
+		// Sync it to mailChimp
+		$chimp = new CmcHelperChimp;
+		$shop  = CmcHelperShop::getShop();
+
+
 		echo json_encode($result);
 		jexit();
 	}

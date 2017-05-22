@@ -12,6 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helpers/');
+JLoader::discover('CmcMailChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/items/');
 
 require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
 require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
@@ -172,17 +173,55 @@ class plgSystemECom360Virtuemart extends JPlugin
 	}
 
 	/**
-	 * Clone a product
+	 * Add or update a product to MailChimp
 	 *
 	 * @param   object  $data  Data for the product
 	 *
-	 * @return  void
+	 * @return  array|false
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public function plgVmOnAfterSaveProduct($data)
+	public function plgVmAfterStoreProduct($data, $productData)
 	{
 		$this->loadShop();
+
+		/** @var VirtueMartModelProduct $model */
+		$model = VmModel::getModel('product');
+
+		$product = new CmcMailChimpProduct;
+
+		$id = CmcHelperShop::PREFIX_PRODUCT . $data['virtuemart_product_id'];
+
+		$product->id          = $id;
+		$product->title       = $data['product_name'];
+		$product->description = $data['product_s_desc'];
+		$product->image_url   = '';
+
+		$variants = array();
+
+		$model->setId($data['virtuemart_product_id']);
+		$uncatChildren = $model->getUncategorizedChildren(false);
+
+		$variants[] = array(
+			'id'    => $id,
+			'title' => $data['product_name'],
+			'price' => number_format((float) $data['mprices']['product_price'][0],2)
+		);
+
+		foreach ($uncatChildren as $child)
+		{
+			$vmChild = $model->getProduct($child);
+
+			$variants[] = array(
+				'id'    => CmcHelperShop::PREFIX_PRODUCT . $vmChild->virtuemart_product_id,
+				'title' => $vmChild->product_name,
+				'price' => number_format((float) $vmChild->allPrices[0]['product_price'], 2)
+			);
+		}
+
+		$product->variants = $variants;
+
+		return $this->chimp->addProduct($this->shop->shop_id, $product);
 	}
 
 	/**
