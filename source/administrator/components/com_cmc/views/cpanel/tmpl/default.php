@@ -120,7 +120,6 @@ JHtml::_('behavior.tooltip');
 			</div>
 		</div>
 		<div class="col-sm-6">
-
 			<div class="box-info">
 				<h2>Ads from compojoom.com</h2>
 
