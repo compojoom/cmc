@@ -17,7 +17,7 @@ JLoader::discover('CmcMailChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/lib
 require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
 require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
 
-/**
+/**administrator/components/com_cmc/libraries/shopsync/shops/virtuemart.php
  * Class plgSystemECom360Virtuemart
  *
  * @since  1.3
@@ -140,6 +140,12 @@ class plgSystemECom360Virtuemart extends JPlugin
 		$mOrder->lines       = $lines;
 		$mOrder->campaign_id = $session->get('mc_cid', '');
 
+		if (empty($session->get('mc_cid', '')))
+		{
+			// MailChimp does not accept empty|null value here
+			unset($mOrder->campaign_id);
+		}
+
 		return $this->chimp->addOrder($this->shop->shop_id, $mOrder);
 	}
 
@@ -249,5 +255,110 @@ class plgSystemECom360Virtuemart extends JPlugin
 		);
 
 		return $this->chimp->addCustomer($this->shop->shop_id, $customer);;
+	}
+
+	/**
+	 * Sent the cart to MailChimp
+	 *
+	 * @param   array  $data  Crap
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function plgVmOnUpdateCart($data)
+	{
+		$this->loadShop();
+
+		$vmCart = VirtueMartCart::getCart();
+
+		if (empty($vmCart->user->virtuemart_user_id))
+		{
+			// We can't send a card to MailChimp without a user email
+			return true;
+		}
+
+		$session = JFactory::getSession();
+
+		/** @var VirtueMartModelCurrency $curModel */
+		$curModel = VmModel::getModel('currency');
+
+		/** @var VirtueMartModelProduct $model */
+		$prodModel = VmModel::getModel('product');
+
+		/** @var VirtueMartModelUser $model */
+		$userModel = VmModel::getModel('user');
+
+		$cart = new CmcMailChimpCart;
+
+		$cart->id = CmcHelperShop::PREFIX_CART . $vmCart->virtuemart_cart_id;
+
+		// Customer
+		$userAddress = $userModel->getUserAddressList($vmCart->user->virtuemart_user_id, 'BT');
+		$userModel->setId($vmCart->user->virtuemart_user_id);
+		$user = $userModel->getUser($userAddress[0]->virtuemart_userinfo_id);
+
+		$customer = CmcHelperShop::getCustomerObject(
+			$user->JUser->email,
+			$vmCart->user->virtuemart_user_id,
+			$userAddress[0]->company,
+			$userAddress[0]->first_name,
+			$userAddress[0]->last_name
+		);
+
+		// Cart information
+		$cart->customer = $customer;
+
+		$currency     = $curModel->getCurrency($vmCart->pricesCurrency);
+		$currencyCode = !empty($currency->currency_code_2) ?: $currency->currency_code_3;
+
+		$cart->currency_code = $currencyCode;
+
+		$lines      = array();
+		$total      = 0;
+		$totalTax   = 0;
+
+		foreach ($vmCart->cartProductsData as $i => $item)
+		{
+			$product = $prodModel->getProduct($item['virtuemart_product_id']);
+
+			$line = new CmcMailChimpLine;
+
+			$line->id = CmcHelperShop::PREFIX_ORDER_LINE . $vmCart->virtuemart_cart_id . '_' . $i;
+
+			$parentProductId = CmcHelperShop::getVmParentProductId($item['virtuemart_product_id']);
+
+			$line->product_id         = CmcHelperShop::PREFIX_PRODUCT . $parentProductId;
+			$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item['virtuemart_product_id'];
+			$line->quantity           = $item['quantity'];
+
+			$price = $product->allPrices[0]['salesPrice'] * $item['quantity'];
+			$tax   = $product->allPrices[0]['taxAmount'] * $item['quantity'];
+
+			$total    += $price;
+			$totalTax += $tax;
+
+			$line->price = $price;
+
+			$lines[] = $line;
+		}
+
+		$cart->lines = $lines;
+
+		$cart->order_total = $total;
+		$cart->tax_total   = $totalTax;
+
+		$cart->campaign_id = $session->get('mc_cid', '');
+
+		if (empty($session->get('mc_cid', '')))
+		{
+			// MailChimp does not accept empty|null value here
+			unset($cart->campaign_id);
+		}
+
+		// Send result to MailChimp
+		$result = $this->chimp->addCart($this->shop->shop_id, $cart);
+
+		return true;
 	}
 }

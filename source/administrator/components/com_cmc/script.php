@@ -21,9 +21,9 @@ class Com_CmcInstallerScript
 	/*
 	  * The release value to be displayed and checked against throughout this file.
 	  */
-	public $release = '3.0';
+	public $release = '4.0';
 
-	public $minimum_joomla_release = '2.5.10';
+	public $minimum_joomla_release = '3.7.0';
 
 	public $extension = 'com_cmc';
 
