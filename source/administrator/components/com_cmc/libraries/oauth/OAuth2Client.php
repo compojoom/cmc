@@ -1,5 +1,7 @@
 <?php
 
+defined('_JEXEC') or die;
+
 /**
  * The default Cache Lifetime (in seconds).
  */

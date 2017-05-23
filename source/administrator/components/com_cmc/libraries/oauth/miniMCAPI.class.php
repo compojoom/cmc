@@ -1,5 +1,7 @@
 <?php
 
+defined('_JEXEC') or die;
+
 class MCAPI {
     var $version = "1.3";
     var $errorMessage;

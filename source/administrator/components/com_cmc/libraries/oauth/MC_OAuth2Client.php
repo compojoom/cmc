@@ -1,6 +1,15 @@
 <?php
+
+defined('_JEXEC') or die;
+
 require_once('OAuth2Client.php');
 require_once('OAuth2Exception.php');
+
+/**
+ * @package     ${NAMESPACE}
+ *
+ * @since       version
+ */
 class MC_OAuth2Client extends OAuth2Client {
 
     public $access_token = null;
