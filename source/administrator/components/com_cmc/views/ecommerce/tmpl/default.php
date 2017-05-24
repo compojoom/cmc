@@ -16,10 +16,18 @@ $doc->addStyleDeclaration('
 	div.modal {background: none;}
 	#shops-to-sync {padding: 15px}
 ');
+
+$isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php');
 ?>
 
 <div id="shops-to-sync" class="box-info full">
 	<div id="shop-edit">
+		<?php if (!$isVmInstalled) : ?>
+			<div class="alert alert-warning">
+				<?php echo JText::_('COM_CMC_THERE_IS_NO_SUPPORTED_ECOMMERCE_SOFTWARE_INSTALLED'); ?>
+			</div>
+		<?php endif; ?>
+
 		<p class="intro">
 			<?php echo JText::_('COM_CMC_INITIAL_SHOP_SYNC'); ?>
 		</p>
@@ -31,13 +39,13 @@ $doc->addStyleDeclaration('
 			</div>
 
 			<div class="form-group">
-				<label for="shop"><?php echo JText::_('COM_CMC_SHOP_EMAIL'); ?></label>
+				<label for="shop_email"><?php echo JText::_('COM_CMC_SHOP_EMAIL'); ?></label>
 
 				<input type="text" name="shop_email" id="shop_email" class="form-control"/>
 			</div>
 
 			<div class="form-group">
-				<label for="shop"><?php echo JText::_('COM_CMC_SHOP_CURRENCY_CODE'); ?></label>
+				<label for="shop_currency"><?php echo JText::_('COM_CMC_SHOP_CURRENCY_CODE'); ?></label>
 
 				<input type="text" name="shop_currency" id="shop_currency" class="form-control" value="USD"/>
 			</div>
@@ -230,6 +238,19 @@ $doc->addStyleDeclaration('
 				var shopCurrency = $('#shop_currency').val();
 				var shopEmail = $('#shop_email').val();
 
+				if (shopName.length < 2 || shopEmail.length < 2 || shopCurrency.length < 2) {
+					var message = {
+						'error': ['Please fill out shop name, email address and currency']
+					};
+
+					Joomla.renderMessages(message);
+
+					$('#shop-edit').show();
+					$('#modal_sync').modal('hide');
+
+					return false;
+				}
+
 				$.ajax(juri + 'administrator/index.php?option=com_cmc&task=ecommerce.createShop', {
 					method: 'POST',
 					data: {list: list, type: type, title: shopName, currency: shopCurrency, email: shopEmail},
@@ -301,8 +322,8 @@ $doc->addStyleDeclaration('
 			<tr>
 				<th width="5">#</th>
 				<th width="5"><input type="checkbox" name="checkall-toggle" value=""
-				           title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>"
-				           onclick="Joomla.checkAll(this)"/></th>
+				                     title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>"
+				                     onclick="Joomla.checkAll(this)"/></th>
 				<th><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></th>
 				<th><?php echo JText::_('COM_CMC_SHOP_TYPE'); ?></th>
 				<th><?php echo JText::_('COM_CMC_SHOP_ID'); ?></th>
@@ -318,7 +339,7 @@ $doc->addStyleDeclaration('
 			<?php foreach ($this->items as $i => $item) : ?>
 				<tr>
 					<td><?php echo $this->pagination->getRowOffset($i); ?></td>
-					<td><?php echo JHTML::_('grid.id', $i, $item->shop_id); ?>	</td>
+					<td><?php echo JHTML::_('grid.id', $i, $item->shop_id); ?>    </td>
 					<td><?php echo $item->name; ?></td>
 					<td><?php echo $item->type == 1 ? 'Virtuemart' : 'Other'; ?></td>
 					<td><?php echo $item->shop_id; ?></td>
