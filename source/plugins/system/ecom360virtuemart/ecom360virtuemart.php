@@ -85,7 +85,7 @@ class plgSystemECom360Virtuemart extends JPlugin
 
 		$session = JFactory::getSession();
 
-		$customerId = $cart['BT']->customer_number;
+		$customerId = $cart->BT['email'];
 
 		if (!empty($order->virtuemart_user_id))
 		{
@@ -129,13 +129,13 @@ class plgSystemECom360Virtuemart extends JPlugin
 		/** @var VirtueMartModelCurrency $curModel */
 		$curModel = VmModel::getModel('currency');
 
-		$currency = $curModel->getCurrency($cart->BT['order_currency']);
+		$currency = $curModel->getCurrency($order["details"]["BT"]->order_currency);
 		$currencyCode = !empty($currency->currency_code_2) ? $currency->currency_code_2 : $currency->currency_code_3;
 
 		$mOrder->currency_code        = $currencyCode;
 		$mOrder->payment_tax          = (double) $order["details"]["BT"]->order_tax;
 		$mOrder->order_total          = (double) $order["details"]["BT"]->order_total;
-		$mOrder->processed_at_foreign = JFactory::getDate($order->order_created)->toSql();
+		$mOrder->processed_at_foreign = JFactory::getDate($order["details"]["BT"]->order_created)->toSql();
 
 		$mOrder->lines       = $lines;
 		$mOrder->campaign_id = $session->get('mc_cid', '');
