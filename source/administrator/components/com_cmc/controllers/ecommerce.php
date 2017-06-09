@@ -87,6 +87,13 @@ class CmcControllerEcommerce extends CmcController
 			'checkouts'  => 'cart'
 		);
 
+		if (empty($shop))
+		{
+			echo json_encode(array('success' => false, 'errors' => ['No shop found']));
+
+			jexit();
+		}
+
 		// Add them
 		foreach ($results as $result)
 		{

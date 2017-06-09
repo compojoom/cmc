@@ -449,8 +449,11 @@ class CmcShopVirtuemart extends CmcShop
 				$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item->virtuemart_product_id;
 				$line->quantity           = $item->quantity;
 
-				$price = $product->allPrices[0]['salesPrice'] * $item->quantity;
-				$tax   = $product->allPrices[0]['taxAmount'] * $item->quantity;
+				$itemPrice = empty($product->allPrices[0]['salesPrice']) ? $product->allPrices[0]['product_price'] : $product->allPrices[0]['salesPrice'];
+				$taxAmount = empty($product->allPrices[0]['taxAmount']) ? 0 : $product->allPrices[0]['taxAmount'];
+
+				$price = $itemPrice * $item->quantity;
+				$tax   = $taxAmount * $item->quantity;
 
 				$total    += $price;
 				$totalTax += $tax;

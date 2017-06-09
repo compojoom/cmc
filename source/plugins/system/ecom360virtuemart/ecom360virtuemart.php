@@ -150,22 +150,6 @@ class plgSystemECom360Virtuemart extends JPlugin
 	}
 
 	/**
-	 * Clone a product
-	 *
-	 * @param   object  $data  Data for the product
-	 *
-	 * @return  void
-	 *
-	 * @since  __DEPLOY_VERSION__
-	 */
-	public function plgVmCloneProduct($data)
-	{
-		// TODO
-		$this->loadShop();
-
-	}
-
-	/**
 	 * Delete a product
 	 *
 	 * @param   object  $id  Id of the product
@@ -332,8 +316,11 @@ class plgSystemECom360Virtuemart extends JPlugin
 			$line->product_variant_id = CmcHelperShop::PREFIX_PRODUCT . $item['virtuemart_product_id'];
 			$line->quantity           = $item['quantity'];
 
-			$price = $product->allPrices[0]['salesPrice'] * $item['quantity'];
-			$tax   = $product->allPrices[0]['taxAmount'] * $item['quantity'];
+			$itemPrice = empty($product->allPrices[0]['salesPrice']) ? $product->allPrices[0]['product_price'] : $product->allPrices[0]['salesPrice'];
+			$taxAmount = empty($product->allPrices[0]['taxAmount']) ? 0 : $product->allPrices[0]['taxAmount'];
+
+			$price = $itemPrice * $item['quantity'];
+			$tax   = $taxAmount * $item['quantity'];
 
 			$total    += $price;
 			$totalTax += $tax;
