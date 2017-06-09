@@ -38,11 +38,6 @@ JHtml::_('behavior.tooltip');
 			</div>
 			<div class=" box-info full">
 				<ul class="nav nav-tabs nav-justified">
-					<li>
-						<a data-toggle="tab" href="#oauth2">
-							<?php echo JText::_('COM_CMC_MAILCHIMP_OAUTH2_LOGIN'); ?>
-						</a>
-					</li>
 					<li class="active">
 						<a data-toggle="tab" href="#mailchimp">
 							<?php echo JText::_('COM_CMC_MAILCHIMP_ACCOUNT_DETAILS'); ?>
@@ -60,19 +55,6 @@ JHtml::_('behavior.tooltip');
 					</li>
 				</ul>
 				<div class="tab-content">
-					<div id="oauth2" class="tab-pane">
-						You can now use OAuth2 to use CMC. If you already have an API-token there is no reason to
-						update.
-
-						<?php
-						require_once JPATH_COMPONENT_ADMINISTRATOR . '/libraries/oauth/MC_OAuth2Client.php';
-
-						$client = new MC_OAuth2Client();
-						$url = $client->getLoginUri();
-						?>
-
-						<a href="<?php echo $url ?>" class="btn btn-primary" id="btnModalOauth2">Begin Auth</a>
-					</div>
 					<div id="mailchimp" class="tab-pane active">
 						<?php
 						$apiKey = CmcHelperBasic::getComponent('com_cmc')->params->get('api_key');
