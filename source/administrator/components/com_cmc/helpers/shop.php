@@ -106,11 +106,7 @@ class CmcHelperShop
 	public static function getVmParentProductId($virtuemartProductId)
 	{
 		// Make sure VM is loaded
-		require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
-		require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
-		require_once JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/shopinterface.php';
-		require_once JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/shop.php';
-		require_once JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/shops/virtuemart.php';
+		self::loadVm();
 
 		/** @var VirtueMartModelProduct $model */
 		$model = VmModel::getModel('product');
@@ -124,5 +120,27 @@ class CmcHelperShop
 		}
 
 		return $product->product_parent_id;
+	}
+
+	public static function getVmProductCategory($categoryId)
+	{
+		self::loadVm();
+
+		/** @var VirtueMartModelCategory $model */
+		$model = VmModel::getModel('category');
+
+		$category = $model->getCategory($categoryId);
+
+		return $category->category_name;
+	}
+
+	protected static function loadVm()
+	{
+		// Make sure VM is loaded
+		require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/shopinterface.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/shop.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/shops/virtuemart.php';
 	}
 }

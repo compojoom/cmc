@@ -154,6 +154,16 @@ class CmcShopVirtuemart extends CmcShop
 			$product->description = $vmProduct->product_s_desc;
 			$product->image_url   = '';
 
+			if (!empty($vmProduct->categories))
+			{
+				// Take only the first one
+				$catid = $vmProduct->categories[0];
+
+				$category = CmcHelperShop::getVmProductCategory($catid);
+
+				$product->type = $category;
+			}
+
 			$variants = array();
 
 			$model->setId($vmProduct->virtuemart_product_id);
