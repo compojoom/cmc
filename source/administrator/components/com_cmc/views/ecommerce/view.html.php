@@ -44,6 +44,6 @@ class CmcViewEcommerce extends CmcViewBackend
 	{
 		$this->setCTitle(JText::_('COM_CMC_E_COMMERCE_SYNC'), JText::_(''), 'ecommerce');
 
-		JToolBarHelper::custom('ecommerce.sync', 'refresh', '', JText::_('COM_CMC_SYNC_HEADING'), false);
+		JToolbarHelper::deleteList('Do you really want to delete this shop?', 'ecommerce.deleteShop');
 	}
 }

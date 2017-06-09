@@ -270,4 +270,57 @@ class CmcControllerEcommerce extends CmcController
 		require_once JPATH_COMPONENT_ADMINISTRATOR . '/libraries/shopsync/shop.php';
 		require_once JPATH_COMPONENT_ADMINISTRATOR . '/libraries/shopsync/shops/virtuemart.php';
 	}
+
+	/**
+	 * Delete a shop
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function deleteShop()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$ids = $input->get('cid', array(), 'array');
+
+		$link = JRoute::_('index.php?option=com_cmc&view=ecommerce');
+
+		if (empty($ids))
+		{
+			$this->setRedirect($link, 'No shops selected to delete');
+		}
+
+		$this->loadShop();
+
+		$db = JFactory::getDbo();
+
+		$chimp = new CmcHelperChimp;
+
+		foreach ($ids as $id)
+		{
+			$shop = CmcHelperShop::getShop($id);
+
+			if (!$shop)
+			{
+				throw new Exception('Could not load shop with id ' . $id . ' for deletion!', 500);
+			}
+
+			$query = $db->getQuery(true);
+
+			$query->delete('#__cmc_shops')->where('id = ' . (int) $id);
+
+			$db->setQuery($query);
+			$db->execute();
+
+			$result = $chimp->deleteShop($shop->shop_id);
+
+			if (!empty($result['status']))
+			{
+				$this->setRedirect($link, 'Error deleting shop ' . $id . ' Message: ' . $result['title'] , 'error');
+			}
+		}
+
+		$this->setRedirect($link, JText::_('COM_CMC_SHOP_DELETED_SUCCESSFULLY'), 'info');
+	}
 }

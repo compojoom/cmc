@@ -518,6 +518,20 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	}
 
 	/**
+	 * DELETE /ecommerce/stores/{store_id}
+	 *
+	 * @param   string  $shopId  Store id (e.g. 1)
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function deleteShop($shopId)
+	{
+		return $this->delete('/ecommerce/stores/' . $shopId);
+	}
+
+	/**
 	 * Create a product
 	 *
 	 * @param   string  $storeId  - the store id

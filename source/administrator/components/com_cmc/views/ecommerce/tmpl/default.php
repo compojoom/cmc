@@ -316,37 +316,43 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 
 <div class="box-info full">
 
-	<div class="table-responsive">
-		<table class="table table-hover table-striped">
-			<thead>
-			<tr>
-				<th width="5">#</th>
-				<th width="5"><input type="checkbox" name="checkall-toggle" value=""
-				                     title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>"
-				                     onclick="Joomla.checkAll(this)"/></th>
-				<th><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></th>
-				<th><?php echo JText::_('COM_CMC_SHOP_TYPE'); ?></th>
-				<th><?php echo JText::_('COM_CMC_SHOP_ID'); ?></th>
-				<th><?php echo JText::_('COM_CMC_ID'); ?></th>
-			</tr>
-			</thead>
-			<tfoot>
-			<tr>
-				<td colspan="5"><?php echo $this->pagination->getListFooter(); ?></td>
-			</tr>
-			</tfoot>
-			<tbody>
-			<?php foreach ($this->items as $i => $item) : ?>
+	<form name="adminForm" id="adminForm" method="post" action="<?php echo JRoute::_('index.php?option=com_cmc&view=ecommerce'); ?>">
+		<div class="table-responsive">
+			<table class="table table-hover table-striped">
+				<thead>
 				<tr>
-					<td><?php echo $this->pagination->getRowOffset($i); ?></td>
-					<td><?php echo JHTML::_('grid.id', $i, $item->shop_id); ?>    </td>
-					<td><?php echo $item->name; ?></td>
-					<td><?php echo $item->type == 1 ? 'Virtuemart' : 'Other'; ?></td>
-					<td><?php echo $item->shop_id; ?></td>
-					<td><?php echo $item->id; ?></td>
+					<th width="5">#</th>
+					<th width="5"><input type="checkbox" name="checkall-toggle" value=""
+					                     title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>"
+					                     onclick="Joomla.checkAll(this)"/></th>
+					<th><?php echo JText::_('COM_CMC_SHOP_NAME'); ?></th>
+					<th><?php echo JText::_('COM_CMC_SHOP_TYPE'); ?></th>
+					<th><?php echo JText::_('COM_CMC_SHOP_ID'); ?></th>
+					<th><?php echo JText::_('COM_CMC_ID'); ?></th>
 				</tr>
-			<?php endforeach; ?>
-			</tbody>
-		</table>
-	</div>
+				</thead>
+				<tfoot>
+				<tr>
+					<td colspan="6"><?php echo $this->pagination->getListFooter(); ?></td>
+				</tr>
+				</tfoot>
+				<tbody>
+				<?php foreach ($this->items as $i => $item) : ?>
+					<tr>
+						<td><?php echo $this->pagination->getRowOffset($i); ?></td>
+						<td><?php echo JHTML::_('grid.id', $i, $item->id); ?>    </td>
+						<td><?php echo $item->name; ?></td>
+						<td><?php echo $item->type == 1 ? 'Virtuemart' : 'Other'; ?></td>
+						<td><?php echo $item->shop_id; ?></td>
+						<td><?php echo $item->id; ?></td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+
+		<input type="hidden" name="task" id="task" value="" />
+		<input type="hidden" name="boxchecked" value="0"/>
+
+	</form>
 </div>
