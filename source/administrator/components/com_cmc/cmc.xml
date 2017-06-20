@@ -21,6 +21,7 @@
         <submenu>
             <menu img="../media/com_cmc/backend/images/lists-16px.png" view="lists">COM_CMC_LISTS</menu>
             <menu img="../media/com_cmc/backend/images/users-16px.png" view="users">COM_CMC_USERS</menu>
+            <menu img="../media/com_cmc/backend/images/users-16px.png" view="ecommerce">COM_CMC_ECOMMERCE</menu>
         </submenu>
         <files folder="administrator/components/com_cmc">
             ##BACKEND_COMPONENT_FILES##
