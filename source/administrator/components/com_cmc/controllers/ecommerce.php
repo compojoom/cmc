@@ -41,7 +41,7 @@ class CmcControllerEcommerce extends CmcController
 
 	/**
 	 * Sync task to be called by JavaScript
-	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&offset=0&limit=100
+	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&shopId=shopId&offset=0&limit=100
 	 *
 	 * @return  void
 	 * 
