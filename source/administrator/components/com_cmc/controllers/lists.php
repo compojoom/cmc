@@ -48,4 +48,47 @@ class CmcControllerLists extends CmcController
 
 		$this->setRedirect('index.php?option=com_cmc&view=lists');
 	}
+
+	/**
+	 * Create a mailchimp list
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function create()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$listDetails = $input->getArray($_POST);
+
+		$listDetails['email_type_option'] = (bool) $listDetails['email_type_option'];
+
+
+		$chimp = new CmcHelperChimp;
+
+		$result = $chimp->createList($listDetails);
+
+		if (!empty($result['status']))
+		{
+			return $this->setRedirect('index.php?option=com_cmc&view=lists', JText::_('COM_CMC_ERROR_CREATING_LIST') . ' ' . $result['detail'], 'error');
+		}
+
+		$table = JTable::getInstance('Lists', 'CmcTable');
+
+		$listDetails['mc_id'] = $result['id'];
+		$listDetails['web_id'] = $result['web_id'];
+		$listDetails['list_name'] = $result['name'];
+		$listDetails['email_type_option'] = $result['email_type_option'] ? 1 : 0;
+		$listDetails['created_time'] = JFactory::getDate()->toSql();
+		$listDetails['modified_time'] = JFactory::getDate()->toSql();
+		$listDetails['default_from_name'] = $listDetails['campaign_defaults']['from_name'];
+		$listDetails['default_from_email'] = $listDetails['campaign_defaults']['from_email'];
+
+		$table->bind($listDetails);
+
+		$table->store();
+
+		$this->setRedirect('index.php?option=com_cmc&view=lists', JText::_('COM_CMC_LIST_CREATED'));
+	}
 }
