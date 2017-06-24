@@ -199,7 +199,7 @@ class CmcControllerEcommerce extends CmcController
 		$mcShop->name     = $shop->name;
 
 		// TODO
-		$mcShop->platform = 'VirtueMart';
+		$mcShop->platform = 'cmc/vm/' . JUri::getInstance()->getHost();
 
 		$mcShop->is_syncing    = true;
 		$mcShop->email_address = $email;
