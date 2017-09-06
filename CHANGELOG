@@ -1,6 +1,12 @@
 <?php defined('_JEXEC') or die(); ?>
 
 =====================================================================
+CMC 4.1.0 - Released 25-June-2017
+=====================================================================
++ MailChimp list creation from the backend
+* Improved Virtuemart shop creation
+
+=====================================================================
 CMC 4.0.0 - Released 20-June-2017
 =====================================================================
 + Complete VirtueMart synchronization (products, customers, orders, carts etc.)
