@@ -94,7 +94,7 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 
 					<div id="sync-progress">
 						<div class="sync-item">
-							<label for="productProgress">Products (<span id="productTotal"></span>)</label>
+							<label for="productProgress"><?php echo JText::_('COM_CMC_PRODUCTS_AND_CATEGORIES'); ?> (<span id="productTotal"></span>)</label>
 							<div class="progress">
 								<div id="productProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
 								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
@@ -103,7 +103,7 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 							</div>
 						</div>
 						<div class="sync-item">
-							<label for="customerProgress">Customers (<span id="customerTotal"></span>)</label>
+							<label for="customerProgress"><?php echo JText::_('COM_CMC_CUSTOMERS'); ?> (<span id="customerTotal"></span>)</label>
 							<div class="progress">
 								<div id="customerProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
 								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
@@ -112,7 +112,7 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 							</div>
 						</div>
 						<div class="sync-item">
-							<label for="orderProgress">Orders (<span id="orderTotal"></span>)</label>
+							<label for="orderProgress"><?php echo JText::_('COM_CMC_ORDERS'); ?> (<span id="orderTotal"></span>)</label>
 							<div class="progress">
 								<div id="orderProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
 								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
@@ -121,16 +121,7 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 							</div>
 						</div>
 						<div class="sync-item">
-							<label for="categoryProgress">Product Categories (<span id="categoryTotal"></span>)</label>
-							<div class="progress">
-								<div id="categoryProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
-								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
-									0
-								</div>
-							</div>
-						</div>
-						<div class="sync-item">
-							<label for="checkoutProgress">Carts / Checkouts (<span id="checkoutTotal"></span>)</label>
+							<label for="checkoutProgress"><?php echo JText::_('COM_CMC_CARTS_CHECKOUTS'); ?> (<span id="checkoutTotal"></span>)</label>
 							<div class="progress">
 								<div id="checkoutProgress" class="progress-bar" role="progressbar" aria-valuenow="0"
 								     aria-valuemin="0" aria-valuemax="100" style="width: 0">
@@ -160,7 +151,6 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 				$productsProgress: $('#productProgress'),
 				$customersProgress: $('#customerProgress'),
 				$ordersProgress: $('#orderProgress'),
-				$categoriesProgress: $('#categoryProgress'),
 				$checkoutsProgress: $('#checkoutProgress')
 			};
 
@@ -169,7 +159,7 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 				console.log('Type: ' + type);
 				console.log('List: ' + list);
 
-				var actions = ['products', 'customers', 'orders', 'categories', 'checkouts'];
+				var actions = ['products', 'customers', 'orders', 'checkouts'];
 
 				// Start 5 in parallel BAD IDEA
 				syncItem(type, list, actions.shift(), actions, 0, globalLimit);
@@ -205,7 +195,6 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 					dataType: 'json'
 				}).done(function (json) {
 					console.log('Sync for ' + action + ' for ' + shopId + ' done');
-					console.log(json);
 
 					if (json.success === false) {
 						var message = {
@@ -289,7 +278,6 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 				var $productTotal = $('#productTotal');
 				var $customerTotal = $('#customerTotal');
 				var $orderTotal = $('#orderTotal');
-				var $categoryTotal = $('#categoryTotal');
 				var $checkoutTotal = $('#checkoutTotal');
 
 				// Get the count
@@ -300,7 +288,6 @@ $isVmInstalled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_virtuemart
 					$productTotal.text(json.productsCount);
 					$customerTotal.text(json.customersCount);
 					$orderTotal.text(json.ordersCount);
-					$categoryTotal.text(json.categoriesCount);
 					$checkoutTotal.text(json.checkoutsCount);
 
 					createShop();

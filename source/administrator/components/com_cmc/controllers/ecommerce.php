@@ -41,7 +41,7 @@ class CmcControllerEcommerce extends CmcController
 
 	/**
 	 * Sync task to be called by JavaScript
-	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&offset=0&limit=100
+	 * index.php?option=com_cmc&task=ecommerce.sync&type=1&action=customers&shopId=shopId&offset=0&limit=100
 	 *
 	 * @return  void
 	 * 
@@ -199,7 +199,7 @@ class CmcControllerEcommerce extends CmcController
 		$mcShop->name     = $shop->name;
 
 		// TODO
-		$mcShop->platform = 'VirtueMart';
+		$mcShop->platform = 'cmc/vm/' . JUri::getInstance()->getHost();
 
 		$mcShop->is_syncing    = true;
 		$mcShop->email_address = $email;

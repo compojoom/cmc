@@ -161,7 +161,7 @@ class CmcShopVirtuemart extends CmcShop
 
 				$category = CmcHelperShop::getVmProductCategory($catid);
 
-				$product->type = $category;
+				$product->vendor = $category;
 			}
 
 			$variants = array();

@@ -901,4 +901,19 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	{
 		return $this->delete('/ecommerce/stores/' . $shopId . '/carts/' . $id);
 	}
+
+
+	/**
+	 * CREATE list POST /lists
+	 *
+	 * @param   array  $list  The list
+	 *
+	 * @return  array|false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function createList($list)
+	{
+		return $this->post('/lists', $list);
+	}
 }

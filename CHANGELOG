@@ -1,5 +1,17 @@
 <?php defined('_JEXEC') or die(); ?>
 
+=====================================================================
+CMC 4.1.0 - Released 25-June-2017
+=====================================================================
++ MailChimp list creation from the backend
+* Improved Virtuemart shop creation
+
+=====================================================================
+CMC 4.0.0 - Released 20-June-2017
+=====================================================================
++ Complete VirtueMart synchronization (products, customers, orders, carts etc.)
++ Oauth2 authentication
+# Minor improvements and adjustments
 # wrong update profile link generated in the update preferences email
 # wrong link to buy credits on the dashboard
 # the dashboard was showing SQL: 00000 when the component was run on joomla with mysql PDO driver

@@ -44,6 +44,7 @@ class CmcViewLists extends CmcViewBackend
 	{
 		$this->setCTitle(JText::_('COM_CMC_LISTS'), JText::_(''), 'lists');
 
+		JToolBarHelper::custom('lists.new', 'new', '', JText::_('COM_CMC_NEW_LIST'), false);
 		JToolBarHelper::custom('lists.sync', 'refresh', '', JText::_('COM_CMC_SYNC_HEADING'), false);
 		JToolBarHelper::deleteList(JText::_('COM_CMC_DO_YOU_WANT_TO_REMOVE_LIST'), 'lists.delete');
 	}

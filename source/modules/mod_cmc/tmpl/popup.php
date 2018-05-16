@@ -155,7 +155,7 @@ $document->addScriptDeclaration($script);
 				<div class="cmc-popup-subscribe">
 					<button class="btn btn-primary validate" type="submit">
 						<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
-						<img width="16" height="16" class="cmc-spinner" style="display: none;"
+						<img width="16" height="16" class="cmc-spinner" style="display: none;" alt="Loading"
 						     src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg">
 					</button>
 				</div>

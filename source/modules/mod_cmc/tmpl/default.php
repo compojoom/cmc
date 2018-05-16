@@ -153,7 +153,7 @@ $document->addScriptDeclaration($script);
 				<?php echo JText::_('MOD_CMC_SUBSCRIBE'); ?>
 			<?php endif; ?>
 			<img width="16" height="16" class="cmc-spinner" style="display: none;"
-			     src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg">
+			     src="<?php echo JURI::root(); ?>media/mod_cmc/images/loading-bubbles.svg" alt="Loading">
 		</button>
 
 		<?php if ($params->get('outro-text-2')) : ?>
