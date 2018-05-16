@@ -161,7 +161,7 @@ class CmcHelperXmlbuilder
 						foreach ($groups as $g)
 						{
 							$o = explode('##', $g);
-							$html .= '<option value="' . $o[0] . '">' . JText::_($o[1]) . '</option>';
+							$html .= '<option value="' . $o[0] . '">' . str_replace('&', 'and', JText::_($o[1])) . '</option>';
 						}
 
 						$html .= '</field>';
