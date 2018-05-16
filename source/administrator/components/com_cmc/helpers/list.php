@@ -139,7 +139,7 @@ class CmcHelperList
 				{
 					$details = $api->listIntegerestGroupingsField($listId, $interest['id']);
 
-					$groups = '';
+					$groups = array();
 
 					foreach ($details as $ig)
 					{
