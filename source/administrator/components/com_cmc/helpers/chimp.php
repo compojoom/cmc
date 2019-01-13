@@ -251,7 +251,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 	 * @param  object  $order  The order details
 	 *
 	 * @throws  Exception
-	 * 
+	 *
 	 * @return  array
 	 */
 	public function ecommOrderAdd($order)
@@ -335,7 +335,7 @@ class CmcHelperChimp extends \DrewM\MailChimp\MailChimp
 			'email_address' => $email_address,
 			'status'        => $status,
 			'merge_fields'  => $merge_vars,
-			'interests'     => count($interests) ? $interests : new stdClass,
+			'interests'     => is_array($interests) && count($interests) ? $interests : new stdClass,
 			'email_type'    => $email_type
 		);
 
