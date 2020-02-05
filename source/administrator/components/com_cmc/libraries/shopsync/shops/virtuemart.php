@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
+VmConfig::loadConfig();
 
 /**
  * Class CmcShopVirtuemart
