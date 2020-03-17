@@ -15,7 +15,7 @@ JLoader::discover('CmcHelper', JPATH_ADMINISTRATOR . '/components/com_cmc/helper
 JLoader::discover('CmcMailChimp', JPATH_ADMINISTRATOR . '/components/com_cmc/libraries/shopsync/items/');
 
 require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/config.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_virtuemart/helpers/vmmodel.php';
+VmConfig::loadConfig();
 
 /**administrator/components/com_cmc/libraries/shopsync/shops/virtuemart.php
  * Class plgSystemECom360Virtuemart
